@@ -30,7 +30,7 @@ Key 1 was updated twice while the reader was disconnected. It received the final
 
 | Your application | Integration |
 | --- | --- |
-| Python publisher and worker | Install the downloaded archive with `python3 -m pip install ./tailstate.tar.gz` in an environment with a C99 compiler and CPython development headers. Import `Store` and `Cursor` from `tailstate`. |
+| Python publisher and worker | In the download directory, install the archive with `CC=cc python3 -m pip install ./tailstate.tar.gz` in an environment with a C99 compiler and CPython development headers. Import `Store` and `Cursor` from `tailstate`. |
 | C publisher | Vendor `include/tailstate.h` and `src/tailstate.c` from the source kit. Serialize calls to a shared store. |
 | Native StreamSieve publisher with a Python replica | Run the [score-feed example](../../../examples/tailstate_scores.py). It commits the scores and the cursor in one SQLite transaction. |
 | C++17 publisher | Use the [Afterkey header](../../) for a native C++ change feed. |
