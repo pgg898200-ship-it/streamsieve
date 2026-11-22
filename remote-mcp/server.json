@@ -1,0 +1,25 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "site.chatgpt.tancurl3.rankfence-tools-pgg/rankfence",
+  "title": "RankFence",
+  "description": "Replay supplied ranked lists and check when shard-local reciprocal rank fusion has an exact top k.",
+  "version": "0.1.0",
+  "websiteUrl": "https://rankfence-pgg.tancurl3.chatgpt.site",
+  "repository": {
+    "url": "https://github.com/pgg898200-ship-it/streamsieve",
+    "source": "github",
+    "id": "1467865386",
+    "subfolder": "remote-mcp"
+  },
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "sourceUrl": "https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-mcp-0.1.0/remote-mcp"
+    }
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://rankfence-tools-pgg.tancurl3.chatgpt.site/mcp"
+    }
+  ]
+}
