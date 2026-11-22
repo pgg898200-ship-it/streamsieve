@@ -2,6 +2,8 @@
 
 Choose the operation your application needs. Each product link opens its source or release files. The last column opens a working example, replay, or guide.
 
+[Subscribe to the PGG Engineering release feed](https://pgg898200-ship-it.github.io/cachepin/releases.atom) for runnable examples and measured results.
+
 ## Search and retrieval
 
 | Product | What it does | Where it fits | Try it |
