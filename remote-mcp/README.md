@@ -2,6 +2,8 @@
 
 How many ranked results does your search service need to read before the top result is certain? RankFence answers that question for reciprocal rank fusion (RRF). Give it complete, stable lists of document IDs from your retrievers. It replays those lists one page at a time, reports the first round that certifies the winners, and checks them against exhaustive fusion.
 
+[Run two public examples](https://rankfence-tools-pgg.tancurl3.chatgpt.site/) to see both stopping points. One query settles after 2 of 8 IDs. The other needs all 6. Each button calls the public MCP service with the displayed inputs.
+
 **Try it in the [browser workbench](https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html)** or connect a Streamable HTTP MCP client to `https://rankfence-tools-pgg.tancurl3.chatgpt.site/rpc`. Call `rankfence_analyze` with these arguments:
 
 ```json
