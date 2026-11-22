@@ -1,0 +1,9 @@
+include include/recastcrps.hpp
+include *.md
+recursive-include tests *.py *.cpp
+recursive-include bench *.cpp *.py *.sh *.md *.txt *.json *.jsonl *.csv *.tsv
+recursive-include replay *.cpp *.py *.sh *.md *.txt *.json *.jsonl *.csv *.tsv *.gz
+recursive-include comparison *.py *.md *.txt *.json *.jsonl *.csv *.tsv
+recursive-include demo *.cpp *.sh *.md *.html *.css *.js *.wasm *.json
+include llms.txt
+recursive-include examples *.py *.md

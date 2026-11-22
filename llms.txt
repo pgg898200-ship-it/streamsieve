@@ -35,3 +35,5 @@
 - [Native CLI](csrc/streamsieve_cli.cpp): `<5 ms` standalone binary (`sift`, `bench`, `version`).
 - [Python Package](python/streamsieve/__init__.py): Zero-dependency `ctypes` bindings, `sift_matrix`, `assert_causal`, and `mcp_server`.
 - [Adversarial Breaker Suite](tests/test_breaker_adversarial.py): 27 torture tests across numerical, peeking null, CRDT fuzzing, zero-lookahead causality, Byzantine/trust-flip, and MCP/CLI security surfaces.
+
+- [RecastCRPS](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps): Incremental weighted ensemble CRPS and extremal member-withdrawal scoring on an integer forecast grid. Includes NOAA replay, xarray and StreamSieve examples, and benchmark crossovers.

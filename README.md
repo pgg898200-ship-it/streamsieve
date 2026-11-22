@@ -142,6 +142,10 @@ Plugin manifests and agent skill instructions are pre-packaged at [`SKILL.md`](S
 
 ---
 
+## Score revised scalar forecasts
+
+[RecastCRPS](integrations/recastcrps/) scores an ensemble after a member revises or withdraws its point forecast. It also identifies the best and worst single-member withdrawals for an equal-weight panel in logarithmic time. A [worked example](integrations/recastcrps/examples/) uses the same forecasts with `TrustCalibrator` and RecastCRPS and resolves both against an observed outcome. [Try the Hurricane Lee replay](https://huggingface.co/spaces/pgg-engineering/recastcrps).
+
 ## Architecture: Four Co-Designed Strictly Causal Engines
 
 ```mermaid
