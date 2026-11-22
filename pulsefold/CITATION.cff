@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Please cite the exact version when publishing benchmark results."
+title: Pulsefold
+version: 0.1.0
+date-released: 2026-11-22
+type: software
+authors:
+  - name: Pulsefold contributors
+license: MIT
+url: "https://huggingface.co/spaces/pgg-engineering/pulsefold"

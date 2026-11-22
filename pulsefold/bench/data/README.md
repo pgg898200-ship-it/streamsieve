@@ -1,0 +1,11 @@
+# Intel Berkeley environmental sensor replay
+
+`intel-lab-4h.tsv` contains 10,535 observed event timestamps from all 54 motes in the Intel Berkeley Research Lab deployment. Each headerless row gives microseconds since midnight on February 28, 2004, then the original `moteid` minus one, separated by a tab. The interval is `[00:00, 04:00)` on the recorded clock. The source documentation does not give a time zone. The first recorded event in this interval occurs at 00:58:46.002832. Gaps and repeated observations are preserved. Rows are ordered by time, then feed ID. No measurement value, subscription, deadline, or live arrival order is supplied by this trace.
+
+The [original dataset description and permission](https://db.csail.mit.edu/labdata/labdata.html) attribute collection to Peter Bodik, Wei Hong, Carlos Guestrin, Sam Madden, Mark Paskin and Romain Thibaux. Intel Berkeley supplied hardware. The TinyOS team, including Joe Polastre and Rob Szewczyk, supplied software infrastructure and hardware designs. The authors permit use or reproduction in any format or venue and request acknowledgment. The project’s code license applies to the replay program. The observations are redistributed under the authors’ permission.
+
+We extracted timestamps and mote IDs from the [pinned per-mote CSV mirror](https://github.com/AhmedCh24/data_compression_bitteiler_technical_task/tree/0683fb4e9190f1b89148a3e4fa41c8145f0c4694/data/data_by_sensor_node/csv). Its [conversion script](https://github.com/AhmedCh24/data_compression_bitteiler_technical_task/blob/0683fb4e9190f1b89148a3e4fa41c8145f0c4694/scripts/data_preparation/split_data.py) groups by mote after filtering malformed rows, missing timestamps and IDs outside 1–54. Our input is the full four-hour interval present in those CSVs. It is an event-time projection of a sensor deployment. Any subscriber fan-out and freshness budgets used by a benchmark are configured by the benchmark.
+
+To regenerate, run `python3 bench/data/extract_intel.py` from the repository root. The command downloads the 54 pinned CSVs and checks the output digest before writing. With a local copy of the mirror, pass `--csv-dir /path/to/data/data_by_sensor_node/csv`. The committed 150,029-byte fixture works offline.
+
+SHA-256 `33c1be134f2b2f3170ae369a5e34db89ab29ef435951aad334fccc13cccb10a0`.

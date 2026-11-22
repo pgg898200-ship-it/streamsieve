@@ -1,0 +1,15 @@
+# Pulsefold
+
+> A dependency-free C++17 monitor for heartbeat freshness. Each feed can have many subscribers with different deadlines. Repeated deadline policies can share storage across a fleet.
+
+- [Interactive example](https://pulsefold.tancurl3.chatgpt.site/): Advance a heartbeat timeline and inspect expiry and recovery order.
+- [C++17 header](https://pulsefold.tancurl3.chatgpt.site/pulsefold.hpp): Embed the monitor, or use a grouped callback to hand off an immutable subscriber list.
+- [Buildable release](https://pulsefold.tancurl3.chatgpt.site/releases/pulsefold-0.1.0.zip): Offline source, CLI, POSIX live adapter, tests, real sensor trace and competing schedulers. Unzip, change into pulsefold-0.1.0, and run make check live-check.
+- [Usage and event contract](https://pulsefold.tancurl3.chatgpt.site/README.md): Monotonic event time, first observation, equal-time expiries and shared-policy lifetimes.
+- [Results in Markdown](https://pulsefold.tancurl3.chatgpt.site/REPORT.md): Hardware, cases where other schedulers were faster, and the cost of representing vs delivering a transition.
+- [Raw scalar measurements](https://pulsefold.tancurl3.chatgpt.site/synthetic.csv)
+- [Recorded sensor replay](https://pulsefold.tancurl3.chatgpt.site/sensor.csv)
+- [Grouped measurements](https://pulsefold.tancurl3.chatgpt.site/grouped.csv)
+- [Release metadata and checksum](https://pulsefold.tancurl3.chatgpt.site/release.json)
+
+Typical evaluation questions include how to watch a shared feed on several timeouts, how to verify expiry before a same-tick renewal, and how a scan compares with an index at different fleet sizes. Network delivery and end-to-end agent latency require separate measurement.

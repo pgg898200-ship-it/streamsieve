@@ -1,0 +1,13 @@
+name: Test release
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make -j2 check live-check build/scale build/benchmark build/grouped
+      - run: build/scale 4096 128 8
+      - run: build/benchmark --trace bench/data/intel-lab-4h.tsv --repeats 1
+      - run: build/grouped --repeats 1
