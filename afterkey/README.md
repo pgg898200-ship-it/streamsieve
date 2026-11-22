@@ -41,7 +41,7 @@ The first two rows make up page one. Worker 1 comes first because it reported be
 5 key=2 deleted
 ```
 
-Copy [afterkey.hpp](include/afterkey.hpp) or [afterkey_journal.hpp](include/afterkey_journal.hpp) into your include path. Each header works on its own. Each callback receives a revision, a dense key and a borrowed pointer to the current value. A null pointer means deletion. The [full-feed example](examples/quickstart.cpp) uses `since` to read all changes in one call.
+Copy [afterkey.hpp](include/afterkey.hpp) or [afterkey_journal.hpp](include/afterkey_journal.hpp) into your include path. Each header works on its own. Each callback receives a revision, a dense key and a borrowed pointer to the current value. A null pointer means deletion. The [full-feed example](examples/quickstart.cpp) uses `since` to read all changes in one call. [Edit the worker updates in Compiler Explorer](https://godbolt.org/z/Tz3sP7KMj) to run the C++17 header and inspect the rows that reach the reader.
 
 The kit includes the tests, comparison harness and raw measurements. Its SHA-256 is `6ecccac7f4c35a4132db3d128ec2a599ca4c9b89a99dab1f39f0582111771470`. The [0.1.0 ZIP](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-0.1.0.zip) contains the original full-feed API.
 
