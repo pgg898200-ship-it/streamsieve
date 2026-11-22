@@ -157,8 +157,7 @@ public:
     static constexpr uint32_t kMaxCheckpoints = 24; /* 1.5x spacing covers > 500k ticks */
 
     explicit EStreamEngine(const ss_estream_config_t& cfg)
-        : cfg_(cfg),
-          n_ch_(cfg.n_channels),
+        : n_ch_(cfg.n_channels),
           warmup_(std::max<uint32_t>(cfg.warmup, 12)),
           ring_cap_(cfg.ring_capacity),
           alpha_(sanitize_cfg(cfg.alpha, 0.05, 1e-9, 0.5)),
@@ -954,7 +953,6 @@ private:
         mode_[c] = static_cast<uint8_t>((m_hit ? 1 : 0) | (b_hit ? 2 : 0));
     }
 
-    ss_estream_config_t cfg_;
     uint32_t n_ch_;
     uint32_t warmup_;
     uint32_t ring_cap_;
@@ -1326,8 +1324,7 @@ private:
 class VOISifter {
 public:
     explicit VOISifter(const ss_sifter_config_t& cfg)
-        : cfg_(cfg),
-          n_ch_(std::max<uint32_t>(cfg.n_channels, 1)),
+        : n_ch_(std::max<uint32_t>(cfg.n_channels, 1)),
           n_sites_(std::max<uint32_t>(1, std::min(cfg.n_sites, std::max<uint32_t>(cfg.n_channels, 1)))),
           prior_active_(sanitize_cfg(cfg.prior_active, 0.08, 1e-5, 0.5)),
           hot_site_prior_(sanitize_cfg(cfg.hot_site_prior, 0.15, 1e-4, 0.9)),
@@ -1612,7 +1609,6 @@ private:
         site_log_odds_[s] = clamp_d(site_log_odds_[s] + (log_hot - log_cold), -20.0, 20.0);
     }
 
-    ss_sifter_config_t cfg_;
     uint32_t n_ch_;
     uint32_t n_sites_;
     double   prior_active_;
@@ -1648,8 +1644,7 @@ public:
     static constexpr double kAciGammas[kNumAciRates] = {0.005, 0.02, 0.08, 0.20};
 
     explicit TrustCalibrator(const ss_trust_config_t& cfg)
-        : cfg_(cfg),
-          n_agents_(std::max<uint32_t>(cfg.n_agents, 1)),
+        : n_agents_(std::max<uint32_t>(cfg.n_agents, 1)),
           fs_alpha_(sanitize_cfg(cfg.fixed_share_alpha, 0.04, 0.0, 0.4)),
           eta_(sanitize_cfg(cfg.eta, 0.8, 0.05, 5.0)),
           q_thresh_(sanitize_cfg(cfg.quarantine_e_thresh, 20.0, 2.0, 1e9)),
@@ -2046,7 +2041,6 @@ private:
         }
     }
 
-    ss_trust_config_t cfg_;
     uint32_t n_agents_;
     double   fs_alpha_;
     double   eta_;

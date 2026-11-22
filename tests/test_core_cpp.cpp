@@ -59,61 +59,83 @@ static void test_estream_null_calibration_and_power() {
         assert(far <= 0.065); /* Strictly calibrated anytime-valid error control */
     }
 
-    /* 2. Power on 256-channel firehose: 4 mean-shifted, 4 rare-burst (18% @ +3.5sd), 32 loud 5x null */
-    const uint32_t N = 256;
-    ss_estream_config_t cfg{};
-    ss_estream_default_config(&cfg, N);
-    cfg.warmup = 32;
-    cfg.ring_capacity = 64;
-    cfg.alpha = 0.05;
-    ss_estream_t* st = ss_estream_create(&cfg);
-
-    std::vector<double> row(N);
-    std::uniform_real_distribution<double> u01(0.0, 1.0);
-    for (uint32_t t = 0; t < 600; ++t) {
-        for (uint32_t c = 0; c < N; ++c) {
-            double sc = (c >= 16 && c < 48) ? 5.0 : 1.0; /* 32 loud null channels */
-            double x = sc * norm(rng);
-            if (t >= 180) {
-                if (c < 4) x += 1.4 * sc; /* Sustained mean shift */
-                else if (c >= 4 && c < 8) {
-                    if (u01(rng) < 0.18) x += 3.5 * sc; /* Sparse bursty channel! */
-                }
-            }
-            row[c] = x;
+    /* 2. Power on 256-channel firehose across 5 seeds (20 shifts, 20 rare 18% +3.5sd bursts, 160 loud 5x nulls)
+     *    using a portable SplitMix64 + Box-Muller generator identical across libstdc++/libc++/MSVC. */
+    struct PortableRng {
+        uint64_t state;
+        explicit PortableRng(uint64_t s) : state(s) {}
+        uint64_t next_u64() {
+            uint64_t z = (state += 0x9e3779b97f4a7c15ULL);
+            z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9ULL;
+            z = (z ^ (z >> 27)) * 0x94d049bb133111ebULL;
+            return z ^ (z >> 31);
         }
-        ss_estream_update_row(st, row.data(), N);
+        double u01() { return (static_cast<double>(next_u64() >> 11) + 0.5) * (1.0 / 9007199254740992.0); }
+        double gauss() {
+            double u1 = std::max(u01(), 1e-15);
+            double u2 = u01();
+            return std::sqrt(-2.0 * std::log(u1)) * std::cos(6.28318530717958647692 * u2);
+        }
+    };
+
+    const uint32_t N = 256;
+    int tp_mean = 0, tp_burst = 0, fp_loud = 0, fp_other = 0;
+    for (uint64_t seed = 0; seed < 5; ++seed) {
+        PortableRng prng(4200 + seed * 997);
+        ss_estream_config_t cfg{};
+        ss_estream_default_config(&cfg, N);
+        cfg.warmup = 32;
+        cfg.ring_capacity = (seed == 0) ? 64 : 0;
+        cfg.alpha = 0.05;
+        ss_estream_t* st = ss_estream_create(&cfg);
+
+        std::vector<double> row(N);
+        for (uint32_t t = 0; t < 1000; ++t) {
+            for (uint32_t c = 0; c < N; ++c) {
+                double sc = (c >= 16 && c < 48) ? 5.0 : 1.0; /* 32 loud null channels */
+                double x = sc * prng.gauss();
+                if (t >= 360) {
+                    if (c < 4) x += 1.4 * sc; /* Sustained mean shift */
+                    else if (c >= 4 && c < 8) {
+                        if (prng.u01() < 0.18) x += 3.5 * sc; /* Sparse bursty channel! */
+                    }
+                }
+                row[c] = x;
+            }
+            ss_estream_update_row(st, row.data(), N);
+        }
+
+        std::vector<uint32_t> rej(N);
+        uint32_t n_rej = 0;
+        ss_estream_ebh_reject(st, 0.05, rej.data(), N, &n_rej);
+        for (uint32_t i = 0; i < n_rej; ++i) {
+            uint32_t c = rej[i];
+            if (c < 4) tp_mean++;
+            else if (c < 8) tp_burst++;
+            else if (c >= 16 && c < 48) fp_loud++;
+            else fp_other++;
+        }
+
+        if (seed == 0) {
+            /* 3. Verify lossless raw tick recovery */
+            std::vector<double> raw_vals(64);
+            std::vector<uint32_t> raw_ticks(64);
+            uint32_t got = 0;
+            assert(ss_estream_fetch_raw(st, 0, raw_vals.data(), raw_ticks.data(), 64, &got) == SS_OK);
+            assert(got == 64);
+            assert(raw_ticks[63] == 1000);
+            assert(raw_vals[63] == row[0]);
+        }
+        ss_estream_destroy(st);
     }
 
-    std::vector<uint32_t> rej(N);
-    uint32_t n_rej = 0;
-    ss_estream_ebh_reject(st, 0.05, rej.data(), N, &n_rej);
-    int tp_mean = 0, tp_burst = 0, fp_loud = 0, fp_other = 0;
-    for (uint32_t i = 0; i < n_rej; ++i) {
-        uint32_t c = rej[i];
-        if (c < 4) tp_mean++;
-        else if (c < 8) tp_burst++;
-        else if (c >= 16 && c < 48) fp_loud++;
-        else fp_other++;
-    }
-    std::printf("[Firehose e-BH 256ch] tp_mean=%d/4 tp_burst=%d/4 fp_loud=%d/32 fp_other=%d\n",
+    std::printf("[Firehose e-BH 256ch x 5 seeds] tp_mean=%d/20 tp_burst=%d/20 fp_loud=%d/160 fp_other=%d\n",
                 tp_mean, tp_burst, fp_loud, fp_other);
     std::fflush(stdout);
-    assert(tp_mean == 4);
-    assert(tp_burst >= 3);
+    assert(tp_mean == 20);
+    assert(tp_burst >= 16);
     assert(fp_loud == 0);
-    assert(fp_other <= 1);
-
-    /* 3. Verify lossless raw tick recovery */
-    std::vector<double> raw_vals(64);
-    std::vector<uint32_t> raw_ticks(64);
-    uint32_t got = 0;
-    assert(ss_estream_fetch_raw(st, 0, raw_vals.data(), raw_ticks.data(), 64, &got) == SS_OK);
-    assert(got == 64);
-    assert(raw_ticks[63] == 600);
-    assert(raw_vals[63] == row[0]);
-
-    ss_estream_destroy(st);
+    assert(fp_other <= 2);
 }
 
 static void test_lattice_crdt_axioms() {
