@@ -19,7 +19,7 @@ tags:
 
 **How many search results do you need to read before the winners are certain?** RankFence sits between paged keyword or vector retrievers and your reranker or RAG context builder. It uses reciprocal rank fusion (RRF) to return the exact ordered top documents. A trusted map of disjoint document namespaces lets it close the cursors on losing shards.
 
-[Replay a query](https://pgg-engineering-rankfence.hf.space/workbench.html) · [Integration guide and Python source](https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0) · [Benchmark results](https://pgg-engineering-rankfence.hf.space/benchmarks.html)
+[Replay a query](https://pgg-engineering-rankfence.static.hf.space/workbench.html) · [Integration guide and Python source](https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0) · [Benchmark results](https://pgg-engineering-rankfence.static.hf.space/benchmarks.html)
 
 The Space runs in your browser. Paste complete ranked lists or use the example to compare the IDs read with and without a shard map. The replay checks the answer against exhaustive fusion. In a live pipeline, use the Python adapter with stable paged cursors. Remote savings depend on the backend supporting lazy reads or cancellation.
 

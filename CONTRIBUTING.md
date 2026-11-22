@@ -9,3 +9,19 @@ A reproducible integration can be small. Supply a public fixture or a self-conta
 A benchmark submission may use anonymized, consistently remapped IDs. Include the same mapping across sources, page sizes, local score tie order and true EOF markers. The browser workbench performs its analysis locally. Upload rankings to a public repository only if you have the rights to publish them.
 
 Run the package tests with `python -m unittest discover -v`. Reports in `results/` contain machine and configuration details for comparison.
+
+## Run the browser replay
+
+From the release checkout, serve the static files locally. The workbench uses a Web Worker on the same origin.
+
+```sh
+python -m http.server 8000 --bind 127.0.0.1 --directory demo
+```
+
+Open <http://127.0.0.1:8000/workbench.html>. The bundled query returns `west/alpha` and checks the winner against exhaustive fusion.
+
+To publish the replay from the same checkout, upload the whole demo directory with an authenticated Hugging Face CLI. This includes the worker, scripts, examples and Space card.
+
+```sh
+hf upload pgg-engineering/rankfence demo . --repo-type space
+```
