@@ -9,6 +9,8 @@ The replay uses GPS samples from taxis in Porto, Portugal. Each inner array in `
 | Within-trip moves | 4,469 |
 | Stationary moves after quantization | 116 |
 
+The labeled replay uses 256 generated rectangles. Of the 4,469 moves, 1,937 changed zone membership, with 1,955 entries and 2,016 exits. [Count the events in SQL](https://huggingface.co/datasets/pgg-engineering/edgechime-bench/viewer/porto-256/test?sql=SELECT+count%28%2A%29+AS+moves%2C%0A+++++++count_if%28len%28entered%29+%2B+len%28exited%29+%3E+0%29+AS+changed_moves%2C%0A+++++++sum%28len%28entered%29%29+AS+entries%2C+sum%28len%28exited%29%29+AS+exits%0AFROM+test&sql_console=true).
+
 ## Selection and reproduction
 
 Take the first 100 data records in file order from `Porto_taxi_data_test_partial_trajectories.csv`. Keep trips flagged `MISSING_DATA=False` with at least two observations. Keep the full polyline from each selected record. Multiply each coordinate by one million and round to the nearest integer. This removes floating-point formatting noise and all identifying metadata. The benchmark uses generated rectangles. The source has no zone subscriptions or notification logs. These trip prefixes represent a historical sample from one city.
