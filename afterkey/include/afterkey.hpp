@@ -1,6 +1,7 @@
 #ifndef AFTERKEY_HPP
 #define AFTERKEY_HPP
 
+#include <cstddef>
 #include <cstdint>
 #include <limits>
 #include <memory>
@@ -74,29 +75,45 @@ public:
     // touched keys. Cost is O(1 + keys returned), with no temporary allocation.
     template<class F>
     void since(Revision cursor, F&& callback) const {
+        since_page(cursor, std::nullopt, std::numeric_limits<std::size_t>::max(),
+                   std::forward<F>(callback));
+    }
+
+    // Emit up to limit rows and return the number delivered. Keep the last
+    // emitted (revision, key) for the next call. A matching nonzero cursor
+    // and key seek directly to their successor; any other hint falls back to
+    // the usual exact cursor seek. All callbacks share since()'s read guard.
+    template<class F>
+    std::size_t since_page(Revision cursor, std::optional<Key> last_key,
+                           std::size_t limit, F&& callback) const {
         if (cursor > revision_) {
             throw std::out_of_range("Afterkey cursor exceeds current revision");
         }
-        if (cursor == revision_) return;
+        if (!limit || cursor == revision_) return 0;
 
-        Key first = oldest_;
-        if (slots_[first].revision <= cursor) {
-            first = newest_;
-            Key older = slots_[first].older;
+        Key next = oldest_;
+        if (cursor && last_key && *last_key < slots_.size() &&
+            slots_[*last_key].revision == cursor) {
+            next = slots_[*last_key].newer;
+        } else if (slots_[next].revision <= cursor) {
+            next = newest_;
+            Key older = slots_[next].older;
             while (older != end && slots_[older].revision > cursor) {
-                first = older;
-                older = slots_[first].older;
+                next = older;
+                older = slots_[next].older;
             }
         }
         const ReadScope scope(reading_);
-        Key next = first;
-        while (next != end) {
+        std::size_t count = 0;
+        while (next != end && count < limit) {
             const Key key = next;
             const Slot& slot = slots_[key];
             callback(slot.revision, key,
                      slot.value ? std::addressof(*slot.value) : nullptr);
             next = slot.newer;
+            ++count;
         }
+        return count;
     }
 
 private:

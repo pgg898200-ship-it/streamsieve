@@ -35,6 +35,25 @@ The reader starts after revision 1. It receives the latest value for key 7 and t
 
 For an existing service, copy [include/afterkey.hpp](include/afterkey.hpp) into its include path. The header has no third-party dependencies. Each callback receives a revision, a dense key and a borrowed pointer to the absolute value. A null pointer means deletion. Advance the cursor only after your consumer has successfully applied the entire batch. Retrying after a partial failure can redeliver rows, so apply values and tombstones idempotently.
 
+## Read a bounded page
+
+Both `Index` and `Journal` expose `since_page(revision, last_key, limit, callback)`. It returns the number of rows delivered and stops at the requested limit. A deletion consumes one row. Use `std::nullopt` when only the revision is available.
+
+```cpp
+std::uint64_t cursor = 0;
+std::optional<std::uint32_t> last_key;
+auto delivered = index.since_page(cursor, last_key, 16,
+    [&](std::uint64_t revision, std::uint32_t key, const int* value) {
+        apply(key, value);  // copy the value, or apply the tombstone
+        cursor = revision;
+        last_key = key;
+    });
+```
+
+Use the last delivered revision and key on the next call. Persist that pair with the successfully applied page when the consumer uses durable checkpoints. Each call reads current state, so writes between pages can supersede unseen rows. Empty pages leave the caller's cursor unchanged. A zero limit delivers no rows and a future revision still throws.
+
+A matching key hint gives `Index` a direct link to the next row. A stale or invalid hint uses the existing numeric seek, which can walk the full changed suffix. `Journal` computes the start position directly for recent cursors and uses the hint or binary search for packed history. It skips superseded entries, so the page limit bounds delivered rows and callbacks. The number of journal positions scanned can be higher.
+
 ## Which workload benefits?
 
 With 1,048,576 populated keys, 16 hot keys and 16 staggered readers, Index ran **2.04× faster than a cursor-indexed append log** and **1.15× faster than an equivalent std::list recency index**. The latter isolates the benefit of the dense slot representation. The machine was a shared AMD EPYC 9V74 VM. Each mixed operation is one write or one poll, and a poll can deliver many rows.

@@ -90,28 +90,56 @@ public:
 
     template<class F>
     void since(Revision cursor, F&& callback) const {
-        if (cursor > revision_) {
-            throw std::out_of_range("Afterkey cursor exceeds current revision");
-        }
-        if (cursor == revision_) return;
+        visit<false>(cursor, std::nullopt, 0, callback);
+    }
 
-        const ReadScope scope(reading_);
-        std::size_t start = packed_count_;
-        if (cursor < packed_through_) {
-            const Revision* first = packed_revisions_.get();
-            const Revision* pos = std::upper_bound(first, first + packed_count_, cursor);
-            for (auto i = static_cast<std::size_t>(pos - first); i < packed_count_; ++i) {
-                emit(keys_[i], first[i], callback);
-            }
-        } else {
-            start += static_cast<std::size_t>(cursor - packed_through_);
-        }
-        for (auto i = start; i < count_; ++i) {
-            emit(keys_[i], tail_revision(i), callback);
-        }
+    // Emit up to limit live rows (including tombstones). A hint is accepted
+    // only when its current revision matches cursor, even across compactions.
+    // Superseded journal entries are skipped and do not consume the limit.
+    template<class F>
+    std::size_t since_page(Revision cursor, std::optional<Key> last_key,
+                           std::size_t limit, F&& callback) const {
+        return visit<true>(cursor, last_key, limit, callback);
     }
 
 private:
+    template<bool Bounded, class F>
+    std::size_t visit(Revision cursor, std::optional<Key> last_key,
+                      std::size_t limit, F& callback) const {
+        if (cursor > revision_) {
+            throw std::out_of_range("Afterkey cursor exceeds current revision");
+        }
+        if ((Bounded && !limit) || cursor == revision_) return 0;
+
+        std::size_t pos = start_after(cursor, last_key);
+        const ReadScope scope(reading_);
+        std::size_t count = 0;
+        for (; pos < packed_count_ && (!Bounded || count < limit); ++pos) {
+            if constexpr (Bounded) count += emit(keys_[pos], packed_revisions_[pos], callback);
+            else emit(keys_[pos], packed_revisions_[pos], callback);
+        }
+        for (; pos < count_ && (!Bounded || count < limit); ++pos) {
+            if constexpr (Bounded) count += emit(keys_[pos], tail_revision(pos), callback);
+            else emit(keys_[pos], tail_revision(pos), callback);
+        }
+        return count;
+    }
+
+    std::size_t start_after(Revision cursor, std::optional<Key> last_key) const {
+        // Recent revisions map directly to positions, including holes.
+        if (cursor >= packed_through_)
+            return packed_count_ + static_cast<std::size_t>(cursor - packed_through_);
+
+        // A live pre-compaction anchor can skip the binary search.
+        if (cursor && last_key && *last_key < slots_.size()) {
+            const auto pos = slots_[*last_key].position;
+            if (pos < packed_count_ && packed_revisions_[pos] == cursor)
+                return pos + 1;
+        }
+        const Revision* first = packed_revisions_.get();
+        return static_cast<std::size_t>(std::upper_bound(first, first + packed_count_, cursor) - first);
+    }
+
     Slot& writable(Key key) {
         if (reading_) {
             throw std::logic_error("Afterkey cannot mutate during a read");
@@ -126,11 +154,13 @@ private:
     }
 
     template<class F>
-    void emit(Key key, Revision revision, F& callback) const {
+    bool emit(Key key, Revision revision, F& callback) const {
         if (key != empty) {
             const auto& value = slots_[key].value;
             callback(revision, key, value ? std::addressof(*value) : nullptr);
+            return true;
         }
+        return false;
     }
 
     Revision tail_revision(std::size_t position) const noexcept {

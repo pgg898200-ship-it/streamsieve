@@ -18,6 +18,7 @@
 #include <cstdint>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <stdexcept>
 #include <string_view>
 
@@ -35,18 +36,26 @@ double z_score(ss_estream_t* stream, std::uint32_t key) {
 
 struct Reader {
     std::uint64_t cursor = 0;
+    std::optional<std::uint32_t> last_key;
     std::array<double, channels> scores{};
     std::size_t received = 0;
 
     void poll(const afterkey::Index<double>& index, ss_estream_t* stream, bool export_rows = false) {
-        index.since(cursor, [&](std::uint64_t, std::uint32_t key, const double* score) {
+        auto apply = [&](std::uint64_t revision, std::uint32_t key, const double* score) {
             if (!score) throw std::logic_error("unexpected deletion");
             scores[key] = *score;
             if (export_rows)
                 std::cout << "put " << key << ' ' << std::bit_cast<std::uint64_t>(*score) << '\n';
             ++received;
-        });
-        cursor = index.version();
+            cursor = revision;
+            last_key = key;
+        };
+        if (export_rows) {
+            while (cursor < index.version())
+                index.since_page(cursor, last_key, 2, apply);
+        } else {
+            index.since(cursor, apply);
+        }
         if (export_rows) std::cout << "checkpoint " << cursor << '\n';
 
         // Oracle for this example: compare the reader's materialized view with

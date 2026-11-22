@@ -234,6 +234,74 @@ void callback_rules() {
 }
 
 template <template <typename> class Engine>
+void bounded_pages() {
+    constexpr Key capacity = 9;
+    Engine<int> index(capacity);
+    Changes history;
+    std::mt19937 rng(3835);
+    auto no_rows = [](Revision, Key, const int*) { check(false, "unexpected row"); };
+    check(index.since_page(0, 1, 12, no_rows) == 0, "empty index page");
+    expect_exception([&] { index.since_page(1, std::nullopt, 0, no_rows); },
+                     "future cursor with empty limit");
+
+    // Force many Journal compactions, holes at page boundaries, and both
+    // live and superseded hints. Scan every possible cursor at every write.
+    for (Revision rev = 1; rev <= 110; ++rev) {
+        const Key key = (rev % 3) ? static_cast<Key>(rng() % capacity) : 0;
+        const bool deleted = rev % 4 == 0;
+        if (deleted) index.erase(key);
+        else index.put(key, static_cast<int>(rev));
+        history.emplace_back(rev, key, deleted ? std::nullopt : std::optional<int>(rev));
+        for (Revision cursor = 0; cursor <= rev; ++cursor) {
+            auto expected = oracle(history, cursor, capacity);
+            const std::optional<Key> hints[] = {
+                std::nullopt, cursor ? std::get<1>(history[cursor - 1]) : 0u,
+                static_cast<Key>(rng() % capacity), std::numeric_limits<Key>::max()
+            };
+            for (auto hint : hints) {
+                for (std::size_t limit : {0u, 1u, 3u, capacity, capacity + 1}) {
+                    Changes actual;
+                    auto count = index.since_page(cursor, hint, limit, [&](Revision seq, Key k, const int* v) {
+                        actual.emplace_back(seq, k, v ? std::optional<int>(*v) : std::nullopt);
+                    });
+                    check(count == actual.size() && count == std::min(limit, expected.size()),
+                          "bounded count");
+                    check(std::equal(actual.begin(), actual.end(), expected.begin()), "bounded page content");
+                }
+            }
+        }
+    }
+
+    Revision cursor = 0;
+    std::optional<Key> hint;
+    Changes replay;
+    while (index.since_page(cursor, hint, 2, [&](Revision seq, Key k, const int* v) {
+        replay.emplace_back(seq, k, v ? std::optional<int>(*v) : std::nullopt);
+        cursor = seq;
+        hint = k;
+    })) {}
+    check(replay == oracle(history, 0, capacity), "multi-page replay");
+
+    struct Abort {};
+    bool thrown = false;
+    try {
+        index.since_page(0, std::nullopt, 1, [&](Revision, Key, const int*) {
+            check(index.since_page(0, std::nullopt, 1, [&](Revision, Key, const int*) {
+                expect_exception([&] { index.erase(0); }, "write during nested bounded read");
+            }) == 1, "nested bounded page");
+            try {
+                index.since_page(0, std::nullopt, 1, [](Revision, Key, const int*) { throw Abort{}; });
+            } catch (const Abort&) {
+                expect_exception([&] { index.put(0, 19); }, "guard survived inner exception");
+            }
+            throw Abort{};
+        });
+    } catch (const Abort&) { thrown = true; }
+    check(thrown, "callback exception propagates");
+    check(index.put(0, 42) == history.size() + 1, "guard released after bounded read exception");
+}
+
+template <template <typename> class Engine>
 void move_only() {
     Engine<std::unique_ptr<int>> index(2);
     index.put(0, std::make_unique<int>(1));
@@ -271,6 +339,7 @@ void run_suite(const char* name) {
         random_history<Engine>();
         rejected_operations<Engine>();
         callback_rules<Engine>();
+        bounded_pages<Engine>();
         move_only<Engine>();
         failed_copy<Engine>();
     } catch (const std::exception& error) {
