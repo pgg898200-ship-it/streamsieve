@@ -2,7 +2,7 @@
 
 **Stop fetching search results when the next page can’t change the winners.** RankFence merges paged rankings with reciprocal rank fusion (RRF). Put it between your keyword and vector retrievers and the component that consumes their top results, such as a reranker or a RAG context builder. It returns the exact ordered document IDs and closes cursors it no longer needs.
 
-[Try a query in your browser](https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html) · [Connect live cursors](#use-live-retrieval-cursors) · [Call from an MCP client](#let-an-agent-measure-its-own-workload)
+[Try a query in your browser](https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html) · [Connect live cursors](#use-live-retrieval-cursors) · [Call from an MCP client](#let-an-agent-measure-its-own-workload) · [Install for GitHub Copilot CLI](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/rankfence-copilot)
 
 ## Try one query
 
@@ -75,6 +75,13 @@ Open one consistent query snapshot per producer. The sources may finish at diffe
 The [SQLite FTS5 example](examples/sqlite_fts.py) builds a real full-text index of the installed Python standard library, ranks matches with three BM25 configurations, closes its cursors at certification, and checks the answer against exhaustive RRF. On our Python 3.12 corpus, the default query read 72 of 1,605 result rows. Run `python examples/sqlite_fts.py --shards 4` for four actual FTS5 tables and twelve ranked cursors. The query `file` read 96 of 1,605 rows and returned the same top three as exhaustive shard-local-rank fusion. Across seven illustrative searches, the partitioned coordinator consumed 612 rows against 900 for independently solving each shard and merging its exact scores. These counts measure rows fetched from component retrievers. A backend that natively returns fused, scored shard winners has a different interface. SQLite can score and sort matches before the client reads its first page.
 
 ## Let an agent measure its own workload
+
+In GitHub Copilot CLI, the [RankFence plugin](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/rankfence-copilot) adds `rankfence_analyze` and `rankfence_verify` as local tools. With Python 3.10+ and uv available, register the PGG plugin marketplace and install RankFence.
+
+```sh
+copilot plugin marketplace add pgg898200-ship-it/streamsieve
+copilot plugin install rankfence@pgg-engineering
+```
 
 After installing the wheel, configure a local MCP server using the Python interpreter that contains RankFence. A typical stdio client accepts this entry.
 
