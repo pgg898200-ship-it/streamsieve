@@ -83,3 +83,9 @@ python3 render.py --index
 ```
 
 Each card is 1200 × 630. The output directory contains one folder per product, with the card and its plain-text image description under `art/`. Omit `--product` and `--spaces` to export the full collection.
+
+The [live tool index](https://pgg898200-ship-it.github.io/cachepin/tools/) uses the same catalogue, captions and marks. To rebuild the page in a CachePin checkout, run:
+
+```sh
+python3 render_web.py /path/to/cachepin/site/tools/index.html
+```

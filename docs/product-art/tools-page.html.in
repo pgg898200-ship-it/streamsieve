@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PGG Engineering · Tool index</title>
+<meta name="description" content="Choose a PGG Engineering tool for search, inference, state replication, telemetry or evaluation. Browse practical examples and source code.">
+<link rel="canonical" href="https://pgg898200-ship-it.github.io/cachepin/tools/">
+<meta property="og:title" content="PGG Engineering · Tool index">
+<meta property="og:description" content="$count engineering tools. Find a task, try an example and inspect the source.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pgg898200-ship-it.github.io/cachepin/tools/">
+<meta property="og:image" content="https://pgg898200-ship-it.github.io/cachepin/tools/cover.png">
+<meta property="og:image:alt" content="PGG Engineering’s visual index of $count developer tools.">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fff3d7">
+<style>
+:root{--paper:#fff3d7;--ink:#171729;--blue:#384cfa;--red:#ef543c;--line:rgba(23,23,41,.27);--serif:'DejaVu Serif',Georgia,serif;--sans:'DejaVu Sans',Arial,sans-serif;--mono:'DejaVu Sans Mono',ui-monospace,monospace;color-scheme:light;font-family:var(--sans);color:var(--ink);background:var(--paper);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0}a{color:inherit;text-underline-offset:.24em;text-decoration-thickness:1px}a:hover{color:var(--blue)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}h1,h2,h3,h4,p,figure,ul{margin:0}ul{list-style:none;padding:0}button{font:inherit;color:inherit;cursor:pointer}a,button{-webkit-tap-highlight-color:transparent}::selection{background:var(--blue);color:var(--paper)}[hidden]{display:none!important}
+.page{width:min(100% - clamp(36px,10vw,160px),1320px);margin:auto}.skip{position:absolute;background:var(--ink);color:var(--paper);padding:.8em;transform:translateY(-180%);z-index:3}.skip:focus{transform:translateY(0)}
+.header{display:flex;align-items:center;justify-content:space-between;padding:23px 0;border-bottom:1px solid var(--ink)}.wordmark{font:700 clamp(18px,2.1vw,25px)/1 var(--serif);letter-spacing:-.055em;text-decoration:none}.header nav,.actions,.links{display:flex;align-items:center;gap:24px}.header nav,.actions,.links,.controls{font-size:14px}.header nav a,.links a{display:inline-flex;align-items:center;gap:.25em;min-height:40px}.index-link{text-decoration:none}.index-link span,.out{font-family:var(--mono)}
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:7%;align-items:center;padding:clamp(38px,5vw,76px) 0 clamp(45px,5.2vw,78px)}.hero-copy{max-width:625px}.category{display:inline-block;font:12px/1.4 var(--mono);letter-spacing:.09em;text-transform:uppercase;text-decoration:none}.hero h1{margin:.15em 0 .13em;font:700 clamp(76px,8.9vw,141px)/1 var(--serif);letter-spacing:-.088em}.lead{max-width:37ch;font-size:clamp(19px,1.72vw,25px);line-height:1.43;letter-spacing:-.035em}.actions{margin-top:27px;gap:22px}.primary{padding:13px 19px;background:var(--ink);color:var(--paper);text-decoration:none}.primary:hover{background:var(--blue);color:var(--paper)}.out{padding-left:.23em}.actions a{display:inline-flex;align-items:center;min-height:46px}
+.specimen{padding:0;max-width:535px;width:100%;align-self:center;justify-self:center}.specimen-art{position:relative;height:clamp(183px,22vw,327px)}.specimen svg{position:absolute;inset:0;display:block;width:100%;height:100%}.specimen figcaption{padding-top:10px;border-top:1px solid var(--ink);display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:start}.specimen-title{font:700 14px/1.5 var(--sans)}.specimen-output{font:13px/1.6 var(--mono)}.controls{grid-column:2;grid-row:1 / 3;display:flex;gap:2px}.controls button{background:transparent;border:1px solid transparent;font:12px/1.2 var(--mono);padding:6px 9px;min-height:32px}.controls button[aria-pressed=true]{border-color:var(--ink)}.controls button:hover{color:var(--blue)}
+#afterkey-mark g>path{transition:opacity .24s ease,translate .26s ease}#afterkey-mark[data-view=reader] g>path:nth-child(-n+2){opacity:0;translate:0 -15px}
+.index{border-top:2px solid var(--ink);padding-top:30px}.index-head{display:grid;grid-template-columns:1fr 1.2fr;gap:25px;align-items:start;margin-bottom:38px}.index h2{font:700 clamp(45px,5.4vw,80px)/1.05 var(--serif);letter-spacing:-.073em}.index nav{display:flex;flex-wrap:wrap;align-content:start;gap:5px 19px;padding-top:4px}.index nav a{min-height:35px;display:inline-flex;align-items:center;font-size:14px;line-height:1.4;text-decoration:none;border-bottom:1px solid var(--line)}.index nav a:hover{border-color:var(--blue)}.group{margin:0 0 42px}.group h3{border-top:1px solid var(--ink);padding:12px 0 11px;font:600 14px/1.5 var(--mono);letter-spacing:-.02em}.entry{display:grid;grid-template-columns:90px minmax(125px,1fr) minmax(210px,1.8fr) auto;gap:24px;align-items:center;min-height:108px;border-top:1px solid var(--line)}.entry h4{font:700 clamp(22px,2.3vw,35px)/1.1 var(--serif);letter-spacing:-.065em}.entry h4 a{text-decoration:none}.entry p{max-width:48ch;font-size:clamp(15px,1.25vw,18px);line-height:1.48;letter-spacing:-.018em}.glyph{width:79px;aspect-ratio:1;display:grid;place-items:center}.glyph svg{display:block;width:100%;height:100%}.links{gap:16px;white-space:nowrap}.links a:first-child{color:var(--blue)}footer{display:flex;justify-content:space-between;align-items:center;padding:20px 0 35px;border-top:1px solid var(--ink);font-size:14px}footer a{display:inline-flex;align-items:center;min-height:40px}
+@media(max-width:820px){.page{width:calc(100% - 54px)}.hero{gap:22px}.entry{grid-template-columns:64px minmax(115px,1fr) minmax(170px,1.65fr) auto;gap:15px}.glyph{width:64px}.links{flex-direction:column;gap:0;align-items:start}.links a{min-height:32px}.specimen figcaption{display:flex;flex-wrap:wrap;gap:2px 10px}.specimen-output{flex-basis:100%}.controls{margin-top:4px}.index-head{grid-template-columns:1fr 1.45fr}}
+@media(max-width:640px){.page{width:calc(100% - 38px)}.header{padding:9px 0}.header nav{gap:15px;font-size:12px}.hero{grid-template-columns:1fr;gap:22px;padding:32px 0 30px}.hero h1{font-size:clamp(65px,15.5vw,94px);margin:6px 0 11px}.lead{font-size:19px;line-height:1.4}.category{font-size:11px}.actions{margin-top:16px}.specimen{max-width:none}.specimen-art{height:158px}.specimen figcaption{display:grid;grid-template-columns:1fr auto;gap:0 8px}.controls{margin:0}.controls button{min-height:38px;padding:5px 7px}.specimen-title{font-size:13px}.specimen-output{font-size:12px}.index{padding-top:24px}.index-head{grid-template-columns:1fr;gap:13px;margin-bottom:25px}.index nav{gap:0 16px;padding:0}.index nav a{font-size:13px;min-height:34px}.group{margin-bottom:30px}.group h3{font-size:13px}.entry{grid-template-columns:61px 1fr;gap:4px 13px;min-height:0;padding:16px 0 9px}.glyph{width:60px;grid-column:1;grid-row:1 / 4;align-self:start}.entry h4{font-size:25px}.entry p{font-size:15px;line-height:1.42}.links{grid-column:2;flex-direction:row;gap:18px;font-size:13px}.links a{min-height:34px}footer{font-size:13px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body id="top"><div class="page">
+<a class="skip" href="#index">Skip to the tool index</a>
+<header class="header"><a class="wordmark" href="#top">PGG Engineering</a><nav aria-label="Main"><a class="index-link" href="#index">Tool index <span aria-hidden="true">↓</span></a><a href="https://github.com/pgg898200-ship-it">GitHub <span class="out" aria-hidden="true">↗</span></a></nav></header>
+<main>
+<section class="hero" aria-labelledby="feature-name"><div class="hero-copy"><a class="category" href="#group-afterkey">State replication</a><h1 id="feature-name">Afterkey</h1><p class="lead">When a reader reconnects, give it the latest value or deletion for each key written since its last revision.</p><div class="actions"><a class="primary" href="$demo">Try Afterkey <span class="out" aria-hidden="true">↗</span></a><a href="$source">Read the source</a></div></div>
+<figure class="specimen"><div class="specimen-art">$hero</div><figcaption><span class="specimen-title">Worker 0 · available slots</span><span class="specimen-output" id="readout" aria-live="polite">8 → 7 → 6. Reader gets 6.</span><div class="controls" aria-label="Afterkey example" role="group" hidden><button type="button" data-view="writes" aria-pressed="true">Writes</button><button type="button" data-view="reader" aria-pressed="false">Catch-up</button></div></figcaption></figure></section>
+<section class="index" aria-labelledby="index"><div class="index-head"><h2 id="index" tabindex="-1">Tool index</h2><nav aria-label="Jump to a task">$nav</nav></div>
+$groups
+</section></main><footer><span>PGG Engineering · $count tools</span><a href="#top">Back to top ↑</a></footer>
+</div>
+<script>
+const controls = document.querySelector('.controls');
+const mark = document.getElementById('afterkey-mark');
+const readout = document.getElementById('readout');
+function setView(view) {
+  mark.dataset.view = view;
+  readout.textContent = view === 'reader' ? 'Reader gets 6 slots.' : 'Writes: 8 → 7 → 6 slots.';
+  for (const button of controls.querySelectorAll('button')) {
+    button.setAttribute('aria-pressed', String(button.dataset.view === view));
+  }
+}
+for (const button of controls.querySelectorAll('button')) {
+  button.addEventListener('click', () => setView(button.dataset.view));
+}
+setView('writes');
+controls.hidden = false;
+</script></body></html>

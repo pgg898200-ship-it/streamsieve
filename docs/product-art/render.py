@@ -181,7 +181,9 @@ def write_index(catalogue, alts):
         "The SVGs in [motifs](motifs) scale to any size. Their adjacent JSON files describe the artwork for screen readers. [products.json](products.json) contains each card’s caption and destinations. The family sheets above also work in print.", "",
         "From this directory, run one of these commands with Python 3.9 or later. SVG generation uses the standard library. PNG export uses a local copy of Inkscape or librsvg’s `rsvg-convert`.", "",
         "```sh", "python3 render.py --product rankpatch --out build", "python3 render.py --spaces --png --out build", "python3 render.py --index", "```", "",
-        "Each card is 1200 × 630. The output directory contains one folder per product, with the card and its plain-text image description under `art/`. Omit `--product` and `--spaces` to export the full collection.", ""])
+        "Each card is 1200 × 630. The output directory contains one folder per product, with the card and its plain-text image description under `art/`. Omit `--product` and `--spaces` to export the full collection.", "",
+        "The [live tool index](https://pgg898200-ship-it.github.io/cachepin/tools/) uses the same catalogue, captions and marks. To rebuild the page in a CachePin checkout, run:", "",
+        "```sh", "python3 render_web.py /path/to/cachepin/site/tools/index.html", "```", ""])
     (ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8")
 
 
