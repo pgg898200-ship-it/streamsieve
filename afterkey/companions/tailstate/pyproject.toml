@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pgg-tailstate"
+version = "0.1.0"
+description = "A bounded C index for coalesced state catch-up with per-reader cursors"
+readme = {text = "Tailstate delivers the latest change per key in sequence order, including tombstones. Building from source requires CPython development headers and a C99 compiler. The installed Python wrapper has no third-party runtime dependencies.", content-type = "text/plain"}
+requires-python = ">=3.8"
+keywords = ["changefeed", "replication", "state-synchronization", "cursor"]
+
+[tool.setuptools]
+py-modules = ["tailstate"]
+package-dir = {"" = "python"}

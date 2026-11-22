@@ -1,0 +1,14 @@
+Borg machine-capacity state replay, 2026-11-22 UTC
+Host: Linux 6.18.57 x86_64; AMD EPYC 9V74 80-Core Processor
+Compiler: Debian GCC/G++ 14.2.0, -O3 -DNDEBUG
+Command and methodology: bench/real/README.md
+
+input_rows=37780 keys=12583 final_time_us=2506135493517
+poll_hours=1 polls=698 initial_rows=12477 subsequent_input=25303 subsequent_delivered=17270 all_delivered=29747 superseded=8033 compact_p50_ms=0.605514 indexed_p50_ms=0.631407 std_map_p50_ms=6.02336
+poll_hours=24 polls=31 initial_rows=12477 subsequent_input=25303 subsequent_delivered=11110 all_delivered=23587 superseded=14193 compact_p50_ms=0.468342 indexed_p50_ms=0.66392 std_map_p50_ms=2.15037
+
+Build inputs (SHA-256)
+6b708620f10e6c2ca97afd2a356d219d3c25a7fc6d19b574bfacd321b87f872f  src/tailstate.c
+f80741ab543a03a4cd26d0a53aa13d00fd56f34a779a083f66ca149fa169651e  include/tailstate.h
+5d34f07c7ad8db5fdb6e87988f9c998062d848159fcc015572a02e09dab3ddb6  bench/real/borg.py
+772661245d99f004f6573be15bdc444b6bbc86ab0af029595f3887e78b9d8d22  bench/real/replay.cpp

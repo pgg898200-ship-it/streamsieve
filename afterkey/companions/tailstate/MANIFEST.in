@@ -1,0 +1,3 @@
+include include/tailstate.h
+include src/tailstate.c
+include python/native_module.c

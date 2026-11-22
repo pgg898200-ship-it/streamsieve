@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Resume a lagging worker with the latest change per key. Try a state-sync trace, install the C and Python library, and compare it with ordered maps on Google Borg fleet events.">
+<meta name="color-scheme" content="dark">
+<title>Tailstate — live state catch-up</title>
+<style>
+:root{color-scheme:dark;--bg:#121615;--panel:#191e1c;--line:#3a423e;--muted:#adb7ad;--fg:#eef3e7;--lime:#c3ef86;--gold:#f3bf82;--mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:20px}body{font:16px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--fg);margin:0}
+a{color:var(--lime);text-underline-offset:.2em}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+main,header{width:min(100% - 48px,1056px);margin:auto}header{height:74px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}nav{display:flex;gap:22px}nav a{color:var(--muted);font-size:.88rem;text-decoration:none}.brand{font-size:1.25rem;font-weight:700;letter-spacing:-.055em;display:flex;gap:10px;align-items:center;color:var(--fg);text-decoration:none}
+.mark{width:25px;height:21px;display:inline-flex;align-items:flex-end;gap:3px}.mark b{display:block;width:6px;background:var(--lime)}.mark b:nth-child(1){height:8px}.mark b:nth-child(2){height:14px}.mark b:nth-child(3){height:21px}
+.hero{padding:56px 0 32px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:25px;align-items:end}h1,h2,h3,p{margin:0}h1{font:600 clamp(2.65rem,6.4vw,5.1rem)/.98 "Space Grotesk",Inter,system-ui,sans-serif;letter-spacing:-.075em;max-width:850px}.hero p{color:var(--muted);max-width:61ch;margin-top:20px}.download,button{font:600 .86rem/1.3 Inter,system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:7px;min-height:41px;padding:10px 15px;text-decoration:none;cursor:pointer}.download,.primary{color:#17200f;background:var(--lime);border:1px solid var(--lime)}.download{white-space:nowrap}.secondary{background:#232a26;color:var(--fg);border:1px solid #475249}.secondary:hover:not(:disabled){background:#344032}.primary:hover:not(:disabled),.download:hover{background:#d2f5a4;text-decoration:none}button:disabled{opacity:.5;cursor:default}
+.panel{border:1px solid var(--line);background:var(--panel);border-radius:14px;overflow:hidden}.panel-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:19px 24px;border-bottom:1px solid var(--line)}.panel-top h2{font-size:1.2rem;font-weight:620;letter-spacing:-.035em}.reset{color:var(--muted);background:none;border:none;text-decoration:underline;text-underline-offset:3px;padding:5px 0;min-height:32px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);padding:19px 24px 21px;border-bottom:1px solid var(--line);gap:12px;background:#1d241f}.stat{border-left:1px solid var(--line);padding-left:20px}.stat:first-child{border:0;padding:0}.stat span{color:var(--muted);font-size:.8rem;display:block}.stat strong{font:500 2rem/1.2 var(--mono);font-variant-numeric:tabular-nums;display:block;margin-top:6px}.stat:nth-child(3) strong{color:var(--lime)}
+.body{padding:22px 24px}.controls{display:flex;flex-wrap:wrap;gap:8px}.status{margin:14px 0 18px;min-height:1.6em;color:var(--muted);font-size:.9rem}.grid{display:grid;grid-template-columns:1.25fr 1fr;gap:32px}.grid h3,details summary{font-size:.93rem;font-weight:600;letter-spacing:-.018em}.grid h3{margin-bottom:9px}
+table{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:.83rem;text-align:left;font-variant-numeric:tabular-nums}th{font-weight:400;color:var(--muted);font-size:.72rem}th,td{padding:8px 6px 8px 0;border-bottom:1px solid var(--line)}td:last-child,th:last-child{text-align:right;padding-right:0}.green{color:var(--lime)}.warm{color:var(--gold)}.muted{color:var(--muted)}.page-list{list-style:none;margin:0;padding:0;font-family:var(--mono);font-size:.83rem}.page-list li{padding:8px 0;border-bottom:1px solid var(--line)}.hint{color:var(--muted);font-size:.83rem}.cursor{margin-top:16px}.cursor code{color:var(--lime);font-family:var(--mono)}details{border-top:1px solid var(--line);margin-top:22px;padding-top:14px}summary{cursor:pointer;display:list-item;width:fit-content}.trace{max-height:230px;overflow:auto;margin:10px 0 0;padding-left:41px;color:var(--muted);font:13px/1.7 var(--mono)}.semantic{font-size:.79rem;color:var(--muted);margin-top:14px}.lower{display:grid;grid-template-columns:1.12fr 1fr;gap:40px;margin:40px 0 48px}.lower h2{font-size:1.35rem;letter-spacing:-.04em}.lower p{color:var(--muted);font-size:.9rem;margin:8px 0 12px}.command{display:flex;gap:12px;align-items:start;justify-content:space-between;background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:8px}.command pre{margin:0;font:13px/1.65 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;min-width:0}.command button{min-height:32px;padding:5px 9px}.links{display:flex;gap:16px;flex-wrap:wrap;font-size:.9rem}
+@media(max-width:740px){.hero,.lower{grid-template-columns:1fr}.hero{padding-top:38px;gap:18px}.download{justify-self:start}.grid{gap:20px}.lower{gap:24px}}@media(max-width:535px){main,header{width:calc(100% - 28px)}header{height:58px}nav{gap:13px}.panel-top,.body,.stats{padding-left:14px;padding-right:14px}.stats{grid-template-columns:1fr 1fr;row-gap:16px}.stat:nth-child(3){border:0;padding:0}.stat:nth-child(even){padding-left:15px}.grid{grid-template-columns:1fr}.controls button{min-height:44px}.hero p{margin-top:14px}.status{min-height:3em}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header>
+<a class="brand" href="#top" aria-label="Tailstate home"><span class="mark" aria-hidden="true"><b></b><b></b><b></b></span>Tailstate</a>
+<nav aria-label="Sections"><a href="#workbench">Workbench</a><a href="#measurements">Benchmarks</a></nav>
+</header>
+<main id="top">
+<section class="hero">
+<div><h1>Catch up without replaying every write.</h1><p>Tailstate is a C index for reconnecting workers. Each reader gets the latest change per key since its checkpoint, in sequence order. Deletions travel with the updates.</p></div>
+<a class="download" href="./tailstate.tar.gz" download>Download source <span aria-hidden="true">↓</span></a>
+</section>
+<section class="panel" id="workbench" aria-labelledby="workbench-title">
+<div class="panel-top"><h2 id="workbench-title">State sync workbench</h2><button type="button" class="reset" id="reset">Reset trace</button></div>
+<div class="stats">
+<div class="stat"><span>Writes since cursor</span><strong id="writes">8</strong></div>
+<div class="stat"><span>Distinct pending keys</span><strong id="pending">4</strong></div>
+<div class="stat"><span>Rows delivered</span><strong id="delivered">0</strong></div>
+<div class="stat"><span>Publisher head</span><strong id="head">8</strong></div>
+</div>
+<div class="body">
+<div class="controls">
+<button id="read" class="primary" type="button">Read next page <span aria-hidden="true">→</span></button>
+<button id="overwrite" class="secondary" type="button" disabled>Overwrite cursor key</button>
+<button id="remove" class="secondary" type="button">Delete a live key</button>
+</div>
+<p id="status" class="status" role="status"></p>
+<div class="grid">
+<div><h3>Publisher and worker</h3><table aria-label="Latest publisher and worker state per key"><thead><tr><th scope="col">Key</th><th scope="col">Publisher</th><th scope="col">Worker</th></tr></thead><tbody id="states"></tbody></table></div>
+<div><h3>Last page <span class="muted">· up to 2 rows</span></h3><ol class="page-list" id="last"></ol><p class="cursor hint">Worker cursor <code id="cursor"></code></p></div>
+</div>
+<details><summary>Mutation trace</summary><ol class="trace" id="trace" aria-label="Writes in sequence order"></ol></details>
+<p class="semantic">This deterministic JavaScript simulation illustrates cursor semantics. Native timings are in the benchmark results below.</p>
+<noscript><p>This workbench requires JavaScript. Download the source to run the native examples.</p></noscript>
+</div>
+</section>
+<section class="lower">
+<div><h2>Run it locally</h2><p>Extract the source and run the SQLite worker reconnect example with a C compiler, Make, and Python 3.</p><div class="command"><pre id="commands">tar -xzf tailstate.tar.gz
+cd tailstate
+make
+python3 examples/reconnect.py</pre><button id="copy" class="secondary" type="button">Copy</button></div><p class="hint" id="copy-status" role="status"></p></div>
+<div id="measurements"><h2>Native benchmarks</h2><p>On Google’s Borg trace, compact Tailstate processed the hourly polling replay in 0.606 ms versus 6.023 ms for an ordered map. At one million keys and 10,000 logical readers, the map won the mixed replay. Both tests run in-process.</p><div class="links"><a href="./borg-results.txt">Borg replay</a><a href="./fleet-results.txt">Million-key replay</a><a href="./results.txt">Catch-up results</a><a href="./pages-results.txt">Paged results</a></div></div>
+</section>
+</main>
+<script>
+"use strict";
+const el = id => document.getElementById(id);
+const seed = [[0,12],[1,40],[0,18],[2,26],[1,44],[3,70],[1,49],[0,21]];
+let log, latest, replica, checkpoint, total, last, message;
+function write(key, value) {
+  const row = {seq: log.length + 1, key, value};
+  log.push(row);
+  latest.set(key, row);
+}
+function pendingRows() {
+  return [...latest.values()].filter(row => row.seq > checkpoint.seq)
+    .sort((a,b) => a.seq - b.seq);
+}
+function reset() {
+  log = []; latest = new Map(); replica = new Map();
+  checkpoint = {seq: 0, key: null}; total = 0; last = [];
+  for (const [key, value] of seed) write(key, value);
+  message = "Eight writes changed four keys. Read a page to acknowledge its last row.";
+  render();
+}
+function read() {
+  const anchor = latest.get(checkpoint.key);
+  const changed = anchor && anchor.seq !== checkpoint.seq;
+  last = pendingRows().slice(0,2);
+  if (!last.length) return;
+  for (const row of last) replica.set(row.key,row);
+  checkpoint = last[last.length - 1];
+  total += last.length;
+  message = changed
+    ? "The cursor key was rewritten. Resuming by sequence still delivered the correct page."
+    : "Page applied. The worker saved the last row’s sequence and key together.";
+  render();
+}
+function overwrite() {
+  if (checkpoint.key === null) return;
+  const key = checkpoint.key;
+  const base = latest.get(key).value ?? 0;
+  write(key, base + 1); write(key, base + 2);
+  message = "Two writes replaced the cursor key. Its latest value now occupies one pending row.";
+  render();
+}
+function remove() {
+  const live = [...latest.values()].filter(row => row.value !== null).sort((a,b) => a.key-b.key);
+  if (!live.length) return;
+  write(live[0].key, null);
+  message = "Key " + live[0].key + " was deleted. Its tombstone is pending until the worker reads it.";
+  render();
+}
+function label(row) {
+  if (!row) return "unseen";
+  return row.value === null ? "deleted" : String(row.value);
+}
+function valueCell(row) {
+  const td = document.createElement("td");
+  td.textContent = label(row);
+  td.className = !row ? "muted" : row.value === null ? "warm" : "";
+  return td;
+}
+function render() {
+  const pending = pendingRows();
+  el("writes").textContent = log.length - checkpoint.seq;
+  el("pending").textContent = pending.length;
+  el("delivered").textContent = total;
+  el("head").textContent = log.length;
+  el("read").disabled = pending.length === 0;
+  el("overwrite").disabled = checkpoint.key === null;
+  el("remove").disabled = [...latest.values()].every(row => row.value === null);
+  el("cursor").textContent = "A / seq " + checkpoint.seq + (checkpoint.key === null ? "" : " / key " + checkpoint.key);
+  el("status").textContent = message;
+  const rows = [...latest.keys()].sort((a,b) => a-b).map(key => {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th"); th.scope = "row"; th.textContent = key;
+    tr.append(th, valueCell(latest.get(key)), valueCell(replica.get(key)));
+    return tr;
+  });
+  el("states").replaceChildren(...rows);
+  const page = last.map(row => {
+    const li = document.createElement("li");
+    li.className = row.value === null ? "warm" : "green";
+    li.textContent = "#" + row.seq + " · key " + row.key + " → " + label(row);
+    return li;
+  });
+  if (!page.length) {
+    const li = document.createElement("li"); li.className = "muted";
+    li.textContent = "Waiting for the first read."; page.push(li);
+  }
+  el("last").replaceChildren(...page);
+  const trace = log.slice(-32).map(row => {
+    const li = document.createElement("li"); li.value = row.seq;
+    li.textContent = "key " + row.key + " → " + label(row); return li;
+  });
+  el("trace").replaceChildren(...trace);
+}
+el("read").addEventListener("click",read);
+el("overwrite").addEventListener("click",overwrite);
+el("remove").addEventListener("click",remove);
+el("reset").addEventListener("click",reset);
+el("copy").addEventListener("click",async () => {
+  const commands = el("commands");
+  try {
+    await navigator.clipboard.writeText(commands.textContent);
+    el("copy-status").textContent = "Build commands copied.";
+  } catch {
+    const selection = window.getSelection(), range = document.createRange();
+    range.selectNodeContents(commands);
+    selection.removeAllRanges(); selection.addRange(range);
+    el("copy-status").textContent = "Commands selected. Use your device’s copy command.";
+  }
+});
+reset();
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+keys=1048576 subscribers=10000 waves=12 writes_per_wave=65536 page_size=16 seed=20261122
+verified_rows=1920000 valid_hints=115614 stale_hints=4386 lag_p50=787184 lag_p95=1579925 indexed_reserved_bytes=54657088
+run=1 engine=tailstate_indexed initial_build_ms=42.018 writes_ms=96.532 pages_ms=474.814 mixed_ms=571.346 digest=1fc26ca73eac68bc
+run=2 engine=std_map initial_build_ms=82.017 writes_ms=287.065 pages_ms=107.716 mixed_ms=394.781 digest=1fc26ca73eac68bc
+run=3 engine=std_map initial_build_ms=78.405 writes_ms=349.593 pages_ms=120.598 mixed_ms=470.191 digest=1fc26ca73eac68bc
+run=4 engine=tailstate_indexed initial_build_ms=53.870 writes_ms=63.177 pages_ms=207.284 mixed_ms=270.461 digest=1fc26ca73eac68bc
+run=5 engine=tailstate_indexed initial_build_ms=62.023 writes_ms=109.818 pages_ms=476.761 mixed_ms=586.579 digest=1fc26ca73eac68bc
+run=6 engine=std_map initial_build_ms=54.605 writes_ms=301.350 pages_ms=120.084 mixed_ms=421.434 digest=1fc26ca73eac68bc

@@ -1,0 +1,72 @@
+Tailstate paged recovery benchmark
+Date: 2026-11-22 UTC
+Host: Linux 6.18.57 x86_64; AMD EPYC 9V74 80-Core Processor
+Toolchain: Debian GCC/G++ 14.2.0, libstdc++; one process, one thread
+Reproduce from the project root:
+  cc -std=c11 -O3 -DNDEBUG -Iinclude -c src/tailstate.c -o /tmp/tailstate-engine.o
+  c++ -std=c++17 -O3 -DNDEBUG -Iinclude bench/pages.cpp /tmp/tailstate-engine.o -o /tmp/tailstate-pages
+  /tmp/tailstate-pages
+
+Synthetic workload. Every method replays the same shuffled dense-key input.
+Build includes construction and initial inserts. Rewrites update 25% of keys,
+including some deletes. Build order is randomized across five fresh stores.
+Bytes requested include the store object/arrays, or the std::map object,
+allocated tree nodes and dense key-to-iterator vector. Excludes allocator
+metadata, benchmark inputs, and output arrays. These numbers do not measure RSS.
+
+For each cohort, 256 requests resume from the middle half of the first load.
+Current and overwritten anchor cohorts use adjacent initial sequence numbers.
+Recent-window trials use this state. For older-window trials a single hot
+key receives 65,536 additional rewrites. All query checkpoints are then outside
+the revision ring. The warmup and timing still read the original checkpoints.
+The final separate workload rewrites all keys in initial order, then rewrites
+a consecutive run of five keys per block of 64, cycling its offset across the epoch. Its sampled recent cursors point at
+those superseded anchors, and all four successor probes miss.
+Writes finish before timing. Page requests return the first 16 full
+ordered rows. Each method first warms its own working set. Method order and
+cursor order are shuffled across five rounds. p50/p95 include read, digest
+and timer overhead. An independent map traversal verifies every field before
+timing; all methods in a cohort must also have identical timed digests.
+These are warmed process-local reads, with no network, concurrency, or I/O.
+
+keys=65536 rewrites=16384 page=16 requests_per_cohort=256 rounds=5 seed=20261122 input_generation_ms=0.428
+store=compact live_requested_bytes=1581112 build_p50_ms=1.498 rewrite_p50_ms=0.270
+store=indexed live_requested_bytes=3416128 build_p50_ms=1.352 rewrite_p50_ms=0.443
+store=map     live_requested_bytes=4194376 build_p50_ms=3.487 rewrite_p50_ms=1.593
+window=recent anchor=valid       method=compact_begin  p50_ns=547703 p95_ns=791074 digest=f02f0a1fc85dc17c
+window=recent anchor=valid       method=compact_resume p50_ns=160 p95_ns=220 digest=f02f0a1fc85dc17c
+window=recent anchor=valid       method=indexed_begin  p50_ns=160 p95_ns=320 digest=f02f0a1fc85dc17c
+window=recent anchor=valid       method=indexed_resume p50_ns=171 p95_ns=411 digest=f02f0a1fc85dc17c
+window=recent anchor=valid       method=map_seek       p50_ns=251 p95_ns=611 digest=f02f0a1fc85dc17c
+window=recent anchor=valid       method=map_hint       p50_ns=161 p95_ns=471 digest=f02f0a1fc85dc17c
+window=recent anchor=overwritten method=compact_begin  p50_ns=524328 p95_ns=754458 digest=84e1b3062a9536cc
+window=recent anchor=overwritten method=compact_resume p50_ns=517597 p95_ns=785794 digest=84e1b3062a9536cc
+window=recent anchor=overwritten method=indexed_begin  p50_ns=160 p95_ns=571 digest=84e1b3062a9536cc
+window=recent anchor=overwritten method=indexed_resume p50_ns=170 p95_ns=471 digest=84e1b3062a9536cc
+window=recent anchor=overwritten method=map_seek       p50_ns=260 p95_ns=701 digest=84e1b3062a9536cc
+window=recent anchor=overwritten method=map_hint       p50_ns=250 p95_ns=581 digest=84e1b3062a9536cc
+additional_hot_key_writes=65536 before older-window cohorts
+window=older  anchor=valid       method=compact_begin  p50_ns=538809 p95_ns=786065 digest=f02f0a1fc85dc17c
+window=older  anchor=valid       method=compact_resume p50_ns=160 p95_ns=281 digest=f02f0a1fc85dc17c
+window=older  anchor=valid       method=indexed_begin  p50_ns=541 p95_ns=1523 digest=f02f0a1fc85dc17c
+window=older  anchor=valid       method=indexed_resume p50_ns=181 p95_ns=330 digest=f02f0a1fc85dc17c
+window=older  anchor=valid       method=map_seek       p50_ns=251 p95_ns=471 digest=f02f0a1fc85dc17c
+window=older  anchor=valid       method=map_hint       p50_ns=161 p95_ns=371 digest=f02f0a1fc85dc17c
+window=older  anchor=overwritten method=compact_begin  p50_ns=575823 p95_ns=1121111 digest=84e1b3062a9536cc
+window=older  anchor=overwritten method=compact_resume p50_ns=512449 p95_ns=733287 digest=84e1b3062a9536cc
+window=older  anchor=overwritten method=indexed_begin  p50_ns=1012 p95_ns=4397 digest=84e1b3062a9536cc
+window=older  anchor=overwritten method=indexed_resume p50_ns=741 p95_ns=2513 digest=84e1b3062a9536cc
+window=older  anchor=overwritten method=map_seek       p50_ns=390 p95_ns=1652 digest=84e1b3062a9536cc
+window=older  anchor=overwritten method=map_hint       p50_ns=250 p95_ns=811 digest=84e1b3062a9536cc
+four-miss workload refreshes 65536 keys, then rewrites 5 per group of 64
+window=recent anchor=four_misses method=compact_begin  p50_ns=457668 p95_ns=675641 digest=382c3ad0f71fd412
+window=recent anchor=four_misses method=compact_resume p50_ns=478940 p95_ns=690803 digest=382c3ad0f71fd412
+window=recent anchor=four_misses method=indexed_begin  p50_ns=691 p95_ns=3305 digest=382c3ad0f71fd412
+window=recent anchor=four_misses method=indexed_resume p50_ns=721 p95_ns=3855 digest=382c3ad0f71fd412
+window=recent anchor=four_misses method=map_seek       p50_ns=251 p95_ns=671 digest=382c3ad0f71fd412
+window=recent anchor=four_misses method=map_hint       p50_ns=231 p95_ns=561 digest=382c3ad0f71fd412
+
+Build inputs (SHA-256)
+fef445d04c0b833ba2d1ed30afa74a33bc720d8a9dc5397de3abba15eacd920c  bench/pages.cpp
+6b708620f10e6c2ca97afd2a356d219d3c25a7fc6d19b574bfacd321b87f872f  src/tailstate.c
+f80741ab543a03a4cd26d0a53aa13d00fd56f34a779a083f66ca149fa169651e  include/tailstate.h
