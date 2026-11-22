@@ -29,7 +29,7 @@ jobs:
           CIBW_SKIP: "*-musllinux_* *-manylinux_i686 *-win32 cp313t-*"
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_ARCHS_WINDOWS: "AMD64"
-          CIBW_TEST_COMMAND: "python -m unittest discover -s {project}/tests -p 'test_*.py'"
+          CIBW_TEST_COMMAND: 'python -m unittest discover -s "{project}/tests" -p "test_*.py"'
 
       - uses: actions/upload-artifact@v4
         with:
