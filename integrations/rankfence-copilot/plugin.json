@@ -1,0 +1,18 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "rankfence",
+  "version": "0.1.0",
+  "description": "Replay paged hybrid search rankings, find when the top k is fixed, and verify the result against exhaustive reciprocal rank fusion.",
+  "author": {
+    "name": "PGG Engineering"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0",
+  "repository": "https://github.com/pgg898200-ship-it/streamsieve",
+  "keywords": [
+    "hybrid-search",
+    "reciprocal-rank-fusion",
+    "retrieval",
+    "mcp"
+  ]
+}

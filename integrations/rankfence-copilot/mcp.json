@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "rankfence": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--no-config",
+        "--no-project",
+        "--isolated",
+        "--no-index",
+        "--with",
+        "https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/9107326cf0993e842c281d412cb276e83eb1c6a4/releases/rankfence-0.1.0-py3-none-any.whl#sha256=c600be4383ad45651e2388c16a0e08559fb97364ab6663484b5c9cedc96896e1",
+        "python",
+        "-I",
+        "-m",
+        "rankfence.mcp"
+      ]
+    }
+  }
+}

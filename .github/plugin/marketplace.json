@@ -1,0 +1,14 @@
+{
+  "name": "pgg-engineering",
+  "owner": {
+    "name": "PGG Engineering"
+  },
+  "plugins": [
+    {
+      "name": "rankfence",
+      "description": "Replay paged hybrid search rankings, find when the top k is fixed, and verify the result against exhaustive reciprocal rank fusion.",
+      "version": "0.1.0",
+      "source": "./integrations/rankfence-copilot"
+    }
+  ]
+}
