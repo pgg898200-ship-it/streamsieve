@@ -28,3 +28,15 @@ The benchmark prefills every key outside the timed region and constructs its inp
 The append-log baseline reserves storage for the entire run and seeks directly to each cursor, then discards superseded entries by checking a dense array of latest revisions. The std::list implementation splices stable nodes on overwrite, stores the data within each node and uses dense per-key iterators. It has the same output-sensitive read complexity as Afterkey Index. The dense scan reuses its sort buffer.
 
 `min_ns_op`, `median_ns_op`, and `max_ns_op` are trial-level elapsed time divided by total mixed operations. `median_mixed_mops_s` counts millions of writes plus polls per elapsed second. `median_cpu_ns_op` uses process CPU time over the same replay loop. These statistics describe amortized throughput. The range reflects variation across trials. This benchmark does not capture single-operation tail latency, network time, synchronization or production adoption. For measured record counts from public traces under simulated poll schedules, see [public-trace replay](replay.md).
+
+## Load the CSV with Hugging Face Datasets
+
+Install `datasets` and `fsspec[http]` in a Python environment. This streams the published benchmark rows from an immutable GitHub revision.
+
+```python
+from datasets import load_dataset
+url = "https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/33590c650619a518e9f873e2825b6a5db47590e0/afterkey/bench/results.csv"
+rows = load_dataset("csv", data_files=url, split="train", streaming=True,
+                    usecols=["scenario", "method", "median_ns_op"])
+print(next(iter(rows)))
+```

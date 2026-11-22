@@ -3,7 +3,7 @@ title: Afterkey
 sdk: static
 app_file: demo/index.html
 license: apache-2.0
-short_description: C++17 latest-state catch-up for independently lagging readers
+short_description: C++17 latest-state updates for lagging readers
 tags:
 - cpp
 - multi-agent
@@ -15,13 +15,16 @@ tags:
 
 **Let a slow reader catch up with one value per changed key.** Afterkey is a C++17 header for agent dashboards, worker state and telemetry fan-out. A producer overwrites a fixed set of keys. Each reader keeps one 64-bit cursor. A reader that sleeps through a million updates to the same key receives one row when it returns. Deletions travel through the same feed.
 
-[Try two independent readers in your browser](https://afterkey.tancurl3.chatgpt.site) · [Download the source kit](https://afterkey.tancurl3.chatgpt.site/afterkey-0.1.0.zip) · [Reproduce the benchmarks](bench/environment.md)
+[Try two independent readers in your browser](https://afterkey.tancurl3.chatgpt.site) · [Download the source kit](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-0.1.0.zip) · [Reproduce the benchmarks](bench/environment.md)
 
 ## Run in 30 seconds
 
-From this directory, with any C++17 compiler:
+Download the standalone kit and run the example with a C++17 compiler. If you cloned StreamSieve, start in its `afterkey/` directory and run the last two commands.
 
 ```sh
+curl -fsSLO https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-0.1.0.zip
+unzip -q afterkey-0.1.0.zip
+cd afterkey-0.1.0
 c++ -std=c++17 -O2 -Iinclude examples/quickstart.cpp -o /tmp/afterkey-demo
 /tmp/afterkey-demo
 ```
