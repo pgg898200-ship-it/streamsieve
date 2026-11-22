@@ -16,6 +16,10 @@ The monitor flags one channel, `api_p99_ms`. The database spikes stay below the 
 STREAMSIEVE BRIEF | 6 ch x 480 ticks | e-BH(alpha=0.050): 1/6 flagged
 ```
 
+![API latency over 480 hourly ticks. The alert starts at tick 234. The last 64 samples, ticks 417 through 480, are highlighted as the values still available to fetch.](telemetry-history.png)
+
+The handle is `ch:0@t=234..480`. The example keeps 64 raw samples per channel, so the earliest reading it can still return is tick 417. Increase `ring_capacity` to keep a longer history.
+
 The example uses the same [JSON Lines reader](../python/streamsieve/formats.py) as the CLI and MCP server. To process your own flat JSON objects, run `streamsieve sift your-metrics.jsonl`.
 
 ## More examples
