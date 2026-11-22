@@ -4,7 +4,7 @@ Choose a tool by the operation your application needs. Each entry links to its s
 
 ![Five product families illustrated by a ranked page, two timers, a coalesced update, a signal trace, and a tally of votes.](docs/product-families.svg)
 
-[Subscribe to the PGG Engineering release feed](https://pgg898200-ship-it.github.io/cachepin/releases.atom) for runnable examples and measured results.
+Follow [runnable examples and measured results](https://pgg898200-ship-it.github.io/cachepin/releases.atom), or [import the portfolio’s release feeds into your reader (OPML)](https://pgg898200-ship-it.github.io/cachepin/releases.opml).
 
 ## Search and retrieval
 
