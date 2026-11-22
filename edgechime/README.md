@@ -46,6 +46,14 @@ rooms.move(6, 3, 10, 3, (id, entered) => console.log(id, entered));
 // 0 false
 ```
 
+For a browser module, use the commit-pinned jsDelivr import directly.
+
+```js
+import { EdgeChime } from 'https://cdn.jsdelivr.net/gh/pgg898200-ship-it/streamsieve@9121d2b93443dcf4e3faee1bfd27f8a6e9a21d48/edgechime/index.js';
+```
+
+[Move a point on a Leaflet floor map](https://pgg898200-ship-it.github.io/cachepin/edgechime/) to watch it enter Assembly, leave Loading and then leave Assembly. The example passes each Leaflet position in EdgeChime’s `(x, y)` order. [Copy the single-file example](https://github.com/pgg898200-ship-it/cachepin/blob/main/site/edgechime/index.html).
+
 **Use cases.** Wake an agent when a tracked object changes rooms, update area-of-interest subscriptions in a multiplayer simulation, or route sampled positions to dashboards whose rectangles gained or lost the object. Keep the last point per object in the application. Call `at` once to seed membership when you need a complete initial snapshot.
 
 **Geometry.** A zone contains `minX ≤ x < maxX` and `minY ≤ y < maxY`. Coordinates are finite Cartesian numbers. IDs are zero-based insertion positions. Identical rectangles retain separate IDs. Callbacks run synchronously, in unspecified order, once per changed ID. Both query methods return the callback count. A jump from outside to outside produces no event, even if the straight line passes through the zone. Project geographic coordinates or handle longitude wrap in the caller as needed. Rebuild the index when subscriptions change.
