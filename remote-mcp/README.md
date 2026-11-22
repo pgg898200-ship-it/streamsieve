@@ -2,7 +2,7 @@
 
 This stateless HTTP worker exposes one read-only tool, `rankfence_analyze`. Give it complete, stable ranked ID lists and a target k. It returns the ordered RRF winners, the number of entries a paged consumer would read before certification, and an exhaustive cross-check. The caller uploads every ID for this simulation. To stop live producers in your own service, use the Python coordinator in the repository root.
 
-**Endpoint** [RankFence MCP](https://rankfence-tools-pgg.tancurl3.chatgpt.site/mcp)  
+**Endpoint** [RankFence MCP](https://rankfence-tools-pgg.tancurl3.chatgpt.site/rpc)  
 **Project** [RankFence guide and measured results](https://rankfence-pgg.tancurl3.chatgpt.site/guide.html)
 
 | Tool input | Contract |
@@ -32,3 +32,7 @@ node --test test.mjs
 ```
 
 The timing and entry counts reported by the replay describe simulated CPU-side page rounds. The public worker accepts no source URLs and makes no outbound retrieval calls.
+
+## Python coordinator evidence
+
+[Independent synchronous-round audit](evidence/README.md) checks the local Python coordinator on 100 sharded Robust03 topics. The hosted JavaScript replay has separate tests in this directory.
