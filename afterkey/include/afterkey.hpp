@@ -91,32 +91,37 @@ public:
         }
         if (!limit || cursor == revision_) return 0;
 
-        Key next = oldest_;
-        if (cursor && last_key && *last_key < slots_.size() &&
-            slots_[*last_key].revision == cursor) {
-            next = slots_[*last_key].newer;
-        } else if (slots_[next].revision <= cursor) {
-            next = newest_;
-            Key older = slots_[next].older;
-            while (older != end && slots_[older].revision > cursor) {
-                next = older;
-                older = slots_[next].older;
-            }
-        }
         const ReadScope scope(reading_);
-        std::size_t count = 0;
-        while (next != end && count < limit) {
-            const Key key = next;
+        std::size_t delivered = 0;
+        for (Key key = first_after(cursor, last_key);
+             key != end && delivered < limit; key = slots_[key].newer) {
             const Slot& slot = slots_[key];
             callback(slot.revision, key,
                      slot.value ? std::addressof(*slot.value) : nullptr);
-            next = slot.newer;
-            ++count;
+            ++delivered;
         }
-        return count;
+        return delivered;
     }
 
 private:
+    // Called only when there is a newer row. A matching hint still points to
+    // its last write. If it was overwritten, seek by revision instead.
+    Key first_after(Revision cursor, std::optional<Key> last_key) const noexcept {
+        if (cursor && last_key && *last_key < slots_.size() &&
+            slots_[*last_key].revision == cursor) {
+            return slots_[*last_key].newer;
+        }
+        if (slots_[oldest_].revision > cursor) return oldest_;
+
+        Key first = newest_;
+        Key older = slots_[first].older;
+        while (older != end && slots_[older].revision > cursor) {
+            first = older;
+            older = slots_[first].older;
+        }
+        return first;
+    }
+
     Slot& writable(Key key) {
         if (reading_) {
             throw std::logic_error("Afterkey cannot mutate during a read");
