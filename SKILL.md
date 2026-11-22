@@ -97,7 +97,9 @@ When connected via `.claude-plugin/plugin.json` or `.cursor-plugin/plugin.json` 
 
 ---
 
-## 3. Zero-Dependency Python API (`pip install streamsieve`)
+## 3. Python API
+
+Use the [current source install](README.md#build-the-current-source) for the full API described here. The [release wheel and example](README.md#try-it) cover the v0.1.0 API.
 
 The `streamsieve` Python package uses only the Python standard library (`ctypes` + `array`, zero NumPy/SciPy imports) while accepting Python lists, `array('d')`, `memoryview`, and duck-typed NumPy `float64` arrays zero-copy.
 

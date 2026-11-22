@@ -4,12 +4,12 @@
 
 ## 1. Current State (`2026-11-22`, v0.2.0)
 
-- **Product:** `streamsieve` v0.2.0 — zero-dependency 8-wide cache-tiled AVX2 C++20 runtime + `<4 ms` native CLI (`--jsonl` / CSV / `--season` / `--detrend`) + zero-dependency Python SDK (`pip install streamsieve`) + drop-in `river.drift` (`EStreamDrift`) & `scikit-learn` (`SklearnSieveDetector`) adapters + 7-tool stdio MCP server.
+- **Product:** `streamsieve` v0.2.0 — zero-dependency 8-wide cache-tiled AVX2 C++20 runtime + `<4 ms` native CLI (`--jsonl` / CSV / `--season` / `--detrend`) + zero-dependency Python SDK (source build from `main`) + drop-in `river.drift` (`EStreamDrift`) & `scikit-learn` (`SklearnSieveDetector`) adapters + 7-tool stdio MCP server.
 - **Verification Gate:**
   - Native C++20 `-O3 -march=native -ffp-contract=off -Wall -Wextra -Wpedantic`: **0 warnings**, PASS.
   - Strict `clang++ -std=c++20 -O3 -ffp-contract=off -Wall -Wextra -Wpedantic -Werror`: **0 warnings**, PASS.
   - ASan + UBSan + `float-cast-overflow` scalar build (`test-san`): **0 sanitizer errors**, 0-ULP bit-exact AVX2 vs scalar parity.
-  - Windows MSVC C++20 CI + 15 cross-platform wheels (`Linux x86_64`, `macOS ARM64`, `Windows AMD64`, Python `3.9`–`3.13`).
+  - Windows MSVC C++20 CI + a configured 15-wheel build matrix (`Linux x86_64`, `macOS ARM64`, `Windows AMD64`, Python `3.9`–`3.13`).
   - Zero-dep Python unittest + Adversarial Breaker + v0.2.0 parity/regression suite: **79/79 tests passing** (all 13 independent breaker witnesses `W1`–`W13` resolved & locked under regression tests).
   - Affiliation hygiene audit: **0** external/personal references anywhere in source, docs, or git history.
 - **Verified Frontier Edge (`benchmarks/results.json`):**
@@ -25,10 +25,10 @@
 
 | Surface | Artifact in Repo | Why It Drives Organic Third-Party Pull | Status |
 |---|---|---|---|
-| **PyPI (`pip install streamsieve`)** | `pyproject.toml`, `setup.py`, `MANIFEST.in`, `.github/workflows/release.yml` | Zero-dep prebuilt wheels (15 wheels: Linux/macOS/Windows, Py 3.9–3.13) via OIDC Trusted Publishing | Live on `v0.2.0` tag |
-| **Standalone Native CLI Tarballs** | `.github/workflows/release.yml` (`cli-linux`, `cli-macos`) | `<4 ms` drop-in terminal pipe for OpenTelemetry/Prometheus JSONL & CSV logs | Live on `v0.2.0` GitHub Release |
+| **Python distribution** | [GitHub release](https://github.com/pgg898200-ship-it/streamsieve/releases/tag/v0.1.0), `pyproject.toml`, `setup.py` | 10 CPython wheels for Linux x86-64 and macOS ARM64 (3.9–3.13), plus sdist | GitHub v0.1.0 available. Build v0.2.0 from `main`. |
+| **Native CLI** | [Release assets](https://github.com/pgg898200-ship-it/streamsieve/releases/tag/v0.1.0), `Makefile` | Standalone Linux x86-64 AVX2 binary | GitHub v0.1.0 available. Build the current CLI from `main`. |
 | **Drop-in `river` & `sklearn` Adapters** | `python/streamsieve/adapters.py` (`EStreamDrift`, `SklearnSieveDetector`) | 1-line swaps (`from streamsieve import EStreamDrift as ADWIN`, `SklearnSieveDetector().fit_predict(X)`) with 0 deps | Shipped & tested |
-| **MCP Directories & Registries** | `server.json`, `python/streamsieve/mcp_server.py` | Agents discover 7 streaming tools (`sift_stream` with `jsonl_text`/`season_period`/`detrend_alpha`, `lattice_*`, `voi_allocate`, `trust_step`) | Ready for MCP Registry listing |
+| **MCP Directories & Registries** | `server.json`, `python/streamsieve/mcp_server.py` | Agents discover 7 streaming tools (`sift_stream` with `jsonl_text`/`season_period`/`detrend_alpha`, `lattice_*`, `voi_allocate`, `trust_step`) | Local stdio supported after installation. The registry manifest anticipates a future PyPI release. |
 | **Claude Code / Cursor Skills** | `SKILL.md`, `.claude-plugin/plugin.json`, `.cursor-plugin/plugin.json` | Native skill/plugin install in coding agents | Shipped |
 | **AEO / AI-Agent Search Indexing** | `llms.txt`, `llms-full.txt`, `docs/benchmarks.md`, `docs/comparisons/*.md` | Dated, reproducible, honest X-vs-Y tables give AI coding assistants verifiable grounds to recommend `streamsieve` where it genuinely wins | Synced to v0.2.0 |
 | **Provenance & Checksums** | `LICENSE`, `NOTICE`, `SHA256SUMS` | Satisfies downstream maintainers auditing dependencies | Generated automatically per release |

@@ -1,6 +1,6 @@
 # streamsieve v0.2.0 — Full Machine-Readable Reference (`llms-full.txt`)
 
-> SIMD C++20/AVX2 runtime (8-wide cache-tiled batch kernel) + `<4 ms` native CLI (`--jsonl` / CSV / `--season` / `--detrend`) + zero-dependency Python SDK (`pip install streamsieve`, prebuilt Linux/macOS/Windows wheels) + drop-in `river` & `scikit-learn` adapters + 7-tool JSON-RPC 2.0 stdio MCP server for strictly causal, anytime-valid multi-agent streaming inference, zero-echo CRDT belief fusion, budgeted hierarchical VOI attention, and delayed-label Byzantine-safe agent trust calibration.
+> SIMD C++20/AVX2 runtime (8-wide cache-tiled batch kernel) + `<4 ms` native CLI (`--jsonl` / CSV / `--season` / `--detrend`) + Python SDK with zero runtime dependencies + drop-in `river` & `scikit-learn` adapters + 7-tool JSON-RPC 2.0 stdio MCP server for strictly causal, anytime-valid multi-agent streaming inference, zero-echo CRDT belief fusion, budgeted hierarchical VOI attention, and delayed-label Byzantine-safe agent trust calibration.
 > License: Apache-2.0 | Zero runtime dependencies | Verified on GCC `-O3`, `clang++ -Werror`, MSVC C++20, and ASan/UBSan/`float-cast-overflow` (79/79 tests passing, 0 compiler warnings).
 
 ---
@@ -25,9 +25,14 @@
 
 ## 2. Build, Install & CLI Reference
 
+The CLI flags and adapters below refer to v0.2.0 on `main`. For the shared API and a checked result on both versions, see the [Python example](README.md#try-it).
+
 ```bash
-# Prebuilt zero-dep wheels (Linux x86_64, macOS ARM64, Windows AMD64, Python 3.9-3.13)
-pip install streamsieve
+# v0.1.0 wheel, CPython 3.9–3.13 on Linux x86-64 or Apple Silicon macOS
+python -m pip install --no-index --only-binary=:all: --find-links https://github.com/pgg898200-ship-it/streamsieve/releases/expanded_assets/v0.1.0 streamsieve==0.1.0
+
+# v0.2.0 Python SDK and CLI, from a main checkout with a C++20 compiler
+python -m pip install .
 
 # Or build from source: shared lib + native CLI + C++20/ASan/UBSan + 79 Python tests
 make all test-cpp test-san

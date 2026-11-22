@@ -1,23 +1,43 @@
-# `streamsieve`
+# StreamSieve
 
-**SIMD C++20/AVX2 anytime-valid streaming inference, causal deseasonalizing & detrending, zero-echo CRDT belief fusion, and Byzantine-safe multi-agent calibration — zero runtime dependencies, `<4 ms` native CLI (`--jsonl` / CSV), drop-in `river` & `scikit-learn` adapters, 7-tool MCP server, and 99.99% LLM token compression with bit-exact raw drill-down.**
+**Find which telemetry channels changed, then read the samples behind the alert.**
 
-[![PyPI](https://img.shields.io/pypi/v/streamsieve?color=blue)](https://pypi.org/project/streamsieve/)
-[![Zero Runtime Deps](https://img.shields.io/badge/runtime%20deps-0-brightgreen)](https://github.com/pgg898200-ship-it/streamsieve/blob/main/pyproject.toml)
-[![C++20 AVX2](https://img.shields.io/badge/core-C%2B%2B20%20%2F%208--wide%20AVX2-blue)](https://github.com/pgg898200-ship-it/streamsieve/blob/main/csrc/streamsieve_core.hpp)
-[![Tests](https://img.shields.io/badge/tests-79%2F79%20%2B%20ASan%2FUBSan-brightgreen)](https://github.com/pgg898200-ship-it/streamsieve/tree/main/tests)
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-orange)](https://github.com/pgg898200-ship-it/streamsieve/blob/main/LICENSE)
+Put StreamSieve between a metrics collector and an alerting service or monitoring agent. Feed it one row of numeric measurements per tick. It returns a ranked brief with flagged channels, estimated change points and handles for reading back exact samples held in memory.
 
-AI agent fleets and streaming monitors break in four predictable ways on live data:
+[Try the Python example](#try-it) · [Use the CLI or MCP server](#quickstart) · [Benchmark results](docs/benchmarks.md) · [Agent reference](llms.txt)
 
-1. **Context-window blowup** — dumping 1,024-channel telemetry into prompts burns millions of tokens and gets trapped by high-variance "loud channels."
-2. **Continuous-peeking p-hacking & non-stationary false alarms** — polling rolling z-scores or Welch $t$-tests every few ticks inflates false alarms from 5% to **20–83%** under heavy tails/DC offsets and **84–100%** on diurnal or trending telemetry.
-3. **Echo-chamber double-counting** — gossiping findings across $W$ agents multiplies log-odds by **5–10×** or causes **93–97%** last-write-wins overwrite churn.
-4. **Delayed-label & Byzantine trust collapse** — uncalibrated "bloviators", poisoned agents, and sudden regime flips wreck naive voting when ground truth arrives late and out of order.
+![Two simulated latency streams over 256 ticks. Worker B shifts from 40–41 ms to 50–51 ms. StreamSieve flags B and returns the range ch:1@t=80..256.](docs/worker-latency.png)
 
-`streamsieve` solves all four in a single **zero-dependency C++20/AVX2 engine** (`255.67 M ch-ticks/s`, prebuilt Linux/macOS/Windows wheels) exposed via `pip install streamsieve`, a `<4 ms` native CLI (`--jsonl` / CSV / TSV), drop-in `river` and `scikit-learn` adapters, a 7-tool JSON-RPC 2.0 stdio **MCP server**, and pre-packaged **Claude Code / Cursor plugin skills**.
+## Try it
 
----
+Install the v0.1.0 wheel from GitHub Releases with CPython 3.9–3.13 on Linux x86-64 (glibc 2.17+, AVX2/FMA) or macOS on Apple Silicon (11+).
+
+```sh
+python -m pip install --no-index --only-binary=:all: --find-links https://github.com/pgg898200-ship-it/streamsieve/releases/expanded_assets/v0.1.0 streamsieve==0.1.0
+```
+
+Run this example in Python. It works with the release wheel and with the current source.
+
+```python
+from streamsieve import EStream
+
+# Two workers alternate between 40 and 41 ms. After 80 samples, B gains 10 ms.
+rows = [[40 + t % 2, 40 + t % 2 + 10 * (t >= 80)] for t in range(256)]
+with EStream(2, warmup=32, ring_capacity=256) as monitor:
+    monitor.update_batch(rows)
+    brief = monitor.brief(names=["worker_a_ms", "worker_b_ms"])
+    for item in brief["top"]:
+        if item["rejected_ebh"]:
+            print(item["name"], item["handle"], monitor.fetch_raw(item["handle"])[-1])
+```
+
+```text
+worker_b_ms ch:1@t=80..256 (256, 51.0)
+```
+
+Only worker B crosses the alert threshold. Its last retained sample is 51 ms at tick 256. Keep the monitor alive to resolve its handles. The ring retains the most recent `ring_capacity` samples per channel.
+
+For continuous monitoring, keep an `EStream` per group of channels and update it as new rows arrive. A CLI call analyzes one input window. The stdio MCP server lets an agent call `sift_stream`, then `fetch_raw_ticks` against the same session. Current source adds JSONL input, seasonal adjustment, detrending and a scikit-learn adapter. [Build the current source](#build-the-current-source) · [Statistical assumptions and limits](#honest-limitations-where-not-to-use-streamsieve)
 
 ## Catch up a slow reader
 
@@ -69,23 +89,23 @@ Measured live on an Intel Xeon 2.30 GHz Linux VM (2 vCPUs, AVX2+FMA, Python 3.12
 
 ## Quickstart
 
-### 1. Install Prebuilt Wheel (Zero Dependencies)
+### Build the current source
 
-```bash
-pip install streamsieve
+The examples below use the v0.2.0 code on `main`. Install the Python SDK and its `streamsieve` command with Python 3.9+ and a C++20 compiler.
+
+```sh
+git clone https://github.com/pgg898200-ship-it/streamsieve.git
+cd streamsieve
+python -m pip install .
+streamsieve version
 ```
 
-Prebuilt native wheels ship for **Linux (x86_64), macOS (ARM64), and Windows (AMD64)** across Python `3.9`–`3.13`, plus standalone `<4 ms` Linux/macOS native CLI tarballs on [GitHub Releases](https://github.com/pgg898200-ship-it/streamsieve/releases). Or build from source:
+On Unix, set `CXX=c++` if Python selects a compiler that is missing. For an x86-64 CPU without AVX2/FMA, set `STREAMSIEVE_NO_AVX2=1` before building. To build the separate native executable in the checkout, run `make all` and then `./build/streamsieve version`.
+
+### Read CSV, TSV or JSON Lines from the terminal
 
 ```bash
-git clone https://github.com/pgg898200-ship-it/streamsieve.git && cd streamsieve
-make all test-cpp
-```
-
-### 2. Sift Any CSV, TSV, or JSONL/NDJSON Stream from the Terminal (`<4 ms` native CLI)
-
-```bash
-# Pipe OpenTelemetry / Prometheus / FluentBit JSONL logs directly (auto-detects JSONL!)
+# Each line is a flat JSON object with numeric metric fields
 tail -n 2000 metrics.jsonl | streamsieve sift --season 24 --alpha 0.05 --json -
 
 # Detrend linear ramps or random walks (1.0 = causal first difference)
@@ -99,7 +119,7 @@ streamsieve bench --channels 1024 --ticks 4000
 streamsieve verify --json
 ```
 
-### 3. Zero-Dependency Python SDK & Drop-In Adapters
+### Python SDK and adapters
 
 ```python
 import streamsieve as ss
@@ -142,7 +162,7 @@ tc.resolve("day_42", outcome=18.2)                    # strictly causal delayed 
 
 See runnable cookbooks in [`examples/jsonl_diurnal_sre.py`](https://github.com/pgg898200-ship-it/streamsieve/blob/main/examples/jsonl_diurnal_sre.py) and [`examples/multi_agent_pipeline.py`](https://github.com/pgg898200-ship-it/streamsieve/blob/main/examples/multi_agent_pipeline.py).
 
-### 4. Drop-In MCP Server & Claude Code / Cursor Skill
+### MCP server and agent configuration
 
 Run the zero-dependency JSON-RPC 2.0 stdio MCP server exposing **7 stateful tools** (`sift_stream` with `jsonl_text` / `csv_text` / `rows` / `json_data`, `fetch_raw_ticks`, `lattice_observe`, `lattice_merge`, `lattice_query`, `voi_allocate`, `trust_step`):
 
@@ -207,6 +227,8 @@ Every engine obeys **bit-exact zero-lookahead causality** verified by [`assert_c
 ---
 
 ## Documentation & Comparisons
+
+[Find related tools by integration point in the PGG Engineering product guide.](https://github.com/pgg898200-ship-it/backfold/blob/main/docs/PRODUCTS.md)
 
 - **Technical Specification & Math:** [`docs/architecture.md`](https://github.com/pgg898200-ship-it/streamsieve/blob/main/docs/architecture.md)
 - **Full Benchmark Report (`StreamSwarmBench`):** [`docs/benchmarks.md`](https://github.com/pgg898200-ship-it/streamsieve/blob/main/docs/benchmarks.md) | [`benchmarks/results.json`](https://github.com/pgg898200-ship-it/streamsieve/blob/main/benchmarks/results.json)
