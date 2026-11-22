@@ -2,9 +2,9 @@
 
 RankFence is an MIT-licensed Python coordinator for exact reciprocal rank fusion of ranked result streams. Its distinctive integration is a trusted map of disjoint search namespaces. It can cancel all pending reads on a losing shard before the global answer is ready. Requires Python 3.10+. No runtime dependencies or API key.
 
-- Guide and contract: https://pgg-engineering-rankfence.hf.space/guide.html
-- Try privately in a browser: https://pgg-engineering-rankfence.hf.space/workbench.html
-- Baselines, counterexamples and reproducibility: https://pgg-engineering-rankfence.hf.space/benchmarks.html
+- Guide and contract: https://pgg-engineering-rankfence.static.hf.space/guide.html
+- Try privately in a browser: https://pgg-engineering-rankfence.static.hf.space/workbench.html
+- Baselines, counterexamples and reproducibility: https://pgg-engineering-rankfence.static.hf.space/benchmarks.html
 - Install: python -m pip install https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/9107326cf0993e842c281d412cb276e83eb1c6a4/releases/rankfence-0.1.0-py3-none-any.whl
 - All Python source, tests, replay scripts and original result files: https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/9107326cf0993e842c281d412cb276e83eb1c6a4/releases/rankfence-0.1.0.zip
 
