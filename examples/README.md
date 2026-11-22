@@ -1,14 +1,29 @@
-# `streamsieve` Examples & Cookbooks
+# StreamSieve examples
 
-## Included Dataset & Runnable Scripts
+## Find a latency shift in JSON Lines
 
-| File | What It Demonstrates | Run Command |
-|---|---|---|
-| [`examples/jsonl_diurnal_sre.py`](jsonl_diurnal_sre.py) | Streaming SRE JSONL/NDJSON telemetry with 6σ diurnal cycles (`season_period=24`), sustained latency shift + sparse DB lock bursts, 108× brief compression, and bit-exact lossless raw drill-down | `python3 examples/jsonl_diurnal_sre.py` |
-| [`examples/multi_agent_pipeline.py`](multi_agent_pipeline.py) | End-to-end 4-engine multi-agent loop: `EStream` e-BH sift → `VOISifter` zero-overlap read allocation → `EvidenceLattice` echo-free CRDT sync (`SSLT` wire) → `TrustCalibrator` Byzantine quarantine + 4:1 asymmetric action | `python3 examples/multi_agent_pipeline.py` |
-| [`examples/noaa_weather.csv`](noaa_weather.csv) | 2,922 daily NOAA weather observations (Seattle & New York, 2012–2015, public domain `other-pd` via Vega Datasets) | Used in CLI & NOAA delayed-AgACI examples below |
+The [service telemetry example](jsonl_diurnal_sre.py) generates 480 hourly records for six metrics. Halfway through, API latency rises and database locks start to spike. Each metric also has a daily cycle.
 
----
+From the repository root, [install the current source](../README.md#build-the-current-source), then run:
+
+```sh
+python3 examples/jsonl_diurnal_sre.py
+```
+
+The monitor flags one channel, `api_p99_ms`. The database spikes stay below the alert threshold. The alert handle leads back to the original latency measurements, ending at **53.361 ms at tick 480**.
+
+```text
+STREAMSIEVE BRIEF | 6 ch x 480 ticks | e-BH(alpha=0.050): 1/6 flagged
+```
+
+The example uses the same [JSON Lines reader](../python/streamsieve/formats.py) as the CLI and MCP server. To process your own flat JSON objects, run `streamsieve sift your-metrics.jsonl`.
+
+## More examples
+
+| Example | What to run or inspect |
+|---|---|
+| [Multi-agent pipeline](multi_agent_pipeline.py) | Run `python3 examples/multi_agent_pipeline.py` to assign inspections, merge duplicate evidence and update trust after an outcome arrives. |
+| [NOAA weather observations](noaa_weather.csv) | The CLI and forecast examples below use daily measurements from Seattle and New York, 2012–2015. |
 
 ## Quick CLI & Python Snippets
 

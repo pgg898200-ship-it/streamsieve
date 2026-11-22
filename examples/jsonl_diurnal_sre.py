@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""Zero-dependency SRE observability cookbook: diurnal JSONL telemetry -> e-BH brief -> raw drill-down.
+"""Find a latency shift in 20 days of simulated hourly service metrics.
 
-Demonstrates:
-  1. Generating realistic diurnal (24h periodic) + trending microservice metrics in JSONL format.
-  2. Sifting with ``season_period=24`` so normal 24-hour traffic waves produce 0 false alarms
-     while real latency shifts and tail-burst spikes are caught with anytime-valid e-BH FDR control.
-  3. Lossless raw-tick drill-down on the exact original (un-filtered) telemetry via ``fetch_raw(handle)``.
+The fixture adds a sustained latency shift and intermittent database lock spikes
+halfway through the trace. The monitor accounts for the 24-hour cycle, flags
+the latency channel, and returns its last five unfiltered samples.
 
-Run:
+Run from the repository root with the current source installed:
     python3 examples/jsonl_diurnal_sre.py
 """
 
@@ -18,7 +16,7 @@ import math
 import random
 
 from streamsieve import EStream
-from streamsieve.mcp_server import _parse_jsonl_rows
+from streamsieve.formats import parse_jsonl_rows
 
 
 def main() -> None:
@@ -46,7 +44,7 @@ def main() -> None:
         lines.append(json.dumps(record))
 
     jsonl_payload = "\n".join(lines)
-    rows, names = _parse_jsonl_rows(jsonl_payload)
+    rows, names = parse_jsonl_rows(jsonl_payload)
     assert names is not None
 
     with EStream(len(names), warmup=32, season_period=period, ring_capacity=64, alpha=0.05, names=names) as est:

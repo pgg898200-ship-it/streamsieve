@@ -12,14 +12,8 @@ from typing import Sequence
 
 from ._native import has_avx2, version
 from .causality import verify_estream_causality
+from .formats import parse_csv_rows, parse_json_stream, parse_jsonl_rows, sanitize_json
 from .lattice import EvidenceLattice
-from .mcp_server import (
-    _parse_csv_rows,
-    _parse_json_stream,
-    _parse_jsonl_rows,
-    _sanitize_json,
-    serve_stdio,
-)
 from .monitor import EStream
 from .sifter import VOISifter
 from .trust import TrustCalibrator
@@ -32,6 +26,8 @@ def _cmd_version(_args: argparse.Namespace) -> int:
 
 
 def _cmd_mcp(_args: argparse.Namespace) -> int:
+    from .mcp_server import serve_stdio
+
     return serve_stdio()
 
 
@@ -48,11 +44,11 @@ def _cmd_sift(args: argparse.Namespace) -> int:
         return 1
 
     if args.jsonl or stripped.startswith("{"):
-        rows, names = _parse_jsonl_rows(raw_text)
+        rows, names = parse_jsonl_rows(raw_text)
     elif stripped.startswith("["):
-        rows, names = _parse_json_stream(stripped)
+        rows, names = parse_json_stream(stripped)
     else:
-        rows, names = _parse_csv_rows(raw_text)
+        rows, names = parse_csv_rows(raw_text)
 
     if not rows or not rows[0]:
         print("streamsieve: no numeric rows found", file=sys.stderr)
@@ -85,7 +81,7 @@ def _cmd_sift(args: argparse.Namespace) -> int:
         out["season_period"] = eff_season
         out["detrend_alpha"] = eff_detrend
         out["elapsed_ms"] = round(elapsed_ms, 3)
-        print(json.dumps(_sanitize_json(out), separators=(",", ":"), allow_nan=False))
+        print(json.dumps(sanitize_json(out), separators=(",", ":"), allow_nan=False))
     else:
         print(brief.to_compact_text())
     return 0
