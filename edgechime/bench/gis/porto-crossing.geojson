@@ -1,0 +1,144 @@
+{
+  "type": "FeatureCollection",
+  "name": "Porto geofence update · trip 48, step 8",
+  "description": "Synthetic geofences with changed endpoint membership. The line joins two recorded positions.",
+  "source": "https://huggingface.co/datasets/pgg-engineering/edgechime-bench",
+  "attribution": "Moreira-Matias et al., UCI Taxi Service Trajectory dataset (doi:10.24432/C55W25). PGG Engineering generated the zones, labels and map.",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -8.582283,
+              41.164561
+            ],
+            [
+              -8.581617,
+              41.164561
+            ],
+            [
+              -8.581617,
+              41.165135
+            ],
+            [
+              -8.582283,
+              41.165135
+            ],
+            [
+              -8.582283,
+              41.164561
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "Zone 198 · entered",
+        "event": "entered",
+        "zone_id": 198,
+        "stroke": "#254fc8",
+        "fill": "#254fc8",
+        "fill-opacity": 0.16,
+        "trip": 48,
+        "step": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -8.58124,
+              41.163162
+            ],
+            [
+              -8.580698,
+              41.163162
+            ],
+            [
+              -8.580698,
+              41.16414
+            ],
+            [
+              -8.58124,
+              41.16414
+            ],
+            [
+              -8.58124,
+              41.163162
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "title": "Zone 15 · exited",
+        "event": "exited",
+        "zone_id": 15,
+        "stroke": "#bf4a24",
+        "fill": "#bf4a24",
+        "fill-opacity": 0.16,
+        "trip": 48,
+        "step": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -8.580969,
+            41.163651
+          ],
+          [
+            -8.58195,
+            41.164848
+          ]
+        ]
+      },
+      "properties": {
+        "title": "Between recorded fixes",
+        "stroke": "#30343c",
+        "trip": 48,
+        "step": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.580969,
+          41.163651
+        ]
+      },
+      "properties": {
+        "title": "Previous fix",
+        "marker-color": "#536171",
+        "trip": 48,
+        "step": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -8.58195,
+          41.164848
+        ]
+      },
+      "properties": {
+        "title": "Current fix",
+        "marker-color": "#172b4d",
+        "trip": 48,
+        "step": 8
+      }
+    }
+  ]
+}

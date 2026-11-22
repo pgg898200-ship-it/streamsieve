@@ -10,6 +10,8 @@ node bench/run.js --scenario wide-local --boxes 100000 --steps 1024 --repeats 5 
 
 Defaults are 8,192 static rectangles, at most 2,048 interleaved moves per scenario, five timed passes, and seed 270113. Use the same Node version, CPU, and command to compare changes. On Linux, prefix the command with `taskset -c CPU` using a CPU available to the process. Use an idle machine for timing.
 
+[Inspect a labeled Porto movement on a map](gis/). The GeoJSON example shows the two GPS fixes and the zones the taxi entered and exited. You can export any move from the replay for a GIS reader.
+
 ## Workloads
 
 A move emits the IDs of boxes whose endpoint membership changed and the corresponding enter or exit direction. Each rectangle includes its minimum edges and excludes its maximum edges. Rectangle centers are uniform over the coordinate extent. Width and height are independent uniform draws from the listed range, scaled separately by each axis span. Rectangles may extend beyond the coordinate extent.
