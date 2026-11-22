@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  native-and-python:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python-version: "3.12"
+            run-sanitizers: true
+          - os: ubuntu-latest
+            python-version: "3.10"
+            run-sanitizers: false
+          - os: macos-latest
+            python-version: "3.12"
+            run-sanitizers: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Build native C++20 shared library & CLI
+        run: make all test-cpp
+
+      - name: Run AddressSanitizer & UndefinedBehaviorSanitizer tests
+        if: matrix.run-sanitizers
+        run: make test-san
+
+      - name: Run zero-dependency Python unit & adversarial breaker suite
+        run: PYTHONPATH=python python3 -m unittest discover -s tests -p "test_*.py" -v
+
+      - name: Verify clean pip build & install (zero runtime deps)
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install --no-build-isolation --no-deps .
+          python3 -c "import streamsieve as ss; assert ss.version() == '0.1.0'; print('Installed OK, AVX2=', ss.has_avx2())"
+          streamsieve version

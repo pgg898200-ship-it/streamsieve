@@ -1,0 +1,29 @@
+# Build artifacts
+build/
+python/streamsieve/_libstreamsieve.so
+python/streamsieve/_libstreamsieve.dylib
+python/streamsieve/_libstreamsieve.dll
+*.o
+*.so
+*.dylib
+*.dll
+
+# Python caches & packaging
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local benchmark virtualenv (streamsieve itself has 0 runtime deps)
+.bench-venv/
+.venv/
+venv/
+
+# Editor / OS
+.DS_Store
+*.swp
+*.swo

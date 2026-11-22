@@ -1,0 +1,43 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.pgg898200-ship-it/streamsieve",
+  "description": "Zero-dependency SIMD C++20/AVX2 multi-agent streaming inference: 99.99% lossless firehose token compression, anytime-valid online e-BH, echo-free CRDT EvidenceLattice, VOI firehose sifter, and delayed-label Byzantine TrustCalibrator.",
+  "repository": {
+    "url": "https://github.com/pgg898200-ship-it/streamsieve",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registry_type": "pypi",
+      "identifier": "streamsieve",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "runtime_hint": "uvx",
+      "package_arguments": [
+        {
+          "type": "positional",
+          "value": "--from"
+        },
+        {
+          "type": "positional",
+          "value": "streamsieve"
+        },
+        {
+          "type": "positional",
+          "value": "python3"
+        },
+        {
+          "type": "positional",
+          "value": "-m"
+        },
+        {
+          "type": "positional",
+          "value": "streamsieve.mcp_server"
+        }
+      ]
+    }
+  ]
+}
