@@ -13,34 +13,35 @@ tags:
 
 # Afterkey
 
-**Let a slow reader catch up with one value per changed key.** Afterkey is a C++17 header for agent dashboards, worker state and telemetry fan-out. A producer overwrites a fixed set of keys. Each reader keeps one 64-bit cursor. A reader that sleeps through a million updates to the same key receives one row when it returns. Deletions travel through the same feed.
+**Send a returning reader one update per changed key.** Afterkey sits between a producer and its readers. A producer writes the latest value for each key. A dashboard or worker keeps a 64-bit revision and asks what changed. If a key changed a million times while the reader was away, it receives just the last value or deletion.
 
-[Try two independent readers in your browser](https://afterkey.tancurl3.chatgpt.site) · [Download the source kit](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-0.1.0.zip) · [Reproduce the benchmarks](bench/environment.md)
+[Try two readers in your browser](https://afterkey.tancurl3.chatgpt.site) · [Download the C++17 kit](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-057fe313.tar.gz) · [Reproduce the benchmarks](bench/environment.md)
 
-## Run in 30 seconds
+## Run a catch-up in two-row pages
 
-Download the standalone kit and run the example with a C++17 compiler. If you cloned StreamSieve, start in its `afterkey/` directory and run the last two commands.
+The example tracks available slots per worker. While the reader is away, worker 0 changes twice and worker 2 is deleted. Build the example with a C++17 compiler.
 
 ```sh
-curl -fsSLO https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-0.1.0.zip
-unzip -q afterkey-0.1.0.zip
-cd afterkey-0.1.0
-c++ -std=c++17 -O2 -Iinclude examples/quickstart.cpp -o /tmp/afterkey-demo
-/tmp/afterkey-demo
+curl -fsSLO https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-057fe313.tar.gz
+tar -xzf afterkey-pages-057fe313.tar.gz
+cd afterkey-pages
+c++ -std=c++17 -O2 -Iinclude example.cpp -o afterkey-demo
+./afterkey-demo
 ```
 
-The reader starts after revision 1. It receives the latest value for key 7 and the deletion of key 3, in that order.
+The first page holds workers 1 and 0 in revision order. The next page carries the deletion.
 
 ```text
-3 7 11
-4 3 deleted
+3 key=1 slots=12
+4 key=0 slots=6
+5 key=2 deleted
 ```
 
-For an existing service, copy [include/afterkey.hpp](include/afterkey.hpp) into its include path. The header has no third-party dependencies. Each callback receives a revision, a dense key and a borrowed pointer to the absolute value. A null pointer means deletion. Advance the cursor only after your consumer has successfully applied the entire batch. Retrying after a partial failure can redeliver rows, so apply values and tombstones idempotently.
+Copy [afterkey.hpp](include/afterkey.hpp) or [afterkey_journal.hpp](include/afterkey_journal.hpp) into your include path. Each header works on its own. Each callback receives a revision, a dense key and a borrowed pointer to the current value. A null pointer means deletion. The [full-feed example](examples/quickstart.cpp) uses `since` to read all changes in one call.
+
+The kit includes the tests, comparison harness and raw measurements. Its SHA-256 is `6ecccac7f4c35a4132db3d128ec2a599ca4c9b89a99dab1f39f0582111771470`. The [0.1.0 ZIP](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-0.1.0.zip) contains the original full-feed API.
 
 ## Read a bounded page
-
-Download the [bounded-page source kit](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-057fe313.tar.gz) for the C++17 headers, tests, runnable example, comparison harness and raw results. Its SHA-256 is `6ecccac7f4c35a4132db3d128ec2a599ca4c9b89a99dab1f39f0582111771470`. The 0.1.0 kit above contains the original full-feed API.
 
 Both `Index` and `Journal` expose `since_page(revision, last_key, limit, callback)`. It returns the number of rows delivered and stops at the requested limit. A deletion consumes one row. Use `std::nullopt` when only the revision is available.
 
@@ -55,7 +56,7 @@ auto delivered = index.since_page(cursor, last_key, 16,
     });
 ```
 
-Use the last delivered revision and key on the next call. Persist that pair with the successfully applied page when the consumer uses durable checkpoints. Each call reads current state, so writes between pages can supersede unseen rows. Empty pages leave the caller's cursor unchanged. A zero limit delivers no rows and a future revision still throws.
+Use the last delivered revision and key on the next call. For a durable consumer, commit the cursor and applied page together. A retry after a partial failure can redeliver rows, so apply values and deletions idempotently. Each call reads current state, so writes between pages can supersede unseen rows. Empty pages leave the caller's cursor unchanged. A zero limit delivers no rows and a future revision still throws.
 
 A matching key hint gives `Index` a direct link to the next row. A stale or invalid hint uses the existing numeric seek, which can walk the full changed suffix. `Journal` computes the start position directly for recent cursors and uses the hint or binary search for packed history. It skips superseded entries, so the page limit bounds delivered rows and callbacks. The number of journal positions scanned can be higher.
 
