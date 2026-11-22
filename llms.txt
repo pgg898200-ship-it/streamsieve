@@ -39,3 +39,5 @@
 ## Incremental state catch-up
 
 - [Afterkey C++17 change feed](https://github.com/pgg898200-ship-it/streamsieve/tree/main/afterkey): independent reader cursors, dense keys, latest values and tombstones. Includes StreamSieve and ZeroMQ examples, benchmark crossover and reproduction commands.
+
+- [RecastCRPS](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps): Incremental weighted ensemble CRPS and extremal member-withdrawal scoring on an integer forecast grid. Includes NOAA replay, xarray and StreamSieve examples, and benchmark crossovers.

@@ -347,12 +347,53 @@ void run_suite(const char* name) {
     }
 }
 
+template<class T> using DefaultJournal = afterkey::Journal<T>;
+template<class T> using SparseJournal = afterkey::Journal<T, true>;
+
+void sparse_page_boundaries() {
+    constexpr Key capacity = 8193;
+    SparseJournal<int> journal(capacity);
+    Changes history;
+    auto write = [&](Key key) {
+        const Revision revision = history.size() + 1;
+        std::optional<int> payload;
+        if (revision % 5 == 0) journal.erase(key);
+        else { payload = static_cast<int>(revision); journal.put(key, *payload); }
+        history.emplace_back(revision, key, payload);
+    };
+    auto verify = [&] {
+        // Include word and summary boundaries, plus their immediate neighbors.
+        for (Revision cursor : {0u, 1u, 62u, 63u, 64u, 65u, 4094u, 4095u,
+                                4096u, 4097u, 8191u, 8192u, 8193u}) {
+            const auto expected = oracle(history, cursor, capacity);
+            const std::optional<Key> hints[] = {std::nullopt, 0, capacity - 1};
+            for (auto hint : hints) {
+                Changes actual;
+                auto count = journal.since_page(cursor, hint, 7, [&](Revision seq, Key key, const int* value) {
+                    actual.emplace_back(seq, key, value ? std::optional<int>(*value) : std::nullopt);
+                });
+                check(count == std::min<std::size_t>(7, expected.size()) &&
+                      actual.size() == count && std::equal(actual.begin(), actual.end(), expected.begin()),
+                      "sparse page across word/summary boundary");
+            }
+        }
+    };
+    for (Key key = 0; key < capacity; ++key) write(key);
+    verify();
+    for (Key key = 62; key < capacity - 1; ++key) write(key);
+    verify(); // gap crosses two summary words
+    for (Key key = 0; key < capacity; ++key) write((key * 17) % capacity);
+    verify(); // repacked bitmap and new holes in packed history
+}
+
 }  // namespace
 
 int main() {
     try {
         run_suite<afterkey::Index>("Index");
-        run_suite<afterkey::Journal>("Journal");
+        run_suite<DefaultJournal>("Journal");
+        run_suite<SparseJournal>("Journal with sparse pages");
+        sparse_page_boundaries();
         compaction_boundaries();
     } catch (const std::exception& error) {
         std::cerr << "Afterkey test failure: " << error.what() << '\n';

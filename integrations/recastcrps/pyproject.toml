@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "recastcrps"
+version = "0.1.0"
+description = "Incremental weighted CRPS for ensembles with changing members"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+keywords = ["crps", "ensemble-forecasting", "probabilistic-forecasting", "streaming"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C++",
+    "Topic :: Scientific/Engineering",
+]
+
+[tool.setuptools]
+include-package-data = false
+package-dir = {"" = "python"}
+packages = ["recastcrps"]

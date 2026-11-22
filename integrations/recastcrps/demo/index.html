@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RecastCRPS · Hurricane Lee forecast replay</title>
+<meta name="description" content="Replay NOAA Hurricane Lee forecast revisions and see the weighted empirical CRPS recalculated by the C++ ensemble engine in your browser.">
+<link rel="stylesheet" href="style.css"><script type="module" src="replay.js"></script>
+</head><body>
+<header><span class="brand">Recast<span>CRPS</span></span><a id="source" href="https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps">Source code</a></header>
+<main>
+<section class="intro"><h1>One forecast changes.<br>How does the ensemble score?</h1>
+<p>Replay the wind forecasts for Hurricane Lee. Each revision updates one of 31 ensemble members. The browser runs the C++ scorer against the storm’s historical best-track intensity.</p></section>
+<section class="panel" aria-labelledby="replay-title">
+<div class="panel-head"><h2 id="replay-title">Hurricane Lee <span>2023</span></h2><label>Forecast valid at <select id="target" disabled></select></label></div>
+<div class="readings"><div><label for="score">Empirical CRPS</label><output id="score">—</output><span>kn</span></div><div><label for="observed">Observed intensity</label><output id="observed">—</output><span>kn</span></div><div><label for="members">Active members</label><output id="members">—</output><span>/ 31</span></div></div>
+<div class="chart-title"><h3>Member wind forecasts</h3><span><i></i>Observed</span></div>
+<canvas id="distribution" height="200" role="img" aria-label="Frequency of active member forecasts across wind speeds"></canvas>
+<div class="controls"><button id="play" type="button" disabled>Play</button><button id="next" type="button" disabled>Step</button><label for="position" class="sr">Member update</label><input type="range" id="position" min="1" max="1" value="1" disabled><output id="step">—</output></div>
+<div class="withdraw"><label>Withdraw <select id="omit" disabled aria-label="Member to withdraw"></select></label><output id="counterfactual">—</output></div><p class="event" id="status" role="status">Loading forecasts and scoring engine…</p>
+</section>
+<section class="notes"><div><h2>What the score means</h2><p>CRPS measures how closely a forecast distribution matches the eventual observation. Lower is better. Like the wind forecasts, this score is measured in knots.</p></div><div><h2>How the replay works</h2><p>Forecasts come from NOAA’s ATCF archive. Each model cycle is real. Within a cycle, members arrive in identifier order so you can inspect each edit. Mid-cycle scores mix old and revised members.</p><a href="https://www.nhc.noaa.gov/data/">NOAA archive</a></div></section>
+</main></body></html>

@@ -1,0 +1,11 @@
+# RecastCRPS
+
+> Recompute weighted empirical CRPS after a forecast member revises or withdraws its value. Identify the unit-weight withdrawals giving the lowest and highest score in O(log U).
+
+Use for a univariate ensemble with stable slots, a known integer forecast grid, and per-update score queries. Input weights are positive integers. This package computes the empirical CRPS. Bulk floating-point arrays, fresh independent forecasts and fair CRPS are covered by array scoring libraries such as scoringrules. The optional leave-one-out vector is available for weighted forecasts. The two-extrema query requires at least two unit-weight members and returns forecast values.
+
+- [Source and install](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps)
+- [Runnable weather replay](https://huggingface.co/spaces/pgg-engineering/recastcrps)
+- [Native baselines and raw measurements](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps/bench)
+- [scoringrules comparison and versions](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps/comparison)
+- [Forecast data, ordering, and provenance](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps/replay)

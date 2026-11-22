@@ -1,0 +1,47 @@
+{
+  "name": "@pgg-engineering/edgechime",
+  "version": "0.1.0",
+  "description": "Exact enter and exit events for moving points over static rectangular subscriptions.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  },
+  "types": "./index.d.ts",
+  "bin": {
+    "edgechime": "./bin/edgechime.js"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "bench": "node bench/run.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "geofence",
+    "spatial-index",
+    "area-of-interest",
+    "subscriptions",
+    "multi-agent",
+    "telemetry",
+    "enter-exit"
+  ],
+  "license": "MIT",
+  "homepage": "https://huggingface.co/spaces/pgg-engineering/edgechime",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pgg898200-ship-it/streamsieve.git",
+    "directory": "edgechime"
+  }
+}

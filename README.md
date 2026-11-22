@@ -22,6 +22,10 @@ AI agent fleets break in four predictable ways on live data streams:
 
 [Afterkey](afterkey/) is the standalone C++17 change feed for dashboards and agents that poll at different rates. It returns the latest value or deletion for each changed key since a reader’s cursor. Try the [interactive demo](https://afterkey.tancurl3.chatgpt.site/) or compile the [StreamSieve channel-score example](afterkey/examples/streamsieve.cpp).
 
+## Route moving agents by zone
+
+[EdgeChime](edgechime/) emits the rectangular zones that each moving agent entered or left. It includes a dependency-free JavaScript API, an NDJSON CLI, and examples for Eclipse SUMO and Tiled. Compare it with a packed R-tree and a perimeter grid on two CPUs, including random jumps where the R-tree wins. [Live demo](https://huggingface.co/spaces/pgg-engineering/edgechime) · [Labeled replay](https://huggingface.co/datasets/pgg-engineering/edgechime-bench) · [Benchmark data](edgechime/bench/README.md).
+
 ## Verified Benchmarks (`StreamSwarmBench`)
 
 Measured live on an Intel Xeon 2.30 GHz Linux VM (2 vCPUs, AVX2+FMA, Python 3.12.16) against `river 0.27.0`, `scipy 1.18.1`, and `numpy 2.5.5`. Full structured output: [`benchmarks/results.json`](benchmarks/results.json) | Detailed report: [`docs/benchmarks.md`](docs/benchmarks.md).
@@ -145,6 +149,10 @@ Add to `.mcp.json` / Claude Desktop / Cursor MCP config:
 Plugin manifests and agent skill instructions are pre-packaged at [`SKILL.md`](SKILL.md), [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json), and [`.cursor-plugin/plugin.json`](.cursor-plugin/plugin.json).
 
 ---
+
+## Score revised scalar forecasts
+
+[RecastCRPS](integrations/recastcrps/) scores an ensemble after a member revises or withdraws its point forecast. It also identifies the best and worst single-member withdrawals for an equal-weight panel in logarithmic time. A [worked example](integrations/recastcrps/examples/) uses the same forecasts with `TrustCalibrator` and RecastCRPS and resolves both against an observed outcome. [Try the Hurricane Lee replay](https://huggingface.co/spaces/pgg-engineering/recastcrps).
 
 ## Architecture: Four Co-Designed Strictly Causal Engines
 
