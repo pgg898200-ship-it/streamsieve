@@ -38,6 +38,35 @@ The reader starts after revision 1. It receives the latest value for key 7 and t
 
 For an existing service, copy [include/afterkey.hpp](include/afterkey.hpp) into its include path. The header has no third-party dependencies. Each callback receives a revision, a dense key and a borrowed pointer to the absolute value. A null pointer means deletion. Advance the cursor only after your consumer has successfully applied the entire batch. Retrying after a partial failure can redeliver rows, so apply values and tombstones idempotently.
 
+## Read a bounded page
+
+Use the headers in this checkout for the page API and the optional sparse journal. The 0.1.0 download above contains the original full-feed API.
+
+Both `Index` and `Journal` expose `since_page(revision, last_key, limit, callback)`. It returns the number of rows delivered and stops at the requested limit. A deletion consumes one row. Use `std::nullopt` when only the revision is available.
+
+```cpp
+std::uint64_t cursor = 0;
+std::optional<std::uint32_t> last_key;
+auto delivered = index.since_page(cursor, last_key, 16,
+    [&](std::uint64_t revision, std::uint32_t key, const int* value) {
+        apply(key, value);  // copy the value, or apply the tombstone
+        cursor = revision;
+        last_key = key;
+    });
+```
+
+Use the last delivered revision and key on the next call. Persist that pair with the successfully applied page when the consumer uses durable checkpoints. Each call reads current state, so writes between pages can supersede unseen rows. Empty pages leave the caller's cursor unchanged. A zero limit delivers no rows and a future revision still throws.
+
+A matching key hint gives `Index` a direct link to the next row. A stale or invalid hint uses the existing numeric seek, which can walk the full changed suffix. `Journal` computes the start position directly for recent cursors and uses the hint or binary search for packed history. It skips superseded entries, so the page limit bounds delivered rows and callbacks. The number of journal positions scanned can be higher.
+
+### Skip long runs of superseded writes
+
+Use `afterkey::Journal<T, true>` when readers frequently cross a large contiguous run of retired journal positions. One bit records whether each position holds a current key, and a second level records which 64-position words have any live entries. Both `since` and `since_page` can skip holes. The default `Journal<T>` keeps the original sequential scan and write costs.
+
+At 65,536 keys the two bitmaps occupy 16,640 bytes (about 0.254 bytes/key), plus implementation-specific bookkeeping. Writes update the maps and compaction rebuilds them. Dense sequential reads can be faster with the default journal. Both configurations emit identical rows and preserve the same cursor and callback contracts. Recompile consumers when updating these header-only templates.
+
+A seeded 65,536-key replay on one shared AMD EPYC 9V74 VM retired a contiguous quarter of the original registration order. Median time to deliver a 16-row page starting inside that gap was **90 ns** with sparse reads and **6,690 ns** with the default journal. On the 64-row sparse catch-up, whole-feed times were 261 ns and 4,727 ns. For 4,096 densely surviving rows they were 6,780 ns and 6,710 ns. After compaction the writes measured 6.95 ns and 5.74 ns respectively, and the sparse configuration added 16,688 allocated bytes. These synthetic in-process measurements include a consuming callback. The runnable comparison and raw results are under `bench/afterkey/` in the [Tailstate source kit](https://pgg-tailstate.tancurl3.chatgpt.site).
+
 ## Which workload benefits?
 
 With 1,048,576 populated keys, 16 hot keys and 16 staggered readers, Index ran **2.04× faster than a cursor-indexed append log** and **1.15× faster than an equivalent std::list recency index**. The latter isolates the benefit of the dense slot representation. The machine was a shared AMD EPYC 9V74 VM. Each mixed operation is one write or one poll, and a poll can deliver many rows.

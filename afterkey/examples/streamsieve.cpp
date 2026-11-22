@@ -7,16 +7,20 @@
  * From the StreamSieve repository root:
  *   c++ -O2 -std=c++20 -Icsrc -Iafterkey/include afterkey/examples/streamsieve.cpp csrc/streamsieve_capi.cpp -o /tmp/streamsieve-afterkey
  *   /tmp/streamsieve-afterkey
+ * For the paged Python subscriber, see examples/tailstate_scores.py.
  * Tested against StreamSieve 77a48776092056a7319d91961273abfdee3f7c7e.
  */
 #include "afterkey.hpp"
 #include "streamsieve_capi.h"
 
 #include <array>
+#include <bit>
 #include <cstdint>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <stdexcept>
+#include <string_view>
 
 constexpr std::uint32_t channels = 3;
 
@@ -32,16 +36,27 @@ double z_score(ss_estream_t* stream, std::uint32_t key) {
 
 struct Reader {
     std::uint64_t cursor = 0;
+    std::optional<std::uint32_t> last_key;
     std::array<double, channels> scores{};
     std::size_t received = 0;
 
-    void poll(const afterkey::Index<double>& index, ss_estream_t* stream) {
-        index.since(cursor, [&](std::uint64_t, std::uint32_t key, const double* score) {
+    void poll(const afterkey::Index<double>& index, ss_estream_t* stream, bool export_rows = false) {
+        auto apply = [&](std::uint64_t revision, std::uint32_t key, const double* score) {
             if (!score) throw std::logic_error("unexpected deletion");
             scores[key] = *score;
+            if (export_rows)
+                std::cout << "put " << key << ' ' << std::bit_cast<std::uint64_t>(*score) << '\n';
             ++received;
-        });
-        cursor = index.version();
+            cursor = revision;
+            last_key = key;
+        };
+        if (export_rows) {
+            while (cursor < index.version())
+                index.since_page(cursor, last_key, 2, apply);
+        } else {
+            index.since(cursor, apply);
+        }
+        if (export_rows) std::cout << "checkpoint " << cursor << '\n';
 
         // Oracle for this example: compare the reader's materialized view with
         // StreamSieve's current scores for *every* channel, including quiet ones.
@@ -52,7 +67,13 @@ struct Reader {
     }
 };
 
-int main() {
+int main(int argc, char** argv) {
+    const bool export_rows = argc == 2 && std::string_view(argv[1]) == "--score-feed";
+    if (argc != 1 && !export_rows) {
+        std::cerr << "usage: streamsieve-afterkey [--score-feed]\n";
+        return 2;
+    }
+    if (export_rows) std::cout << "channels " << channels << '\n';
     try {
         ss_estream_config_t config{};
         ss_estream_default_config(&config, channels);
@@ -79,8 +100,15 @@ int main() {
             // Only the observed channel's local z-score can change on this tick.
             // A cross-channel metric such as e-BH status requires a fresh panel.
             index.put(key, z_score(stream.get(), key));
-            if (tick % 4 == 0) dashboard.poll(index, stream.get());
+            if (tick % 4 == 0) dashboard.poll(index, stream.get(), export_rows);
             if (tick % 12 == 0) observer.poll(index, stream.get());
+        }
+
+        if (export_rows) {
+            for (std::uint32_t key = 0; key < channels; ++key)
+                std::cout << "expect " << key << ' '
+                          << std::bit_cast<std::uint64_t>(z_score(stream.get(), key)) << '\n';
+            return 0;
         }
 
         std::cout << "verified native StreamSieve scores across " << channels
