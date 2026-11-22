@@ -1,9 +1,9 @@
 {
-  "backfold": "A replacement panel slots into a folded history while the surrounding readings stay in place.",
-  "streamsieve": "Several telemetry channels pass through a sieve, and a marked strip carries the changed channel’s samples.",
-  "chronosieve": "A change rings a bell, representing the compact digest that can wake a monitoring agent.",
-  "causalsieve": "A marked upstream domino leads two later changes, illustrating how CausalSieve ranks incident candidates.",
-  "flashmp": "Two impressions show the same subsequence shape at different levels and amplitudes.",
-  "tsjit": "One incoming reading feeds a fan of nine forecast quantiles.",
-  "recastcrps": "One forecast bead moves while the other ensemble members and the observed outcome stay fixed."
+  "backfold": "A correction at the second event branches from the original timeline to a revised summary below.",
+  "streamsieve": "Three telemetry channels enter a brief. A selected channel retains a handle back to its samples.",
+  "chronosieve": "A series shifts from one level to another. A blue bracket marks the changed interval for a digest.",
+  "causalsieve": "Three aligned telemetry channels shift at different times. The earlier upstream candidate is highlighted for investigation.",
+  "flashmp": "Two repeated subsequences align across an observed series. Blue brackets identify their locations.",
+  "tsjit": "A fixed context window feeds a forecast with a fixed horizon. The blue continuation is the prediction.",
+  "recastcrps": "An ensemble member shifts relative to the observation. The remaining forecast members keep their positions."
 }

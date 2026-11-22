@@ -1,7 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <path d="M28 200 C83 199 99 187 127 145 C156 100 167 63 208 43 L214 55 C179 72 166 112 141 155 C109 209 87 225 28 226 Z" fill="#171729" />
-  <path d="M99 206 C117 198 142 179 163 136 C182 98 191 86 216 74 L222 86 C201 98 195 114 179 148 C160 187 135 216 106 228 Z" fill="#384cfa" />
-  <circle cx="31" cy="213" r="15" fill="#171729"/>
-  <circle cx="105" cy="216" r="14" fill="#ef543c"/>
-  <path d="M188 41 L200 26 L208 33 L197 49 Z M207 57 L217 41 L227 47 L217 65 Z M218 72 L229 57 L238 64 L228 81 Z" fill="#ef543c" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>Two requests start at different times. The blue backup finishes before the first request.</title>
+  <path d="M13 33H78" fill="none" stroke="#141619" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M36 62H64" fill="none" stroke="#315BFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M13 25v16 M78 25v16" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M36 54v16 M64 54v16" fill="none" stroke="#315BFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M14 78H84" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M36 17V48" fill="none" stroke="#555C65" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 5" />
+  <circle cx="64" cy="62" r="4" fill="#315BFF" />
 </svg>

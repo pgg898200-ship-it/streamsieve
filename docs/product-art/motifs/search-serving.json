@@ -1,13 +1,13 @@
 {
-  "rankpatch": "A vermilion replacement strip slides into a stack of ranked results.",
-  "rankseal": "A serrated seal encloses three ordered bars to represent a ranking certified from partial lists.",
-  "rankfence": "Two groups of ranked streams stop at a common cutoff, leaving later results unread.",
-  "cachepin": "A pin holds the shared portion of three stacked prompt sheets at a cache breakpoint.",
-  "prefix-atlas": "Nested contour lines represent the cache capacities explored for a target prompt-prefix hit rate.",
-  "cutstream": "A blade cuts a stream at a stop sequence that straddles the seam between two chunks.",
-  "eventfold": "A pleated frame carries a single highlighted edit across successive folds.",
-  "racecurve": "A backup request starts later and races the first request toward the same deadline.",
-  "pathprobe-dag": "Two dependency paths converge, with one task highlighted for duration analysis.",
-  "cloture": "A fan of rollout ballots shows repeated circular votes for the same answer.",
-  "eproc": "A sequence of evidence values rises and falls before crossing a stopping threshold."
+  "rankpatch": "Two document rows exchange positions after a source revises its ranking. The blue row moves upward.",
+  "rankseal": "Ranked-score intervals have separated. The blue cutoff lies between the lowest certified top score and the strongest remaining challenger.",
+  "rankfence": "Three shard streams meet a vertical cutoff. Pages beyond it remain unread.",
+  "cachepin": "Three requests share a prompt prefix. A blue breakpoint sits where their suffixes diverge.",
+  "prefix-atlas": "A step curve reaches the target cache hit rate. Blue guides locate the associated capacity.",
+  "cutstream": "The final bytes of one chunk and the first bytes of the next form a stop string. The output ends at its start.",
+  "eventfold": "Two event frames have the same prefix and suffix. The blue segment is the edit carried between them.",
+  "racecurve": "Two requests start at different times. The blue backup finishes before the first request.",
+  "pathprobe-dag": "Two dependency paths converge on one task. The blue segment marks the duration being changed.",
+  "cloture": "Five ballots have been read. The fifth locks the leading count, leaving the last two ballots unopened.",
+  "eproc": "A sequential evidence trace crosses a preset stopping boundary. The crossing is marked in blue."
 }

@@ -1,12 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <path d="M26 79 89 54 154 83 226 58 226 176 155 207 88 177 26 203Z" fill="#171729"/>
-  <path d="M34 85 86 64 86 169 34 190Z" fill="#fff3d7"/>
-  <path d="M160 89 218 69 218 168 160 192Z" fill="#fff3d7"/>
-  <path d="M91 65 151 91 151 193 91 166Z" fill="#384cfa"/>
-  <path d="M100 88 139 105 M100 103 139 120 M100 118 125 130" fill="none" stroke="#fff3d7" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M44 119 74 107 M44 137 74 125 M44 155 64 147" fill="none" stroke="#171729" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M170 120 206 107 M170 138 206 125 M170 156 191 149" fill="none" stroke="#171729" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M85 52 101 28 163 55 148 79Z" fill="#ef543c" stroke="#171729" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M102 38 91 54 M117 44 106 60 M132 51 121 67" fill="none" stroke="#fff3d7" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M89 173 150 200 138 220 76 192Z" fill="#ef543c" stroke="#171729" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>A correction at the second event branches from the original timeline to a revised summary below.</title>
+  <path d="M12 27H80" fill="none" stroke="#141619" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="12" cy="27" r="3.7" fill="#141619" />
+  <circle cx="52" cy="27" r="3.7" fill="#141619" />
+  <circle cx="68" cy="27" r="3.7" fill="#141619" />
+  <rect x="75" y="22" width="10" height="10" fill="none" stroke="#555C65" stroke-width="2.5" />
+  <path d="M32 32V58Q32 66 40 66H76" fill="none" stroke="#315BFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="27" y="22" width="10" height="10" fill="#FAFAFA" stroke="#315BFF" stroke-width="3" />
+  <rect x="75" y="60" width="12" height="12" fill="#315BFF" />
 </svg>

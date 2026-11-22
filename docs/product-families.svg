@@ -1,70 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="680" height="204" viewBox="0 0 680 204" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="188" viewBox="0 0 720 188" role="img" aria-labelledby="title description">
   <title id="title">Five operations in the PGG Engineering directory</title>
-  <desc id="description">A lifted ranking page, two offset timers, three updates that converge on one value, a recorded signal, and a fifth vote completing a tally. Five labels read Rank, Time, Sync, Trace, Decide.</desc>
-  <!-- Each shape carries its settled appearance as SVG attributes. The optional
-       motion changes only transforms, and runs once over the same interval. -->
-  <style>
-    @media (prefers-reduced-motion: no-preference) {
-      .page { animation: lift 1.2s cubic-bezier(.2,.8,.2,1) both; }
-      .hand { animation: tick 1.2s cubic-bezier(.2,.8,.2,1) both; transform-origin: 202px 91px; }
-      .current { animation: settle 1.2s cubic-bezier(.2,.8,.2,1) both; }
-      .sample { animation: sample 1.2s cubic-bezier(.2,.8,.2,1) both; }
-      .vote { animation: count 1.2s cubic-bezier(.2,.8,.2,1) both; }
-    }
-    @keyframes lift { from { transform: translate(-3px,9px); } to { transform: translate(0,0); } }
-    @keyframes tick { from { transform: rotate(-40deg); } to { transform: rotate(0); } }
-    @keyframes settle { from { transform: translateX(-17px); } to { transform: translateX(0); } }
-    @keyframes sample { from { transform: translate(-12px,9px); } to { transform: translate(0,0); } }
-    @keyframes count { from { transform: translate(5px,-7px); } to { transform: translate(0,0); } }
-  </style>
-
-  <rect width="680" height="204" fill="#fff3d7"/>
-
-  <!-- Lift one sheet out of a ranked stack. -->
-  <g id="ranked-pages">
-    <path d="m25 98 76-31 32 17-75 35Z" fill="#171729"/>
-    <path d="m25 86 76-31 32 17-75 35Z" fill="#384cfa"/>
-    <g class="page">
-      <path d="m25 73 76-31 32 17-75 35Z" fill="#171729"/>
-      <path d="m43 73 56-23 15 7-55 24Z" fill="#fff3d7"/>
-      <path d="m100 42 13-5 17 8-13 6Z" fill="#ef543c"/>
-    </g>
+  <desc id="description">Five independent diagrams show a ranked page, two timers, updates converging on a value, a sampled signal, and a fifth vote completing a tally.</desc>
+  <rect width="720" height="188" fill="#FAFAFA"/>
+  <path d="M22 126h676" stroke="#DADDE1"/>
+  <!-- Each group is usable on its own. The settled state is the source image. -->
+  <g id="ranked-pages" fill="none" stroke-linejoin="round">
+    <path d="m30 92 67-24 35 12-67 26Z" fill="#FAFAFA" stroke="#555C65" stroke-width="2"/>
+    <path d="m30 78 67-24 35 12-67 26Z" fill="#FAFAFA" stroke="#141619" stroke-width="2"/>
+    <path d="m30 62 67-24 35 12-67 26Z" fill="#315BFF"/>
+    <path d="m55 62 39-14m-25 17 20-7" stroke="#FAFAFA" stroke-width="2"/>
   </g>
-
-  <!-- The two hands advance independently against the same time scale. -->
-  <g id="parallel-timers">
-    <circle cx="224" cy="77" r="31" fill="#384cfa"/>
-    <path d="M224 56v21l14 5" fill="none" stroke="#fff3d7" stroke-width="4"/>
-    <circle cx="202" cy="91" r="32" fill="#fff3d7" stroke="#171729" stroke-width="6"/>
-    <path d="M202 64v5m25 22h-5m-20 26v-5m-26-21h5" fill="none" stroke="#171729" stroke-width="2.5"/>
-    <path class="hand" d="M198 94l6 2 16-27Z" fill="#ef543c"/>
-    <circle cx="202" cy="91" r="4" fill="#171729"/>
+  <g id="parallel-timers" stroke="#141619" fill="#FAFAFA" stroke-width="2.5">
+    <circle cx="234" cy="68" r="27"/><path d="M234 50v18l11 6" fill="none" stroke="#555C65"/>
+    <circle cx="213" cy="81" r="27"/>
+    <path d="M213 57v5m24 19h-5m-19 24v-5m-24-19h5" stroke="#DADDE1" stroke-width="2"/>
+    <path d="m213 81 13-16" stroke="#315BFF" stroke-width="4"/><circle cx="213" cy="81" r="3" stroke="none" fill="#315BFF"/>
   </g>
-
-  <!-- Three revisions coalesce at the same key. -->
-  <g id="state-revisions">
-    <path d="M292 50c30 0 32 28 55 28h26v10h-30c-26 0-27-29-51-29Z" fill="#171729"/>
-    <path d="M292 78h82v10h-82Z" fill="#384cfa"/>
-    <path d="M292 115c22 0 30-37 51-37h31v10h-29c-19 0-23 37-53 37Z" fill="#171729"/>
-    <circle cx="292" cy="55" r="5" fill="#171729"/><circle cx="292" cy="83" r="5" fill="#384cfa"/><circle cx="292" cy="120" r="5" fill="#171729"/>
-    <circle class="current" cx="378" cy="83" r="12" fill="#ef543c"/>
+  <g id="state-revisions" fill="none" stroke-linecap="round" stroke-width="2.5">
+    <path d="M309 48h16c20 0 22 29 42 29h19M309 105h16c20 0 22-28 42-28h19" stroke="#555C65"/>
+    <path d="M309 77h92" stroke="#141619"/>
+    <g fill="#FAFAFA" stroke="#141619"><circle cx="309" cy="48" r="4.5"/><circle cx="309" cy="77" r="4.5"/><circle cx="309" cy="105" r="4.5"/></g>
+    <circle cx="402" cy="77" r="7" fill="#315BFF"/>
   </g>
-
-  <!-- A sample advances along a trace. -->
-  <g id="signal-traces">
-    <path d="M420 103c18 0 18-2 23-20l4-13c2-6 4-5 6 1l11 36c3 9 6 9 10-2l16-48c3-9 5-9 8 0l9 29c2 7 4 8 9 4l12-9" fill="none" stroke="#384cfa" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M420 119h108" stroke="#171729" stroke-width="2"/>
-    <circle class="sample" cx="528" cy="81" r="6.5" fill="#ef543c"/>
+  <g id="signal-traces" fill="none">
+    <path d="M453 96h103" stroke="#DADDE1"/>
+    <path d="M453 88h13l8-23 13 38 16-60 15 43 14-13 12 7 12-8" stroke="#141619" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="556" cy="72" r="5.5" fill="#315BFF"/>
   </g>
-
-  <!-- Four accumulated votes plus the stroke that completes a group of five. -->
-  <g id="counted-votes">
-    <path d="m564 64 8-3-2 52-7 3Zm22-5 8-3-2 52-7 3Zm22-5 8-3-2 52-7 3Zm22-5 8-3-2 52-7 3Z" fill="#171729"/>
-    <path class="vote" d="m554 108 89-55 3 7-90 56Z" fill="#ef543c"/>
+  <g id="counted-votes" fill="none" stroke="#141619" stroke-width="4">
+    <path d="M610 57v45m16-49v45m16-49v45m16-49v45"/>
+    <path d="m602 103 67-57" stroke="#315BFF" stroke-width="5.5"/>
   </g>
-
-  <g font-family="'DejaVu Sans',Arial,sans-serif" font-size="23" font-weight="600" letter-spacing="-.8" fill="#171729" text-anchor="middle">
-    <text x="79" y="169">Rank</text><text x="211" y="169">Time</text>
-    <text x="339" y="169">Sync</text><text x="473" y="169">Trace</text><text x="603" y="169">Decide</text>
+  <g font-family="'IBM Plex Mono',ui-monospace,'DejaVu Sans Mono',monospace" font-size="21" fill="#141619" text-anchor="middle">
+    <text x="81" y="157">rank</text><text x="224" y="157">time</text>
+    <text x="355" y="157">sync</text><text x="505" y="157">trace</text><text x="635" y="157">decide</text>
   </g>
 </svg>

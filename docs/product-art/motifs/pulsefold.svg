@@ -1,11 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img"><title>Pulsefold tracks deadlines for readers that share a heartbeat but tolerate different amounts of silence.</title>
-  <path d="M57 38H193L210 56H43Z" fill="#171729"/>
-  <path d="M122 62L47 143L57 153L131 74Z" fill="#384cfa"/>
-  <path d="M122 66L99 187L113 190L135 68Z" fill="#171729"/>
-  <path d="M126 68L181 208L196 204L139 63Z" fill="#ef543c"/>
-  <path d="M48 121L67 140L51 165L30 143Z" fill="#384cfa"/>
-  <path d="M105 164L125 186L104 212L84 189Z" fill="#171729"/>
-  <path d="M184 177L214 204L194 231L169 204Z" fill="#ef543c"/>
-  <g fill="#fff3d7"><circle cx="50" cy="143" r="5"/><circle cx="105" cy="188" r="6"/><circle cx="191" cy="205" r="7"/></g>
-  <circle cx="129" cy="63" r="22" fill="#171729"/><circle cx="129" cy="63" r="9" fill="#fff3d7"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>One heartbeat starts three deadline intervals. Blue endpoints show when each reader marks it stale.</title>
+  <path d="M16 16V79" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M16 28H48" fill="none" stroke="#141619" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="48" cy="28" r="4" fill="#315BFF" />
+  <path d="M16 48H64" fill="none" stroke="#141619" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="64" cy="48" r="4" fill="#315BFF" />
+  <path d="M16 68H80" fill="none" stroke="#141619" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="80" cy="68" r="4" fill="#315BFF" />
 </svg>

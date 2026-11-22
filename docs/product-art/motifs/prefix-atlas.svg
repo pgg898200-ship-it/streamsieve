@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <path d="M23 149 C36 107 43 55 81 40 C112 28 145 53 173 41 C196 32 219 45 222 73 C226 104 205 124 211 153 C218 193 197 213 162 211 C132 208 98 234 70 215 C41 197 11 191 23 149 Z" fill="none" stroke="#171729" stroke-width="10" />
-  <path d="M48 148 C60 112 60 75 89 63 C112 54 142 77 171 64 C190 55 200 66 199 85 C198 106 182 126 188 150 C194 179 182 190 158 188 C129 185 104 207 84 195 C61 181 37 177 48 148 Z" fill="none" stroke="#384cfa" stroke-width="9" />
-  <path d="M74 145 C82 121 82 94 103 88 C122 82 143 99 161 89 C174 82 181 89 176 105 C168 123 159 139 166 155 C171 168 158 172 142 168 C124 164 110 184 96 173 C79 162 69 160 74 145 Z" fill="none" stroke="#171729" stroke-width="8" />
-  <path d="M99 138 C106 121 105 110 118 110 C127 108 137 119 150 113 C150 124 142 133 145 145 C136 142 125 143 120 151 C112 154 93 152 99 138 Z" fill="#ef543c" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>A step curve reaches the target cache hit rate. Blue guides locate the associated capacity.</title>
+  <path d="M14 16V78H84" fill="none" stroke="#555C65" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M16 69H27V61H40V50H52V36H67V28H83" fill="none" stroke="#141619" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M15 36H52V77" fill="none" stroke="#315BFF" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 5" />
+  <circle cx="52" cy="36" r="4.5" fill="#315BFF" />
 </svg>

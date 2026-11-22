@@ -1,4 +1,4 @@
-<img align="right" src="docs/product-mark.svg" width="88" height="88" alt="A sieve picks a changed channel out of several telemetry strips.">
+<img align="right" src="docs/product-mark.svg" width="88" height="88" alt="Three telemetry channels enter a brief. A selected channel retains a handle back to its samples.">
 
 # StreamSieve
 

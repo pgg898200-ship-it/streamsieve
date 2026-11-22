@@ -1,10 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img"><title>KthWake reports when a rolling arrival count crosses a rule’s threshold, including expiration during silence.</title>
-  <g transform="rotate(7 128 128)">
-    <path d="M55 35H201V52H193C189 81 166 105 141 128C163 150 191 176 193 204H201V222H55V204H63C65 175 93 149 115 128C91 104 67 82 63 52H55Z" fill="#171729"/>
-    <path d="M78 53H179C174 75 158 95 128 120C101 98 83 77 78 53Z" fill="#fff3d7"/>
-    <path d="M128 137C111 153 91 175 83 197H174C164 171 145 151 128 137Z" fill="#384cfa"/>
-    <g fill="#ef543c"><circle cx="113" cy="72" r="10.7"/><circle cx="142" cy="72" r="10.7"/><circle cx="128" cy="94" r="10.7"/></g>
-    <path d="M128 142V164" stroke="#fff3d7" stroke-width="6"/><circle cx="128" cy="183" r="7" fill="#fff3d7"/>
-    <path d="M55 35H201V41H55ZM55 204H201V211H55Z" fill="#ef543c"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>A moving window contains three event ticks. The blue boundary marks the next expiration while no new events arrive.</title>
+  <path d="M10 56H85" fill="none" stroke="#555C65" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M15 56v-10" fill="none" stroke="#DADDE1" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M29 56v-24" fill="none" stroke="#315BFF" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M44 56v-14" fill="none" stroke="#141619" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M55 56v-22" fill="none" stroke="#141619" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M24 23V17H68V23" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M24 66v9h44v-9" fill="none" stroke="#DADDE1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M74 28V61" fill="none" stroke="#315BFF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 4" />
 </svg>

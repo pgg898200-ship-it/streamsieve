@@ -1,9 +1,9 @@
 {
-  "afterkey": "Afterkey returns the latest value or deletion for each key changed after a reader’s cursor.",
-  "tailstate": "Tailstate pages through the latest changed keys in sequence order from a worker’s acknowledged cursor.",
-  "sincekit": "SinceKit builds one changed-key array, and each reader takes the prefix needed for its checkpoint.",
-  "guardshift": "Guardshift reports which registered conditions switched on or off after a batch of signal changes.",
-  "kthwake": "KthWake reports when a rolling arrival count crosses a rule’s threshold, including expiration during silence.",
-  "pulsefold": "Pulsefold tracks deadlines for readers that share a heartbeat but tolerate different amounts of silence.",
-  "edgechime": "EdgeChime reports which rectangular zones a moving point enters or leaves between position updates."
+  "afterkey": "Three writes across two keys reduce to two latest rows. The blue terminal row carries a deletion.",
+  "tailstate": "A reader cursor separates acknowledged rows from an ordered blue page. Further rows remain available.",
+  "sincekit": "A single array of changed keys serves three readers. Each reader takes a different prefix.",
+  "guardshift": "Two conditions change state in opposite directions after the same update batch.",
+  "kthwake": "A moving window contains three event ticks. The blue boundary marks the next expiration while no new events arrive.",
+  "pulsefold": "One heartbeat starts three deadline intervals. Blue endpoints show when each reader marks it stale.",
+  "edgechime": "A point moves through two overlapping rectangular zones. Blue crossings mark changes in membership."
 }

@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img"><title>Afterkey returns the latest value or deletion for each key changed after a reader’s cursor.</title><g transform="rotate(-13 128 128)"><path transform="translate(-4 66)" fill="#384cfa" fill-rule="evenodd" d="M30 62C30 39 47 22 71 22S112 39 112 62C112 71 108 79 104 85H214V107H203V124H184V111H171V123H151V111H94C88 114 79 117 69 117C47 117 30 98 30 78ZM45 59C45 69 51 76 61 76S77 69 77 59S71 43 61 43S45 50 45 59Z"/><path transform="translate(2 45)" fill="#ef543c" fill-rule="evenodd" d="M30 62C30 39 47 22 71 22S112 39 112 62C112 71 108 79 104 85H214V107H203V124H184V111H171V123H151V111H94C88 114 79 117 69 117C47 117 30 98 30 78ZM45 59C45 69 51 76 61 76S77 69 77 59S71 43 61 43S45 50 45 59Z"/><path transform="translate(8 24)" fill="#171729" fill-rule="evenodd" d="M30 62C30 39 47 22 71 22S112 39 112 62C112 71 108 79 104 85H214V107H203V124H184V111H171V123H151V111H94C88 114 79 117 69 117C47 117 30 98 30 78ZM45 59C45 69 51 76 61 76S77 69 77 59S71 43 61 43S45 50 45 59Z"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>Three writes across two keys reduce to two latest rows. The blue terminal row carries a deletion.</title>
+  <path d="M14 27H75 M14 59H75" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="24" cy="27" r="4" fill="none" stroke="#555C65" stroke-width="2.5" />
+  <circle cx="36" cy="59" r="4" fill="none" stroke="#555C65" stroke-width="2.5" />
+  <circle cx="64" cy="27" r="5" fill="#141619" />
+  <path d="M66 54l8 9m0-9-8 9" fill="none" stroke="#315BFF" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M80 19H84V69H80" fill="none" stroke="#141619" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
+</svg>

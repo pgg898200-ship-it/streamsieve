@@ -1,13 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <path d="M27 95 H52 M65 95 H92 M105 95 H132 M145 95 H172 M185 95 H212 M224 95 H235" fill="none" stroke="#ef543c" stroke-width="7" />
-  <path d="M29 185 L66 153 L102 174 L141 122 L169 141 L206 65 L224 76" fill="none" stroke="#171729" stroke-width="9" stroke-linejoin="bevel"/>
-  <path d="M29 202 V218 M66 171 V218 M102 190 V218 M141 141 V218 M169 159 V218 M206 86 V218" fill="none" stroke="#384cfa" stroke-width="5" />
-  <circle cx="29" cy="185" r="9" fill="#171729"/>
-  <circle cx="66" cy="153" r="9" fill="#171729"/>
-  <circle cx="102" cy="174" r="9" fill="#171729"/>
-  <circle cx="141" cy="122" r="9" fill="#171729"/>
-  <circle cx="169" cy="141" r="9" fill="#171729"/>
-  <circle cx="206" cy="65" r="19" fill="#ef543c"/>
-  <circle cx="206" cy="65" r="8" fill="#171729"/>
-  <path d="M189 36 L186 30 M205 32 V23 M224 42 L230 36" fill="none" stroke="#171729" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>A sequential evidence trace crosses a preset stopping boundary. The crossing is marked in blue.</title>
+  <path d="M12 30H83" fill="none" stroke="#555C65" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 5" />
+  <path d="M12 70l12 -6 10 4 9 -15 8 4 9 -17" fill="none" stroke="#141619" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M60 40l9 -15 12 -7" fill="none" stroke="#315BFF" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="66" cy="30" r="3.6" fill="#315BFF" />
 </svg>

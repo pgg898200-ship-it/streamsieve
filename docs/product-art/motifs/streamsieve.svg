@@ -1,14 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <path d="M29 79 134 37 226 83 120 128Z" fill="#171729"/>
-  <path d="M29 84 116 128 116 148 29 103Z" fill="#384cfa"/>
-  <path d="M122 131 227 88 227 108 122 150Z" fill="#171729"/>
-  <path d="M47 78 126 48 207 85 127 118Z" fill="#fff3d7"/>
-  <path d="M62 81 143 50 M79 90 162 57 M97 99 180 64 M115 107 199 71" fill="none" stroke="#171729" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M49 112 58 116 58 151 49 157Z" fill="#171729"/>
-  <path d="M75 126 84 130 84 163 75 171Z" fill="#171729"/>
-  <path d="M172 131 183 126 183 160 172 166Z" fill="#171729"/>
-  <path d="M203 118 213 114 213 148 203 155Z" fill="#171729"/>
-  <path d="M112 84 130 77 151 87 132 95Z" fill="#ef543c" stroke="#171729" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M122 135 153 121 153 169 144 183 144 202 110 219 93 212 93 199 122 185Z" fill="#ef543c" stroke="#171729" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M104 203 132 190 M132 174 143 168" fill="none" stroke="#fff3d7" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>Three telemetry channels enter a brief. A selected channel retains a handle back to its samples.</title>
+  <path d="M12 24h7l4 -4 5 8 4 -6 8 2" fill="none" stroke="#141619" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M12 46h7l4 -4 5 8 4 -6 8 2" fill="none" stroke="#141619" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M12 68h7l4 -4 5 8 4 -6 8 2" fill="none" stroke="#141619" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M45 16v59" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M45 46h8l6-12h21" fill="none" stroke="#315BFF" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="57" y="53" width="25" height="4" fill="#141619" />
+  <rect x="57" y="62" width="18" height="4" fill="#555C65" />
+  <circle cx="80" cy="34" r="4" fill="#315BFF" />
 </svg>

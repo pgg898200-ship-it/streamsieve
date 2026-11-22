@@ -66,9 +66,9 @@ Choose a tool by the operation you need. Each product has editable vector artwor
 
 ## Visual rules
 
-Ink (`#171729`) carries type and outlines. Paper (`#fff3d7`) supplies the field and negative space. Cobalt (`#384cfa`) distinguishes a second shape or state. Vermilion (`#ef543c`) draws attention to a change. Pair color with shape or position. Local DejaVu Serif sets names, Sans sets captions, and Sans Mono sets categories and addresses. Each has a system fallback. Use the individual mark for a square thumbnail.
+Each mark is a schematic of one operation on a common 96-unit grid. Graphite (`#141619`) draws its structure, secondary gray (`#555C65`) labels it, and light gray (`#DADDE1`) separates rows on the off-white field (`#FAFAFA`). Blue (`#315BFF`) singles out the revision, selected value or decision boundary. Instrument Sans sets names and captions. IBM Plex Mono sets technical labels. System fonts provide fallbacks.
 
-A mark identifies one product operation. A figure showing a measured result needs a labeled scale, units, and a trace or benchmark source. Use motion when the sequence explains the operation. A control response often takes 180–350 ms. An expanded sequence may need up to about two seconds. Play it once. With reduced motion, show the completed state immediately. Keep the same result visible in the static image and its text description.
+The diagrams illustrate inputs, state changes and outputs. A measured figure also needs units, a labeled scale and a source. Animate a transition once when its order matters. A control response often takes 180–350 ms, while a multi-step explanation may need up to two seconds. With reduced motion, show the final state immediately and describe it in text.
 
 ## Reuse a mark
 
@@ -76,13 +76,16 @@ The SVGs in [motifs](motifs) scale to any size. Their adjacent JSON files descri
 
 From this directory, run one of these commands with Python 3.9 or later. SVG generation uses the standard library. PNG export uses a local copy of Inkscape or librsvg’s `rsvg-convert`.
 
+The [fonts](fonts) directory includes the two WOFF2 files and their OFL notices. On Linux with Fontconfig and WOFF2 support, PNG export loads them directly from this checkout. Elsewhere, install Instrument Sans and IBM Plex Mono for matching output. Without those families, the SVG uses Arial or the system sans-serif for names and captions, and DejaVu Sans Mono or the system monospace for technical labels.
+
 ```sh
 python3 render.py --product rankpatch --out build
 python3 render.py --spaces --png --out build
+python3 render.py --cover --png --out build
 python3 render.py --index
 ```
 
-Each card is 1200 × 630. The output directory contains one folder per product, with the card and its plain-text image description under `art/`. Omit `--product` and `--spaces` to export the full collection.
+Each card is 1200 × 630. Each product folder contains its card and plain-text description under `art/`. Omit `--product` and `--spaces` to export all product cards. The [index cover](sheets/share.svg) shows the whole collection. Use `--cover` to export it and its description to the output directory.
 
 The [live tool index](https://pgg898200-ship-it.github.io/cachepin/tools/) uses the same catalogue, captions and marks. To rebuild the page in a CachePin checkout, run:
 

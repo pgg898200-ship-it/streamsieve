@@ -1,11 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <polygon points="128,20 142.9,32.2 160.8,25.2 171.1,41.4 190.3,40.2 195.2,58.8 213.8,63.7 212.6,82.9 228.8,93.2 221.8,111.1 234,126 221.8,140.9 228.8,158.8 212.6,169.1 213.8,188.3 195.2,193.2 190.3,211.8 171.1,210.6 160.8,226.8 142.9,219.8 128,232 113.1,219.8 95.2,226.8 84.9,210.6 65.7,211.8 60.8,193.2 42.2,188.3 43.4,169.1 27.2,158.8 34.2,140.9 22,126 34.2,111.1 27.2,93.2 43.4,82.9 42.2,63.7 60.8,58.8 65.7,40.2 84.9,41.4 95.2,25.2 113.1,32.2" fill="#171729"/>
-  <circle cx="128" cy="126" r="78" fill="#fff3d7"/>
-  <circle cx="128" cy="126" r="70" fill="#171729"/>
-  <circle cx="128" cy="126" r="56" fill="#ef543c"/>
-<g transform="rotate(-10 128 126)">
-  <path d="M91 103 H165 L159 114 H87 Z" fill="#171729" />
-  <path d="M86 121 H154 L148 132 H84 Z" fill="#171729" />
-  <path d="M88 139 H140 L134 150 H91 Z" fill="#171729" />
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>Ranked-score intervals have separated. The blue cutoff lies between the lowest certified top score and the strongest remaining challenger.</title>
+  <path d="M14 76H82" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M61 24H81 M61 19v10 M81 19v10" fill="none" stroke="#141619" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M42 44H55 M42 39v10 M55 39v10" fill="none" stroke="#141619" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M14 64H32 M14 59v10 M32 59v10" fill="none" stroke="#555C65" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M36 53v20" fill="none" stroke="#315BFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="36" cy="53" r="3" fill="#315BFF" />
 </svg>

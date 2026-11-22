@@ -1,8 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <path d="M20 151 C62 156 69 99 112 98 L146 98 L129 123 H112 C86 123 78 183 20 180 Z" fill="#171729" />
-  <path d="M20 185 C79 192 91 130 112 130 H123 L109 154 C91 160 78 218 20 213 Z" fill="#171729" />
-  <path d="M145 128 L164 98 C187 89 212 96 237 57 V87 C219 115 198 116 182 120 Z" fill="#384cfa" />
-  <path d="M130 155 L143 134 L180 126 C201 121 222 121 237 99 V130 C223 146 208 150 185 155 Z" fill="#384cfa" />
-  <path d="M118 188 L139 149 L169 99 L199 38 L193 25 L170 40 L104 178 Z" fill="#ef543c" />
-  <path d="M182 44 L117 171" fill="none" stroke="#fff3d7" stroke-width="3" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>The final bytes of one chunk and the first bytes of the next form a stop string. The output ends at its start.</title>
+  <rect x="11" y="27" width="8" height="12" fill="#555C65" />
+  <rect x="22" y="27" width="8" height="12" fill="#555C65" />
+  <rect x="33" y="27" width="8" height="12" fill="#315BFF" />
+  <rect x="44" y="27" width="8" height="12" fill="#315BFF" />
+  <rect x="55" y="27" width="8" height="12" fill="#315BFF" />
+  <rect x="66" y="27" width="8" height="12" fill="#DADDE1" />
+  <rect x="77" y="27" width="8" height="12" fill="#DADDE1" />
+  <path d="M41 17V46 M47 17V46" fill="none" stroke="#141619" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="11" y="61" width="8" height="12" fill="#141619" />
+  <rect x="22" y="61" width="8" height="12" fill="#141619" />
+  <path d="M33 53V80" fill="none" stroke="#315BFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M39 67H82" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="2 5" />
 </svg>

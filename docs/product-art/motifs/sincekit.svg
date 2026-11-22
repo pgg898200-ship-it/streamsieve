@@ -1,9 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img"><title>SinceKit builds one changed-key array, and each reader takes the prefix needed for its checkpoint.</title>
-  <g transform="rotate(-12 128 128)">
-    <path d="M48 49H221V92H173V140H127V187H48L34 201V65Z" fill="#171729"/>
-    <path d="M48 49H221V83H48ZM48 96H173V130H48ZM48 143H127V177H48Z" fill="#384cfa"/>
-    <path d="M48 49H73V177H48Z" fill="#ef543c"/>
-    <g fill="#fff3d7"><path d="M82 60H100V73H82ZM117 60H135V73H117ZM152 60H170V73H152ZM187 60H205V73H187ZM82 107H100V120H82ZM117 107H135V120H117ZM82 154H100V167H82Z"/></g>
-    <path d="M35 192H49V205H35Z" fill="#171729"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img">
+  <title>A single array of changed keys serves three readers. Each reader takes a different prefix.</title>
+  <rect x="12" y="19" width="8" height="9" fill="#141619" />
+  <rect x="24" y="19" width="8" height="9" fill="#141619" />
+  <rect x="36" y="19" width="8" height="9" fill="#141619" />
+  <rect x="48" y="19" width="8" height="9" fill="#141619" />
+  <rect x="60" y="19" width="8" height="9" fill="#141619" />
+  <rect x="72" y="19" width="8" height="9" fill="#141619" />
+  <path d="M12 38H30" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M30 34v8" fill="none" stroke="#315BFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M12 52H54" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M54 48v8" fill="none" stroke="#315BFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M12 66H78" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M78 62v8" fill="none" stroke="#315BFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M12 79H81" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
 </svg>
