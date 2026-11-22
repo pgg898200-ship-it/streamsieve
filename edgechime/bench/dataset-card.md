@@ -79,7 +79,7 @@ This fixture measures endpoint membership on one small nonrandom sample from one
 
 From the source archive, run `node bench/export-dataset.mjs ./porto-export` with Node 18+. The exporter uses the included trace. To regenerate the trace from UCI first, run `python3 bench/trace_porto.py`. SHA-256 of `zones.json` is `{{zones_sha256}}`. SHA-256 of the **decompressed** JSON Lines is `{{uncompressed_label_sha256}}`.
 
-[Interactive Space](https://huggingface.co/spaces/pgg-engineering/edgechime) · [EdgeChime source and benchmark](https://edgechime.tancurl3.chatgpt.site/source.zip)
+[Interactive Space](https://huggingface.co/spaces/pgg-engineering/edgechime) · [EdgeChime source and benchmark](https://huggingface.co/spaces/pgg-engineering/edgechime/resolve/main/source.zip)
 
 ## Attribution and license
 

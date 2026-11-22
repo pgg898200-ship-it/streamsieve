@@ -2,7 +2,7 @@
 
 Emit the zone IDs that a moving agent entered or left. One immutable index serves every agent. Supply the previous and current position and a callback. The index keeps no per-agent membership sets.
 
-**[Try it on Hugging Face](https://huggingface.co/spaces/pgg-engineering/edgechime) · [Download the source](https://edgechime.tancurl3.chatgpt.site/source.zip) · [Use the labeled replay](https://huggingface.co/datasets/pgg-engineering/edgechime-bench)**
+**[Try it on Hugging Face](https://huggingface.co/spaces/pgg-engineering/edgechime) · [Download the source](https://huggingface.co/spaces/pgg-engineering/edgechime/resolve/main/source.zip) · [GitHub source](https://github.com/pgg898200-ship-it/streamsieve/tree/edgechime-v0.1/edgechime) · [Use the labeled replay](https://huggingface.co/datasets/pgg-engineering/edgechime-bench)**
 
 ## Measured performance
 
@@ -30,7 +30,7 @@ The index sorts horizontal and vertical boundary coordinates. A short move visit
 For Node 18+ or a browser with ES modules, copy `index.js` into your project. The runtime has no dependencies. For an installed Node package and CLI:
 
 ```sh
-npm install https://edgechime.tancurl3.chatgpt.site/edgechime-0.1.0.tgz
+npm install https://huggingface.co/spaces/pgg-engineering/edgechime/resolve/main/edgechime-0.1.0.tgz
 ```
 
 ```js
