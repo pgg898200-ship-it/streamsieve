@@ -1,0 +1,298 @@
+{
+  "Search and retrieval": [
+    {
+      "slug": "rankpatch",
+      "name": "RankPatch",
+      "source": "https://github.com/pgg898200-ship-it/rankpatch",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/rankpatch",
+      "space": "https://huggingface.co/spaces/pgg-engineering/rankpatch",
+      "lines": [
+        "Replace one ranked list.",
+        "Read the revised top k."
+      ]
+    },
+    {
+      "slug": "rankseal",
+      "name": "RankSeal",
+      "source": "https://huggingface.co/spaces/pgg-engineering/rankseal/tree/main",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/rankseal",
+      "space": "https://huggingface.co/spaces/pgg-engineering/rankseal",
+      "lines": [
+        "Prove the ordered top k",
+        "while results arrive",
+        "in pages."
+      ]
+    },
+    {
+      "slug": "rankfence",
+      "name": "RankFence",
+      "source": "https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-mcp-0.1.0",
+      "demo": "https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html",
+      "space": "https://huggingface.co/spaces/pgg-engineering/rankfence",
+      "lines": [
+        "Use a shard map to stop",
+        "rank fusion once the top k",
+        "is settled."
+      ]
+    }
+  ],
+  "LLM serving and workflow latency": [
+    {
+      "slug": "cachepin",
+      "name": "CachePin",
+      "source": "https://github.com/pgg898200-ship-it/cachepin",
+      "demo": "https://pgg898200-ship-it.github.io/cachepin/",
+      "lines": [
+        "Build reusable prompt",
+        "prefixes and choose",
+        "cache breakpoints."
+      ]
+    },
+    {
+      "slug": "prefix-atlas",
+      "name": "Prefix Atlas",
+      "source": "https://github.com/pgg898200-ship-it/cachepin/tree/main/tools/prefix-atlas",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/prefix-atlas",
+      "space": "https://huggingface.co/spaces/pgg-engineering/prefix-atlas",
+      "lines": [
+        "Size a prefix cache for",
+        "a target hit rate on a",
+        "recorded serving trace."
+      ]
+    },
+    {
+      "slug": "cutstream",
+      "name": "Cutstream",
+      "source": "https://github.com/pgg898200-ship-it/cachepin/tree/main/cutstream",
+      "demo": "https://github.com/pgg898200-ship-it/cachepin/blob/main/cutstream/examples/gateway.py",
+      "lines": [
+        "Catch stop strings that",
+        "cross response chunks."
+      ]
+    },
+    {
+      "slug": "eventfold",
+      "name": "EventFold",
+      "source": "https://github.com/pgg898200-ship-it/backfold/tree/eventfold-v0.1/companions/eventfold",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/eventfold",
+      "space": "https://huggingface.co/spaces/pgg-engineering/eventfold",
+      "lines": [
+        "Send each SSE frame as",
+        "edits to its predecessor.",
+        "Restore the exact bytes."
+      ]
+    },
+    {
+      "slug": "racecurve",
+      "name": "Racecurve",
+      "source": "https://github.com/pgg898200-ship-it/cachepin/tree/racecurve",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/racecurve",
+      "space": "https://huggingface.co/spaces/pgg-engineering/racecurve",
+      "lines": [
+        "Test a backup request",
+        "delay against paired",
+        "latency traces."
+      ]
+    },
+    {
+      "slug": "pathprobe-dag",
+      "name": "PathProbe DAG",
+      "source": "https://github.com/pgg898200-ship-it/causalsieve/tree/main/tools/pathprobe",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/pathprobe-dag",
+      "space": "https://huggingface.co/spaces/pgg-engineering/pathprobe-dag",
+      "lines": [
+        "Change one task’s duration.",
+        "See when the whole",
+        "workflow finishes."
+      ]
+    }
+  ],
+  "State replication and event routing": [
+    {
+      "slug": "afterkey",
+      "name": "Afterkey",
+      "source": "https://github.com/pgg898200-ship-it/streamsieve/tree/main/afterkey",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/afterkey",
+      "space": "https://huggingface.co/spaces/pgg-engineering/afterkey",
+      "lines": [
+        "Catch up a reader with one",
+        "value or deletion per key",
+        "written since its cursor."
+      ]
+    },
+    {
+      "slug": "tailstate",
+      "name": "Tailstate",
+      "source": "https://github.com/pgg898200-ship-it/streamsieve/tree/afterkey-tailstate-0.1.0/afterkey/companions/tailstate",
+      "demo": "https://github.com/pgg898200-ship-it/streamsieve/blob/afterkey-tailstate-0.1.0/afterkey/companions/tailstate/examples/reconnect.py",
+      "lines": [
+        "Page through changed keys",
+        "after a worker reconnects."
+      ]
+    },
+    {
+      "slug": "sincekit",
+      "name": "SinceKit",
+      "source": "https://huggingface.co/spaces/pgg-engineering/sincekit/tree/main",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/sincekit",
+      "space": "https://huggingface.co/spaces/pgg-engineering/sincekit",
+      "lines": [
+        "Prepare one changed-key",
+        "array for readers at",
+        "different revisions."
+      ]
+    },
+    {
+      "slug": "guardshift",
+      "name": "Guardshift",
+      "source": "https://github.com/pgg898200-ship-it/chronosieve/tree/releases/guardshift/guardshift",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/guardshift",
+      "space": "https://huggingface.co/spaces/pgg-engineering/guardshift",
+      "lines": [
+        "Find the conditions that",
+        "turned on or off after",
+        "a batch of updates."
+      ]
+    },
+    {
+      "slug": "kthwake",
+      "name": "KthWake",
+      "source": "https://github.com/pgg898200-ship-it/chronosieve/tree/releases/kthwake-0.1.0/companions/kthwake",
+      "demo": "https://pgg-kthwake.tancurl3.chatgpt.site/",
+      "space": "https://huggingface.co/spaces/pgg-engineering/kthwake",
+      "lines": [
+        "Report when an event count",
+        "crosses a threshold inside",
+        "a sliding time window."
+      ]
+    },
+    {
+      "slug": "pulsefold",
+      "name": "Pulsefold",
+      "source": "https://github.com/pgg898200-ship-it/streamsieve/tree/pulsefold-v0.1.0/pulsefold",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/pulsefold",
+      "space": "https://huggingface.co/spaces/pgg-engineering/pulsefold",
+      "lines": [
+        "Detect stale heartbeats for",
+        "readers with different",
+        "deadlines."
+      ]
+    },
+    {
+      "slug": "edgechime",
+      "name": "EdgeChime",
+      "source": "https://github.com/pgg898200-ship-it/streamsieve/tree/main/edgechime",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/edgechime",
+      "space": "https://huggingface.co/spaces/pgg-engineering/edgechime",
+      "lines": [
+        "Find which rectangular",
+        "zones a moving point",
+        "just entered or left."
+      ]
+    }
+  ],
+  "Telemetry, time series and forecasts": [
+    {
+      "slug": "backfold",
+      "name": "Backfold",
+      "source": "https://github.com/pgg898200-ship-it/backfold",
+      "demo": "https://pgg898200-ship-it.github.io/backfold/",
+      "lines": [
+        "Correct or retract a past",
+        "event and update the",
+        "online statistic."
+      ]
+    },
+    {
+      "slug": "streamsieve",
+      "name": "StreamSieve",
+      "source": "https://github.com/pgg898200-ship-it/streamsieve",
+      "demo": "https://github.com/pgg898200-ship-it/streamsieve/blob/main/examples/jsonl_diurnal_sre.py",
+      "lines": [
+        "Sift numeric channels.",
+        "Return a brief with handles",
+        "for closer inspection."
+      ]
+    },
+    {
+      "slug": "chronosieve",
+      "name": "ChronoSieve",
+      "source": "https://github.com/pgg898200-ship-it/chronosieve",
+      "demo": "https://github.com/pgg898200-ship-it/chronosieve/blob/main/examples/alarm_escalation.py",
+      "lines": [
+        "Detect a distribution shift",
+        "and send a compact digest",
+        "to a downstream reader."
+      ]
+    },
+    {
+      "slug": "causalsieve",
+      "name": "CausalSieve",
+      "source": "https://github.com/pgg898200-ship-it/causalsieve",
+      "demo": "https://pgg898200-ship-it.github.io/causalsieve/",
+      "lines": [
+        "Rank likely upstream",
+        "contributors to a",
+        "telemetry incident."
+      ]
+    },
+    {
+      "slug": "flashmp",
+      "name": "FlashMP",
+      "source": "https://github.com/pgg898200-ship-it/flashmp",
+      "demo": "https://github.com/pgg898200-ship-it/flashmp/blob/main/examples/audit_tsfm_leakage.py",
+      "lines": [
+        "Find recurring or unusual",
+        "subsequences with an",
+        "exact matrix profile."
+      ]
+    },
+    {
+      "slug": "tsjit",
+      "name": "tsjit",
+      "source": "https://github.com/pgg898200-ship-it/tsjit",
+      "demo": "https://github.com/pgg898200-ship-it/tsjit/blob/main/llms.txt",
+      "lines": [
+        "Compile a forecasting model",
+        "for a specified context",
+        "and prediction horizon."
+      ]
+    },
+    {
+      "slug": "recastcrps",
+      "name": "RecastCRPS",
+      "source": "https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps",
+      "demo": "https://huggingface.co/spaces/pgg-engineering/recastcrps",
+      "space": "https://huggingface.co/spaces/pgg-engineering/recastcrps",
+      "lines": [
+        "Update an ensemble forecast’s",
+        "CRPS when a member",
+        "prediction changes."
+      ]
+    }
+  ],
+  "Evaluation and sequential decisions": [
+    {
+      "slug": "cloture",
+      "name": "Cloture",
+      "source": "https://github.com/pgg898200-ship-it/cloture",
+      "demo": "https://pgg898200-ship-it.github.io/cloture/playground.html",
+      "lines": [
+        "Stop a fixed-budget vote",
+        "when the remaining judges",
+        "cannot change the winner."
+      ]
+    },
+    {
+      "slug": "eproc",
+      "name": "eproc",
+      "source": "https://github.com/pgg898200-ship-it/eproc",
+      "demo": "https://pgg898200-ship-it.github.io/eproc/",
+      "lines": [
+        "Track evidence as individual",
+        "or paired evaluation scores",
+        "arrive."
+      ]
+    }
+  ]
+}

@@ -4,13 +4,36 @@ How many ranked results does your search service need to read before the top res
 
 [Run two public examples](https://rankfence-tools-pgg.tancurl3.chatgpt.site/) to see both stopping points. One query settles after 2 of 8 IDs. The other needs all 6. Each button calls the public MCP service with the displayed inputs.
 
-**Try it in the [browser workbench](https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html)** or connect a Streamable HTTP MCP client to `https://rankfence-tools-pgg.tancurl3.chatgpt.site/rpc`. Call `rankfence_analyze` with these arguments:
+## Replay one search with and without a shard map
+
+Connect a Streamable HTTP MCP client to `https://rankfence-tools-pgg.tancurl3.chatgpt.site/rpc` and call `rankfence_analyze` with the JSON below. You can also paste it into the [browser workbench](https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html).
+
+A billing index and a documentation index each return a keyword ranking and a vector ranking. The two indexes own different documents. The source groups tell RankFence which lists can contain the same ID.
 
 ```json
-{"rankings":[["a","b"],["a","c"]],"k":1,"page_size":1}
+{
+  "rankings": [
+    ["invoice", "receipt"],
+    ["invoice", "receipt"],
+    ["guide", "manual"],
+    ["manual", "guide"]
+  ],
+  "source_groups": ["billing", "billing", "docs", "docs"],
+  "k": 1,
+  "page_size": 1
+}
 ```
 
-Both retrievers rank `a` first. The replay certifies `a` after reading two of the four entries. The hosted tool receives all four IDs. Use the browser workbench or local stdio server to keep your IDs on your machine.
+Run it once as shown, then remove `source_groups` and run it again. Both calls receive all eight entries. They report how far a consumer of paged results would have to read.
+
+| Input | Winning ID | Ranked IDs read in replay | Matches exhaustive RRF |
+| --- | --- | ---: | --- |
+| With the shard map | `invoice` | 4 of 8 | Yes |
+| Same rankings, no map | `invoice` | 8 of 8 | Yes |
+
+Both billing retrievers rank `invoice` first. Once the first page of each list arrives, the map rules out any additional billing points for `guide` and `manual`. Without that guarantee, either could still appear on the billing lists. Omit the map whenever document ownership is uncertain.
+
+The hosted tool accepts up to 32 lists, 512 IDs per list, and 2,048 ID occurrences in total. Use the browser workbench or local stdio server to keep document IDs on your machine.
 
 | What you need | Where to find it |
 |---|---|

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+<g transform="rotate(-8 128 128)">
+  <path d="M35 44 H182 L204 65 L184 84 H35 Z" fill="#171729" />
+  <path d="M35 96 H143 L128 113 L143 134 H35 Z" fill="#171729" />
+  <path d="M35 148 H188 L204 168 L186 187 H35 Z" fill="#171729" />
+  <path d="M35 199 H151 L164 213 L151 226 H35 Z" fill="#171729" />
+  <path d="M157 97 H221 L239 116 L220 136 H157 L141 115 Z" fill="#ef543c" />
+  <path d="M169 105 L156 120 M187 105 L167 129 M204 105 L184 129" fill="none" stroke="#fff3d7" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+</g>
+</svg>

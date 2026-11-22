@@ -44,8 +44,9 @@
 - [Python Package](python/streamsieve/__init__.py): Zero-dependency `ctypes` bindings, `sift_matrix`, `EStreamDrift`, `SklearnSieveDetector`, `assert_causal`, and `mcp_server`.
 - [Adversarial & v0.2.0 Test Suites](tests/test_v020_features.py): 79/79 tests covering numerical extremes, peeking nulls, non-stationary streams, 0-ULP SIMD parity, CRDT fuzzing, zero-lookahead causality, Byzantine/trust-flip, and MCP/CLI RFC-8259 security surfaces.
 
-## Incremental state catch-up
+## Other tools in this repository
 
-- [Afterkey C++17 change feed](https://github.com/pgg898200-ship-it/streamsieve/tree/main/afterkey): independent reader cursors, dense keys, latest values and tombstones. Includes StreamSieve and ZeroMQ examples, benchmark crossover and reproduction commands.
-
-- [RecastCRPS](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps): Incremental weighted ensemble CRPS and extremal member-withdrawal scoring on an integer forecast grid. Includes NOAA replay, xarray and StreamSieve examples, and benchmark crossovers.
+- [Afterkey](https://github.com/pgg898200-ship-it/streamsieve/blob/main/afterkey/README.md) gives a C++17 dashboard or worker the latest value or deletion for each dense key changed since its last read. Readers can catch up in bounded pages.
+- [Tailstate](https://github.com/pgg898200-ship-it/streamsieve/blob/main/afterkey/companions/tailstate/README.md) gives C99 and Python applications a paged change feed for 64-bit unsigned values. A worker saves its cursor with each page and can detect a publisher restart.
+- [EdgeChime](https://github.com/pgg898200-ship-it/streamsieve/blob/main/edgechime/README.md) takes a moving agent’s previous and current positions and reports which rectangular zones it entered or left. Use the JavaScript API or the NDJSON command-line tool.
+- [RecastCRPS](https://github.com/pgg898200-ship-it/streamsieve/blob/main/integrations/recastcrps/README.md) scores an ensemble of point forecasts against an observed outcome. The C++17 and Python APIs update the weighted continuous ranked probability score (CRPS) as members revise or withdraw forecasts on a predefined integer grid.

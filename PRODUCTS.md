@@ -1,10 +1,16 @@
 # PGG Engineering tools
 
-Choose the operation your application needs. Each product link opens its source or release files. The last column opens a working example, replay, or guide.
+Choose a tool by the operation your application needs. Each entry links to its source and a working example. [Browse the illustrated index of all 25 tools](docs/product-art/README.md).
+
+![Five product families illustrated by a ranked page, two timers, a coalesced update, a signal trace, and a tally of votes.](docs/product-families.svg)
 
 [Subscribe to the PGG Engineering release feed](https://pgg898200-ship-it.github.io/cachepin/releases.atom) for runnable examples and measured results.
 
 ## Search and retrieval
+
+Can a retriever replace its list? RankPatch updates the current winners after each revision. If retrievers only append stable pages, RankSeal can prove the final order. RankFence can use a map of disjoint document IDs to stop reading individual shards.
+
+![Three retrievers seek one winning document. A and B return document 8 first. C has yet to reply. With mutable lists, A can switch its vote and change the winner. With stable pages, two possible endings can still yield different winners. If C serves a disjoint shard, its best possible score already falls short of 8.](docs/search-winners.svg)
 
 | Product | What it does | Where it fits | Try it |
 | --- | --- | --- | --- |
@@ -16,7 +22,7 @@ Choose the operation your application needs. Each product link opens its source 
 
 | Product | What it does | Where it fits | Try it |
 | --- | --- | --- | --- |
-| [Cachepin](https://github.com/pgg898200-ship-it/cachepin) | Build reusable prompt prefixes and choose cache breakpoints. | In the request builder or proxy before calls reach the inference provider. | [Cache simulator](https://pgg898200-ship-it.github.io/cachepin/) |
+| [CachePin](https://github.com/pgg898200-ship-it/cachepin) | Build reusable prompt prefixes and choose cache breakpoints. | In the request builder or proxy before calls reach the inference provider. | [Cache simulator](https://pgg898200-ship-it.github.io/cachepin/) |
 | [Prefix Atlas](https://github.com/pgg898200-ship-it/cachepin/tree/main/tools/prefix-atlas) | Find the cache capacity needed for a target prefix hit rate. | Offline, between a serving trace and a KV-cache sizing decision. The curve models serial prefix LRU. | [Capacity calculator](https://huggingface.co/spaces/pgg-engineering/prefix-atlas) |
 | [Cutstream](https://github.com/pgg898200-ship-it/cachepin/tree/main/cutstream) | Catch a literal stop string even when it spans response chunks. | In a model gateway, after decoding chunks and before emitting safe bytes to the client. | [Gateway adapter](https://github.com/pgg898200-ship-it/cachepin/blob/main/cutstream/examples/gateway.py) |
 | [EventFold](https://github.com/pgg898200-ship-it/backfold/tree/eventfold-v0.1/companions/eventfold) | Send byte-exact SSE frames as edits to the previous frame. | On a private gateway-to-gateway hop. Decode before passing standard server-sent events to the client. | [SSE inspector](https://huggingface.co/spaces/pgg-engineering/eventfold) |

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="774" viewBox="0 0 500 774" role="img" aria-labelledby="title desc">
+  <title id="title">One search, three rules for choosing a winner</title>
+  <desc id="desc">Retrievers A and B each return document 8 first. C has not replied. RankPatch can replace a list. If C votes for 7, then A switches to 7, document 7 wins two votes to one. With stable pages and equal-weight reciprocal rank fusion, suppose C returns only 7. If A and B stop, 8 wins. If both append 7 then stop, 7 wins. With RankFence, if C's shard is disjoint from A and B's shard, 8 already has 2/61. Any other document can receive at most 2/62 in the first shard or 1/61 in the second. This example uses one-based ranks and a rank constant of 60.</desc>
+  <defs>
+    <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
+      <path d="M0 0V7" fill="none" stroke="#171729" stroke-width="2"/>
+    </pattern>
+    <style>
+      text {font-family: 'DejaVu Sans',Arial,sans-serif; fill: #171729}
+      .serif {font-family: Georgia,'DejaVu Serif',serif; font-weight: bold}
+      .reversed {fill: #fff3d7}
+      .body {font-size:17px}
+      .tile {font-weight:bold; font-size:22px}
+      .source {font-size:16px; font-weight:bold}
+      .sign {font-size:19px; font-weight:bold; text-anchor:middle}
+    </style>
+  </defs>
+  <rect width="500" height="774" rx="10" fill="#fff3d7"/>
+  <path d="M10 0H490Q500 0 500 10V172H0V10Q0 0 10 0Z" fill="#171729"/>
+  <text x="26" y="44" font-size="32" class="serif reversed">Who wins this search?</text>
+  <text x="26" y="73" class="body reversed">A, B and C each rank documents for one query.</text>
+
+  <g fill="#fff3d7">
+    <path d="M26 92H151V150H26V133a5 5 0 0 0 0-10Z"/>
+    <path d="M163 92H288V150H163V133a5 5 0 0 0 0-10Z"/>
+  </g>
+  <path d="M300 92H474V150H300V133a5 5 0 0 0 0-10Z" fill="#171729" stroke="#fff3d7" stroke-dasharray="5 4" stroke-width="2"/>
+  <g class="source">
+    <text x="39" y="113">Source A</text><text x="176" y="113">Source B</text><text x="314" y="113" class="reversed">Source C</text>
+  </g>
+  <g class="tile">
+    <text x="39" y="140">8 first</text><text x="176" y="140">8 first</text><text x="314" y="140" class="reversed">No reply yet</text>
+  </g>
+
+  <text x="26" y="214" font-size="31" class="serif">RankPatch</text>
+  <text x="26" y="244" class="body">C votes for 7. Then A replaces its first choice.</text>
+  <g stroke="#171729" stroke-width="2">
+    <path d="M26 269H116L130 283V316H26Z" fill="#fff3d7"/>
+    <path d="M134 293H168M159 284l10 9-10 9" fill="none"/>
+    <path d="M176 269H266L280 283V316H176Z" fill="#f8d5b7"/>
+  </g>
+  <g class="sign"><text x="77" y="301">A votes 8</text><text x="227" y="301">A votes 7</text></g>
+  <text x="303" y="291" font-size="23" class="serif">7 leads</text>
+  <text x="303" y="314" class="body">2 votes to 1</text>
+  <path d="M26 340H474" stroke="#bcb5a7"/>
+
+  <text x="26" y="383" font-size="31" class="serif">RankSeal</text>
+  <text x="26" y="413" class="body">Pages are stable. C returns only 7.</text>
+  <text x="26" y="437" class="body">Two legal endings give different winners.</text>
+  <g fill="none" stroke="#171729" stroke-width="3">
+    <circle cx="39" cy="493" r="7" fill="#ef543c"/>
+    <path d="M46 493C71 493 57 471 84 471H98M46 493C71 493 57 516 84 516H98"/>
+  </g>
+  <text x="109" y="477" class="body">A and B stop</text>
+  <text x="109" y="522" class="body">Both add 7, then stop</text>
+  <path d="M352 451h117v35H352l-10-17Z" fill="#e0dff3"/>
+  <path d="M352 497h117v35H352l-10-17Z" fill="#f8d5b7"/>
+  <g class="sign"><text x="408" y="475">8 wins</text><text x="408" y="521">7 wins</text></g>
+  <path d="M26 552H474" stroke="#bcb5a7"/>
+
+  <text x="26" y="594" font-size="31" class="serif">RankFence</text>
+  <text x="26" y="623" class="body">C serves a disjoint shard. Its next page can wait.</text>
+  <rect x="26" y="642" width="448" height="76" rx="3" fill="#e0dff3" stroke="#171729" stroke-width="2"/>
+  <rect x="291" y="643" width="182" height="74" fill="#fff3d7"/>
+  <path d="M285 642H296V718H285Z" fill="url(#hatch)" stroke="#171729" stroke-width="1"/>
+  <text x="40" y="669" class="tile">A + B</text><text x="309" y="669" class="tile">C</text>
+  <text x="40" y="697" class="body">8 has 2/61. Others ≤ 2/62.</text>
+  <text x="309" y="697" class="body">Any ID ≤ 1/61.</text>
+  <text x="26" y="752" class="body">RRF contribution at rank r = 1/(60 + r).</text>
+</svg>

@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 548" width="880" height="548" role="img" aria-labelledby="title desc">
+  <title id="title">Afterkey: three writes, two rows</title>
+  <desc id="desc">The full-feed C++ example saves its reader cursor at revision 1. Revision 2 sets key 3 to 20, revision 3 sets key 7 to 11, and revision 4 deletes key 3. The poll emits two rows in order: revision 3, key 7, value 11; then revision 4, key 3, deleted. The later deletion supersedes the value 20.</desc>
+  <defs>
+    <!-- A key's color and edge cuts repeat on its write and on its emitted row. -->
+    <pattern id="screen" width="6" height="6" patternUnits="userSpaceOnUse">
+      <path d="M-1 5L5-1M2 8L8 2" fill="none" stroke="#171729" stroke-width="1.3"/>
+    </pattern>
+    <pattern id="pinholes" width="15" height="15" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1.5" fill="#fff3d7"/>
+    </pattern>
+    <g id="short-sheet">
+      <path d="M11 0H230L248 18V104L235 117H11L0 106V13Z"/>
+    </g>
+    <g id="long-sheet">
+      <path d="M12 0H370L391 21V111L376 126H12L0 114V14Z"/>
+    </g>
+    <g id="key-three" fill="#171729">
+      <circle cx="0" cy="0" r="4"/><circle cx="13" cy="0" r="4"/><circle cx="26" cy="0" r="4"/>
+    </g>
+    <g id="key-seven" fill="none" stroke="#384cfa" stroke-width="3">
+      <path d="M0 5L5-5M6 5L11-5M12 5L17-5M18 5L23-5M24 5L29-5M30 5L35-5M36 5L41-5"/>
+    </g>
+  </defs>
+  <rect width="880" height="548" fill="#171729"/>
+  <path d="M0 0H880V11H0z" fill="#ef543c"/>
+  <path d="M0 536H880V548H0z" fill="#384cfa"/>
+  <g fill="none" stroke="#716d70" stroke-width="1">
+    <path d="M21 22v501M859 22v501M14 34h14m-7-7v14m831-7h14m-7-7v14M14 513h14m-7-7v14m831-7h14m-7-7v14"/>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="37" y="99" fill="#fff3d7" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-weight="bold" font-size="88" letter-spacing="-5">Afterkey</text>
+    <g transform="translate(434 45)">
+      <path d="M0 0h22v9H0zM8 13h34v9H8zM16 26h46v9H16z" fill="#384cfa"/>
+      <path d="M5 3h22v9H5zM13 16h34v9H13zM21 29h46v9H21z" fill="#fff3d7"/>
+      <path d="M5 3h17v6H5zM13 16h29v6H13zM21 29h41v6H21z" fill="#ef543c"/>
+    </g>
+    <text x="526" y="62" font-size="26" font-weight="bold" fill="#fff3d7">One row per</text>
+    <text x="526" y="93" font-size="26" font-weight="bold" fill="#fff3d7">written key.</text>
+    <path d="M741 34h94v63h-94z" fill="url(#pinholes)" opacity=".62"/>
+    <path d="M40 121h800" stroke="#716d70"/>
+    <text x="40" y="161" font-size="26" font-weight="bold" fill="#fff3d7">Three writes after revision 1</text>
+    <g transform="translate(40 179) rotate(-1 124 58)">
+      <use xlink:href="#short-sheet" x="3" y="6" fill="#fff3d7"/>
+      <use xlink:href="#short-sheet" fill="#ef543c"/>
+      <text x="19" y="31" font-size="25" font-weight="bold" fill="#171729">r2 / key 3</text>
+      <use xlink:href="#key-three" x="188" y="24"/>
+      <text x="17" y="97" font-family="Georgia, 'Times New Roman', serif" font-size="62" font-weight="bold" fill="#171729">20</text>
+      <path d="M149 56h77v44h-77z" fill="url(#screen)"/>
+    </g>
+    <g transform="translate(315 179) rotate(1 124 58)">
+      <use xlink:href="#short-sheet" x="3" y="6" fill="#384cfa"/>
+      <use xlink:href="#short-sheet" fill="#fff3d7"/>
+      <text x="19" y="31" font-size="25" font-weight="bold" fill="#171729">r3 / key 7</text>
+      <use xlink:href="#key-seven" x="179" y="24"/>
+      <text x="17" y="97" font-family="Georgia, 'Times New Roman', serif" font-size="62" font-weight="bold" fill="#171729">11</text>
+    </g>
+    <g transform="translate(590 179) rotate(-1 124 58)">
+      <use xlink:href="#short-sheet" x="3" y="6" fill="#fff3d7"/>
+      <use xlink:href="#short-sheet" fill="#ef543c"/>
+      <text x="19" y="31" font-size="25" font-weight="bold" fill="#171729">r4 / key 3</text>
+      <use xlink:href="#key-three" x="188" y="24"/>
+      <text x="17" y="95" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="bold" fill="#171729">delete</text>
+    </g>
+    <path d="M40 326h799" stroke="#716d70" stroke-dasharray="3 5"/>
+    <text x="40" y="366" font-size="26" font-weight="bold" fill="#ef543c">Poll result</text>
+    <text x="838" y="366" text-anchor="end" font-size="25" fill="#fff3d7">Two rows in last-write order</text>
+    <g transform="translate(40 385)">
+      <use xlink:href="#long-sheet" x="4" y="6" fill="#384cfa"/>
+      <use xlink:href="#long-sheet" fill="#fff3d7"/>
+      <path d="M314 0h56l21 21v90l-15 15h-62z" fill="url(#screen)"/>
+      <path d="M309 7v112" fill="none" stroke="#171729" stroke-dasharray="4 5"/>
+      <text x="21" y="35" font-size="25" font-weight="bold" fill="#171729">r3 / key 7</text>
+      <text x="18" y="104" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="bold" fill="#171729">11</text>
+      <rect x="323" y="49" width="58" height="29" fill="#fff3d7"/>
+      <use xlink:href="#key-seven" x="332" y="63"/>
+    </g>
+    <g transform="translate(447 385)">
+      <use xlink:href="#long-sheet" x="4" y="6" fill="#fff3d7"/>
+      <use xlink:href="#long-sheet" fill="#ef543c"/>
+      <path d="M314 0h56l21 21v90l-15 15h-62z" fill="url(#screen)"/>
+      <path d="M309 7v112" fill="none" stroke="#171729" stroke-dasharray="4 5"/>
+      <text x="21" y="35" font-size="25" font-weight="bold" fill="#171729">r4 / key 3</text>
+      <text x="18" y="101" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="bold" fill="#171729">deleted</text>
+      <rect x="323" y="49" width="58" height="29" fill="#ef543c"/>
+      <use xlink:href="#key-three" x="338" y="63"/>
+    </g>
+  </g>
+</svg>

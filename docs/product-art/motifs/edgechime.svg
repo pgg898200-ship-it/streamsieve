@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img"><title>EdgeChime reports which rectangular zones a moving point enters or leaves between position updates.</title>
+  <g transform="rotate(-9 128 128)">
+    <path d="M38 63H150V175H38Z" stroke="#171729" stroke-width="16" fill="none"/>
+    <path d="M102 97H214V201H102Z" stroke="#384cfa" stroke-width="16" fill="none"/>
+    <path d="M67 138L185 125" stroke="#fff3d7" stroke-width="19" fill="none"/>
+    <path d="M67 138L185 125" stroke="#ef543c" stroke-width="8" fill="none"/>
+    <circle cx="67" cy="138" r="11" fill="#fff3d7" stroke="#ef543c" stroke-width="5"/>
+    <circle cx="185" cy="125" r="15" fill="#ef543c"/>
+    <path d="M102 119V145M150 113V140" fill="none" stroke="#ef543c" stroke-width="6"/>
+  </g>
+</svg>

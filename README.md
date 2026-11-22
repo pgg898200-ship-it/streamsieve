@@ -1,3 +1,5 @@
+<img align="right" src="docs/product-mark.svg" width="88" height="88" alt="A sieve picks a changed channel out of several telemetry strips.">
+
 # StreamSieve
 
 **Find which telemetry channels changed, then read the samples behind the alert.**

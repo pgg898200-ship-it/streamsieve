@@ -3,7 +3,7 @@ title: Afterkey
 sdk: static
 app_file: demo/index.html
 license: apache-2.0
-short_description: C++17 latest-state updates for lagging readers
+short_description: A C++17 change feed for the current state of each key
 tags:
 - cpp
 - multi-agent
@@ -13,13 +13,17 @@ tags:
 
 # Afterkey
 
-**Send a returning reader one update per changed key.** Afterkey sits between a producer and its readers. A producer writes the latest value for each key. A dashboard or worker keeps a 64-bit revision and asks what changed. If a key changed a million times while the reader was away, it receives just the last value or deletion.
+Afterkey is a header-only C++17 library for dashboards and workers that need the current state of a producer. Each reader saves a revision number. On its next poll, it gets one row per key written since that revision, ordered by the key’s last write. The row holds the latest value or marks a deletion.
 
-[Try two readers in your browser](https://afterkey.tancurl3.chatgpt.site) · [Download the C++17 kit](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-057fe313.tar.gz) · [Reproduce the benchmarks](bench/environment.md)
+If a worker publishes its available slot count ten times between polls, the dashboard receives just the last count.
+
+![After revision 1, key 3 is set to 20, key 7 is set to 11, and key 3 is deleted. The poll returns key 7 with value 11 at revision 3, then the deletion of key 3 at revision 4.](art/afterkey-register.svg)
+
+[Try two readers in your browser](https://huggingface.co/spaces/pgg-engineering/afterkey) · [Download the C++17 kit](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-057fe313.tar.gz) · [Reproduce the benchmarks](bench/environment.md)
 
 ## Run a catch-up in two-row pages
 
-The example tracks available slots per worker. While the reader is away, worker 0 changes twice and worker 2 is deleted. Build the example with a C++17 compiler.
+The example tracks available slots per worker. The reader last saw worker 0 with eight slots. While it is away, that count falls to seven, then six. Worker 1 reports twelve slots, and the producer records a deletion for worker 2. Build the example with a C++17 compiler.
 
 ```sh
 curl -fsSLO https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-057fe313.tar.gz
@@ -29,7 +33,7 @@ c++ -std=c++17 -O2 -Iinclude example.cpp -o afterkey-demo
 ./afterkey-demo
 ```
 
-The first page holds workers 1 and 0 in revision order. The next page carries the deletion.
+The first two rows make up page one. Worker 1 comes first because it reported before worker 0’s final write. The deletion is the only row on page two.
 
 ```text
 3 key=1 slots=12
@@ -70,15 +74,15 @@ A seeded 65,536-key replay on one shared AMD EPYC 9V74 VM retired a contiguous q
 
 ## Which workload benefits?
 
-With 1,048,576 populated keys, 16 hot keys and 16 staggered readers, Index ran **2.04× faster than a cursor-indexed append log** and **1.15× faster than an equivalent std::list recency index**. The latter isolates the benefit of the dense slot representation. The machine was a shared AMD EPYC 9V74 VM. Each mixed operation is one write or one poll, and a poll can deliver many rows.
+When writes concentrated on 16 of 1,048,576 populated keys, Index took **5.60 ns per operation** and a cursor-indexed append log took **11.45 ns**. When writes spread uniformly across 16,384 keys, the log was faster at **121.63 ns** against **421.46 ns** for Index. Each run used 16 staggered readers on a shared AMD EPYC 9V74 VM. One operation is a write or a poll, and one poll can deliver many rows.
 
-| Synthetic workload | Afterkey Index | Bounded Journal | Cursor log | std::list |
+| Synthetic workload | Afterkey Index (ns/op) | Bounded Journal (ns/op) | Cursor log (ns/op) | `std::list` (ns/op) |
 | --- | ---: | ---: | ---: | ---: |
 | 1M populated keys, 16 hot | 5.60 | 20.47 | 11.45 | 6.42 |
 | 16K populated keys, 16 hot | 4.41 | 13.09 | 10.41 | 6.06 |
 | 16K populated keys, uniform writes | 421.46 | 134.77 | 121.63 | 546.34 |
 
-Values are median elapsed nanoseconds per mixed operation across 5 or 9 trials. Timings include the callback and exclude initialization. The cursor log won under uniform churn. With broad changes, contiguous traversal makes the Journal a faster bounded-memory option in this workload. CPU-time medians, sample ranges, the full-map scan and additional cases are in the [results CSV](bench/results.csv).
+The table shows medians across five or nine trials. Timings include the callback and exclude initialization. With uniform writes, Journal’s contiguous traversal was faster than Index in this workload. CPU-time medians, sample ranges, the full-map scan and additional cases are in the [results CSV](bench/results.csv).
 
 With **4,096 independently lagging readers**, a second benchmark measured each synchronous catch-up call on one thread. For a moving hot set, p99 was **1.67 µs** for Index and **4.99 µs** for the cursor log. With uniform writes, p99 was **417.86 µs** and **75.92 µs** respectively. The timer includes the consuming callback. Queueing, network and producer time are excluded. [Latency harness](bench/fanout.cpp) · [Raw percentiles](bench/fanout.json)
 
@@ -99,7 +103,7 @@ Run reads and writes on one event loop or serialize access externally. Cursors b
 
 ## Integrations
 
-- [StreamSieve channel scores](examples/streamsieve.cpp) publishes absolute scores and checks that a dashboard and a slower observer both reconstruct the underlying native state.
+- The [StreamSieve example](examples/streamsieve.cpp) publishes absolute scores and checks that a dashboard and a slower observer both reconstruct the underlying native state.
 - [ZeroMQ catch-up](examples/zmq_catchup.cpp) serves independent filtered readers over REQ/REP, including tombstones and reconnects to the same server instance. Its topic masks filter after index traversal. Build instructions are in the example. The multi-topic slow-consumer case was described in [libzmq issue 1688](https://github.com/zeromq/libzmq/issues/1688).
 - [Randomized reference tests](tests/test_afterkey.cpp) exercise tombstones, callbacks, independent readers and historical cursors across compactions. Run `c++ -std=c++17 -O2 tests/test_afterkey.cpp -o /tmp/test-afterkey && /tmp/test-afterkey`.
 

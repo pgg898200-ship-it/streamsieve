@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <polygon points="24,172 140,148 209,182 91,209" fill="#171729"/>
+  <polygon points="24,151 140,127 209,161 91,188" fill="#384cfa"/>
+  <polygon points="24,130 140,106 209,140 91,167" fill="#171729"/>
+  <path d="M90 149 L141 63 L153 71 L104 153 L85 168 Z" fill="#ef543c" />
+  <path d="M118 45 Q142 20 169 24 Q190 28 195 44 Q199 58 186 70 L176 77 L181 96 L158 113 L122 90 L103 79 L117 62 L130 60 Z" fill="#171729" />
+  <path d="M133 45 Q151 29 169 32 Q181 34 185 43 Q171 58 150 60 Z" fill="#ef543c" />
+  <path d="M43 149 L80 167 M58 145 L86 158" fill="none" stroke="#fff3d7" stroke-width="4" />
+</svg>

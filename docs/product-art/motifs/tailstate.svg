@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img"><title>Tailstate pages through the latest changed keys in sequence order from a worker’s acknowledged cursor.</title>
+  <path fill="#384cfa" d="M116 151H233V198H116C80 198 48 174 46 147Z"/>
+  <path fill="#171729" d="M232 151V198L220 207H110C73 207 42 181 36 150L47 144C55 178 82 191 112 191H223V151Z"/>
+  <circle cx="98" cy="102" r="70" fill="#171729"/>
+  <circle cx="98" cy="102" r="57" fill="#fff3d7"/>
+  <circle cx="98" cy="102" r="48" fill="#171729"/>
+  <g fill="#fff3d7">
+    <path d="M76 70Q91 58 110 66L103 82Q92 79 84 87Z"/>
+    <path d="M131 83Q141 101 130 119L115 110Q120 101 114 92Z"/>
+    <path d="M100 138Q78 139 67 121L83 111Q91 123 101 120Z"/>
+  </g>
+  <circle cx="97" cy="102" r="10" fill="#ef543c"/>
+  <path d="M135 159V188M171 159V188" fill="none" stroke="#fff3d7" stroke-width="4" stroke-dasharray="4 5"/>
+  <path d="M205 143H218V198H205Z" fill="#ef543c"/>
+</svg>

@@ -1,0 +1,9 @@
+{
+  "backfold": "A replacement panel slots into a folded history while the surrounding readings stay in place.",
+  "streamsieve": "Several telemetry channels pass through a sieve, and a marked strip carries the changed channel’s samples.",
+  "chronosieve": "A change rings a bell, representing the compact digest that can wake a monitoring agent.",
+  "causalsieve": "A marked upstream domino leads two later changes, illustrating how CausalSieve ranks incident candidates.",
+  "flashmp": "Two impressions show the same subsequence shape at different levels and amplitudes.",
+  "tsjit": "One incoming reading feeds a fan of nine forecast quantiles.",
+  "recastcrps": "One forecast bead moves while the other ensemble members and the observed outcome stay fixed."
+}

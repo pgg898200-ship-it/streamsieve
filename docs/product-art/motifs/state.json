@@ -1,0 +1,9 @@
+{
+  "afterkey": "Afterkey returns the latest value or deletion for each key changed after a reader’s cursor.",
+  "tailstate": "Tailstate pages through the latest changed keys in sequence order from a worker’s acknowledged cursor.",
+  "sincekit": "SinceKit builds one changed-key array, and each reader takes the prefix needed for its checkpoint.",
+  "guardshift": "Guardshift reports which registered conditions switched on or off after a batch of signal changes.",
+  "kthwake": "KthWake reports when a rolling arrival count crosses a rule’s threshold, including expiration during silence.",
+  "pulsefold": "Pulsefold tracks deadlines for readers that share a heartbeat but tolerate different amounts of silence.",
+  "edgechime": "EdgeChime reports which rectangular zones a moving point enters or leaves between position updates."
+}

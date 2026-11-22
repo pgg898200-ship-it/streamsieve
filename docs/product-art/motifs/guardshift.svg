@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img"><title>Guardshift reports which registered conditions switched on or off after a batch of signal changes.</title>
+  <path d="M35 195V80L69 46H135V62H77L53 86V180H100V198Z" fill="#171729"/>
+  <path d="M143 37H220V80H196V59H143Z" fill="#384cfa"/>
+  <path d="M157 175H198V152H220V199H157Z" fill="#171729"/>
+  <path d="M74 137L175 64L189 82L89 155Z" fill="#ef543c"/>
+  <path d="M87 150L166 173" fill="none" stroke="#384cfa" stroke-width="7" stroke-dasharray="8 7"/>
+  <circle cx="79" cy="146" r="27" fill="#171729"/><circle cx="79" cy="146" r="10" fill="#fff3d7"/>
+  <path d="M171 68L181 61L194 79L184 86Z" fill="#171729"/>
+</svg>

@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="690" viewBox="0 0 780 690" role="img" aria-labelledby="title desc">
+  <title id="title">State replication and event routing</title>
+  <desc id="desc">Afterkey. Afterkey returns the latest value or deletion for each key changed after a reader’s cursor. Tailstate. Tailstate pages through the latest changed keys in sequence order from a worker’s acknowledged cursor. SinceKit. SinceKit builds one changed-key array, and each reader takes the prefix needed for its checkpoint. Guardshift. Guardshift reports which registered conditions switched on or off after a batch of signal changes. KthWake. KthWake reports when a rolling arrival count crosses a rule’s threshold, including expiration during silence. Pulsefold. Pulsefold tracks deadlines for readers that share a heartbeat but tolerate different amounts of silence. EdgeChime. EdgeChime reports which rectangular zones a moving point enters or leaves between position updates.</desc>
+  <rect width="780" height="690" fill="#fff3d7" />
+  <svg viewBox="0 0 256 256" role="img" x="39" y="7" width="182" height="182" aria-hidden="true">
+    <title>Afterkey returns the latest value or deletion for each key changed after a reader’s cursor.</title>
+    <g transform="rotate(-13 128 128)">
+      <path transform="translate(-4 66)" fill="#384cfa" fill-rule="evenodd" d="M30 62C30 39 47 22 71 22S112 39 112 62C112 71 108 79 104 85H214V107H203V124H184V111H171V123H151V111H94C88 114 79 117 69 117C47 117 30 98 30 78ZM45 59C45 69 51 76 61 76S77 69 77 59S71 43 61 43S45 50 45 59Z" />
+      <path transform="translate(2 45)" fill="#ef543c" fill-rule="evenodd" d="M30 62C30 39 47 22 71 22S112 39 112 62C112 71 108 79 104 85H214V107H203V124H184V111H171V123H151V111H94C88 114 79 117 69 117C47 117 30 98 30 78ZM45 59C45 69 51 76 61 76S77 69 77 59S71 43 61 43S45 50 45 59Z" />
+      <path transform="translate(8 24)" fill="#171729" fill-rule="evenodd" d="M30 62C30 39 47 22 71 22S112 39 112 62C112 71 108 79 104 85H214V107H203V124H184V111H171V123H151V111H94C88 114 79 117 69 117C47 117 30 98 30 78ZM45 59C45 69 51 76 61 76S77 69 77 59S71 43 61 43S45 50 45 59Z" />
+    </g>
+  </svg>
+  <text x="130" y="211" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">Afterkey</text>
+  <path d="M260 12v206" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" role="img" x="299" y="7" width="182" height="182" aria-hidden="true">
+    <title>Tailstate pages through the latest changed keys in sequence order from a worker’s acknowledged cursor.</title>
+    <path fill="#384cfa" d="M116 151H233V198H116C80 198 48 174 46 147Z" />
+    <path fill="#171729" d="M232 151V198L220 207H110C73 207 42 181 36 150L47 144C55 178 82 191 112 191H223V151Z" />
+    <circle cx="98" cy="102" r="70" fill="#171729" />
+    <circle cx="98" cy="102" r="57" fill="#fff3d7" />
+    <circle cx="98" cy="102" r="48" fill="#171729" />
+    <g fill="#fff3d7">
+      <path d="M76 70Q91 58 110 66L103 82Q92 79 84 87Z" />
+      <path d="M131 83Q141 101 130 119L115 110Q120 101 114 92Z" />
+      <path d="M100 138Q78 139 67 121L83 111Q91 123 101 120Z" />
+    </g>
+    <circle cx="97" cy="102" r="10" fill="#ef543c" />
+    <path d="M135 159V188M171 159V188" fill="none" stroke="#fff3d7" stroke-width="4" stroke-dasharray="4 5" />
+    <path d="M205 143H218V198H205Z" fill="#ef543c" />
+  </svg>
+  <text x="390" y="211" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">Tailstate</text>
+  <path d="M520 12v206" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" role="img" x="559" y="7" width="182" height="182" aria-hidden="true">
+    <title>SinceKit builds one changed-key array, and each reader takes the prefix needed for its checkpoint.</title>
+    <g transform="rotate(-12 128 128)">
+      <path d="M48 49H221V92H173V140H127V187H48L34 201V65Z" fill="#171729" />
+      <path d="M48 49H221V83H48ZM48 96H173V130H48ZM48 143H127V177H48Z" fill="#384cfa" />
+      <path d="M48 49H73V177H48Z" fill="#ef543c" />
+      <g fill="#fff3d7">
+        <path d="M82 60H100V73H82ZM117 60H135V73H117ZM152 60H170V73H152ZM187 60H205V73H187ZM82 107H100V120H82ZM117 107H135V120H117ZM82 154H100V167H82Z" />
+      </g>
+      <path d="M35 192H49V205H35Z" fill="#171729" />
+    </g>
+  </svg>
+  <text x="650" y="211" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">SinceKit</text>
+  <path d="M12 230h236" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" role="img" x="39" y="237" width="182" height="182" aria-hidden="true">
+    <title>Guardshift reports which registered conditions switched on or off after a batch of signal changes.</title>
+    <path d="M35 195V80L69 46H135V62H77L53 86V180H100V198Z" fill="#171729" />
+    <path d="M143 37H220V80H196V59H143Z" fill="#384cfa" />
+    <path d="M157 175H198V152H220V199H157Z" fill="#171729" />
+    <path d="M74 137L175 64L189 82L89 155Z" fill="#ef543c" />
+    <path d="M87 150L166 173" fill="none" stroke="#384cfa" stroke-width="7" stroke-dasharray="8 7" />
+    <circle cx="79" cy="146" r="27" fill="#171729" />
+    <circle cx="79" cy="146" r="10" fill="#fff3d7" />
+    <path d="M171 68L181 61L194 79L184 86Z" fill="#171729" />
+  </svg>
+  <text x="130" y="441" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">Guardshift</text>
+  <path d="M260 242v206" stroke="#171729" stroke-opacity=".18" />
+  <path d="M272 230h236" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" role="img" x="299" y="237" width="182" height="182" aria-hidden="true">
+    <title>KthWake reports when a rolling arrival count crosses a rule’s threshold, including expiration during silence.</title>
+    <g transform="rotate(7 128 128)">
+      <path d="M55 35H201V52H193C189 81 166 105 141 128C163 150 191 176 193 204H201V222H55V204H63C65 175 93 149 115 128C91 104 67 82 63 52H55Z" fill="#171729" />
+      <path d="M78 53H179C174 75 158 95 128 120C101 98 83 77 78 53Z" fill="#fff3d7" />
+      <path d="M128 137C111 153 91 175 83 197H174C164 171 145 151 128 137Z" fill="#384cfa" />
+      <g fill="#ef543c">
+        <circle cx="113" cy="72" r="10.7" />
+        <circle cx="142" cy="72" r="10.7" />
+        <circle cx="128" cy="94" r="10.7" />
+      </g>
+      <path d="M128 142V164" stroke="#fff3d7" stroke-width="6" />
+      <circle cx="128" cy="183" r="7" fill="#fff3d7" />
+      <path d="M55 35H201V41H55ZM55 204H201V211H55Z" fill="#ef543c" />
+    </g>
+  </svg>
+  <text x="390" y="441" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">KthWake</text>
+  <path d="M520 242v206" stroke="#171729" stroke-opacity=".18" />
+  <path d="M532 230h236" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" role="img" x="559" y="237" width="182" height="182" aria-hidden="true">
+    <title>Pulsefold tracks deadlines for readers that share a heartbeat but tolerate different amounts of silence.</title>
+    <path d="M57 38H193L210 56H43Z" fill="#171729" />
+    <path d="M122 62L47 143L57 153L131 74Z" fill="#384cfa" />
+    <path d="M122 66L99 187L113 190L135 68Z" fill="#171729" />
+    <path d="M126 68L181 208L196 204L139 63Z" fill="#ef543c" />
+    <path d="M48 121L67 140L51 165L30 143Z" fill="#384cfa" />
+    <path d="M105 164L125 186L104 212L84 189Z" fill="#171729" />
+    <path d="M184 177L214 204L194 231L169 204Z" fill="#ef543c" />
+    <g fill="#fff3d7">
+      <circle cx="50" cy="143" r="5" />
+      <circle cx="105" cy="188" r="6" />
+      <circle cx="191" cy="205" r="7" />
+    </g>
+    <circle cx="129" cy="63" r="22" fill="#171729" />
+    <circle cx="129" cy="63" r="9" fill="#fff3d7" />
+  </svg>
+  <text x="650" y="441" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">Pulsefold</text>
+  <path d="M12 460h236" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" role="img" x="39" y="467" width="182" height="182" aria-hidden="true">
+    <title>EdgeChime reports which rectangular zones a moving point enters or leaves between position updates.</title>
+    <g transform="rotate(-9 128 128)">
+      <path d="M38 63H150V175H38Z" stroke="#171729" stroke-width="16" fill="none" />
+      <path d="M102 97H214V201H102Z" stroke="#384cfa" stroke-width="16" fill="none" />
+      <path d="M67 138L185 125" stroke="#fff3d7" stroke-width="19" fill="none" />
+      <path d="M67 138L185 125" stroke="#ef543c" stroke-width="8" fill="none" />
+      <circle cx="67" cy="138" r="11" fill="#fff3d7" stroke="#ef543c" stroke-width="5" />
+      <circle cx="185" cy="125" r="15" fill="#ef543c" />
+      <path d="M102 119V145M150 113V140" fill="none" stroke="#ef543c" stroke-width="6" />
+    </g>
+  </svg>
+  <text x="130" y="671" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">EdgeChime</text>
+</svg>

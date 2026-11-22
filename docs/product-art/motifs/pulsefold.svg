@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img"><title>Pulsefold tracks deadlines for readers that share a heartbeat but tolerate different amounts of silence.</title>
+  <path d="M57 38H193L210 56H43Z" fill="#171729"/>
+  <path d="M122 62L47 143L57 153L131 74Z" fill="#384cfa"/>
+  <path d="M122 66L99 187L113 190L135 68Z" fill="#171729"/>
+  <path d="M126 68L181 208L196 204L139 63Z" fill="#ef543c"/>
+  <path d="M48 121L67 140L51 165L30 143Z" fill="#384cfa"/>
+  <path d="M105 164L125 186L104 212L84 189Z" fill="#171729"/>
+  <path d="M184 177L214 204L194 231L169 204Z" fill="#ef543c"/>
+  <g fill="#fff3d7"><circle cx="50" cy="143" r="5"/><circle cx="105" cy="188" r="6"/><circle cx="191" cy="205" r="7"/></g>
+  <circle cx="129" cy="63" r="22" fill="#171729"/><circle cx="129" cy="63" r="9" fill="#fff3d7"/>
+</svg>

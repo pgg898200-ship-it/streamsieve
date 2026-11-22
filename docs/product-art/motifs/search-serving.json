@@ -1,0 +1,13 @@
+{
+  "rankpatch": "A vermilion replacement strip slides into a stack of ranked results.",
+  "rankseal": "A serrated seal encloses three ordered bars to represent a ranking certified from partial lists.",
+  "rankfence": "Two groups of ranked streams stop at a common cutoff, leaving later results unread.",
+  "cachepin": "A pin holds the shared portion of three stacked prompt sheets at a cache breakpoint.",
+  "prefix-atlas": "Nested contour lines represent the cache capacities explored for a target prompt-prefix hit rate.",
+  "cutstream": "A blade cuts a stream at a stop sequence that straddles the seam between two chunks.",
+  "eventfold": "A pleated frame carries a single highlighted edit across successive folds.",
+  "racecurve": "A backup request starts later and races the first request toward the same deadline.",
+  "pathprobe-dag": "Two dependency paths converge, with one task highlighted for duration analysis.",
+  "cloture": "A fan of rollout ballots shows repeated circular votes for the same answer.",
+  "eproc": "A sequence of evidence values rises and falls before crossing a stopping threshold."
+}

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="460" viewBox="0 0 780 460" role="img" aria-labelledby="title desc">
+  <title id="title">LLM serving and workflow latency</title>
+  <desc id="desc">CachePin. A pin holds the shared portion of three stacked prompt sheets at a cache breakpoint. Prefix Atlas. Nested contour lines represent the cache capacities explored for a target prompt-prefix hit rate. Cutstream. A blade cuts a stream at a stop sequence that straddles the seam between two chunks. EventFold. A pleated frame carries a single highlighted edit across successive folds. Racecurve. A backup request starts later and races the first request toward the same deadline. PathProbe DAG. Two dependency paths converge, with one task highlighted for duration analysis.</desc>
+  <rect width="780" height="460" fill="#fff3d7" />
+  <svg viewBox="0 0 256 256" x="39" y="7" width="182" height="182" aria-hidden="true">
+    <polygon points="24,172 140,148 209,182 91,209" fill="#171729" />
+    <polygon points="24,151 140,127 209,161 91,188" fill="#384cfa" />
+    <polygon points="24,130 140,106 209,140 91,167" fill="#171729" />
+    <path d="M90 149 L141 63 L153 71 L104 153 L85 168 Z" fill="#ef543c" />
+    <path d="M118 45 Q142 20 169 24 Q190 28 195 44 Q199 58 186 70 L176 77 L181 96 L158 113 L122 90 L103 79 L117 62 L130 60 Z" fill="#171729" />
+    <path d="M133 45 Q151 29 169 32 Q181 34 185 43 Q171 58 150 60 Z" fill="#ef543c" />
+    <path d="M43 149 L80 167 M58 145 L86 158" fill="none" stroke="#fff3d7" stroke-width="4" />
+  </svg>
+  <text x="130" y="211" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">CachePin</text>
+  <path d="M260 12v206" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" x="299" y="7" width="182" height="182" aria-hidden="true">
+    <path d="M23 149 C36 107 43 55 81 40 C112 28 145 53 173 41 C196 32 219 45 222 73 C226 104 205 124 211 153 C218 193 197 213 162 211 C132 208 98 234 70 215 C41 197 11 191 23 149 Z" fill="none" stroke="#171729" stroke-width="10" />
+    <path d="M48 148 C60 112 60 75 89 63 C112 54 142 77 171 64 C190 55 200 66 199 85 C198 106 182 126 188 150 C194 179 182 190 158 188 C129 185 104 207 84 195 C61 181 37 177 48 148 Z" fill="none" stroke="#384cfa" stroke-width="9" />
+    <path d="M74 145 C82 121 82 94 103 88 C122 82 143 99 161 89 C174 82 181 89 176 105 C168 123 159 139 166 155 C171 168 158 172 142 168 C124 164 110 184 96 173 C79 162 69 160 74 145 Z" fill="none" stroke="#171729" stroke-width="8" />
+    <path d="M99 138 C106 121 105 110 118 110 C127 108 137 119 150 113 C150 124 142 133 145 145 C136 142 125 143 120 151 C112 154 93 152 99 138 Z" fill="#ef543c" />
+  </svg>
+  <text x="390" y="211" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">Prefix Atlas</text>
+  <path d="M520 12v206" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" x="559" y="7" width="182" height="182" aria-hidden="true">
+    <path d="M20 151 C62 156 69 99 112 98 L146 98 L129 123 H112 C86 123 78 183 20 180 Z" fill="#171729" />
+    <path d="M20 185 C79 192 91 130 112 130 H123 L109 154 C91 160 78 218 20 213 Z" fill="#171729" />
+    <path d="M145 128 L164 98 C187 89 212 96 237 57 V87 C219 115 198 116 182 120 Z" fill="#384cfa" />
+    <path d="M130 155 L143 134 L180 126 C201 121 222 121 237 99 V130 C223 146 208 150 185 155 Z" fill="#384cfa" />
+    <path d="M118 188 L139 149 L169 99 L199 38 L193 25 L170 40 L104 178 Z" fill="#ef543c" />
+    <path d="M182 44 L117 171" fill="none" stroke="#fff3d7" stroke-width="3" />
+  </svg>
+  <text x="650" y="211" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">Cutstream</text>
+  <path d="M12 230h236" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" x="39" y="237" width="182" height="182" aria-hidden="true">
+    <path d="M25 59 L88 83 V209 L25 180 Z" fill="#171729" />
+    <path d="M88 83 L150 43 V170 L88 209 Z" fill="#384cfa" />
+    <path d="M150 43 L195 76 V201 L150 170 Z" fill="#171729" />
+    <path d="M195 76 L231 48 V173 L195 201 Z" fill="#384cfa" />
+    <path d="M35 96 L79 113 M35 123 L79 140 M35 150 L79 168 M99 113 L137 89 M99 141 L137 117 M99 169 L137 145 M159 87 L187 107 M159 115 L187 135 M159 143 L187 163 M204 107 L221 93 M204 135 L221 121 M204 163 L221 149" fill="none" stroke="#fff3d7" stroke-width="4" />
+    <path d="M121 98 L146 82 L176 104 V129 L146 108 L121 124 Z" fill="#ef543c" />
+  </svg>
+  <text x="130" y="441" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">EventFold</text>
+  <path d="M260 242v206" stroke="#171729" stroke-opacity=".18" />
+  <path d="M272 230h236" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" x="299" y="237" width="182" height="182" aria-hidden="true">
+    <path d="M28 200 C83 199 99 187 127 145 C156 100 167 63 208 43 L214 55 C179 72 166 112 141 155 C109 209 87 225 28 226 Z" fill="#171729" />
+    <path d="M99 206 C117 198 142 179 163 136 C182 98 191 86 216 74 L222 86 C201 98 195 114 179 148 C160 187 135 216 106 228 Z" fill="#384cfa" />
+    <circle cx="31" cy="213" r="15" fill="#171729" />
+    <circle cx="105" cy="216" r="14" fill="#ef543c" />
+    <path d="M188 41 L200 26 L208 33 L197 49 Z M207 57 L217 41 L227 47 L217 65 Z M218 72 L229 57 L238 64 L228 81 Z" fill="#ef543c" />
+  </svg>
+  <text x="390" y="441" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">Racecurve</text>
+  <path d="M520 242v206" stroke="#171729" stroke-opacity=".18" />
+  <path d="M532 230h236" stroke="#171729" stroke-opacity=".18" />
+  <svg viewBox="0 0 256 256" x="559" y="237" width="182" height="182" aria-hidden="true">
+    <path d="M42 129 L100 61 L159 61 L210 129" fill="none" stroke="#171729" stroke-width="12" />
+    <path d="M42 129 L103 191 L156 191 L210 129" fill="none" stroke="#384cfa" stroke-width="12" />
+    <path d="M100 61 L156 191" fill="none" stroke="#171729" stroke-width="7" />
+    <polygon points="19,129 42,106 65,129 42,152" fill="#171729" />
+    <path d="M79 44 L114 38 L122 70 L87 79 Z" fill="#171729" />
+    <path d="M141 40 L173 37 L182 67 L150 76 Z" fill="#ef543c" />
+    <path d="M149 51 L157 64 M160 46 L168 60" fill="none" stroke="#fff3d7" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
+    <circle cx="103" cy="191" r="18" fill="#384cfa" />
+    <circle cx="156" cy="191" r="18" fill="#384cfa" />
+    <polygon points="186,129 210,105 235,129 210,154" fill="#171729" />
+    <circle cx="210" cy="129" r="8" fill="#fff3d7" />
+  </svg>
+  <text x="650" y="441" font-size="20" font-family="'DejaVu Serif', Georgia, serif" fill="#171729" font-weight="bold" text-anchor="middle">PathProbe DAG</text>
+</svg>
