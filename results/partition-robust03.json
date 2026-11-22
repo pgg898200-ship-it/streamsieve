@@ -1,0 +1,4671 @@
+{
+  "schema": 1,
+  "config": {
+    "shards": 8,
+    "rankers": 3,
+    "depth": 512,
+    "page": 16,
+    "queries": 100,
+    "repeats": 3,
+    "k": 5,
+    "c": 60,
+    "seed": 119,
+    "trace": "../trace-work/robust03.json",
+    "json": "results/partition-robust03.json"
+  },
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "sha256": {
+    "partition_replay.py": "65e95f0bfb765a0fe5e19bcae9213357e064d8463c71f72f3e3aad0ee3ec137c",
+    "bench.py": "04c29d54ae3d485b47c1bd9129733687f3760d3dbd98c3c85558713807ac5250",
+    "core.py": "a7aebf86cf6781fe3519cda7adeb892bada489d0604dbc7d105080449d15298b",
+    "partition.py": "76bfce074732ad14c64d300e3aaa20da2df677eadfa3984f8f0fe43ccae60128",
+    "robust03.json": "0c4b02522c49436f2ac3eca6c44c6853b0f6acad217ee62e631564297e17c3ea"
+  },
+  "summary": {
+    "hashed_trace": {
+      "global": {
+        "queries": 100,
+        "queries_stopping_before_exhaustion": 0,
+        "same_count_as_support_nra": 1,
+        "entries": 400000,
+        "p50_ms": 4.5815,
+        "p95_ms": 8.5427
+      },
+      "partition": {
+        "queries": 100,
+        "queries_stopping_before_exhaustion": 99,
+        "same_count_as_support_nra": 100,
+        "entries": 82637,
+        "p50_ms": 0.7075,
+        "p95_ms": 4.1052
+      },
+      "local_merge": {
+        "queries": 100,
+        "queries_stopping_before_exhaustion": 99,
+        "same_count_as_support_nra": 6,
+        "entries": 206934,
+        "p50_ms": 2.4152,
+        "p95_ms": 6.667
+      },
+      "partition_integer_nra": {
+        "queries": 100,
+        "queries_stopping_before_exhaustion": 99,
+        "same_count_as_support_nra": 100,
+        "entries": 82637,
+        "p50_ms": 0.3378,
+        "p95_ms": 4.7717
+      },
+      "batch": {
+        "queries": 100,
+        "queries_stopping_before_exhaustion": 0,
+        "same_count_as_support_nra": 1,
+        "entries": 400000,
+        "p50_ms": 0.7462,
+        "p95_ms": 1.2877
+      }
+    }
+  },
+  "queries": [
+    {
+      "kind": "hashed_trace",
+      "query": "303",
+      "exact_top": [
+        "3/LA033090-0082",
+        "0/FT921-7107",
+        "1/LA041090-0148",
+        "2/LA042590-0135",
+        "5/LA041490-0064"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 512,
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "partition": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.99516,
+          0.57425,
+          0.51878
+        ],
+        "partition_integer_nra": [
+          0.20848,
+          0.22173,
+          0.20364
+        ],
+        "batch": [
+          0.66304,
+          0.64541,
+          0.65028
+        ],
+        "local_merge": [
+          0.57264,
+          0.58234,
+          0.72598
+        ],
+        "global": [
+          8.692,
+          3.83243,
+          4.11914
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "307",
+      "exact_top": [
+        "4/FR940303-2-00030",
+        "1/FR940414-2-00020",
+        "3/FR940418-2-00054",
+        "2/FR940804-2-00061",
+        "4/FR940407-2-00040"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "partition": 512,
+        "batch": 4000,
+        "local_merge": 2314
+      },
+      "times_ms": {
+        "local_merge": [
+          2.28194,
+          2.39522,
+          2.33937
+        ],
+        "partition_integer_nra": [
+          0.30781,
+          0.28347,
+          0.28119
+        ],
+        "batch": [
+          0.73949,
+          0.67342,
+          0.64456
+        ],
+        "global": [
+          4.16949,
+          3.94663,
+          3.90028
+        ],
+        "partition": [
+          0.53883,
+          0.51448,
+          0.52332
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "310",
+      "exact_top": [
+        "6/FT931-11958",
+        "4/LA122490-0040",
+        "2/FT922-15435",
+        "2/LA100889-0041",
+        "5/LA053090-0120"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "local_merge": 2880,
+        "global": 4000,
+        "batch": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "batch": [
+          0.70247,
+          0.75281,
+          0.82017
+        ],
+        "local_merge": [
+          2.75077,
+          2.78819,
+          7.65607
+        ],
+        "partition": [
+          0.50778,
+          0.60346,
+          0.51171
+        ],
+        "partition_integer_nra": [
+          0.30011,
+          0.29694,
+          0.44792
+        ],
+        "global": [
+          3.98858,
+          3.96577,
+          4.02631
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "314",
+      "exact_top": [
+        "3/LA122890-0068",
+        "7/LA122589-0092",
+        "0/LA022389-0086",
+        "4/LA120389-0149",
+        "0/LA122790-0066"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "batch": 4000,
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "local_merge": 2792
+      },
+      "times_ms": {
+        "global": [
+          5.6674,
+          6.13981,
+          5.84944
+        ],
+        "partition": [
+          0.8348,
+          0.84774,
+          0.78379
+        ],
+        "batch": [
+          1.1731,
+          1.20205,
+          1.09506
+        ],
+        "local_merge": [
+          4.32217,
+          4.43754,
+          4.36346
+        ],
+        "partition_integer_nra": [
+          0.47817,
+          0.45753,
+          0.48903
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "320",
+      "exact_top": [
+        "1/FBIS4-20428",
+        "4/FBIS4-10645",
+        "7/FT922-7917",
+        "5/FBIS3-40798",
+        "6/FBIS3-59596"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "local_merge": 1152,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.61241,
+          0.58535,
+          0.55124
+        ],
+        "partition_integer_nra": [
+          0.24666,
+          0.34543,
+          0.26966
+        ],
+        "batch": [
+          0.58471,
+          0.64156,
+          0.59483
+        ],
+        "local_merge": [
+          1.23196,
+          1.21189,
+          1.23949
+        ],
+        "global": [
+          4.06589,
+          15.53576,
+          3.85997
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "322",
+      "exact_top": [
+        "7/LA022189-0085",
+        "7/LA061790-0168",
+        "3/LA012889-0030",
+        "7/LA020889-0083",
+        "5/LA110890-0210"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 3072,
+        "local_merge": 3312,
+        "batch": 4000,
+        "global": 4000,
+        "partition_integer_nra": 3072
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          3.59139,
+          3.59522,
+          3.56713
+        ],
+        "global": [
+          4.26356,
+          4.33566,
+          4.0327
+        ],
+        "batch": [
+          0.73204,
+          0.70788,
+          0.69553
+        ],
+        "local_merge": [
+          3.14415,
+          3.38203,
+          3.19778
+        ],
+        "partition": [
+          2.94386,
+          3.01945,
+          3.05998
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "325",
+      "exact_top": [
+        "5/FT932-14344",
+        "6/LA092190-0025",
+        "0/LA020990-0005",
+        "4/LA051689-0033",
+        "1/FT934-8727"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 1216,
+        "partition": 512,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "global": [
+          4.64661,
+          3.95654,
+          4.50383
+        ],
+        "partition_integer_nra": [
+          0.28392,
+          0.26377,
+          0.28532
+        ],
+        "batch": [
+          0.64272,
+          0.6095,
+          0.62015
+        ],
+        "local_merge": [
+          1.28774,
+          1.26314,
+          1.27348
+        ],
+        "partition": [
+          0.56244,
+          0.50248,
+          0.53207
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "330",
+      "exact_top": [
+        "0/FBIS4-37040",
+        "2/FBIS3-14476",
+        "7/FBIS4-43198",
+        "1/FBIS4-65036",
+        "6/FBIS3-54600"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 1024,
+        "partition": 1024,
+        "batch": 4000,
+        "local_merge": 2748,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.95676,
+          0.96911,
+          1.01844
+        ],
+        "global": [
+          4.01747,
+          4.29026,
+          4.21285
+        ],
+        "batch": [
+          0.64285,
+          0.7014,
+          0.62257
+        ],
+        "partition_integer_nra": [
+          0.66009,
+          0.72868,
+          0.65943
+        ],
+        "local_merge": [
+          2.77006,
+          2.87177,
+          2.98515
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "336",
+      "exact_top": [
+        "3/LA081490-0114",
+        "2/LA091290-0156",
+        "6/LA071489-0030",
+        "5/LA020290-0063",
+        "7/LA061490-0080"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 2048,
+        "local_merge": 3887,
+        "global": 4000,
+        "batch": 4000,
+        "partition": 2048
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          1.87343,
+          2.11966,
+          1.91429
+        ],
+        "partition": [
+          1.92218,
+          1.99355,
+          2.15939
+        ],
+        "local_merge": [
+          4.19663,
+          4.30637,
+          4.18848
+        ],
+        "global": [
+          4.35984,
+          4.45556,
+          4.55189
+        ],
+        "batch": [
+          0.71179,
+          0.76061,
+          0.82119
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "341",
+      "exact_top": [
+        "3/FBIS4-68195",
+        "5/FBIS4-68194",
+        "6/FT944-17076",
+        "0/FBIS4-19994",
+        "1/FT942-16387"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "batch": 4000,
+        "partition": 512,
+        "local_merge": 704,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "global": [
+          4.34295,
+          4.49058,
+          4.37149
+        ],
+        "partition_integer_nra": [
+          0.32387,
+          0.27215,
+          0.26764
+        ],
+        "partition": [
+          0.58873,
+          0.63908,
+          0.69576
+        ],
+        "local_merge": [
+          0.80843,
+          0.81913,
+          0.71667
+        ],
+        "batch": [
+          0.64345,
+          0.69757,
+          0.89906
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "344",
+      "exact_top": [
+        "3/FT923-1185",
+        "5/FT942-571",
+        "5/FT922-2176",
+        "1/FT932-9585",
+        "7/FT944-1881"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "partition": 1024,
+        "partition_integer_nra": 1024,
+        "batch": 4000,
+        "local_merge": 3992
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.75181,
+          0.74894,
+          0.84063
+        ],
+        "batch": [
+          0.74095,
+          0.86267,
+          0.73504
+        ],
+        "global": [
+          4.41492,
+          4.37338,
+          4.1947
+        ],
+        "local_merge": [
+          4.76445,
+          5.09748,
+          4.63145
+        ],
+        "partition": [
+          0.95227,
+          1.14777,
+          0.91687
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "345",
+      "exact_top": [
+        "1/LA060590-0024",
+        "0/LA022190-0068",
+        "5/LA052890-0066",
+        "1/FT942-12006",
+        "5/LA051689-0153"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "local_merge": 832,
+        "global": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          1.0847,
+          1.0446,
+          1.36934
+        ],
+        "partition_integer_nra": [
+          0.40994,
+          0.40035,
+          0.39145
+        ],
+        "batch": [
+          0.9316,
+          0.62476,
+          0.96415
+        ],
+        "global": [
+          5.45579,
+          5.03939,
+          6.00618
+        ],
+        "partition": [
+          0.61802,
+          0.82029,
+          0.68254
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "346",
+      "exact_top": [
+        "6/LA062490-0198",
+        "1/FT932-13789",
+        "7/FR940503-2-00168",
+        "6/FR940303-2-00226",
+        "6/FR940711-2-00121"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 2804,
+        "partition": 1024,
+        "global": 4000,
+        "partition_integer_nra": 1024,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.9812,
+          1.11064,
+          0.98647
+        ],
+        "partition_integer_nra": [
+          0.72548,
+          0.70748,
+          0.70936
+        ],
+        "local_merge": [
+          2.90741,
+          3.16232,
+          3.14407
+        ],
+        "batch": [
+          0.70474,
+          0.76859,
+          0.76923
+        ],
+        "global": [
+          4.55823,
+          4.64583,
+          4.73708
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "347",
+      "exact_top": [
+        "1/FT921-996",
+        "5/LA062290-0170",
+        "0/FR940831-1-00018",
+        "2/LA051890-0071",
+        "3/FT922-8047"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "local_merge": 576,
+        "batch": 4000,
+        "global": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.60498,
+          0.34474,
+          0.30161
+        ],
+        "local_merge": [
+          0.78091,
+          0.69061,
+          0.73419
+        ],
+        "partition": [
+          0.5786,
+          0.61187,
+          0.57835
+        ],
+        "global": [
+          4.14715,
+          4.83036,
+          4.61633
+        ],
+        "batch": [
+          0.56758,
+          0.55463,
+          0.55139
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "350",
+      "exact_top": [
+        "5/LA062390-0104",
+        "3/LA052290-0188",
+        "3/LA060690-0112",
+        "0/FT923-4291",
+        "7/FR940405-1-00096"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 3827,
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "partition": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.5224,
+          0.55725,
+          0.54413
+        ],
+        "partition_integer_nra": [
+          0.30729,
+          0.30569,
+          0.3123
+        ],
+        "batch": [
+          0.80737,
+          1.06058,
+          0.74205
+        ],
+        "global": [
+          4.99325,
+          5.59197,
+          17.12719
+        ],
+        "local_merge": [
+          4.75021,
+          4.72051,
+          5.12089
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "353",
+      "exact_top": [
+        "4/FBIS4-67409",
+        "2/LA111690-0059",
+        "7/FBIS4-26294",
+        "5/FBIS3-61405",
+        "1/LA100389-0123"
+      ],
+      "total": 4000,
+      "entries": {
+        "batch": 4000,
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "local_merge": 1547,
+        "partition": 512
+      },
+      "times_ms": {
+        "global": [
+          4.41186,
+          4.23374,
+          4.68888
+        ],
+        "local_merge": [
+          1.65592,
+          1.83589,
+          1.72249
+        ],
+        "batch": [
+          0.70133,
+          0.72154,
+          0.67559
+        ],
+        "partition": [
+          0.72717,
+          0.54805,
+          0.48855
+        ],
+        "partition_integer_nra": [
+          0.28004,
+          0.27556,
+          0.27255
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "354",
+      "exact_top": [
+        "2/LA082489-0005",
+        "3/FBIS3-22921",
+        "5/LA030190-0122",
+        "6/LA050390-0185",
+        "2/FBIS3-58280"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 3325,
+        "global": 4000,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "partition": 512
+      },
+      "times_ms": {
+        "global": [
+          4.57736,
+          4.99621,
+          4.56651
+        ],
+        "local_merge": [
+          3.91566,
+          3.51261,
+          3.66331
+        ],
+        "batch": [
+          0.83844,
+          0.75027,
+          0.8051
+        ],
+        "partition": [
+          0.54396,
+          0.60136,
+          0.48435
+        ],
+        "partition_integer_nra": [
+          0.30771,
+          0.3086,
+          0.30271
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "355",
+      "exact_top": [
+        "4/FBIS3-40210",
+        "7/FBIS4-20436",
+        "6/FBIS3-40224",
+        "3/FBIS4-47374",
+        "1/FBIS3-21238"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "local_merge": 2766,
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          3.37862,
+          3.08677,
+          3.15839
+        ],
+        "batch": [
+          1.07175,
+          0.74514,
+          0.91064
+        ],
+        "partition": [
+          0.55302,
+          0.55977,
+          0.5708
+        ],
+        "global": [
+          4.91941,
+          4.63322,
+          4.59539
+        ],
+        "partition_integer_nra": [
+          0.30883,
+          0.28312,
+          0.29034
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "356",
+      "exact_top": [
+        "0/LA082890-0074",
+        "3/LA010790-0103",
+        "5/LA111589-0004",
+        "1/LA020589-0078",
+        "2/LA030290-0067"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "local_merge": 1064,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "global": [
+          4.70937,
+          4.57861,
+          4.3223
+        ],
+        "local_merge": [
+          1.37729,
+          1.53558,
+          1.5151
+        ],
+        "batch": [
+          0.73523,
+          0.70817,
+          0.85512
+        ],
+        "partition_integer_nra": [
+          0.27168,
+          0.46943,
+          0.31714
+        ],
+        "partition": [
+          0.56853,
+          0.73064,
+          0.75873
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "362",
+      "exact_top": [
+        "1/FBIS4-2353",
+        "6/FT932-4965",
+        "6/FBIS4-66826",
+        "0/LA030189-0037",
+        "5/FBIS3-26112"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 2235,
+        "batch": 4000,
+        "partition": 512,
+        "global": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "partition": [
+          0.51542,
+          0.5201,
+          0.51192
+        ],
+        "partition_integer_nra": [
+          0.28068,
+          0.30173,
+          0.30392
+        ],
+        "global": [
+          4.27829,
+          4.31781,
+          4.82641
+        ],
+        "local_merge": [
+          2.42266,
+          2.40585,
+          2.40226
+        ],
+        "batch": [
+          0.64314,
+          0.62844,
+          0.88787
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "363",
+      "exact_top": [
+        "2/FT944-11817",
+        "3/LA092290-0102",
+        "6/LA103190-0035",
+        "6/FT943-11905",
+        "7/LA072490-0030"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "local_merge": 2769,
+        "global": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "global": [
+          4.32848,
+          4.65295,
+          4.32913
+        ],
+        "batch": [
+          0.6785,
+          0.74012,
+          0.67333
+        ],
+        "partition": [
+          0.57436,
+          0.52898,
+          0.55457
+        ],
+        "local_merge": [
+          3.07201,
+          2.87281,
+          2.8112
+        ],
+        "partition_integer_nra": [
+          0.29238,
+          0.29732,
+          0.29478
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "367",
+      "exact_top": [
+        "1/FBIS4-2223",
+        "4/FBIS4-67139",
+        "7/LA080989-0086",
+        "6/FT944-1847",
+        "0/FT944-2053"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "global": 4000,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "local_merge": 3616
+      },
+      "times_ms": {
+        "local_merge": [
+          3.4818,
+          5.70305,
+          3.66813
+        ],
+        "partition": [
+          0.59895,
+          0.5481,
+          0.50774
+        ],
+        "batch": [
+          0.94271,
+          0.83463,
+          0.7654
+        ],
+        "partition_integer_nra": [
+          0.30751,
+          0.51544,
+          0.30793
+        ],
+        "global": [
+          4.22016,
+          4.52708,
+          4.56214
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "372",
+      "exact_top": [
+        "1/FT942-12298",
+        "5/FT924-6336",
+        "2/FT941-15351",
+        "7/FT944-1462",
+        "7/LA060390-0083"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "batch": 4000,
+        "local_merge": 2368,
+        "global": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          2.80374,
+          2.69326,
+          2.62181
+        ],
+        "batch": [
+          0.65099,
+          0.67737,
+          0.75516
+        ],
+        "global": [
+          4.41367,
+          4.55403,
+          4.2515
+        ],
+        "partition": [
+          0.57383,
+          0.58279,
+          0.52238
+        ],
+        "partition_integer_nra": [
+          0.2758,
+          0.28613,
+          0.27881
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "374",
+      "exact_top": [
+        "5/LA080889-0027",
+        "2/FT911-2323",
+        "7/LA072489-0070",
+        "1/LA101289-0221",
+        "4/FT934-15186"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 896,
+        "partition": 512,
+        "batch": 4000,
+        "global": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "batch": [
+          0.59963,
+          0.56826,
+          0.58666
+        ],
+        "partition": [
+          0.54686,
+          0.56018,
+          0.55527
+        ],
+        "local_merge": [
+          0.96319,
+          0.95395,
+          0.96249
+        ],
+        "partition_integer_nra": [
+          0.28665,
+          0.26425,
+          0.30783
+        ],
+        "global": [
+          4.27215,
+          4.01677,
+          4.47017
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "375",
+      "exact_top": [
+        "0/FBIS3-60383",
+        "3/FBIS3-20985",
+        "7/FT944-16550",
+        "5/FBIS3-59553",
+        "6/FBIS4-66430"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "partition": 512,
+        "local_merge": 1024,
+        "batch": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.26538,
+          0.27551,
+          0.26854
+        ],
+        "batch": [
+          0.59405,
+          0.65799,
+          0.64624
+        ],
+        "global": [
+          4.26971,
+          4.42576,
+          4.14437
+        ],
+        "local_merge": [
+          1.56174,
+          1.17654,
+          1.23322
+        ],
+        "partition": [
+          0.65275,
+          0.5215,
+          0.60267
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "378",
+      "exact_top": [
+        "0/FT922-2274",
+        "1/FT944-14383",
+        "0/FT942-6780",
+        "5/FT944-1738",
+        "4/FT924-14607"
+      ],
+      "total": 4000,
+      "entries": {
+        "batch": 4000,
+        "global": 4000,
+        "partition": 1536,
+        "local_merge": 3655,
+        "partition_integer_nra": 1536
+      },
+      "times_ms": {
+        "partition": [
+          1.36601,
+          1.47731,
+          1.38345
+        ],
+        "local_merge": [
+          3.75149,
+          3.79866,
+          3.80029
+        ],
+        "partition_integer_nra": [
+          1.06838,
+          1.19718,
+          4.00015
+        ],
+        "batch": [
+          0.69052,
+          0.6507,
+          1.14658
+        ],
+        "global": [
+          4.6288,
+          14.66831,
+          5.28988
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "379",
+      "exact_top": [
+        "0/FR940919-2-00098",
+        "6/FR940919-2-00099",
+        "4/FR940419-2-00042",
+        "3/FR940919-2-00094",
+        "5/FR940919-2-00095"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "local_merge": 2621,
+        "global": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "batch": [
+          0.62444,
+          0.68178,
+          0.69846
+        ],
+        "partition_integer_nra": [
+          0.29513,
+          0.29436,
+          0.28753
+        ],
+        "local_merge": [
+          2.8807,
+          2.73077,
+          2.85344
+        ],
+        "partition": [
+          0.52453,
+          0.77256,
+          0.59138
+        ],
+        "global": [
+          4.56918,
+          4.4324,
+          4.06603
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "383",
+      "exact_top": [
+        "4/LA011489-0048",
+        "6/LA112389-0158",
+        "1/FT933-4868",
+        "0/LA120489-0008",
+        "5/LA010889-0051"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "batch": 4000,
+        "partition": 512,
+        "global": 4000,
+        "local_merge": 960
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.26635,
+          0.2732,
+          0.26566
+        ],
+        "batch": [
+          0.63149,
+          0.62282,
+          0.59141
+        ],
+        "partition": [
+          0.52958,
+          0.5264,
+          0.51379
+        ],
+        "global": [
+          4.03663,
+          3.91463,
+          4.31881
+        ],
+        "local_merge": [
+          1.00346,
+          1.06655,
+          1.01468
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "389",
+      "exact_top": [
+        "1/FR940805-2-00049",
+        "2/FR940628-2-00085",
+        "1/FR940407-2-00136",
+        "7/FR940217-1-00026",
+        "0/FR940627-2-00077"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "partition": 1536,
+        "partition_integer_nra": 1536,
+        "batch": 4000,
+        "local_merge": 3830
+      },
+      "times_ms": {
+        "partition": [
+          1.55434,
+          1.42721,
+          1.42687
+        ],
+        "partition_integer_nra": [
+          1.24974,
+          1.25333,
+          1.58606
+        ],
+        "local_merge": [
+          4.48587,
+          4.10311,
+          5.17677
+        ],
+        "global": [
+          4.50069,
+          4.42007,
+          5.22123
+        ],
+        "batch": [
+          0.76355,
+          0.76431,
+          0.77143
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "393",
+      "exact_top": [
+        "3/FT924-15580",
+        "1/LA061090-0035",
+        "3/LA060789-0028",
+        "2/LA042190-0143",
+        "5/LA092689-0007"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 3550,
+        "batch": 4000,
+        "global": 4000,
+        "partition": 1024,
+        "partition_integer_nra": 1024
+      },
+      "times_ms": {
+        "batch": [
+          0.72758,
+          0.73116,
+          0.7886
+        ],
+        "partition": [
+          0.93318,
+          0.92281,
+          0.99291
+        ],
+        "partition_integer_nra": [
+          0.65219,
+          0.58716,
+          0.82834
+        ],
+        "local_merge": [
+          3.67996,
+          3.63019,
+          3.57071
+        ],
+        "global": [
+          4.04649,
+          4.26023,
+          4.03763
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "394",
+      "exact_top": [
+        "4/LA031190-0045",
+        "2/LA101890-0207",
+        "1/LA010890-0013",
+        "5/LA101590-0098",
+        "0/LA021890-0097"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 1024,
+        "local_merge": 3445,
+        "partition_integer_nra": 1024,
+        "batch": 4000,
+        "global": 4000
+      },
+      "times_ms": {
+        "batch": [
+          0.72907,
+          0.79729,
+          1.93854
+        ],
+        "partition": [
+          0.9669,
+          1.27721,
+          2.00331
+        ],
+        "global": [
+          4.17214,
+          8.21815,
+          6.12771
+        ],
+        "local_merge": [
+          3.60353,
+          3.95895,
+          5.74842
+        ],
+        "partition_integer_nra": [
+          0.59524,
+          0.56982,
+          1.14753
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "397",
+      "exact_top": [
+        "0/LA020890-0157",
+        "2/LA072390-0100",
+        "0/LA121989-0061",
+        "4/LA120589-0153",
+        "0/LA021390-0016"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "global": 4000,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "local_merge": 3962
+      },
+      "times_ms": {
+        "batch": [
+          3.93134,
+          1.58872,
+          1.09907
+        ],
+        "partition_integer_nra": [
+          0.81303,
+          0.48622,
+          0.57904
+        ],
+        "local_merge": [
+          7.92889,
+          13.95171,
+          5.93426
+        ],
+        "global": [
+          8.66248,
+          8.73196,
+          7.49835
+        ],
+        "partition": [
+          0.89153,
+          0.89378,
+          1.00852
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "399",
+      "exact_top": [
+        "6/FT924-3602",
+        "0/FT934-7286",
+        "0/LA081390-0044",
+        "4/LA032289-0033",
+        "3/FR940217-1-00140"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "local_merge": 3720,
+        "batch": 4000,
+        "partition": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          9.5914,
+          14.49895,
+          42.84927
+        ],
+        "batch": [
+          0.959,
+          1.48046,
+          1.65263
+        ],
+        "global": [
+          7.22241,
+          35.50678,
+          8.54266
+        ],
+        "partition_integer_nra": [
+          0.32469,
+          0.30374,
+          0.77025
+        ],
+        "partition": [
+          0.6893,
+          1.23119,
+          0.9111
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "401",
+      "exact_top": [
+        "1/FBIS4-18182",
+        "3/FBIS3-59436",
+        "7/FBIS3-18684",
+        "4/FBIS3-39117",
+        "2/FT924-4470"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 3072,
+        "local_merge": 3902,
+        "batch": 4000,
+        "partition": 3072,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition": [
+          4.19614,
+          4.26821,
+          4.27498
+        ],
+        "local_merge": [
+          5.88097,
+          6.50755,
+          4.88662
+        ],
+        "global": [
+          6.03025,
+          25.20464,
+          9.55044
+        ],
+        "partition_integer_nra": [
+          4.77166,
+          5.46746,
+          3.87083
+        ],
+        "batch": [
+          0.94997,
+          0.88916,
+          1.86
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "404",
+      "exact_top": [
+        "6/FT934-11487",
+        "0/FT934-9911",
+        "3/FBIS4-66076",
+        "1/FT944-14470",
+        "7/FT942-16203"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "batch": 4000,
+        "local_merge": 1024,
+        "partition": 512
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.411,
+          0.35665,
+          0.43673
+        ],
+        "local_merge": [
+          1.2634,
+          1.09565,
+          1.27515
+        ],
+        "partition": [
+          0.58383,
+          0.77863,
+          0.85055
+        ],
+        "global": [
+          4.1092,
+          4.40543,
+          5.55138
+        ],
+        "batch": [
+          0.6979,
+          0.77005,
+          0.81303
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "408",
+      "exact_top": [
+        "0/LA062590-0054",
+        "2/LA101390-0102",
+        "7/LA120389-0130",
+        "4/LA082990-0118",
+        "3/LA102090-0035"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "batch": 4000,
+        "partition": 512,
+        "global": 4000,
+        "local_merge": 1705
+      },
+      "times_ms": {
+        "local_merge": [
+          2.42463,
+          2.25303,
+          2.89883
+        ],
+        "partition": [
+          0.58141,
+          0.87054,
+          0.82892
+        ],
+        "partition_integer_nra": [
+          0.3147,
+          0.40183,
+          0.44021
+        ],
+        "global": [
+          5.41555,
+          19.76752,
+          8.36015
+        ],
+        "batch": [
+          0.62771,
+          0.99428,
+          1.01016
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "409",
+      "exact_top": [
+        "5/FT923-13692",
+        "4/LA110489-0092",
+        "0/FT923-13817",
+        "1/LA042089-0111",
+        "2/LA091290-0053"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "local_merge": 512,
+        "partition": 512,
+        "global": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "batch": [
+          0.96698,
+          0.98885,
+          1.00103
+        ],
+        "global": [
+          6.2458,
+          6.26091,
+          5.58859
+        ],
+        "partition": [
+          0.78072,
+          0.80021,
+          0.84466
+        ],
+        "partition_integer_nra": [
+          0.32927,
+          0.3606,
+          0.33913
+        ],
+        "local_merge": [
+          0.87954,
+          0.81864,
+          0.63272
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "414",
+      "exact_top": [
+        "3/FT923-3729",
+        "5/FT944-12369",
+        "0/FT921-9644",
+        "4/FT943-1006",
+        "0/FT944-11926"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 896,
+        "batch": 4000,
+        "partition": 512,
+        "global": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "batch": [
+          0.74569,
+          0.64638,
+          0.61412
+        ],
+        "partition_integer_nra": [
+          0.27882,
+          0.2879,
+          0.27367
+        ],
+        "global": [
+          4.00315,
+          4.37299,
+          4.0732
+        ],
+        "local_merge": [
+          1.11178,
+          0.99539,
+          0.98674
+        ],
+        "partition": [
+          0.90589,
+          0.62346,
+          0.59427
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "416",
+      "exact_top": [
+        "1/FBIS4-49586",
+        "0/FBIS3-3711",
+        "6/FBIS3-25805",
+        "2/FBIS4-66355",
+        "3/FBIS3-45088"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "partition": 512,
+        "batch": 4000,
+        "local_merge": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.55066,
+          0.70412,
+          0.58248
+        ],
+        "partition_integer_nra": [
+          0.2446,
+          0.24397,
+          0.35384
+        ],
+        "local_merge": [
+          0.63543,
+          0.63747,
+          1.86641
+        ],
+        "global": [
+          4.36756,
+          5.36094,
+          4.80399
+        ],
+        "batch": [
+          0.81246,
+          0.96997,
+          2.15404
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "419",
+      "exact_top": [
+        "4/LA040190-0174",
+        "6/LA022190-0069",
+        "7/FBIS3-41645",
+        "0/FBIS4-67400",
+        "7/LA121389-0085"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 2535,
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "partition": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.32067,
+          0.45314,
+          0.46935
+        ],
+        "batch": [
+          0.65889,
+          1.07866,
+          1.026
+        ],
+        "global": [
+          5.20322,
+          6.16304,
+          6.15437
+        ],
+        "local_merge": [
+          3.92621,
+          3.82939,
+          3.84082
+        ],
+        "partition": [
+          0.74591,
+          0.74189,
+          0.77696
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "426",
+      "exact_top": [
+        "2/LA031490-0004",
+        "1/FR940114-1-00044",
+        "0/LA051990-0141",
+        "7/FR940523-2-00081",
+        "4/LA041089-0080"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "partition": 512,
+        "local_merge": 3131,
+        "batch": 4000
+      },
+      "times_ms": {
+        "global": [
+          6.14662,
+          6.19504,
+          5.90117
+        ],
+        "partition_integer_nra": [
+          0.47471,
+          0.5022,
+          0.44802
+        ],
+        "batch": [
+          1.01027,
+          1.05102,
+          1.17445
+        ],
+        "local_merge": [
+          6.59379,
+          5.1111,
+          4.91789
+        ],
+        "partition": [
+          0.77953,
+          0.7565,
+          0.81589
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "427",
+      "exact_top": [
+        "5/LA082089-0008",
+        "0/FT923-10771",
+        "2/LA070389-0031",
+        "3/FBIS3-22135",
+        "6/FBIS3-21049"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 704,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "partition": 512
+      },
+      "times_ms": {
+        "global": [
+          6.00548,
+          6.01313,
+          5.95999
+        ],
+        "batch": [
+          0.99292,
+          1.01565,
+          1.01082
+        ],
+        "partition": [
+          0.80013,
+          0.86152,
+          0.8088
+        ],
+        "local_merge": [
+          1.13667,
+          1.1208,
+          1.45425
+        ],
+        "partition_integer_nra": [
+          0.39012,
+          0.37324,
+          0.39721
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "433",
+      "exact_top": [
+        "7/LA080690-0141",
+        "1/FT923-4572",
+        "5/FT944-9935",
+        "6/FT924-9527",
+        "7/FT941-4064"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 3519,
+        "global": 4000,
+        "partition": 512,
+        "batch": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "global": [
+          6.05258,
+          6.4902,
+          5.80039
+        ],
+        "batch": [
+          1.02545,
+          1.20504,
+          1.03134
+        ],
+        "partition_integer_nra": [
+          0.46293,
+          0.45289,
+          0.4476
+        ],
+        "partition": [
+          0.8052,
+          0.78387,
+          0.78607
+        ],
+        "local_merge": [
+          7.09532,
+          5.67125,
+          5.81554
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "435",
+      "exact_top": [
+        "3/FT933-15872",
+        "2/FT941-12411",
+        "0/FT943-3422",
+        "7/FBIS4-20131",
+        "5/FT943-8138"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "batch": 4000,
+        "local_merge": 2160,
+        "partition_integer_nra": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "batch": [
+          0.86849,
+          1.12027,
+          1.26828
+        ],
+        "local_merge": [
+          4.41243,
+          3.29327,
+          3.21553
+        ],
+        "partition": [
+          0.86411,
+          0.81978,
+          0.84285
+        ],
+        "partition_integer_nra": [
+          0.45885,
+          0.48454,
+          0.43261
+        ],
+        "global": [
+          6.63113,
+          6.48507,
+          6.76249
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "436",
+      "exact_top": [
+        "1/FT931-15371",
+        "5/FT944-5690",
+        "2/FT931-12906",
+        "2/FT941-11908",
+        "5/FT931-12899"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 3793,
+        "batch": 4000,
+        "partition": 1024,
+        "partition_integer_nra": 1024,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          1.18298,
+          1.1858,
+          0.83344
+        ],
+        "batch": [
+          1.48342,
+          0.71506,
+          0.74911
+        ],
+        "global": [
+          6.63993,
+          4.07118,
+          3.9438
+        ],
+        "local_merge": [
+          6.23778,
+          5.26433,
+          3.96178
+        ],
+        "partition": [
+          1.35569,
+          0.92906,
+          0.95176
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "439",
+      "exact_top": [
+        "1/FR940627-2-00078",
+        "4/FT932-6180",
+        "6/LA100589-0058",
+        "4/FBIS3-23562",
+        "5/FBIS4-46660"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "local_merge": 2496,
+        "batch": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          2.45138,
+          2.66491,
+          2.52309
+        ],
+        "global": [
+          4.30404,
+          4.32219,
+          4.19738
+        ],
+        "partition": [
+          0.56863,
+          0.52979,
+          0.59906
+        ],
+        "partition_integer_nra": [
+          0.32482,
+          0.29663,
+          0.30858
+        ],
+        "batch": [
+          0.96879,
+          0.67162,
+          0.68298
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "442",
+      "exact_top": [
+        "0/LA071090-0093",
+        "6/FBIS3-1928",
+        "7/FBIS4-50680",
+        "1/LA041089-0012",
+        "4/FBIS4-36664"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 3934,
+        "partition_integer_nra": 3999,
+        "batch": 4000,
+        "partition": 3999,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition": [
+          4.12918,
+          5.46521,
+          9.03193
+        ],
+        "local_merge": [
+          4.27017,
+          4.11041,
+          20.48235
+        ],
+        "global": [
+          4.27299,
+          6.97013,
+          5.08273
+        ],
+        "partition_integer_nra": [
+          8.31466,
+          14.46148,
+          13.77622
+        ],
+        "batch": [
+          0.78812,
+          0.83114,
+          0.93405
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "443",
+      "exact_top": [
+        "6/FT941-4190",
+        "1/FT944-17976",
+        "0/FT921-14694",
+        "7/FT923-1945",
+        "7/FT943-15483"
+      ],
+      "total": 4000,
+      "entries": {
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "local_merge": 3550,
+        "partition": 512
+      },
+      "times_ms": {
+        "partition": [
+          0.4883,
+          0.54657,
+          3.10328
+        ],
+        "partition_integer_nra": [
+          0.27455,
+          0.27355,
+          0.51885
+        ],
+        "batch": [
+          0.70662,
+          0.66045,
+          0.81895
+        ],
+        "global": [
+          7.00517,
+          5.51168,
+          7.93266
+        ],
+        "local_merge": [
+          5.98954,
+          3.76119,
+          6.17764
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "445",
+      "exact_top": [
+        "5/LA110789-0149",
+        "2/FT921-7364",
+        "2/FT924-9001",
+        "4/LA040390-0124",
+        "1/FT934-408"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "global": 4000,
+        "local_merge": 1088,
+        "partition_integer_nra": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "batch": [
+          0.68114,
+          0.71655,
+          0.68851
+        ],
+        "partition_integer_nra": [
+          0.25706,
+          0.26907,
+          0.26494
+        ],
+        "local_merge": [
+          1.21338,
+          1.10543,
+          1.25194
+        ],
+        "partition": [
+          6.21087,
+          0.51238,
+          0.53155
+        ],
+        "global": [
+          3.99471,
+          4.74431,
+          3.96107
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "448",
+      "exact_top": [
+        "2/FBIS4-15452",
+        "3/FT931-16636",
+        "3/FT921-11935",
+        "4/FR940217-1-00130",
+        "7/FT944-2991"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 1024,
+        "global": 4000,
+        "batch": 4000,
+        "partition": 1024,
+        "local_merge": 3098
+      },
+      "times_ms": {
+        "local_merge": [
+          2.91391,
+          3.45418,
+          2.94298
+        ],
+        "batch": [
+          0.66546,
+          0.67591,
+          0.67846
+        ],
+        "partition_integer_nra": [
+          0.69853,
+          0.68916,
+          0.70179
+        ],
+        "partition": [
+          0.97212,
+          0.94547,
+          0.97118
+        ],
+        "global": [
+          4.24117,
+          3.95837,
+          4.20149
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "601",
+      "exact_top": [
+        "6/FT931-13722",
+        "5/FT931-10200",
+        "1/FT923-11593",
+        "2/FT944-10568",
+        "6/FT923-9764"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "local_merge": 3584,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.53208,
+          0.51622,
+          0.5288
+        ],
+        "local_merge": [
+          4.33281,
+          3.77881,
+          5.47356
+        ],
+        "partition_integer_nra": [
+          0.29573,
+          0.28834,
+          0.28533
+        ],
+        "batch": [
+          0.66593,
+          0.64668,
+          0.76762
+        ],
+        "global": [
+          4.12018,
+          4.00993,
+          4.52507
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "602",
+      "exact_top": [
+        "1/FT922-1498",
+        "4/FT922-1680",
+        "7/FT923-8609",
+        "3/FT922-1536",
+        "6/FT922-1409"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "batch": 4000,
+        "local_merge": 576,
+        "partition": 512
+      },
+      "times_ms": {
+        "local_merge": [
+          0.69741,
+          0.64485,
+          0.65558
+        ],
+        "partition_integer_nra": [
+          0.24153,
+          0.2489,
+          0.25646
+        ],
+        "partition": [
+          0.66761,
+          0.55428,
+          0.56697
+        ],
+        "global": [
+          4.01412,
+          3.86923,
+          4.25662
+        ],
+        "batch": [
+          0.56562,
+          0.56451,
+          0.86113
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "603",
+      "exact_top": [
+        "3/FT944-3264",
+        "6/LA072790-0059",
+        "5/FT942-1181",
+        "2/FT942-15472",
+        "7/LA032189-0143"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "local_merge": 768,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "batch": [
+          0.8394,
+          0.62334,
+          0.71993
+        ],
+        "local_merge": [
+          0.94604,
+          0.83663,
+          1.32795
+        ],
+        "global": [
+          4.1342,
+          4.16882,
+          5.07003
+        ],
+        "partition_integer_nra": [
+          0.34036,
+          0.24061,
+          0.26853
+        ],
+        "partition": [
+          0.5795,
+          0.53678,
+          0.51494
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "604",
+      "exact_top": [
+        "5/LA092090-0248",
+        "6/LA081989-0064",
+        "7/LA112690-0027",
+        "1/LA061389-0087",
+        "2/LA073090-0058"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 704,
+        "batch": 4000,
+        "partition": 512,
+        "global": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "partition": [
+          0.90306,
+          0.94067,
+          0.61395
+        ],
+        "global": [
+          6.56597,
+          16.30447,
+          4.7385
+        ],
+        "batch": [
+          1.05814,
+          1.06707,
+          0.6261
+        ],
+        "partition_integer_nra": [
+          0.46325,
+          0.42238,
+          0.27093
+        ],
+        "local_merge": [
+          1.32409,
+          1.4053,
+          0.79595
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "605",
+      "exact_top": [
+        "3/LA060489-0030",
+        "0/LA061790-0021",
+        "3/LA013089-0099",
+        "1/LA040990-0065",
+        "1/FR940527-1-00247"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "local_merge": 1654,
+        "batch": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          1.60583,
+          1.66793,
+          1.59435
+        ],
+        "partition": [
+          0.48905,
+          0.68506,
+          0.52614
+        ],
+        "partition_integer_nra": [
+          0.3059,
+          0.30506,
+          0.29872
+        ],
+        "batch": [
+          0.63609,
+          0.6495,
+          0.64408
+        ],
+        "global": [
+          3.96249,
+          4.03411,
+          3.97112
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "606",
+      "exact_top": [
+        "1/LA052489-0063",
+        "5/LA042889-0181",
+        "6/LA082390-0001",
+        "2/LA091489-0077",
+        "4/LA073189-0072"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "local_merge": 2030,
+        "global": 4000,
+        "batch": 4000,
+        "partition": 512
+      },
+      "times_ms": {
+        "global": [
+          3.93459,
+          4.15899,
+          4.15198
+        ],
+        "partition_integer_nra": [
+          0.28244,
+          0.27272,
+          0.29736
+        ],
+        "local_merge": [
+          2.04146,
+          2.09478,
+          2.06466
+        ],
+        "batch": [
+          0.67164,
+          0.66983,
+          0.64403
+        ],
+        "partition": [
+          0.68504,
+          0.52075,
+          0.52831
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "607",
+      "exact_top": [
+        "0/FT934-1290",
+        "4/LA062589-0077",
+        "6/FT934-2039",
+        "5/FT944-17394",
+        "3/LA121790-0086"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 960,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "partition": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          1.05316,
+          1.33847,
+          2.75817
+        ],
+        "partition": [
+          0.53002,
+          0.60769,
+          0.55995
+        ],
+        "partition_integer_nra": [
+          0.30118,
+          0.26525,
+          0.26281
+        ],
+        "global": [
+          4.01918,
+          4.00893,
+          3.91602
+        ],
+        "batch": [
+          0.60541,
+          0.60749,
+          0.61655
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "608",
+      "exact_top": [
+        "7/LA020490-0205",
+        "1/LA040190-0172",
+        "3/FR941125-2-00099",
+        "6/LA090689-0110",
+        "7/FT924-6213"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 3292,
+        "partition_integer_nra": 1536,
+        "partition": 1536,
+        "global": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "global": [
+          14.42045,
+          4.49406,
+          4.3214
+        ],
+        "batch": [
+          0.73785,
+          0.73806,
+          0.69471
+        ],
+        "partition_integer_nra": [
+          1.07145,
+          1.16838,
+          1.08966
+        ],
+        "local_merge": [
+          3.46029,
+          3.63261,
+          3.68256
+        ],
+        "partition": [
+          1.42787,
+          1.51038,
+          1.36746
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "609",
+      "exact_top": [
+        "1/FBIS3-9210",
+        "3/FBIS3-20587",
+        "6/LA070690-0084",
+        "1/FR940617-2-00242",
+        "7/LA030689-0022"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 2885,
+        "partition": 1024,
+        "batch": 4000,
+        "global": 4000,
+        "partition_integer_nra": 1024
+      },
+      "times_ms": {
+        "global": [
+          3.9628,
+          4.26164,
+          4.23697
+        ],
+        "partition": [
+          0.92696,
+          0.99232,
+          6.68751
+        ],
+        "partition_integer_nra": [
+          0.73334,
+          0.95276,
+          0.73454
+        ],
+        "local_merge": [
+          3.57333,
+          3.05022,
+          3.13039
+        ],
+        "batch": [
+          0.72689,
+          0.88485,
+          0.70456
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "610",
+      "exact_top": [
+        "4/FT921-280",
+        "3/FT924-9284",
+        "1/FT921-369",
+        "5/FT921-5263",
+        "5/FT934-14971"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "local_merge": 2162,
+        "batch": 4000,
+        "global": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.28236,
+          0.28277,
+          0.28766
+        ],
+        "global": [
+          3.97788,
+          4.14311,
+          4.15279
+        ],
+        "local_merge": [
+          2.10355,
+          2.09895,
+          2.16271
+        ],
+        "partition": [
+          0.51748,
+          0.70786,
+          0.5267
+        ],
+        "batch": [
+          0.66927,
+          1.57028,
+          0.66853
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "611",
+      "exact_top": [
+        "5/FBIS4-21941",
+        "2/FBIS4-22118",
+        "3/FBIS3-19897",
+        "0/FBIS3-19974",
+        "7/FBIS4-18073"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "batch": 4000,
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "local_merge": 768
+      },
+      "times_ms": {
+        "batch": [
+          0.61011,
+          0.56343,
+          0.52601
+        ],
+        "global": [
+          3.96251,
+          3.96405,
+          3.9822
+        ],
+        "partition_integer_nra": [
+          0.23953,
+          0.23277,
+          0.25613
+        ],
+        "partition": [
+          0.53865,
+          0.57397,
+          0.54348
+        ],
+        "local_merge": [
+          0.80599,
+          0.77183,
+          0.81854
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "612",
+      "exact_top": [
+        "0/LA030689-0004",
+        "3/LA030989-0104",
+        "6/LA031489-0010",
+        "1/FBIS4-24470",
+        "4/LA013089-0055"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "partition": 512,
+        "batch": 4000,
+        "local_merge": 768
+      },
+      "times_ms": {
+        "global": [
+          4.08761,
+          4.18275,
+          4.16717
+        ],
+        "batch": [
+          0.61276,
+          0.65981,
+          0.59566
+        ],
+        "partition": [
+          0.59293,
+          0.56804,
+          0.60046
+        ],
+        "local_merge": [
+          0.89156,
+          0.86587,
+          0.82844
+        ],
+        "partition_integer_nra": [
+          0.30436,
+          0.24326,
+          0.31053
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "613",
+      "exact_top": [
+        "0/LA112089-0031",
+        "2/LA111489-0164",
+        "4/LA041390-0085",
+        "7/LA012890-0072",
+        "7/LA090290-0181"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "batch": 4000,
+        "local_merge": 640,
+        "partition_integer_nra": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "global": [
+          3.99113,
+          4.16725,
+          4.07052
+        ],
+        "partition_integer_nra": [
+          0.26181,
+          0.32443,
+          0.25613
+        ],
+        "partition": [
+          0.58727,
+          0.6482,
+          0.52865
+        ],
+        "local_merge": [
+          0.76248,
+          0.73679,
+          0.74775
+        ],
+        "batch": [
+          0.62494,
+          0.69959,
+          0.65008
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "614",
+      "exact_top": [
+        "3/FT941-7775",
+        "4/FR941003-2-00006",
+        "6/FT941-3180",
+        "7/FT942-8796",
+        "1/FR940523-2-00056"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "local_merge": 2465,
+        "global": 4000,
+        "partition": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.6454,
+          0.55895,
+          0.61863
+        ],
+        "batch": [
+          0.62079,
+          0.64569,
+          0.65327
+        ],
+        "global": [
+          4.59745,
+          4.28056,
+          4.00465
+        ],
+        "partition_integer_nra": [
+          0.28375,
+          0.27496,
+          0.27687
+        ],
+        "local_merge": [
+          2.56277,
+          2.49799,
+          2.49101
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "615",
+      "exact_top": [
+        "0/LA011589-0113",
+        "2/LA051690-0109",
+        "3/LA062689-0014",
+        "6/LA062989-0101",
+        "1/FT932-10619"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "local_merge": 1088,
+        "partition": 512,
+        "batch": 4000,
+        "global": 4000
+      },
+      "times_ms": {
+        "batch": [
+          0.66774,
+          0.64081,
+          0.68349
+        ],
+        "local_merge": [
+          1.12182,
+          1.13757,
+          1.19506
+        ],
+        "partition_integer_nra": [
+          0.26978,
+          0.28245,
+          0.26746
+        ],
+        "partition": [
+          0.57277,
+          0.54085,
+          0.59604
+        ],
+        "global": [
+          4.12533,
+          4.14915,
+          5.2739
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "616",
+      "exact_top": [
+        "0/FT944-6905",
+        "4/FBIS3-29850",
+        "6/FT934-13096",
+        "1/FT921-4982",
+        "5/FT923-10115"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "global": 4000,
+        "local_merge": 1024,
+        "partition_integer_nra": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition": [
+          1.28122,
+          0.90123,
+          0.88139
+        ],
+        "local_merge": [
+          3.15832,
+          1.73752,
+          1.69439
+        ],
+        "batch": [
+          1.50265,
+          1.40334,
+          0.9782
+        ],
+        "partition_integer_nra": [
+          0.40335,
+          0.43167,
+          0.42499
+        ],
+        "global": [
+          7.52093,
+          6.65457,
+          6.6033
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "617",
+      "exact_top": [
+        "1/FBIS4-38627",
+        "7/FT942-12807",
+        "5/FBIS4-10222",
+        "0/FT943-3753",
+        "7/FBIS3-51160"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 1024,
+        "partition": 1024,
+        "local_merge": 2240,
+        "global": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.71395,
+          1.21318,
+          1.08548
+        ],
+        "global": [
+          6.38096,
+          4.52065,
+          6.26668
+        ],
+        "local_merge": [
+          2.6291,
+          3.84073,
+          2.47143
+        ],
+        "batch": [
+          1.20255,
+          0.97853,
+          0.99263
+        ],
+        "partition": [
+          1.45182,
+          1.01017,
+          1.71192
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "618",
+      "exact_top": [
+        "2/LA031889-0055",
+        "0/LA021590-0206",
+        "4/LA060589-0062",
+        "6/LA122790-0078",
+        "0/LA060690-0084"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "partition": 512,
+        "local_merge": 576,
+        "batch": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.23231,
+          0.29431,
+          0.23604
+        ],
+        "global": [
+          4.74402,
+          4.84377,
+          4.09043
+        ],
+        "partition": [
+          0.68886,
+          0.61989,
+          0.54095
+        ],
+        "local_merge": [
+          0.82303,
+          0.76806,
+          0.68776
+        ],
+        "batch": [
+          0.73638,
+          0.67461,
+          0.95253
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "619",
+      "exact_top": [
+        "1/LA050290-0157",
+        "6/LA030889-0103",
+        "7/LA021389-0032",
+        "2/LA022789-0050",
+        "3/LA051490-0058"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 576,
+        "partition_integer_nra": 512,
+        "partition": 512,
+        "batch": 4000,
+        "global": 4000
+      },
+      "times_ms": {
+        "global": [
+          5.86914,
+          3.98871,
+          4.08501
+        ],
+        "partition": [
+          0.55928,
+          0.55292,
+          0.5711
+        ],
+        "batch": [
+          0.63922,
+          0.60154,
+          0.6117
+        ],
+        "local_merge": [
+          0.69864,
+          0.62626,
+          0.65256
+        ],
+        "partition_integer_nra": [
+          0.24048,
+          0.22744,
+          0.35526
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "620",
+      "exact_top": [
+        "1/FBIS4-30449",
+        "2/FT911-2181",
+        "7/FT921-723",
+        "0/FT942-11106",
+        "3/FT932-5843"
+      ],
+      "total": 4000,
+      "entries": {
+        "batch": 4000,
+        "global": 4000,
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "local_merge": 1152
+      },
+      "times_ms": {
+        "local_merge": [
+          1.31528,
+          1.31676,
+          1.15156
+        ],
+        "batch": [
+          0.74326,
+          0.69637,
+          0.79394
+        ],
+        "global": [
+          4.40724,
+          4.17532,
+          4.16983
+        ],
+        "partition_integer_nra": [
+          0.28052,
+          0.29428,
+          0.2734
+        ],
+        "partition": [
+          0.58165,
+          0.56476,
+          0.69559
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "621",
+      "exact_top": [
+        "2/FT924-9001",
+        "3/LA121789-0181",
+        "0/FT921-4820",
+        "4/LA040390-0124",
+        "6/FT924-8156"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 512,
+        "partition": 512,
+        "batch": 4000,
+        "global": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.22394,
+          0.40343,
+          0.48189
+        ],
+        "batch": [
+          1.10915,
+          1.10574,
+          1.20191
+        ],
+        "partition": [
+          0.71492,
+          1.07526,
+          5.86569
+        ],
+        "local_merge": [
+          0.91528,
+          1.9368,
+          1.22163
+        ],
+        "global": [
+          7.93105,
+          7.25152,
+          13.08818
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "622",
+      "exact_top": [
+        "2/FT942-4386",
+        "4/FT941-8771",
+        "3/LA032190-0143",
+        "3/FT944-7904",
+        "1/FT934-12043"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "local_merge": 3965,
+        "global": 4000,
+        "batch": 4000,
+        "partition": 512
+      },
+      "times_ms": {
+        "local_merge": [
+          20.44562,
+          15.88749,
+          5.85885
+        ],
+        "partition_integer_nra": [
+          0.5531,
+          0.44411,
+          0.41091
+        ],
+        "global": [
+          31.75212,
+          7.96677,
+          6.86525
+        ],
+        "partition": [
+          0.80632,
+          0.69506,
+          1.17363
+        ],
+        "batch": [
+          1.0569,
+          1.68444,
+          1.56654
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "623",
+      "exact_top": [
+        "4/FBIS3-59903",
+        "5/FBIS3-21514",
+        "7/FBIS3-43008",
+        "3/FBIS4-66855",
+        "6/FBIS3-21513"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "local_merge": 1216,
+        "partition": 512,
+        "batch": 4000,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.66816,
+          1.63848,
+          0.66982
+        ],
+        "global": [
+          11.66352,
+          8.62774,
+          7.99527
+        ],
+        "local_merge": [
+          1.79142,
+          5.9326,
+          4.13941
+        ],
+        "partition_integer_nra": [
+          0.39449,
+          0.476,
+          0.32706
+        ],
+        "batch": [
+          0.85693,
+          1.01416,
+          0.812
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "624",
+      "exact_top": [
+        "2/LA090889-0075",
+        "4/LA042690-0184",
+        "5/LA121489-0151",
+        "1/LA121689-0092",
+        "0/LA101289-0116"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "batch": 4000,
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "local_merge": 512
+      },
+      "times_ms": {
+        "local_merge": [
+          1.58096,
+          0.99362,
+          0.96
+        ],
+        "global": [
+          6.57176,
+          32.35801,
+          18.22726
+        ],
+        "partition": [
+          0.61158,
+          2.48603,
+          0.83089
+        ],
+        "batch": [
+          1.03193,
+          1.41114,
+          6.7695
+        ],
+        "partition_integer_nra": [
+          0.2423,
+          0.374,
+          0.42484
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "625",
+      "exact_top": [
+        "1/FBIS4-21838",
+        "3/FBIS4-68065",
+        "0/FBIS3-23484",
+        "6/FBIS3-42326",
+        "5/FT931-4556"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "local_merge": 2788,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition": [
+          1.1237,
+          0.88792,
+          0.78741
+        ],
+        "local_merge": [
+          4.57092,
+          14.08552,
+          4.23049
+        ],
+        "batch": [
+          1.24451,
+          1.11868,
+          1.23128
+        ],
+        "partition_integer_nra": [
+          0.44014,
+          0.44409,
+          0.43547
+        ],
+        "global": [
+          6.72823,
+          6.68436,
+          6.60119
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "626",
+      "exact_top": [
+        "0/FT923-8486",
+        "3/FT924-13949",
+        "4/LA071690-0111",
+        "2/LA020889-0137",
+        "1/FBIS4-45057"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "batch": 4000,
+        "local_merge": 3942,
+        "partition": 3982,
+        "partition_integer_nra": 3982
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          13.00084,
+          11.83767,
+          11.74526
+        ],
+        "global": [
+          7.52992,
+          7.42687,
+          6.85319
+        ],
+        "partition": [
+          7.23201,
+          7.60619,
+          6.57426
+        ],
+        "batch": [
+          1.20611,
+          1.23092,
+          1.27132
+        ],
+        "local_merge": [
+          8.00265,
+          19.40247,
+          8.17337
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "627",
+      "exact_top": [
+        "4/FBIS3-2982",
+        "5/FBIS3-27290",
+        "7/FBIS3-27522",
+        "0/FBIS3-17307",
+        "6/FBIS3-42933"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 1024,
+        "partition": 1024,
+        "batch": 4000,
+        "local_merge": 2924,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition": [
+          1.30769,
+          2.03967,
+          1.22721
+        ],
+        "local_merge": [
+          4.66612,
+          4.47521,
+          3.62011
+        ],
+        "global": [
+          6.91181,
+          7.9991,
+          5.92279
+        ],
+        "batch": [
+          1.19099,
+          2.08091,
+          0.7536
+        ],
+        "partition_integer_nra": [
+          1.46948,
+          1.32731,
+          0.9702
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "628",
+      "exact_top": [
+        "4/LA122189-0130",
+        "0/LA122589-0055",
+        "1/LA122189-0027",
+        "7/LA122189-0026",
+        "0/LA122289-0030"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "local_merge": 832,
+        "batch": 4000,
+        "partition": 512
+      },
+      "times_ms": {
+        "partition": [
+          0.72964,
+          31.53673,
+          1.06868
+        ],
+        "partition_integer_nra": [
+          0.49403,
+          0.43816,
+          0.34081
+        ],
+        "global": [
+          6.36845,
+          11.90624,
+          21.00173
+        ],
+        "batch": [
+          0.98233,
+          0.97181,
+          0.82122
+        ],
+        "local_merge": [
+          1.32858,
+          6.80459,
+          5.38148
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "629",
+      "exact_top": [
+        "2/LA040489-0064",
+        "2/LA041590-0152",
+        "2/LA031190-0213",
+        "6/FT931-4191",
+        "0/LA012989-0104"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "local_merge": 960,
+        "partition": 512,
+        "global": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          6.36299,
+          1.88461,
+          1.62204
+        ],
+        "partition": [
+          0.88938,
+          1.72606,
+          1.31908
+        ],
+        "global": [
+          8.61063,
+          7.20759,
+          5.52246
+        ],
+        "batch": [
+          0.71069,
+          13.07913,
+          0.83511
+        ],
+        "partition_integer_nra": [
+          0.24917,
+          0.57474,
+          0.36473
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "630",
+      "exact_top": [
+        "3/FT944-16460",
+        "6/FT944-11095",
+        "1/FBIS3-22143",
+        "7/FBIS3-41804",
+        "7/FBIS4-67633"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "batch": 4000,
+        "local_merge": 2148
+      },
+      "times_ms": {
+        "local_merge": [
+          3.13196,
+          3.20752,
+          2.55326
+        ],
+        "partition": [
+          0.68434,
+          0.72531,
+          0.588
+        ],
+        "partition_integer_nra": [
+          0.34667,
+          0.32149,
+          0.45727
+        ],
+        "global": [
+          5.14382,
+          4.86305,
+          4.28993
+        ],
+        "batch": [
+          0.89816,
+          1.22096,
+          0.92815
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "631",
+      "exact_top": [
+        "3/FBIS4-52427",
+        "6/FBIS4-49232",
+        "4/FBIS4-59405",
+        "0/FBIS4-55563",
+        "5/LA021190-0179"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 1216,
+        "partition_integer_nra": 512,
+        "partition": 512,
+        "global": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.50774,
+          0.29047,
+          0.28585
+        ],
+        "global": [
+          4.61663,
+          12.00353,
+          4.94576
+        ],
+        "partition": [
+          0.54452,
+          1.06029,
+          0.64696
+        ],
+        "batch": [
+          0.70784,
+          0.69639,
+          12.82586
+        ],
+        "local_merge": [
+          1.48595,
+          1.49182,
+          17.26183
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "632",
+      "exact_top": [
+        "4/FBIS4-2743",
+        "6/FBIS4-48987",
+        "3/FBIS3-7110",
+        "7/FBIS4-28050",
+        "5/FT931-345"
+      ],
+      "total": 4000,
+      "entries": {
+        "batch": 4000,
+        "partition_integer_nra": 3072,
+        "local_merge": 3986,
+        "global": 4000,
+        "partition": 3072
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          5.58807,
+          5.09101,
+          3.55071
+        ],
+        "local_merge": [
+          7.19633,
+          6.73842,
+          5.51945
+        ],
+        "global": [
+          6.60918,
+          6.68427,
+          14.55567
+        ],
+        "partition": [
+          4.50404,
+          4.58108,
+          3.18188
+        ],
+        "batch": [
+          1.0981,
+          1.1054,
+          0.7447
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "633",
+      "exact_top": [
+        "0/FT921-10574",
+        "1/FT922-13589",
+        "3/FT944-13056",
+        "4/FT922-15171",
+        "6/FT922-14090"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 1664,
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "partition": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "global": [
+          15.91031,
+          5.7208,
+          4.67526
+        ],
+        "partition_integer_nra": [
+          0.53188,
+          0.28259,
+          0.3015
+        ],
+        "partition": [
+          0.78849,
+          0.74521,
+          2.17433
+        ],
+        "local_merge": [
+          2.10839,
+          1.90469,
+          2.04045
+        ],
+        "batch": [
+          0.6361,
+          0.62636,
+          1.43405
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "634",
+      "exact_top": [
+        "0/LA032390-0070",
+        "1/LA071090-0055",
+        "5/LA061390-0007",
+        "6/LA020890-0085",
+        "2/LA071090-0010"
+      ],
+      "total": 4000,
+      "entries": {
+        "batch": 4000,
+        "partition": 512,
+        "global": 4000,
+        "local_merge": 832,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "partition": [
+          0.69291,
+          0.63083,
+          0.59117
+        ],
+        "local_merge": [
+          0.99119,
+          1.33736,
+          1.16201
+        ],
+        "partition_integer_nra": [
+          0.57031,
+          0.25934,
+          0.2884
+        ],
+        "batch": [
+          0.96122,
+          1.02207,
+          0.81546
+        ],
+        "global": [
+          4.24918,
+          8.17724,
+          5.25619
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "635",
+      "exact_top": [
+        "2/LA062190-0255",
+        "4/LA121490-0059",
+        "5/LA061690-0005",
+        "6/LA060690-0053",
+        "0/LA061690-0003"
+      ],
+      "total": 4000,
+      "entries": {
+        "batch": 4000,
+        "partition": 512,
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "local_merge": 1344
+      },
+      "times_ms": {
+        "partition": [
+          0.53476,
+          0.6455,
+          0.60934
+        ],
+        "partition_integer_nra": [
+          0.45838,
+          0.28012,
+          0.28586
+        ],
+        "global": [
+          4.5671,
+          4.75118,
+          5.07325
+        ],
+        "batch": [
+          3.3693,
+          1.17929,
+          0.95003
+        ],
+        "local_merge": [
+          1.57017,
+          1.43552,
+          4.42041
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "636",
+      "exact_top": [
+        "2/FR940414-1-00021",
+        "1/LA050289-0019",
+        "1/LA012089-0096",
+        "0/LA081590-0083",
+        "5/FBIS4-68734"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "partition_integer_nra": 4000,
+        "partition": 4000,
+        "local_merge": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "partition": [
+          5.27759,
+          15.89197,
+          4.94206
+        ],
+        "global": [
+          4.46209,
+          4.40292,
+          3.95099
+        ],
+        "batch": [
+          0.83129,
+          0.77768,
+          0.83561
+        ],
+        "partition_integer_nra": [
+          7.52386,
+          6.87431,
+          7.96486
+        ],
+        "local_merge": [
+          4.88771,
+          5.05849,
+          5.3299
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "637",
+      "exact_top": [
+        "4/FT924-14004",
+        "6/FT932-1217",
+        "7/LA041789-0062",
+        "0/LA092889-0193",
+        "2/LA110490-0091"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "partition": 512,
+        "batch": 4000,
+        "global": 4000,
+        "local_merge": 1216
+      },
+      "times_ms": {
+        "global": [
+          4.31772,
+          4.32591,
+          4.56404
+        ],
+        "batch": [
+          0.7305,
+          0.68353,
+          0.87016
+        ],
+        "partition": [
+          0.57048,
+          0.54392,
+          0.62286
+        ],
+        "partition_integer_nra": [
+          0.3365,
+          0.42514,
+          0.26017
+        ],
+        "local_merge": [
+          1.5515,
+          1.36848,
+          1.26608
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "638",
+      "exact_top": [
+        "2/LA042689-0016",
+        "6/LA122390-0123",
+        "6/LA120190-0130",
+        "4/FT942-13988",
+        "0/FT922-8629"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "batch": 4000,
+        "partition": 1024,
+        "local_merge": 3200,
+        "partition_integer_nra": 1024
+      },
+      "times_ms": {
+        "batch": [
+          0.9653,
+          0.83059,
+          1.27879
+        ],
+        "local_merge": [
+          14.53679,
+          3.32551,
+          4.57319
+        ],
+        "partition_integer_nra": [
+          0.92775,
+          0.71251,
+          0.67442
+        ],
+        "global": [
+          4.33246,
+          5.07981,
+          5.14393
+        ],
+        "partition": [
+          1.09595,
+          1.07335,
+          1.0489
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "639",
+      "exact_top": [
+        "4/FT932-646",
+        "6/FT934-7363",
+        "2/FT942-1663",
+        "0/FT932-3205",
+        "2/LA111989-0148"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "batch": 4000,
+        "local_merge": 3335,
+        "partition_integer_nra": 1536,
+        "partition": 1536
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          1.2319,
+          1.2352,
+          1.26115
+        ],
+        "global": [
+          4.50442,
+          4.07739,
+          4.08499
+        ],
+        "partition": [
+          1.47904,
+          1.3934,
+          1.68727
+        ],
+        "local_merge": [
+          3.32836,
+          3.33965,
+          3.76511
+        ],
+        "batch": [
+          0.68769,
+          0.68104,
+          0.68507
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "640",
+      "exact_top": [
+        "1/FT931-9324",
+        "2/FT931-8172",
+        "4/FT944-15308",
+        "6/FT933-467",
+        "3/FT924-13064"
+      ],
+      "total": 4000,
+      "entries": {
+        "batch": 4000,
+        "local_merge": 576,
+        "partition_integer_nra": 512,
+        "partition": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          0.81139,
+          0.69196,
+          0.65168
+        ],
+        "partition_integer_nra": [
+          0.27875,
+          0.25119,
+          0.26383
+        ],
+        "batch": [
+          0.70401,
+          0.88088,
+          0.64404
+        ],
+        "global": [
+          4.14568,
+          5.80708,
+          4.49835
+        ],
+        "partition": [
+          0.57778,
+          0.58843,
+          0.53294
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "641",
+      "exact_top": [
+        "1/LA032589-0044",
+        "3/LA120989-0014",
+        "7/LA060189-0093",
+        "0/LA032789-0038",
+        "7/LA052589-0145"
+      ],
+      "total": 4000,
+      "entries": {
+        "batch": 4000,
+        "local_merge": 704,
+        "partition": 512,
+        "global": 4000,
+        "partition_integer_nra": 512
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.21676,
+          0.2481,
+          0.24962
+        ],
+        "partition": [
+          0.57048,
+          0.62735,
+          0.52966
+        ],
+        "local_merge": [
+          0.77149,
+          1.07216,
+          0.83501
+        ],
+        "batch": [
+          0.55241,
+          0.64905,
+          0.5489
+        ],
+        "global": [
+          4.18349,
+          4.03637,
+          4.24154
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "642",
+      "exact_top": [
+        "4/FBIS3-3663",
+        "5/FBIS3-3418",
+        "7/FBIS3-3433",
+        "7/FBIS3-3664",
+        "0/FBIS4-24379"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 768,
+        "partition": 512,
+        "global": 4000,
+        "partition_integer_nra": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "local_merge": [
+          1.308,
+          1.32672,
+          1.37546
+        ],
+        "batch": [
+          0.934,
+          0.97116,
+          1.00892
+        ],
+        "partition": [
+          0.85396,
+          0.86891,
+          0.83347
+        ],
+        "partition_integer_nra": [
+          0.4406,
+          0.43321,
+          0.99658
+        ],
+        "global": [
+          6.56838,
+          6.37678,
+          6.50379
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "643",
+      "exact_top": [
+        "2/FR940603-1-00034",
+        "3/FR940527-2-00133",
+        "5/FT942-17447",
+        "0/LA100189-0102",
+        "6/FR941011-2-00026"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "batch": 4000,
+        "partition": 512,
+        "local_merge": 1472
+      },
+      "times_ms": {
+        "global": [
+          6.28339,
+          6.54312,
+          7.38612
+        ],
+        "batch": [
+          0.96267,
+          0.99753,
+          1.03721
+        ],
+        "partition": [
+          0.86714,
+          0.89127,
+          0.96209
+        ],
+        "partition_integer_nra": [
+          0.40354,
+          0.40419,
+          0.45311
+        ],
+        "local_merge": [
+          2.34814,
+          2.29352,
+          2.37674
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "644",
+      "exact_top": [
+        "3/LA070190-0086",
+        "5/FR940628-1-00012",
+        "3/LA022289-0056",
+        "0/FT921-16211",
+        "7/FR940325-2-00123"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "local_merge": 2750,
+        "partition": 512,
+        "batch": 4000
+      },
+      "times_ms": {
+        "global": [
+          7.06599,
+          7.23897,
+          23.84401
+        ],
+        "batch": [
+          1.16736,
+          0.82477,
+          0.70405
+        ],
+        "local_merge": [
+          4.87956,
+          4.65909,
+          13.89085
+        ],
+        "partition_integer_nra": [
+          0.50428,
+          0.31936,
+          0.2878
+        ],
+        "partition": [
+          0.93022,
+          0.89615,
+          0.56692
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "645",
+      "exact_top": [
+        "3/FT924-2798",
+        "0/FT944-15783",
+        "1/LA102290-0109",
+        "2/FT944-16684",
+        "5/FT934-5574"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 576,
+        "global": 4000,
+        "batch": 4000,
+        "partition_integer_nra": 512,
+        "partition": 512
+      },
+      "times_ms": {
+        "global": [
+          6.43087,
+          6.5232,
+          6.51432
+        ],
+        "partition": [
+          0.8274,
+          0.90052,
+          0.93952
+        ],
+        "partition_integer_nra": [
+          0.4083,
+          0.44435,
+          0.44729
+        ],
+        "batch": [
+          0.91189,
+          0.95435,
+          1.0284
+        ],
+        "local_merge": [
+          0.98076,
+          1.03404,
+          1.12599
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "646",
+      "exact_top": [
+        "0/LA102190-0122",
+        "3/LA082890-0006",
+        "5/FR940830-1-00099",
+        "6/FR941020-1-00008",
+        "7/LA082090-0113"
+      ],
+      "total": 4000,
+      "entries": {
+        "global": 4000,
+        "batch": 4000,
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "local_merge": 1259
+      },
+      "times_ms": {
+        "local_merge": [
+          2.14472,
+          2.26912,
+          2.20005
+        ],
+        "partition_integer_nra": [
+          0.38636,
+          0.39969,
+          0.4634
+        ],
+        "partition": [
+          0.89943,
+          0.90517,
+          0.90396
+        ],
+        "batch": [
+          1.21812,
+          1.11138,
+          1.13962
+        ],
+        "global": [
+          16.84208,
+          6.78071,
+          6.64625
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "647",
+      "exact_top": [
+        "2/FBIS4-47519",
+        "1/LA071290-0149",
+        "7/LA081290-0130",
+        "3/LA110490-0015",
+        "5/LA110890-0070"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "local_merge": 3368,
+        "global": 4000,
+        "batch": 4000
+      },
+      "times_ms": {
+        "batch": [
+          1.04004,
+          1.12168,
+          1.14563
+        ],
+        "global": [
+          6.51387,
+          6.84661,
+          7.25043
+        ],
+        "partition_integer_nra": [
+          0.48863,
+          0.46249,
+          10.05432
+        ],
+        "partition": [
+          0.79924,
+          0.85023,
+          0.54488
+        ],
+        "local_merge": [
+          6.15232,
+          5.83935,
+          4.0778
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "648",
+      "exact_top": [
+        "3/FR941011-1-00026",
+        "2/LA072689-0011",
+        "6/FR940314-2-00104",
+        "6/FT921-3529",
+        "5/FR940314-2-00099"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition": 2560,
+        "global": 4000,
+        "local_merge": 3705,
+        "batch": 4000,
+        "partition_integer_nra": 2560
+      },
+      "times_ms": {
+        "batch": [
+          1.16465,
+          1.28774,
+          1.33058
+        ],
+        "local_merge": [
+          6.49842,
+          6.66696,
+          6.97962
+        ],
+        "partition": [
+          4.10525,
+          3.87261,
+          4.32766
+        ],
+        "partition_integer_nra": [
+          5.08945,
+          4.95973,
+          14.47913
+        ],
+        "global": [
+          6.82187,
+          6.60462,
+          7.51709
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "649",
+      "exact_top": [
+        "0/LA101189-0094",
+        "1/FT921-5724",
+        "2/FBIS4-1556",
+        "6/LA101089-0139",
+        "3/LA101489-0161"
+      ],
+      "total": 4000,
+      "entries": {
+        "partition_integer_nra": 512,
+        "global": 4000,
+        "partition": 512,
+        "batch": 4000,
+        "local_merge": 832
+      },
+      "times_ms": {
+        "local_merge": [
+          0.92261,
+          1.00876,
+          1.23169
+        ],
+        "global": [
+          4.25453,
+          4.78228,
+          5.05722
+        ],
+        "batch": [
+          0.74694,
+          0.6572,
+          0.73423
+        ],
+        "partition_integer_nra": [
+          0.25806,
+          0.25317,
+          0.3304
+        ],
+        "partition": [
+          0.67746,
+          0.5934,
+          0.62509
+        ]
+      }
+    },
+    {
+      "kind": "hashed_trace",
+      "query": "650",
+      "exact_top": [
+        "7/LA092590-0146",
+        "5/LA101790-0029",
+        "3/LA062689-0056",
+        "5/LA021189-0023",
+        "6/LA121989-0022"
+      ],
+      "total": 4000,
+      "entries": {
+        "local_merge": 960,
+        "batch": 4000,
+        "partition": 512,
+        "partition_integer_nra": 512,
+        "global": 4000
+      },
+      "times_ms": {
+        "partition": [
+          0.60165,
+          0.55903,
+          0.63297
+        ],
+        "partition_integer_nra": [
+          0.32183,
+          0.27821,
+          0.29432
+        ],
+        "local_merge": [
+          1.06176,
+          1.13155,
+          1.02366
+        ],
+        "global": [
+          4.58432,
+          4.32224,
+          4.60985
+        ],
+        "batch": [
+          0.69988,
+          0.72844,
+          0.8667
+        ]
+      }
+    }
+  ]
+}

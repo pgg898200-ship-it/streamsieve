@@ -1,0 +1,303 @@
+{
+  "command": "python examples/sqlite_fts.py --shards 4 --k 3 --page-size 8 --query <query>",
+  "query_selection": "Six illustrative English terms and one empty-result control. Not sampled production traffic. Each case compares the same native shard-local cursors.",
+  "cases": [
+    {
+      "query": "file",
+      "k": 3,
+      "page_size": 8,
+      "python": "3.12.14",
+      "sqlite": "3.53.1",
+      "shards": 4,
+      "rankers_per_shard": 3,
+      "documents_indexed": 4926,
+      "ids": [
+        "bz2.py:126:bz2.BZ2File.fileno",
+        "fileinput.py:144:fileinput.fileno",
+        "lzma.py:163:lzma.LZMAFile.fileno"
+      ],
+      "rows_returned": {
+        "partition": 96,
+        "unrestricted": 1605,
+        "local_exact_merge": 168,
+        "exhaustive": 1605
+      },
+      "fetchmany_calls": {
+        "partition": 12,
+        "unrestricted": 207,
+        "local_exact_merge": 21,
+        "exhaustive": 207
+      },
+      "partition_rows_by_source": {
+        "0/name": 8,
+        "0/summary": 8,
+        "0/body": 8,
+        "1/name": 8,
+        "1/summary": 8,
+        "1/body": 8,
+        "2/name": 8,
+        "2/summary": 8,
+        "2/body": 8,
+        "3/name": 8,
+        "3/summary": 8,
+        "3/body": 8
+      },
+      "receipts_verified": true,
+      "matches_exhaustive": true
+    },
+    {
+      "query": "line",
+      "k": 3,
+      "page_size": 8,
+      "python": "3.12.14",
+      "sqlite": "3.53.1",
+      "shards": 4,
+      "rankers_per_shard": 3,
+      "documents_indexed": 4926,
+      "ids": [
+        "difflib.py:1045:difflib.IS_LINE_JUNK",
+        "uuid.py:736:uuid.main",
+        "email/errors.py:54:email.errors.FirstHeaderLineIsContinuationDefect"
+      ],
+      "rows_returned": {
+        "partition": 96,
+        "unrestricted": 852,
+        "local_exact_merge": 168,
+        "exhaustive": 852
+      },
+      "fetchmany_calls": {
+        "partition": 12,
+        "unrestricted": 111,
+        "local_exact_merge": 21,
+        "exhaustive": 111
+      },
+      "partition_rows_by_source": {
+        "0/name": 8,
+        "0/summary": 8,
+        "0/body": 8,
+        "1/name": 8,
+        "1/summary": 8,
+        "1/body": 8,
+        "2/name": 8,
+        "2/summary": 8,
+        "2/body": 8,
+        "3/name": 8,
+        "3/summary": 8,
+        "3/body": 8
+      },
+      "receipts_verified": true,
+      "matches_exhaustive": true
+    },
+    {
+      "query": "network",
+      "k": 3,
+      "page_size": 8,
+      "python": "3.12.14",
+      "sqlite": "3.53.1",
+      "shards": 4,
+      "rankers_per_shard": 3,
+      "documents_indexed": 4926,
+      "ids": [
+        "ipaddress.py:1079:ipaddress._BaseNetwork.is_private",
+        "ipaddress.py:2354:ipaddress.IPv6Network.hosts",
+        "ipaddress.py:534:ipaddress._IPAddressBase._split_addr_prefix"
+      ],
+      "rows_returned": {
+        "partition": 84,
+        "unrestricted": 102,
+        "local_exact_merge": 84,
+        "exhaustive": 102
+      },
+      "fetchmany_calls": {
+        "partition": 12,
+        "unrestricted": 18,
+        "local_exact_merge": 12,
+        "exhaustive": 18
+      },
+      "partition_rows_by_source": {
+        "0/name": 5,
+        "0/summary": 5,
+        "0/body": 5,
+        "1/name": 8,
+        "1/summary": 8,
+        "1/body": 8,
+        "2/name": 8,
+        "2/summary": 8,
+        "2/body": 8,
+        "3/name": 7,
+        "3/summary": 7,
+        "3/body": 7
+      },
+      "receipts_verified": true,
+      "matches_exhaustive": true
+    },
+    {
+      "query": "socket",
+      "k": 3,
+      "page_size": 8,
+      "python": "3.12.14",
+      "sqlite": "3.53.1",
+      "shards": 4,
+      "rankers_per_shard": 3,
+      "documents_indexed": 4926,
+      "ids": [
+        "socket.py:215:socket.socket",
+        "socket.py:277:socket.socket.dup",
+        "imaplib.py:360:imaplib.IMAP4.socket"
+      ],
+      "rows_returned": {
+        "partition": 96,
+        "unrestricted": 270,
+        "local_exact_merge": 96,
+        "exhaustive": 270
+      },
+      "fetchmany_calls": {
+        "partition": 12,
+        "unrestricted": 39,
+        "local_exact_merge": 12,
+        "exhaustive": 39
+      },
+      "partition_rows_by_source": {
+        "0/name": 8,
+        "0/summary": 8,
+        "0/body": 8,
+        "1/name": 8,
+        "1/summary": 8,
+        "1/body": 8,
+        "2/name": 8,
+        "2/summary": 8,
+        "2/body": 8,
+        "3/name": 8,
+        "3/summary": 8,
+        "3/body": 8
+      },
+      "receipts_verified": true,
+      "matches_exhaustive": true
+    },
+    {
+      "query": "error",
+      "k": 3,
+      "page_size": 8,
+      "python": "3.12.14",
+      "sqlite": "3.53.1",
+      "shards": 4,
+      "rankers_per_shard": 3,
+      "documents_indexed": 4926,
+      "ids": [
+        "urllib/request.py:2232:urllib.request.FancyURLopener.http_error_307",
+        "urllib/request.py:2239:urllib.request.FancyURLopener.http_error_308",
+        "urllib/request.py:2178:urllib.request.FancyURLopener.http_error_302"
+      ],
+      "rows_returned": {
+        "partition": 96,
+        "unrestricted": 612,
+        "local_exact_merge": 120,
+        "exhaustive": 612
+      },
+      "fetchmany_calls": {
+        "partition": 12,
+        "unrestricted": 81,
+        "local_exact_merge": 15,
+        "exhaustive": 81
+      },
+      "partition_rows_by_source": {
+        "0/name": 8,
+        "0/summary": 8,
+        "0/body": 8,
+        "1/name": 8,
+        "1/summary": 8,
+        "1/body": 8,
+        "2/name": 8,
+        "2/summary": 8,
+        "2/body": 8,
+        "3/name": 8,
+        "3/summary": 8,
+        "3/body": 8
+      },
+      "receipts_verified": true,
+      "matches_exhaustive": true
+    },
+    {
+      "query": "message",
+      "k": 3,
+      "page_size": 8,
+      "python": "3.12.14",
+      "sqlite": "3.53.1",
+      "shards": 4,
+      "rankers_per_shard": 3,
+      "documents_indexed": 4926,
+      "ids": [
+        "mailbox.py:1516:mailbox.Message._become_message",
+        "email/_header_value_parser.py:2158:email._header_value_parser.parse_message_id",
+        "mailbox.py:1497:mailbox.Message.__init__"
+      ],
+      "rows_returned": {
+        "partition": 144,
+        "unrestricted": 840,
+        "local_exact_merge": 264,
+        "exhaustive": 840
+      },
+      "fetchmany_calls": {
+        "partition": 18,
+        "unrestricted": 111,
+        "local_exact_merge": 33,
+        "exhaustive": 111
+      },
+      "partition_rows_by_source": {
+        "0/name": 16,
+        "0/summary": 16,
+        "0/body": 16,
+        "1/name": 8,
+        "1/summary": 8,
+        "1/body": 8,
+        "2/name": 8,
+        "2/summary": 8,
+        "2/body": 8,
+        "3/name": 16,
+        "3/summary": 16,
+        "3/body": 16
+      },
+      "receipts_verified": true,
+      "matches_exhaustive": true
+    },
+    {
+      "query": "absenttermnotfound",
+      "k": 3,
+      "page_size": 8,
+      "python": "3.12.14",
+      "sqlite": "3.53.1",
+      "shards": 4,
+      "rankers_per_shard": 3,
+      "documents_indexed": 4926,
+      "ids": [],
+      "rows_returned": {
+        "partition": 0,
+        "unrestricted": 0,
+        "local_exact_merge": 0,
+        "exhaustive": 0
+      },
+      "fetchmany_calls": {
+        "partition": 12,
+        "unrestricted": 12,
+        "local_exact_merge": 12,
+        "exhaustive": 12
+      },
+      "partition_rows_by_source": {
+        "0/name": 0,
+        "0/summary": 0,
+        "0/body": 0,
+        "1/name": 0,
+        "1/summary": 0,
+        "1/body": 0,
+        "2/name": 0,
+        "2/summary": 0,
+        "2/body": 0,
+        "3/name": 0,
+        "3/summary": 0,
+        "3/body": 0
+      },
+      "receipts_verified": true,
+      "matches_exhaustive": true
+    }
+  ]
+}

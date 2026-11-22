@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "sha256": {
+    "bench.py": "04c29d54ae3d485b47c1bd9129733687f3760d3dbd98c3c85558713807ac5250",
+    "core.py": "a7aebf86cf6781fe3519cda7adeb892bada489d0604dbc7d105080449d15298b"
+  },
+  "timer": "perf_counter_ns",
+  "command": [
+    "python",
+    "bench.py",
+    "--workloads",
+    "identical",
+    "--sources",
+    "64",
+    "--depth",
+    "16384",
+    "--queries",
+    "1",
+    "--page",
+    "32",
+    "--repeats",
+    "3",
+    "--json",
+    "results/million-agreement.json"
+  ],
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "config": {
+    "sources": 64,
+    "depth": 16384,
+    "queries": 1,
+    "page": 32,
+    "k": 5,
+    "c": 60,
+    "repeats": 3,
+    "seed": 1701,
+    "workloads": [
+      "identical"
+    ],
+    "mode": "ordered",
+    "trace": null,
+    "trace_limit": null,
+    "json": "results/million-agreement.json"
+  },
+  "groups": {
+    "identical": {
+      "queries": 1,
+      "queries_certified_before_full_input": 1,
+      "modeled_break_even_us_per_skipped_item_vs_integer_batch": 0.0,
+      "total_entries": 1048576,
+      "entries_read": {
+        "integer_batch": 1048576,
+        "exact_batch": 1048576,
+        "fraction_nra": 2048,
+        "integer_nra": 2048,
+        "float_batch": 1048576,
+        "rankfence": 2048
+      },
+      "entries_skipped_pct": {
+        "integer_batch": 0.0,
+        "exact_batch": 0.0,
+        "fraction_nra": 99.8,
+        "integer_nra": 99.8,
+        "float_batch": 0.0,
+        "rankfence": 99.8
+      },
+      "median_query_ms": {
+        "rankfence": 1.0953,
+        "exact_batch": 877.5397,
+        "float_batch": 119.693,
+        "integer_batch": 1228.5984,
+        "fraction_nra": 1.7774,
+        "integer_nra": 1.9078
+      },
+      "p95_query_ms": {
+        "rankfence": 1.0953,
+        "exact_batch": 877.5397,
+        "float_batch": 119.693,
+        "integer_batch": 1228.5984,
+        "fraction_nra": 1.7774,
+        "integer_nra": 1.9078
+      },
+      "float_order_disagreements": 0,
+      "same_stopping_round_as_nra": 1
+    }
+  },
+  "queries": {
+    "identical": [
+      {
+        "query": "0",
+        "total_entries": 1048576,
+        "sources": 64,
+        "exact_top": [
+          "d0000718",
+          "d0005218",
+          "d0012573",
+          "d0003348",
+          "d0015463"
+        ],
+        "entries_read": {
+          "integer_batch": 1048576,
+          "exact_batch": 1048576,
+          "fraction_nra": 2048,
+          "integer_nra": 2048,
+          "float_batch": 1048576,
+          "rankfence": 2048
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.025509,
+            1.267879,
+            1.095302
+          ],
+          "exact_batch": [
+            877.539687,
+            840.9881,
+            896.268443
+          ],
+          "float_batch": [
+            119.692963,
+            116.905264,
+            157.267491
+          ],
+          "integer_batch": [
+            1228.598407,
+            1162.635251,
+            1348.266568
+          ],
+          "fraction_nra": [
+            1.783894,
+            1.777423,
+            1.671877
+          ],
+          "integer_nra": [
+            1.907756,
+            2.459393,
+            1.8358
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+The MIT-licensed RankSeal Fusion core is included unchanged for benchmarking. It was read from PGG Engineering's RankSeal revision `c27b8af7a9f982382a206d7a110e161a5ce4f4ca`. Its SHA-256 is `6b0603d10ef7aa4524558e06799e3e3c541eb52d94fbc1e82317f2de08804e6f`. The replay checks the hash before loading it. RankFence has no runtime dependency on RankSeal.

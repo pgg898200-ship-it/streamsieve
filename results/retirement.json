@@ -1,0 +1,211 @@
+{
+  "experiment": "single-process synthetic cooperative async cursors",
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "settings": {
+    "cold_shards": 29,
+    "winner_ms": 40,
+    "page_ms": 3,
+    "repeat": 7
+  },
+  "runs": [
+    {
+      "prune": false,
+      "elapsed_ms": 41.622,
+      "cold_pages_yielded": 319,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 0,
+      "cold_cursor_ms": 1191.075,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": true,
+      "elapsed_ms": 41.352,
+      "cold_pages_yielded": 0,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 29,
+      "cold_cursor_ms": 6.361,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": true,
+      "elapsed_ms": 41.206,
+      "cold_pages_yielded": 0,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 29,
+      "cold_cursor_ms": 10.076,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": false,
+      "elapsed_ms": 41.641,
+      "cold_pages_yielded": 319,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 0,
+      "cold_cursor_ms": 1193.33,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": false,
+      "elapsed_ms": 41.446,
+      "cold_pages_yielded": 319,
+      "cold_pulls_cancelled": 0,
+      "cold_closed_before_deciding_page": 0,
+      "cold_cursor_ms": 1193.123,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": true,
+      "elapsed_ms": 41.389,
+      "cold_pages_yielded": 0,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 29,
+      "cold_cursor_ms": 9.941,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": true,
+      "elapsed_ms": 41.198,
+      "cold_pages_yielded": 0,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 29,
+      "cold_cursor_ms": 8.543,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": false,
+      "elapsed_ms": 41.688,
+      "cold_pages_yielded": 319,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 0,
+      "cold_cursor_ms": 1195.106,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": false,
+      "elapsed_ms": 41.685,
+      "cold_pages_yielded": 261,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 0,
+      "cold_cursor_ms": 1195.372,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": true,
+      "elapsed_ms": 41.329,
+      "cold_pages_yielded": 0,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 29,
+      "cold_cursor_ms": 8.848,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": true,
+      "elapsed_ms": 41.378,
+      "cold_pages_yielded": 0,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 29,
+      "cold_cursor_ms": 8.982,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": false,
+      "elapsed_ms": 41.954,
+      "cold_pages_yielded": 319,
+      "cold_pulls_cancelled": 0,
+      "cold_closed_before_deciding_page": 0,
+      "cold_cursor_ms": 1206.423,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": false,
+      "elapsed_ms": 40.974,
+      "cold_pages_yielded": 290,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 0,
+      "cold_cursor_ms": 1171.215,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    },
+    {
+      "prune": true,
+      "elapsed_ms": 41.334,
+      "cold_pages_yielded": 0,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 29,
+      "cold_cursor_ms": 8.348,
+      "ids": [
+        "b",
+        "a"
+      ],
+      "receipt_verified": true
+    }
+  ],
+  "medians": {
+    "false": {
+      "elapsed_ms": 41.641,
+      "cold_pages_yielded": 319,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 0,
+      "cold_cursor_ms": 1193.33
+    },
+    "true": {
+      "elapsed_ms": 41.334,
+      "cold_pages_yielded": 0,
+      "cold_pulls_cancelled": 29,
+      "cold_closed_before_deciding_page": 29,
+      "cold_cursor_ms": 8.848
+    }
+  }
+}

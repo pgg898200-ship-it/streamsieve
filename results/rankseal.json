@@ -1,0 +1,7479 @@
+{
+  "rankseal_core_sha256": "6b0603d10ef7aa4524558e06799e3e3c541eb52d94fbc1e82317f2de08804e6f",
+  "sha256": {
+    "rankseal_replay.py": "ffac6405f6a3528b4c1e8ad5e99d8d8463cd808ab8f787aee9db3014d46a983e",
+    "partition_replay.py": "65e95f0bfb765a0fe5e19bcae9213357e064d8463c71f72f3e3aad0ee3ec137c",
+    "bench.py": "04c29d54ae3d485b47c1bd9129733687f3760d3dbd98c3c85558713807ac5250",
+    "core.py": "a7aebf86cf6781fe3519cda7adeb892bada489d0604dbc7d105080449d15298b",
+    "partition.py": "76bfce074732ad14c64d300e3aaa20da2df677eadfa3984f8f0fe43ccae60128",
+    "retire.py": "9dfddcbd923cc413e3062da70c3aa9ef964bc0a50c69056f8eb4321ab50c0979",
+    "robust03.json": "0c4b02522c49436f2ac3eca6c44c6853b0f6acad217ee62e631564297e17c3ea"
+  },
+  "config": {
+    "queries": 100,
+    "shards": 8,
+    "page": 16,
+    "k": 5,
+    "c": 60,
+    "repeats": 3
+  },
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "summary": {
+    "flat": {
+      "rankfence": {
+        "queries": 100,
+        "entries": 79904,
+        "early": 93,
+        "p50_ms": 0.2424,
+        "p95_ms": 7.1071
+      },
+      "rankseal": {
+        "queries": 100,
+        "entries": 79904,
+        "early": 93,
+        "p50_ms": 0.3481,
+        "p95_ms": 9.5427
+      }
+    },
+    "hashed_shards": {
+      "rankseal_local_merge": {
+        "queries": 100,
+        "entries": 206934,
+        "early": 99,
+        "p50_ms": 3.8648,
+        "p95_ms": 9.3335
+      },
+      "partition_retire": {
+        "queries": 100,
+        "entries": 78956,
+        "early": 100,
+        "p50_ms": 0.7702,
+        "p95_ms": 2.7128
+      },
+      "partitionfence": {
+        "queries": 100,
+        "entries": 82637,
+        "early": 99,
+        "p50_ms": 0.8125,
+        "p95_ms": 3.1481
+      },
+      "rankfence": {
+        "queries": 100,
+        "entries": 400000,
+        "early": 0,
+        "p50_ms": 5.3889,
+        "p95_ms": 13.9624
+      },
+      "rankseal": {
+        "queries": 100,
+        "entries": 400000,
+        "early": 0,
+        "p50_ms": 8.8247,
+        "p95_ms": 18.451
+      }
+    }
+  },
+  "queries": [
+    {
+      "case": "flat",
+      "topic": "303",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA040190-0178",
+        "LA041490-0064",
+        "LA033090-0082",
+        "LA041090-0148",
+        "LA042590-0135"
+      ],
+      "entries": {
+        "rankfence": 128,
+        "rankseal": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.16509,
+          0.18933,
+          0.23165
+        ],
+        "rankseal": [
+          0.25654,
+          0.22348,
+          0.28146
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "303",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/LA033090-0082",
+        "0/FT921-7107",
+        "1/LA041090-0148",
+        "2/LA042590-0135",
+        "5/LA041490-0064"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 512,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          0.93437,
+          1.19646,
+          0.8126
+        ],
+        "partition_retire": [
+          0.61659,
+          0.62451,
+          0.61758
+        ],
+        "partitionfence": [
+          0.78358,
+          0.56142,
+          0.4852
+        ],
+        "rankfence": [
+          4.75105,
+          4.08589,
+          15.82375
+        ],
+        "rankseal": [
+          6.41295,
+          6.25932,
+          6.42237
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "307",
+      "entries_available": 4000,
+      "exact_top": [
+        "FR940414-2-00020",
+        "FR940804-2-00061",
+        "FR940303-2-00030",
+        "FR940418-2-00054",
+        "FR940512-2-00030"
+      ],
+      "entries": {
+        "rankseal": 512,
+        "rankfence": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          0.37834,
+          0.50243,
+          0.46962
+        ],
+        "rankseal": [
+          0.64167,
+          0.61624,
+          0.60996
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "307",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FR940303-2-00030",
+        "1/FR940414-2-00020",
+        "3/FR940418-2-00054",
+        "2/FR940804-2-00061",
+        "4/FR940407-2-00040"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankfence": 4000,
+        "rankseal_local_merge": 2314,
+        "partitionfence": 512,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          7.87771,
+          4.05635,
+          4.04009
+        ],
+        "rankseal": [
+          6.62939,
+          5.68717,
+          5.61346
+        ],
+        "partitionfence": [
+          0.5439,
+          0.54368,
+          0.49527
+        ],
+        "rankseal_local_merge": [
+          3.72426,
+          3.23292,
+          3.16489
+        ],
+        "partition_retire": [
+          0.52431,
+          0.47493,
+          0.53287
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "310",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT931-11958",
+        "LA122490-0040",
+        "FT922-15435",
+        "LA100889-0041",
+        "FT921-7096"
+      ],
+      "entries": {
+        "rankseal": 2176,
+        "rankfence": 2176
+      },
+      "time_ms": {
+        "rankfence": [
+          1.81214,
+          1.83524,
+          2.0691
+        ],
+        "rankseal": [
+          3.03666,
+          3.13111,
+          3.10175
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "310",
+      "entries_available": 4000,
+      "exact_top": [
+        "6/FT931-11958",
+        "4/LA122490-0040",
+        "2/FT922-15435",
+        "2/LA100889-0041",
+        "5/LA053090-0120"
+      ],
+      "entries": {
+        "rankseal_local_merge": 2880,
+        "partition_retire": 512,
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          4.72826,
+          4.69567,
+          4.92882
+        ],
+        "partition_retire": [
+          0.5693,
+          0.48234,
+          0.55498
+        ],
+        "rankseal": [
+          7.09129,
+          6.2193,
+          5.94143
+        ],
+        "rankseal_local_merge": [
+          4.30728,
+          4.05408,
+          5.9628
+        ],
+        "partitionfence": [
+          0.54091,
+          0.55106,
+          0.5199
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "314",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA122589-0092",
+        "LA122890-0068",
+        "LA022389-0086",
+        "LA122589-0091",
+        "LA122790-0066"
+      ],
+      "entries": {
+        "rankseal": 256,
+        "rankfence": 256
+      },
+      "time_ms": {
+        "rankseal": [
+          0.29467,
+          0.29947,
+          0.26977
+        ],
+        "rankfence": [
+          0.21311,
+          0.20064,
+          0.20228
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "314",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/LA122890-0068",
+        "7/LA122589-0092",
+        "0/LA022389-0086",
+        "4/LA120389-0149",
+        "0/LA122790-0066"
+      ],
+      "entries": {
+        "rankseal_local_merge": 2792,
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "partition_retire": 512,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          3.96537,
+          4.05391,
+          3.92132
+        ],
+        "rankseal": [
+          24.49315,
+          6.09964,
+          7.03029
+        ],
+        "partitionfence": [
+          0.58763,
+          0.50704,
+          0.54203
+        ],
+        "rankfence": [
+          4.31806,
+          4.07798,
+          4.09375
+        ],
+        "partition_retire": [
+          0.78583,
+          0.52778,
+          0.51924
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "320",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-59596",
+        "FBIS4-20470",
+        "FBIS4-20427",
+        "FBIS4-20428",
+        "FBIS4-10645"
+      ],
+      "entries": {
+        "rankfence": 128,
+        "rankseal": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.13553,
+          0.12776,
+          0.10267
+        ],
+        "rankseal": [
+          0.14261,
+          0.13198,
+          0.13626
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "320",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FBIS4-20428",
+        "4/FBIS4-10645",
+        "7/FT922-7917",
+        "5/FBIS3-40798",
+        "6/FBIS3-59596"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "rankseal_local_merge": 1152
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          1.54726,
+          1.68728,
+          1.56238
+        ],
+        "rankfence": [
+          3.99029,
+          13.68063,
+          3.97835
+        ],
+        "partitionfence": [
+          0.56369,
+          0.53211,
+          0.55797
+        ],
+        "rankseal": [
+          5.72401,
+          5.63942,
+          5.72502
+        ],
+        "partition_retire": [
+          0.58071,
+          0.52531,
+          0.61362
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "322",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA012889-0030",
+        "LA022189-0085",
+        "LA061790-0168",
+        "LA020889-0083",
+        "LA110890-0210"
+      ],
+      "entries": {
+        "rankseal": 2432,
+        "rankfence": 2432
+      },
+      "time_ms": {
+        "rankseal": [
+          3.55055,
+          3.47036,
+          3.28832
+        ],
+        "rankfence": [
+          2.13215,
+          2.30912,
+          2.63428
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "322",
+      "entries_available": 4000,
+      "exact_top": [
+        "7/LA022189-0085",
+        "7/LA061790-0168",
+        "3/LA012889-0030",
+        "7/LA020889-0083",
+        "5/LA110890-0210"
+      ],
+      "entries": {
+        "rankseal_local_merge": 3312,
+        "partitionfence": 3072,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partition_retire": 2624
+      },
+      "time_ms": {
+        "partitionfence": [
+          2.80761,
+          4.48679,
+          2.79931
+        ],
+        "rankseal": [
+          5.48731,
+          5.58333,
+          5.89764
+        ],
+        "partition_retire": [
+          2.69932,
+          2.72986,
+          2.71281
+        ],
+        "rankseal_local_merge": [
+          4.53761,
+          4.54894,
+          4.59155
+        ],
+        "rankfence": [
+          4.07524,
+          14.48519,
+          4.05768
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "325",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA050889-0036",
+        "FT934-8727",
+        "LA010990-0026",
+        "LA051689-0033",
+        "FT944-16074"
+      ],
+      "entries": {
+        "rankseal": 320,
+        "rankfence": 320
+      },
+      "time_ms": {
+        "rankseal": [
+          0.36671,
+          0.38593,
+          0.3597
+        ],
+        "rankfence": [
+          0.27899,
+          0.24462,
+          0.26727
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "325",
+      "entries_available": 4000,
+      "exact_top": [
+        "5/FT932-14344",
+        "6/LA092190-0025",
+        "0/LA020990-0005",
+        "4/LA051689-0033",
+        "1/FT934-8727"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal_local_merge": 1216,
+        "partitionfence": 512,
+        "partition_retire": 512,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.62421,
+          0.54301,
+          0.5111
+        ],
+        "rankfence": [
+          4.03602,
+          3.97525,
+          4.16347
+        ],
+        "partition_retire": [
+          0.54828,
+          0.59685,
+          0.5527
+        ],
+        "rankseal_local_merge": [
+          1.69346,
+          1.67762,
+          1.78754
+        ],
+        "rankseal": [
+          6.10498,
+          21.16554,
+          6.21261
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "330",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-37040",
+        "FBIS4-43198",
+        "FBIS3-19414",
+        "FBIS4-26164",
+        "FBIS4-18528"
+      ],
+      "entries": {
+        "rankfence": 1984,
+        "rankseal": 1984
+      },
+      "time_ms": {
+        "rankfence": [
+          1.74294,
+          1.76709,
+          1.87522
+        ],
+        "rankseal": [
+          2.91639,
+          2.75252,
+          13.60233
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "330",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/FBIS4-37040",
+        "2/FBIS3-14476",
+        "7/FBIS4-43198",
+        "1/FBIS4-65036",
+        "6/FBIS3-54600"
+      ],
+      "entries": {
+        "partition_retire": 960,
+        "rankfence": 4000,
+        "rankseal_local_merge": 2748,
+        "partitionfence": 1024,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          3.92807,
+          3.81621,
+          3.83622
+        ],
+        "rankseal": [
+          5.54384,
+          5.36978,
+          5.54298
+        ],
+        "rankfence": [
+          4.04024,
+          3.90628,
+          4.02215
+        ],
+        "partition_retire": [
+          1.01314,
+          1.01827,
+          0.93218
+        ],
+        "partitionfence": [
+          0.92058,
+          1.02591,
+          0.98877
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "336",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA091290-0156",
+        "LA020290-0063",
+        "LA081490-0114",
+        "LA071489-0030",
+        "LA100489-0072"
+      ],
+      "entries": {
+        "rankseal": 1728,
+        "rankfence": 1728
+      },
+      "time_ms": {
+        "rankfence": [
+          1.35015,
+          1.42522,
+          1.4289
+        ],
+        "rankseal": [
+          2.31208,
+          2.45463,
+          2.31636
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "336",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/LA081490-0114",
+        "2/LA091290-0156",
+        "6/LA071489-0030",
+        "5/LA020290-0063",
+        "7/LA061490-0080"
+      ],
+      "entries": {
+        "partition_retire": 1984,
+        "rankseal_local_merge": 3887,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partitionfence": 2048
+      },
+      "time_ms": {
+        "partition_retire": [
+          2.07655,
+          2.26206,
+          2.36333
+        ],
+        "partitionfence": [
+          1.84875,
+          2.13304,
+          2.74148
+        ],
+        "rankfence": [
+          4.86545,
+          4.73416,
+          5.31921
+        ],
+        "rankseal_local_merge": [
+          6.07648,
+          5.88192,
+          5.64671
+        ],
+        "rankseal": [
+          7.75067,
+          7.34366,
+          7.02175
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "341",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-68194",
+        "FBIS4-68195",
+        "LA031289-0199",
+        "FBIS4-19994",
+        "FT944-17076"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.0806,
+          0.07895,
+          0.08036
+        ],
+        "rankfence": [
+          0.07258,
+          0.0642,
+          0.0607
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "341",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FBIS4-68195",
+        "5/FBIS4-68194",
+        "6/FT944-17076",
+        "0/FBIS4-19994",
+        "1/FT942-16387"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 704,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          1.57714,
+          1.56841,
+          1.87592
+        ],
+        "rankseal": [
+          27.55199,
+          10.9763,
+          11.74643
+        ],
+        "partition_retire": [
+          0.93153,
+          0.87986,
+          1.11561
+        ],
+        "partitionfence": [
+          0.8199,
+          0.89459,
+          0.87365
+        ],
+        "rankfence": [
+          7.39325,
+          6.72799,
+          7.17709
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "344",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT923-1185",
+        "FT942-571",
+        "FT922-2176",
+        "FT944-1881",
+        "FT944-2088"
+      ],
+      "entries": {
+        "rankseal": 768,
+        "rankfence": 768
+      },
+      "time_ms": {
+        "rankseal": [
+          1.55181,
+          1.54105,
+          1.55447
+        ],
+        "rankfence": [
+          0.88021,
+          0.83912,
+          0.84974
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "344",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FT923-1185",
+        "5/FT942-571",
+        "5/FT922-2176",
+        "1/FT932-9585",
+        "7/FT944-1881"
+      ],
+      "entries": {
+        "partition_retire": 768,
+        "rankseal_local_merge": 3992,
+        "rankseal": 4000,
+        "partitionfence": 1024,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "partition_retire": [
+          1.22018,
+          1.23821,
+          1.23037
+        ],
+        "rankseal_local_merge": [
+          10.10648,
+          24.53415,
+          9.36094
+        ],
+        "partitionfence": [
+          1.53289,
+          1.44052,
+          1.36068
+        ],
+        "rankseal": [
+          12.65595,
+          9.92001,
+          11.49453
+        ],
+        "rankfence": [
+          7.06743,
+          6.61617,
+          7.12106
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "345",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA060590-0024",
+        "FT942-12006",
+        "LA052890-0066",
+        "LA022190-0068",
+        "LA051689-0153"
+      ],
+      "entries": {
+        "rankseal": 192,
+        "rankfence": 192
+      },
+      "time_ms": {
+        "rankseal": [
+          0.33201,
+          0.35069,
+          0.3594
+        ],
+        "rankfence": [
+          0.24421,
+          0.22051,
+          0.22941
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "345",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/LA060590-0024",
+        "0/LA022190-0068",
+        "5/LA052890-0066",
+        "1/FT942-12006",
+        "5/LA051689-0153"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "rankseal_local_merge": 832,
+        "rankseal": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          1.78456,
+          2.09887,
+          1.83186
+        ],
+        "partition_retire": [
+          0.82516,
+          0.81797,
+          0.96322
+        ],
+        "rankseal": [
+          9.42555,
+          11.48003,
+          9.49968
+        ],
+        "rankfence": [
+          6.60327,
+          6.46546,
+          6.23217
+        ],
+        "partitionfence": [
+          0.86101,
+          0.84951,
+          0.85201
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "346",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA062490-0198",
+        "FT932-13789",
+        "FR940303-2-00226",
+        "FR940503-2-00168",
+        "FR940711-2-00121"
+      ],
+      "entries": {
+        "rankfence": 384,
+        "rankseal": 384
+      },
+      "time_ms": {
+        "rankseal": [
+          0.67349,
+          0.66466,
+          0.61458
+        ],
+        "rankfence": [
+          0.46199,
+          0.40374,
+          0.44161
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "346",
+      "entries_available": 4000,
+      "exact_top": [
+        "6/LA062490-0198",
+        "1/FT932-13789",
+        "7/FR940503-2-00168",
+        "6/FR940303-2-00226",
+        "6/FR940711-2-00121"
+      ],
+      "entries": {
+        "partition_retire": 896,
+        "partitionfence": 1024,
+        "rankseal": 4000,
+        "rankseal_local_merge": 2804,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          22.6901,
+          7.14903,
+          6.77202
+        ],
+        "partitionfence": [
+          1.51248,
+          1.42569,
+          1.46606
+        ],
+        "rankseal": [
+          10.36912,
+          11.21436,
+          9.75306
+        ],
+        "rankseal_local_merge": [
+          6.44668,
+          6.36047,
+          6.13395
+        ],
+        "partition_retire": [
+          1.50845,
+          1.40345,
+          1.42837
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "347",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA051890-0071",
+        "LA062290-0170",
+        "FT922-8911",
+        "LA032090-0105",
+        "LA061690-0061"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankfence": [
+          0.10382,
+          0.12773,
+          0.09889
+        ],
+        "rankseal": [
+          0.12936,
+          0.12362,
+          0.12928
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "347",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FT921-996",
+        "5/LA062290-0170",
+        "0/FR940831-1-00018",
+        "2/LA051890-0071",
+        "3/FT922-8047"
+      ],
+      "entries": {
+        "rankseal_local_merge": 576,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          1.45759,
+          1.44473,
+          1.34949
+        ],
+        "rankseal": [
+          10.18257,
+          10.43304,
+          10.08941
+        ],
+        "rankfence": [
+          6.53353,
+          6.62479,
+          6.58184
+        ],
+        "partitionfence": [
+          0.9071,
+          0.82942,
+          0.94885
+        ],
+        "partition_retire": [
+          0.85057,
+          0.96914,
+          0.94013
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "350",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA052290-0188",
+        "LA060690-0112",
+        "LA062390-0104",
+        "FT923-4291",
+        "LA100690-0107"
+      ],
+      "entries": {
+        "rankfence": 1024,
+        "rankseal": 1024
+      },
+      "time_ms": {
+        "rankseal": [
+          2.2618,
+          15.75178,
+          2.09817
+        ],
+        "rankfence": [
+          1.31434,
+          1.30764,
+          1.17903
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "350",
+      "entries_available": 4000,
+      "exact_top": [
+        "5/LA062390-0104",
+        "3/LA052290-0188",
+        "3/LA060690-0112",
+        "0/FT923-4291",
+        "7/FR940405-1-00096"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankseal_local_merge": 3827,
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.75586,
+          1.13675,
+          0.81747
+        ],
+        "rankseal": [
+          10.59697,
+          10.67131,
+          13.70202
+        ],
+        "rankseal_local_merge": [
+          6.95168,
+          7.32696,
+          7.18695
+        ],
+        "rankfence": [
+          6.24613,
+          6.53579,
+          5.7742
+        ],
+        "partition_retire": [
+          0.6016,
+          0.91365,
+          0.56251
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "353",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-67409",
+        "LA111690-0059",
+        "LA120389-0149",
+        "LA100389-0123",
+        "FBIS3-61405"
+      ],
+      "entries": {
+        "rankfence": 192,
+        "rankseal": 192
+      },
+      "time_ms": {
+        "rankfence": [
+          0.21856,
+          0.3718,
+          0.21245
+        ],
+        "rankseal": [
+          0.24658,
+          0.21641,
+          0.36513
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "353",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FBIS4-67409",
+        "2/LA111690-0059",
+        "7/FBIS4-26294",
+        "5/FBIS3-61405",
+        "1/LA100389-0123"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "partition_retire": 512,
+        "rankseal_local_merge": 1547,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.93593,
+          0.83612,
+          1.01209
+        ],
+        "rankseal": [
+          29.21303,
+          11.4413,
+          10.13373
+        ],
+        "partitionfence": [
+          0.88586,
+          0.89139,
+          0.88975
+        ],
+        "rankfence": [
+          6.87599,
+          8.21192,
+          6.84043
+        ],
+        "rankseal_local_merge": [
+          3.44595,
+          3.498,
+          3.32837
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "354",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA082489-0005",
+        "FBIS3-22921",
+        "FBIS3-58280",
+        "LA050390-0185",
+        "LA123089-0092"
+      ],
+      "entries": {
+        "rankseal": 1664,
+        "rankfence": 1664
+      },
+      "time_ms": {
+        "rankfence": [
+          2.17422,
+          2.20684,
+          2.0775
+        ],
+        "rankseal": [
+          3.76274,
+          3.76556,
+          3.90252
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "354",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/LA082489-0005",
+        "3/FBIS3-22921",
+        "5/LA030190-0122",
+        "6/LA050390-0185",
+        "2/FBIS3-58280"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "rankseal_local_merge": 3325,
+        "rankseal": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          7.29786,
+          7.5137,
+          7.50427
+        ],
+        "rankfence": [
+          7.02142,
+          7.05039,
+          6.39753
+        ],
+        "partition_retire": [
+          0.80395,
+          0.90134,
+          0.71525
+        ],
+        "partitionfence": [
+          0.73825,
+          0.82739,
+          0.82631
+        ],
+        "rankseal": [
+          24.57813,
+          10.06177,
+          8.73335
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "355",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-40210",
+        "FBIS4-20436",
+        "FBIS3-40224",
+        "FBIS3-23683",
+        "FBIS4-47374"
+      ],
+      "entries": {
+        "rankseal": 128,
+        "rankfence": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.16547,
+          0.16464,
+          0.15622
+        ],
+        "rankseal": [
+          0.25836,
+          0.21468,
+          0.21081
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "355",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FBIS3-40210",
+        "7/FBIS4-20436",
+        "6/FBIS3-40224",
+        "3/FBIS4-47374",
+        "1/FBIS3-21238"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "partition_retire": 512,
+        "rankseal_local_merge": 2766
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          13.79013,
+          8.99995,
+          8.34058
+        ],
+        "rankseal": [
+          18.55174,
+          15.67701,
+          17.16197
+        ],
+        "partitionfence": [
+          1.5934,
+          0.94838,
+          1.05234
+        ],
+        "partition_retire": [
+          1.17472,
+          1.2605,
+          1.06053
+        ],
+        "rankfence": [
+          10.43464,
+          32.25001,
+          14.77741
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "356",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA082890-0074",
+        "LA111589-0004",
+        "LA092890-0067",
+        "LA080289-0067",
+        "LA020589-0078"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankfence": [
+          0.15885,
+          0.24372,
+          0.23585
+        ],
+        "rankseal": [
+          0.15979,
+          0.14756,
+          0.12401
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "356",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA082890-0074",
+        "3/LA010790-0103",
+        "5/LA111589-0004",
+        "1/LA020589-0078",
+        "2/LA030290-0067"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "rankseal_local_merge": 1064,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "partitionfence": [
+          1.13606,
+          0.88005,
+          1.24685
+        ],
+        "rankseal": [
+          15.86759,
+          15.85989,
+          43.95344
+        ],
+        "partition_retire": [
+          1.41222,
+          1.10468,
+          1.59567
+        ],
+        "rankfence": [
+          7.07837,
+          7.6845,
+          11.7903
+        ],
+        "rankseal_local_merge": [
+          2.65773,
+          4.03847,
+          3.93665
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "362",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-2353",
+        "FT932-4965",
+        "FBIS4-66826",
+        "LA030189-0037",
+        "FBIS4-50246"
+      ],
+      "entries": {
+        "rankseal": 1536,
+        "rankfence": 1536
+      },
+      "time_ms": {
+        "rankseal": [
+          5.37288,
+          3.75354,
+          4.68015
+        ],
+        "rankfence": [
+          2.45256,
+          2.45158,
+          2.15225
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "362",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FBIS4-2353",
+        "6/FT932-4965",
+        "6/FBIS4-66826",
+        "0/LA030189-0037",
+        "5/FBIS3-26112"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal_local_merge": 2235,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          6.50755,
+          5.94861,
+          5.58978
+        ],
+        "partition_retire": [
+          1.02918,
+          1.63003,
+          1.00008
+        ],
+        "rankfence": [
+          9.00118,
+          58.34938,
+          38.47784
+        ],
+        "partitionfence": [
+          1.17059,
+          1.0869,
+          0.95134
+        ],
+        "rankseal": [
+          17.11933,
+          9.76964,
+          9.70713
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "363",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT944-11817",
+        "LA092290-0102",
+        "LA072490-0030",
+        "FT922-12816",
+        "LA060189-0057"
+      ],
+      "entries": {
+        "rankfence": 448,
+        "rankseal": 448
+      },
+      "time_ms": {
+        "rankseal": [
+          0.78884,
+          0.7962,
+          0.84165
+        ],
+        "rankfence": [
+          0.60636,
+          0.50754,
+          0.52108
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "363",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/FT944-11817",
+        "3/LA092290-0102",
+        "6/LA103190-0035",
+        "6/FT943-11905",
+        "7/LA072490-0030"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "rankseal_local_merge": 2769,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "partitionfence": [
+          29.21414,
+          0.76361,
+          0.80995
+        ],
+        "partition_retire": [
+          1.82043,
+          0.86215,
+          0.84633
+        ],
+        "rankfence": [
+          48.99073,
+          6.9811,
+          6.77505
+        ],
+        "rankseal": [
+          10.72113,
+          11.63882,
+          9.75801
+        ],
+        "rankseal_local_merge": [
+          6.13719,
+          5.97756,
+          6.11973
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "367",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-2223",
+        "FT944-2053",
+        "FT944-1847",
+        "FBIS4-67139",
+        "FBIS4-48973"
+      ],
+      "entries": {
+        "rankfence": 320,
+        "rankseal": 320
+      },
+      "time_ms": {
+        "rankfence": [
+          0.40291,
+          0.36796,
+          0.35553
+        ],
+        "rankseal": [
+          0.53815,
+          0.53722,
+          0.5478
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "367",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FBIS4-2223",
+        "4/FBIS4-67139",
+        "7/LA080989-0086",
+        "6/FT944-1847",
+        "0/FT944-2053"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankseal_local_merge": 3616,
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          8.00893,
+          8.28047,
+          7.81009
+        ],
+        "partition_retire": [
+          0.78423,
+          0.74251,
+          0.77526
+        ],
+        "rankfence": [
+          6.90821,
+          7.10601,
+          6.49747
+        ],
+        "rankseal": [
+          9.88148,
+          25.20251,
+          9.43567
+        ],
+        "partitionfence": [
+          0.79771,
+          0.69525,
+          0.81195
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "372",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT942-12298",
+        "FT924-6336",
+        "FT941-15351",
+        "FT944-1462",
+        "LA060390-0083"
+      ],
+      "entries": {
+        "rankseal": 192,
+        "rankfence": 192
+      },
+      "time_ms": {
+        "rankfence": [
+          0.22204,
+          0.2363,
+          0.217
+        ],
+        "rankseal": [
+          0.40982,
+          0.34392,
+          0.31857
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "372",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FT942-12298",
+        "5/FT924-6336",
+        "2/FT941-15351",
+        "7/FT944-1462",
+        "7/LA060390-0083"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "partition_retire": 512,
+        "rankfence": 4000,
+        "rankseal_local_merge": 2368,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankseal": [
+          8.24947,
+          8.67886,
+          9.93272
+        ],
+        "rankseal_local_merge": [
+          3.89338,
+          4.51154,
+          3.58544
+        ],
+        "partitionfence": [
+          0.57821,
+          0.49706,
+          0.53144
+        ],
+        "rankfence": [
+          5.02386,
+          4.87707,
+          5.80878
+        ],
+        "partition_retire": [
+          0.71713,
+          0.58215,
+          0.8473
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "374",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA101289-0221",
+        "FT911-2323",
+        "LA080889-0027",
+        "LA072489-0070",
+        "FT924-13568"
+      ],
+      "entries": {
+        "rankseal": 192,
+        "rankfence": 192
+      },
+      "time_ms": {
+        "rankfence": [
+          0.16161,
+          0.1825,
+          0.14672
+        ],
+        "rankseal": [
+          0.2385,
+          0.21401,
+          0.22173
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "374",
+      "entries_available": 4000,
+      "exact_top": [
+        "5/LA080889-0027",
+        "2/FT911-2323",
+        "7/LA072489-0070",
+        "1/LA101289-0221",
+        "4/FT934-15186"
+      ],
+      "entries": {
+        "rankseal_local_merge": 896,
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankseal": [
+          10.54736,
+          10.62065,
+          10.02372
+        ],
+        "rankfence": [
+          6.56519,
+          6.68137,
+          6.20141
+        ],
+        "partition_retire": [
+          0.92826,
+          0.82204,
+          0.89541
+        ],
+        "rankseal_local_merge": [
+          2.01125,
+          1.96454,
+          2.25407
+        ],
+        "partitionfence": [
+          0.86632,
+          0.83083,
+          0.79307
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "375",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-20985",
+        "FBIS3-60383",
+        "FBIS3-59553",
+        "FBIS3-60662",
+        "FT944-16550"
+      ],
+      "entries": {
+        "rankseal": 256,
+        "rankfence": 256
+      },
+      "time_ms": {
+        "rankfence": [
+          0.33543,
+          0.3251,
+          0.29591
+        ],
+        "rankseal": [
+          0.45346,
+          0.46308,
+          0.46873
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "375",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/FBIS3-60383",
+        "3/FBIS3-20985",
+        "7/FT944-16550",
+        "5/FBIS3-59553",
+        "6/FBIS4-66430"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankseal_local_merge": 1024,
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          2.22772,
+          2.21765,
+          2.16465
+        ],
+        "partitionfence": [
+          0.84184,
+          0.90505,
+          0.81833
+        ],
+        "rankseal": [
+          12.39458,
+          10.59578,
+          10.78553
+        ],
+        "partition_retire": [
+          0.91243,
+          0.88544,
+          0.84781
+        ],
+        "rankfence": [
+          6.67831,
+          6.64578,
+          6.8487
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "378",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT922-2274",
+        "FT942-10432",
+        "FT942-6780",
+        "FBIS3-19643",
+        "FT921-7322"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          7.3922,
+          7.36159,
+          7.85483
+        ],
+        "rankseal": [
+          10.86033,
+          10.0175,
+          10.1618
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "378",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/FT922-2274",
+        "1/FT944-14383",
+        "0/FT942-6780",
+        "5/FT944-1738",
+        "4/FT924-14607"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partitionfence": 1536,
+        "partition_retire": 1344,
+        "rankseal_local_merge": 3655
+      },
+      "time_ms": {
+        "rankseal": [
+          10.56322,
+          9.99488,
+          7.97717
+        ],
+        "partition_retire": [
+          2.09523,
+          1.68401,
+          1.33399
+        ],
+        "partitionfence": [
+          2.16733,
+          1.62119,
+          1.57432
+        ],
+        "rankfence": [
+          22.93448,
+          5.28811,
+          4.80508
+        ],
+        "rankseal_local_merge": [
+          5.74853,
+          7.15507,
+          6.29145
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "379",
+      "entries_available": 4000,
+      "exact_top": [
+        "FR940919-2-00099",
+        "FR940919-2-00098",
+        "FR940919-2-00095",
+        "FR940919-2-00094",
+        "FR940419-2-00042"
+      ],
+      "entries": {
+        "rankfence": 256,
+        "rankseal": 256
+      },
+      "time_ms": {
+        "rankseal": [
+          0.52494,
+          0.30101,
+          0.42531
+        ],
+        "rankfence": [
+          0.23845,
+          0.20617,
+          0.23045
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "379",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/FR940919-2-00098",
+        "6/FR940919-2-00099",
+        "4/FR940419-2-00042",
+        "3/FR940919-2-00094",
+        "5/FR940919-2-00095"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "rankseal_local_merge": 2621
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.92561,
+          0.90816,
+          0.94621
+        ],
+        "rankseal": [
+          11.23434,
+          11.02415,
+          25.63115
+        ],
+        "rankfence": [
+          6.99568,
+          7.35862,
+          7.04727
+        ],
+        "rankseal_local_merge": [
+          6.54095,
+          6.3658,
+          6.48031
+        ],
+        "partition_retire": [
+          0.89786,
+          0.92291,
+          0.89116
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "383",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA011489-0048",
+        "LA010889-0051",
+        "FT933-4868",
+        "LA112389-0158",
+        "FT933-437"
+      ],
+      "entries": {
+        "rankseal": 256,
+        "rankfence": 256
+      },
+      "time_ms": {
+        "rankseal": [
+          0.54024,
+          0.50709,
+          0.55074
+        ],
+        "rankfence": [
+          0.3718,
+          0.37892,
+          0.35359
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "383",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/LA011489-0048",
+        "6/LA112389-0158",
+        "1/FT933-4868",
+        "0/LA120489-0008",
+        "5/LA010889-0051"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal_local_merge": 960,
+        "rankseal": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          6.93361,
+          7.02813,
+          6.89436
+        ],
+        "rankseal": [
+          10.11783,
+          9.97166,
+          10.92591
+        ],
+        "partitionfence": [
+          0.94108,
+          0.8614,
+          0.92099
+        ],
+        "rankseal_local_merge": [
+          2.41303,
+          2.44435,
+          2.37242
+        ],
+        "partition_retire": [
+          0.91446,
+          0.91058,
+          1.03746
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "389",
+      "entries_available": 4000,
+      "exact_top": [
+        "FR940407-2-00136",
+        "FR940805-2-00049",
+        "FR940627-2-00077",
+        "FR940217-1-00026",
+        "FR941207-0-00147"
+      ],
+      "entries": {
+        "rankseal": 1536,
+        "rankfence": 1536
+      },
+      "time_ms": {
+        "rankfence": [
+          2.23714,
+          2.30305,
+          2.22622
+        ],
+        "rankseal": [
+          3.88488,
+          3.71424,
+          3.68767
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "389",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FR940805-2-00049",
+        "2/FR940628-2-00085",
+        "1/FR940407-2-00136",
+        "7/FR940217-1-00026",
+        "0/FR940627-2-00077"
+      ],
+      "entries": {
+        "partitionfence": 1536,
+        "rankseal_local_merge": 3830,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partition_retire": 1344
+      },
+      "time_ms": {
+        "rankfence": [
+          22.91887,
+          6.94196,
+          6.6861
+        ],
+        "rankseal_local_merge": [
+          9.33347,
+          9.41522,
+          8.74818
+        ],
+        "partition_retire": [
+          2.3906,
+          2.29472,
+          2.43991
+        ],
+        "partitionfence": [
+          2.34893,
+          2.31034,
+          2.44918
+        ],
+        "rankseal": [
+          11.27735,
+          10.92943,
+          11.36431
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "393",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT924-15580",
+        "LA042190-0143",
+        "LA060789-0028",
+        "LA080190-0135",
+        "LA111590-0053"
+      ],
+      "entries": {
+        "rankfence": 1344,
+        "rankseal": 1344
+      },
+      "time_ms": {
+        "rankseal": [
+          3.08648,
+          3.62259,
+          3.23802
+        ],
+        "rankfence": [
+          1.72558,
+          1.71748,
+          1.87671
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "393",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FT924-15580",
+        "1/LA061090-0035",
+        "3/LA060789-0028",
+        "2/LA042190-0143",
+        "5/LA092689-0007"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankseal_local_merge": 3550,
+        "partitionfence": 1024,
+        "rankfence": 4000,
+        "partition_retire": 1024
+      },
+      "time_ms": {
+        "rankseal": [
+          9.44743,
+          10.43317,
+          9.34096
+        ],
+        "partitionfence": [
+          1.56278,
+          1.44711,
+          1.4631
+        ],
+        "rankseal_local_merge": [
+          7.55002,
+          8.01688,
+          8.20048
+        ],
+        "partition_retire": [
+          1.55145,
+          1.45741,
+          1.65458
+        ],
+        "rankfence": [
+          22.41907,
+          6.02524,
+          7.02336
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "394",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA101890-0207",
+        "LA031190-0045",
+        "LA010890-0013",
+        "LA101590-0098",
+        "LA021889-0045"
+      ],
+      "entries": {
+        "rankfence": 3392,
+        "rankseal": 3392
+      },
+      "time_ms": {
+        "rankseal": [
+          9.30228,
+          7.88371,
+          27.19809
+        ],
+        "rankfence": [
+          6.29925,
+          3.95881,
+          4.25737
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "394",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/LA031190-0045",
+        "2/LA101890-0207",
+        "1/LA010890-0013",
+        "5/LA101590-0098",
+        "0/LA021890-0097"
+      ],
+      "entries": {
+        "rankseal_local_merge": 3445,
+        "rankfence": 4000,
+        "partitionfence": 1024,
+        "partition_retire": 1024,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "partition_retire": [
+          1.711,
+          1.23574,
+          1.57162
+        ],
+        "rankfence": [
+          6.77134,
+          4.9068,
+          9.40914
+        ],
+        "partitionfence": [
+          1.58176,
+          1.30062,
+          2.81356
+        ],
+        "rankseal_local_merge": [
+          8.1405,
+          6.68648,
+          8.19207
+        ],
+        "rankseal": [
+          9.69145,
+          6.74423,
+          10.75435
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "397",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA072390-0100",
+        "LA020890-0157",
+        "LA121989-0061",
+        "LA021390-0016",
+        "LA120690-0090"
+      ],
+      "entries": {
+        "rankfence": 448,
+        "rankseal": 448
+      },
+      "time_ms": {
+        "rankfence": [
+          0.64235,
+          0.57589,
+          0.6467
+        ],
+        "rankseal": [
+          0.82535,
+          0.92855,
+          0.8738
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "397",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA020890-0157",
+        "2/LA072390-0100",
+        "0/LA121989-0061",
+        "4/LA120589-0153",
+        "0/LA021390-0016"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal_local_merge": 3962,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.70165,
+          0.52935,
+          0.72054
+        ],
+        "rankseal": [
+          24.66661,
+          9.31276,
+          6.90648
+        ],
+        "rankseal_local_merge": [
+          7.71804,
+          7.66627,
+          10.7472
+        ],
+        "rankfence": [
+          5.27157,
+          4.42781,
+          4.95879
+        ],
+        "partitionfence": [
+          0.6741,
+          0.59897,
+          0.56897
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "399",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT934-7286",
+        "LA081390-0044",
+        "FR940217-1-00140",
+        "FT924-3602",
+        "LA032289-0033"
+      ],
+      "entries": {
+        "rankseal": 192,
+        "rankfence": 192
+      },
+      "time_ms": {
+        "rankfence": [
+          0.23087,
+          0.23824,
+          0.2136
+        ],
+        "rankseal": [
+          0.3431,
+          0.3441,
+          0.32584
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "399",
+      "entries_available": 4000,
+      "exact_top": [
+        "6/FT924-3602",
+        "0/FT934-7286",
+        "0/LA081390-0044",
+        "4/LA032289-0033",
+        "3/FR940217-1-00140"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankseal_local_merge": 3720,
+        "partition_retire": 512,
+        "rankfence": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankseal": [
+          7.77799,
+          25.92444,
+          6.23663
+        ],
+        "rankseal_local_merge": [
+          5.30605,
+          5.32113,
+          5.16777
+        ],
+        "rankfence": [
+          4.22513,
+          4.55882,
+          4.41258
+        ],
+        "partition_retire": [
+          0.53118,
+          0.49479,
+          0.54537
+        ],
+        "partitionfence": [
+          0.49682,
+          0.49082,
+          0.49495
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "401",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-18182",
+        "FBIS3-59436",
+        "FBIS4-9582",
+        "FBIS4-31704",
+        "FT934-15047"
+      ],
+      "entries": {
+        "rankfence": 3072,
+        "rankseal": 3072
+      },
+      "time_ms": {
+        "rankseal": [
+          4.53864,
+          4.94861,
+          4.66769
+        ],
+        "rankfence": [
+          3.14416,
+          2.67608,
+          2.85172
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "401",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FBIS4-18182",
+        "3/FBIS3-59436",
+        "7/FBIS3-18684",
+        "4/FBIS3-39117",
+        "2/FT924-4470"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partition_retire": 2560,
+        "partitionfence": 3072,
+        "rankseal_local_merge": 3902
+      },
+      "time_ms": {
+        "partitionfence": [
+          3.14812,
+          3.06557,
+          3.26502
+        ],
+        "rankseal_local_merge": [
+          5.55401,
+          5.76508,
+          5.49857
+        ],
+        "rankseal": [
+          18.73324,
+          6.67558,
+          6.87778
+        ],
+        "partition_retire": [
+          3.0975,
+          2.90096,
+          2.87436
+        ],
+        "rankfence": [
+          4.2562,
+          4.66809,
+          4.52048
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "404",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-66076",
+        "FT934-11680",
+        "FT934-11487",
+        "FT944-14470",
+        "FT942-16203"
+      ],
+      "entries": {
+        "rankfence": 192,
+        "rankseal": 192
+      },
+      "time_ms": {
+        "rankfence": [
+          0.18177,
+          0.16083,
+          0.15316
+        ],
+        "rankseal": [
+          0.22741,
+          0.2172,
+          0.22736
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "404",
+      "entries_available": 4000,
+      "exact_top": [
+        "6/FT934-11487",
+        "0/FT934-9911",
+        "3/FBIS4-66076",
+        "1/FT944-14470",
+        "7/FT942-16203"
+      ],
+      "entries": {
+        "rankseal_local_merge": 1024,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.59464,
+          0.64597,
+          0.57441
+        ],
+        "rankfence": [
+          4.10834,
+          4.36059,
+          4.12662
+        ],
+        "rankseal": [
+          6.26959,
+          18.62079,
+          5.85871
+        ],
+        "partition_retire": [
+          0.59181,
+          0.56015,
+          0.71217
+        ],
+        "rankseal_local_merge": [
+          1.48758,
+          1.48102,
+          1.50984
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "408",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA062590-0054",
+        "LA120389-0130",
+        "LA102090-0035",
+        "LA082990-0118",
+        "LA101390-0102"
+      ],
+      "entries": {
+        "rankfence": 192,
+        "rankseal": 192
+      },
+      "time_ms": {
+        "rankseal": [
+          0.21441,
+          0.24397,
+          0.22556
+        ],
+        "rankfence": [
+          0.17064,
+          0.15265,
+          0.15985
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "408",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA062590-0054",
+        "2/LA101390-0102",
+        "7/LA120389-0130",
+        "4/LA082990-0118",
+        "3/LA102090-0035"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal_local_merge": 1705,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.60245,
+          0.55293,
+          0.76933
+        ],
+        "rankseal_local_merge": [
+          2.63013,
+          2.48749,
+          2.64044
+        ],
+        "rankseal": [
+          7.74779,
+          7.46261,
+          6.61604
+        ],
+        "partitionfence": [
+          0.61042,
+          0.61225,
+          0.82802
+        ],
+        "rankfence": [
+          4.39901,
+          6.50178,
+          4.24799
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "409",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT923-13692",
+        "LA092189-0137",
+        "FT923-13817",
+        "LA110489-0092",
+        "LA122289-0117"
+      ],
+      "entries": {
+        "rankfence": 128,
+        "rankseal": 128
+      },
+      "time_ms": {
+        "rankseal": [
+          0.14353,
+          0.14166,
+          0.13649
+        ],
+        "rankfence": [
+          0.12187,
+          0.10432,
+          0.12757
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "409",
+      "entries_available": 4000,
+      "exact_top": [
+        "5/FT923-13692",
+        "4/LA110489-0092",
+        "0/FT923-13817",
+        "1/LA042089-0111",
+        "2/LA091290-0053"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal_local_merge": 512,
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          4.15749,
+          4.34382,
+          5.89917
+        ],
+        "rankseal_local_merge": [
+          0.99176,
+          0.7942,
+          1.01369
+        ],
+        "partition_retire": [
+          0.54537,
+          0.54384,
+          0.72476
+        ],
+        "partitionfence": [
+          0.5213,
+          0.60524,
+          0.99813
+        ],
+        "rankseal": [
+          20.27219,
+          7.57479,
+          33.58194
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "414",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT944-12369",
+        "FT921-9644",
+        "FT943-1006",
+        "FT923-3729",
+        "FT944-11926"
+      ],
+      "entries": {
+        "rankfence": 128,
+        "rankseal": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.12226,
+          0.11696,
+          0.11341
+        ],
+        "rankseal": [
+          0.19633,
+          0.18374,
+          0.15203
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "414",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FT923-3729",
+        "5/FT944-12369",
+        "0/FT921-9644",
+        "4/FT943-1006",
+        "0/FT944-11926"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankseal_local_merge": 896,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankseal": [
+          9.01858,
+          11.68864,
+          10.10291
+        ],
+        "partition_retire": [
+          1.06136,
+          0.66924,
+          0.65347
+        ],
+        "rankseal_local_merge": [
+          1.98586,
+          2.37283,
+          1.37875
+        ],
+        "rankfence": [
+          8.78424,
+          6.50376,
+          7.16839
+        ],
+        "partitionfence": [
+          0.83099,
+          0.98013,
+          0.73769
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "416",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-25805",
+        "FBIS4-66355",
+        "FBIS3-3711",
+        "FBIS3-45089",
+        "FBIS3-46276"
+      ],
+      "entries": {
+        "rankseal": 256,
+        "rankfence": 256
+      },
+      "time_ms": {
+        "rankfence": [
+          0.23137,
+          0.44657,
+          0.26412
+        ],
+        "rankseal": [
+          0.48186,
+          0.49727,
+          0.51837
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "416",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FBIS4-49586",
+        "0/FBIS3-3711",
+        "6/FBIS3-25805",
+        "2/FBIS4-66355",
+        "3/FBIS3-45088"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankseal_local_merge": 512,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankseal": [
+          13.53643,
+          9.3498,
+          7.47227
+        ],
+        "partitionfence": [
+          1.1823,
+          1.12733,
+          0.56449
+        ],
+        "partition_retire": [
+          0.57117,
+          0.82493,
+          0.71349
+        ],
+        "rankseal_local_merge": [
+          1.44232,
+          1.17108,
+          0.8159
+        ],
+        "rankfence": [
+          7.23992,
+          7.41071,
+          6.79701
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "419",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA040190-0174",
+        "FBIS3-41645",
+        "LA022190-0069",
+        "LA121389-0085",
+        "FBIS4-67400"
+      ],
+      "entries": {
+        "rankfence": 128,
+        "rankseal": 128
+      },
+      "time_ms": {
+        "rankseal": [
+          0.15298,
+          0.14796,
+          0.15168
+        ],
+        "rankfence": [
+          0.12754,
+          0.1316,
+          0.11113
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "419",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/LA040190-0174",
+        "6/LA022190-0069",
+        "7/FBIS3-41645",
+        "0/FBIS4-67400",
+        "7/LA121389-0085"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 2535,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.60463,
+          0.81251,
+          0.67203
+        ],
+        "rankseal": [
+          10.04908,
+          8.02604,
+          7.08139
+        ],
+        "rankfence": [
+          220.84489,
+          4.25537,
+          5.135
+        ],
+        "rankseal_local_merge": [
+          5.00759,
+          4.01478,
+          3.92015
+        ],
+        "partition_retire": [
+          0.66724,
+          0.52948,
+          2.26218
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "426",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA031490-0004",
+        "FR940114-1-00046",
+        "LA051990-0141",
+        "FR940114-1-00047",
+        "FR940114-1-00044"
+      ],
+      "entries": {
+        "rankfence": 192,
+        "rankseal": 192
+      },
+      "time_ms": {
+        "rankseal": [
+          0.20829,
+          0.21082,
+          0.22771
+        ],
+        "rankfence": [
+          0.16676,
+          0.15522,
+          0.15262
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "426",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/LA031490-0004",
+        "1/FR940114-1-00044",
+        "0/LA051990-0141",
+        "7/FR940523-2-00081",
+        "4/LA041089-0080"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "rankseal_local_merge": 3131,
+        "rankfence": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          4.5419,
+          4.23495,
+          4.38069
+        ],
+        "rankseal": [
+          6.40499,
+          5.90802,
+          16.89982
+        ],
+        "rankseal_local_merge": [
+          4.66813,
+          4.56408,
+          4.93178
+        ],
+        "partition_retire": [
+          0.54956,
+          0.63316,
+          0.50482
+        ],
+        "partitionfence": [
+          0.61259,
+          0.52788,
+          0.56178
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "427",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA082089-0008",
+        "FT923-10771",
+        "FR941028-2-00203",
+        "LA070389-0031",
+        "FR941028-2-00213"
+      ],
+      "entries": {
+        "rankseal": 128,
+        "rankfence": 128
+      },
+      "time_ms": {
+        "rankseal": [
+          0.17279,
+          0.1612,
+          0.18649
+        ],
+        "rankfence": [
+          0.12652,
+          0.11011,
+          0.11603
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "427",
+      "entries_available": 4000,
+      "exact_top": [
+        "5/LA082089-0008",
+        "0/FT923-10771",
+        "2/LA070389-0031",
+        "3/FBIS3-22135",
+        "6/FBIS3-21049"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal_local_merge": 704,
+        "rankseal": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          4.38512,
+          4.55004,
+          4.51076
+        ],
+        "rankseal": [
+          11.37533,
+          6.69638,
+          6.4156
+        ],
+        "rankseal_local_merge": [
+          1.13953,
+          1.28919,
+          1.20498
+        ],
+        "partition_retire": [
+          0.89678,
+          0.63305,
+          0.60899
+        ],
+        "partitionfence": [
+          0.61086,
+          0.75246,
+          0.55318
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "433",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA080690-0141",
+        "FT941-4064",
+        "FT944-9935",
+        "FT924-9527",
+        "FT923-4572"
+      ],
+      "entries": {
+        "rankfence": 320,
+        "rankseal": 320
+      },
+      "time_ms": {
+        "rankfence": [
+          0.24904,
+          0.24457,
+          0.27838
+        ],
+        "rankseal": [
+          0.36571,
+          0.42474,
+          0.34036
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "433",
+      "entries_available": 4000,
+      "exact_top": [
+        "7/LA080690-0141",
+        "1/FT923-4572",
+        "5/FT944-9935",
+        "6/FT924-9527",
+        "7/FT941-4064"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "partition_retire": 512,
+        "rankseal_local_merge": 3519,
+        "partitionfence": 512,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          15.05144,
+          17.07058,
+          7.44521
+        ],
+        "partition_retire": [
+          0.60325,
+          0.60876,
+          0.85994
+        ],
+        "rankseal_local_merge": [
+          5.22986,
+          5.52843,
+          8.33933
+        ],
+        "partitionfence": [
+          0.50926,
+          0.51452,
+          0.88063
+        ],
+        "rankseal": [
+          6.70456,
+          5.84132,
+          11.71012
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "435",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT941-12411",
+        "FT931-892",
+        "FT933-15872",
+        "FT943-5505",
+        "FT943-3422"
+      ],
+      "entries": {
+        "rankfence": 192,
+        "rankseal": 192
+      },
+      "time_ms": {
+        "rankfence": [
+          0.28641,
+          0.28658,
+          0.30234
+        ],
+        "rankseal": [
+          0.37772,
+          0.39251,
+          0.41206
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "435",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FT933-15872",
+        "2/FT941-12411",
+        "0/FT943-3422",
+        "7/FBIS4-20131",
+        "5/FT943-8138"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal_local_merge": 2160,
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "partitionfence": [
+          1.28468,
+          1.04372,
+          0.89767
+        ],
+        "rankseal": [
+          9.47583,
+          27.7702,
+          9.9831
+        ],
+        "partition_retire": [
+          0.85642,
+          0.86625,
+          0.89554
+        ],
+        "rankseal_local_merge": [
+          5.19151,
+          5.19024,
+          5.16803
+        ],
+        "rankfence": [
+          7.0359,
+          7.03759,
+          7.32676
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "436",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT931-15371",
+        "FT944-5690",
+        "FT941-11908",
+        "FT931-12906",
+        "FT933-6495"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankseal": [
+          10.68228,
+          11.38791,
+          9.57052
+        ],
+        "rankfence": [
+          7.10708,
+          7.15417,
+          6.68159
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "436",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FT931-15371",
+        "5/FT944-5690",
+        "2/FT931-12906",
+        "2/FT941-11908",
+        "5/FT931-12899"
+      ],
+      "entries": {
+        "partitionfence": 1024,
+        "rankseal_local_merge": 3793,
+        "rankseal": 4000,
+        "partition_retire": 768,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "partition_retire": [
+          1.27893,
+          1.30208,
+          0.82838
+        ],
+        "rankfence": [
+          6.91196,
+          7.75784,
+          5.26799
+        ],
+        "rankseal": [
+          13.43022,
+          10.05609,
+          10.86859
+        ],
+        "partitionfence": [
+          1.51818,
+          1.59786,
+          1.68746
+        ],
+        "rankseal_local_merge": [
+          9.41109,
+          9.98459,
+          8.97044
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "439",
+      "entries_available": 4000,
+      "exact_top": [
+        "FR940627-2-00078",
+        "LA100589-0058",
+        "FBIS3-23562",
+        "FT942-14635",
+        "FT932-6180"
+      ],
+      "entries": {
+        "rankseal": 384,
+        "rankfence": 384
+      },
+      "time_ms": {
+        "rankfence": [
+          0.482,
+          0.53648,
+          0.5356
+        ],
+        "rankseal": [
+          0.82423,
+          0.7393,
+          0.81826
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "439",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FR940627-2-00078",
+        "4/FT932-6180",
+        "6/LA100589-0058",
+        "4/FBIS3-23562",
+        "5/FBIS4-46660"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 2496
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.85627,
+          0.93236,
+          0.62818
+        ],
+        "rankfence": [
+          7.10954,
+          6.98588,
+          8.69292
+        ],
+        "rankseal": [
+          27.76513,
+          20.7041,
+          73.88418
+        ],
+        "rankseal_local_merge": [
+          6.12172,
+          6.21141,
+          8.69672
+        ],
+        "partitionfence": [
+          0.88719,
+          4.75433,
+          0.69011
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "442",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA071090-0093",
+        "FBIS4-59518",
+        "LA121090-0007",
+        "FBIS4-36655",
+        "FBIS4-36664"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          15.77274,
+          13.95012,
+          9.24873
+        ],
+        "rankseal": [
+          15.86109,
+          95.26768,
+          32.47492
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "442",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA071090-0093",
+        "6/FBIS3-1928",
+        "7/FBIS4-50680",
+        "1/LA041089-0012",
+        "4/FBIS4-36664"
+      ],
+      "entries": {
+        "partition_retire": 3999,
+        "partitionfence": 3999,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "rankseal_local_merge": 3934
+      },
+      "time_ms": {
+        "partition_retire": [
+          19.9288,
+          56.16599,
+          14.21297
+        ],
+        "rankseal": [
+          15.91365,
+          29.26697,
+          9.15028
+        ],
+        "partitionfence": [
+          7.84859,
+          14.67815,
+          9.52585
+        ],
+        "rankfence": [
+          13.0471,
+          10.84896,
+          4.86002
+        ],
+        "rankseal_local_merge": [
+          10.53249,
+          30.89097,
+          9.71125
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "443",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT941-4190",
+        "FT921-14694",
+        "FT944-17976",
+        "FT933-858",
+        "FT923-1945"
+      ],
+      "entries": {
+        "rankseal": 448,
+        "rankfence": 448
+      },
+      "time_ms": {
+        "rankseal": [
+          0.8084,
+          0.58642,
+          0.6154
+        ],
+        "rankfence": [
+          4.48143,
+          0.47714,
+          0.48495
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "443",
+      "entries_available": 4000,
+      "exact_top": [
+        "6/FT941-4190",
+        "1/FT944-17976",
+        "0/FT921-14694",
+        "7/FT923-1945",
+        "7/FT943-15483"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal_local_merge": 3550,
+        "partition_retire": 512,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankseal": [
+          49.45845,
+          17.26206,
+          29.89797
+        ],
+        "partitionfence": [
+          0.76697,
+          4.7568,
+          0.74715
+        ],
+        "partition_retire": [
+          0.5809,
+          0.50046,
+          0.56837
+        ],
+        "rankseal_local_merge": [
+          25.04309,
+          10.0709,
+          13.82667
+        ],
+        "rankfence": [
+          14.5492,
+          8.88678,
+          10.43161
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "445",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA110789-0149",
+        "LA040390-0124",
+        "FT934-408",
+        "LA102790-0157",
+        "FT924-8156"
+      ],
+      "entries": {
+        "rankseal": 320,
+        "rankfence": 320
+      },
+      "time_ms": {
+        "rankfence": [
+          0.26187,
+          0.27916,
+          0.27175
+        ],
+        "rankseal": [
+          0.43953,
+          0.38104,
+          0.35724
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "445",
+      "entries_available": 4000,
+      "exact_top": [
+        "5/LA110789-0149",
+        "2/FT921-7364",
+        "2/FT924-9001",
+        "4/LA040390-0124",
+        "1/FT934-408"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "rankseal_local_merge": 1088,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          6.67793,
+          7.0828,
+          1.99477
+        ],
+        "partitionfence": [
+          1.7319,
+          1.07214,
+          0.73311
+        ],
+        "rankfence": [
+          32.00422,
+          26.2024,
+          8.85331
+        ],
+        "rankseal": [
+          20.54036,
+          34.56271,
+          59.31369
+        ],
+        "partition_retire": [
+          1.55404,
+          0.79197,
+          4.91499
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "448",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT931-16636",
+        "FT921-11935",
+        "FR940217-1-00130",
+        "FR941221-1-00019",
+        "FBIS4-15452"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          13.93683,
+          17.46911,
+          16.11307
+        ],
+        "rankseal": [
+          123.78666,
+          43.62441,
+          24.62517
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "448",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/FBIS4-15452",
+        "3/FT931-16636",
+        "3/FT921-11935",
+        "4/FR940217-1-00130",
+        "7/FT944-2991"
+      ],
+      "entries": {
+        "rankseal_local_merge": 3098,
+        "partition_retire": 832,
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partitionfence": 1024
+      },
+      "time_ms": {
+        "rankfence": [
+          60.68969,
+          16.76481,
+          4.10441
+        ],
+        "partitionfence": [
+          11.3504,
+          1.10494,
+          0.93373
+        ],
+        "partition_retire": [
+          1.30595,
+          4.9777,
+          0.87703
+        ],
+        "rankseal": [
+          23.28471,
+          14.98117,
+          10.79551
+        ],
+        "rankseal_local_merge": [
+          9.65459,
+          8.58287,
+          13.53586
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "601",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT923-11593",
+        "FT931-13722",
+        "FT931-10200",
+        "FT923-9764",
+        "FT944-10568"
+      ],
+      "entries": {
+        "rankfence": 256,
+        "rankseal": 256
+      },
+      "time_ms": {
+        "rankfence": [
+          0.42489,
+          0.24479,
+          0.20064
+        ],
+        "rankseal": [
+          0.33151,
+          0.28563,
+          0.27901
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "601",
+      "entries_available": 4000,
+      "exact_top": [
+        "6/FT931-13722",
+        "5/FT931-10200",
+        "1/FT923-11593",
+        "2/FT944-10568",
+        "6/FT923-9764"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 3584,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          18.82604,
+          9.17001,
+          9.12634
+        ],
+        "partitionfence": [
+          0.56049,
+          0.51292,
+          0.5278
+        ],
+        "rankseal": [
+          14.2015,
+          36.09027,
+          10.38851
+        ],
+        "rankfence": [
+          8.23765,
+          8.47759,
+          17.95257
+        ],
+        "partition_retire": [
+          0.52972,
+          4.56615,
+          0.50388
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "602",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT922-1680",
+        "FT922-1536",
+        "FT922-1498",
+        "FT934-11227",
+        "FT922-1409"
+      ],
+      "entries": {
+        "rankseal": 128,
+        "rankfence": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.1166,
+          0.11538,
+          0.10789
+        ],
+        "rankseal": [
+          0.17296,
+          0.14284,
+          0.13881
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "602",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FT922-1498",
+        "4/FT922-1680",
+        "7/FT923-8609",
+        "3/FT922-1536",
+        "6/FT922-1409"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal_local_merge": 576,
+        "rankseal": 4000,
+        "partition_retire": 512,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.56918,
+          0.59773,
+          0.58081
+        ],
+        "partitionfence": [
+          0.52948,
+          12.74079,
+          4.59511
+        ],
+        "rankfence": [
+          9.28614,
+          8.35299,
+          8.17371
+        ],
+        "rankseal_local_merge": [
+          4.94704,
+          0.87899,
+          0.89757
+        ],
+        "rankseal": [
+          10.56533,
+          6.26319,
+          16.71503
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "603",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT944-3264",
+        "LA072790-0059",
+        "FT942-1181",
+        "FT942-15472",
+        "LA081990-0051"
+      ],
+      "entries": {
+        "rankseal": 320,
+        "rankfence": 320
+      },
+      "time_ms": {
+        "rankfence": [
+          0.28007,
+          0.26825,
+          0.24925
+        ],
+        "rankseal": [
+          0.39637,
+          0.38787,
+          0.37382
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "603",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FT944-3264",
+        "6/LA072790-0059",
+        "5/FT942-1181",
+        "2/FT942-15472",
+        "7/LA032189-0143"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "partition_retire": 512,
+        "rankfence": 4000,
+        "rankseal_local_merge": 768,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          1.64243,
+          1.69692,
+          1.7186
+        ],
+        "rankseal": [
+          8.56672,
+          20.07993,
+          8.26048
+        ],
+        "partitionfence": [
+          0.81753,
+          0.81504,
+          0.77882
+        ],
+        "partition_retire": [
+          0.75164,
+          0.83631,
+          0.7757
+        ],
+        "rankfence": [
+          6.01993,
+          11.77955,
+          6.0017
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "604",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA092090-0248",
+        "LA112690-0027",
+        "LA061389-0087",
+        "LA071989-0117",
+        "LA073090-0058"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.11888,
+          0.14486,
+          0.11203
+        ],
+        "rankfence": [
+          0.10364,
+          0.09586,
+          0.0892
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "604",
+      "entries_available": 4000,
+      "exact_top": [
+        "5/LA092090-0248",
+        "6/LA081989-0064",
+        "7/LA112690-0027",
+        "1/LA061389-0087",
+        "2/LA073090-0058"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankseal_local_merge": 704,
+        "partitionfence": 512,
+        "partition_retire": 512,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.73991,
+          0.53778,
+          0.54733
+        ],
+        "rankseal_local_merge": [
+          1.26428,
+          1.08558,
+          1.14617
+        ],
+        "rankfence": [
+          4.38795,
+          18.49271,
+          4.38169
+        ],
+        "partition_retire": [
+          0.58279,
+          0.6002,
+          0.57938
+        ],
+        "rankseal": [
+          6.30894,
+          6.19466,
+          6.01811
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "605",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA060489-0030",
+        "FR940527-1-00247",
+        "LA040990-0065",
+        "LA061790-0021",
+        "LA013089-0099"
+      ],
+      "entries": {
+        "rankseal": 320,
+        "rankfence": 320
+      },
+      "time_ms": {
+        "rankfence": [
+          0.2387,
+          0.24193,
+          0.25396
+        ],
+        "rankseal": [
+          0.38005,
+          0.33484,
+          0.36527
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "605",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/LA060489-0030",
+        "0/LA061790-0021",
+        "3/LA013089-0099",
+        "1/LA040990-0065",
+        "1/FR940527-1-00247"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "rankseal_local_merge": 1654,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          2.43758,
+          2.40844,
+          2.24898
+        ],
+        "rankseal": [
+          16.199,
+          6.22812,
+          6.25714
+        ],
+        "partitionfence": [
+          0.53765,
+          0.52737,
+          0.482
+        ],
+        "partition_retire": [
+          0.47998,
+          0.64043,
+          0.56278
+        ],
+        "rankfence": [
+          4.89265,
+          4.23471,
+          4.1731
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "606",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA052489-0063",
+        "LA042889-0181",
+        "LA040390-0013",
+        "LA091489-0077",
+        "LA082390-0001"
+      ],
+      "entries": {
+        "rankfence": 128,
+        "rankseal": 128
+      },
+      "time_ms": {
+        "rankseal": [
+          0.15207,
+          0.19536,
+          0.2341
+        ],
+        "rankfence": [
+          0.12571,
+          9.8161,
+          0.13118
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "606",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/LA052489-0063",
+        "5/LA042889-0181",
+        "6/LA082390-0001",
+        "2/LA091489-0077",
+        "4/LA073189-0072"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal_local_merge": 2030,
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          5.94307,
+          5.97472,
+          4.38894
+        ],
+        "rankseal_local_merge": [
+          4.24427,
+          4.49919,
+          12.86143
+        ],
+        "partition_retire": [
+          0.83914,
+          0.61988,
+          0.68797
+        ],
+        "partitionfence": [
+          0.78616,
+          0.78453,
+          0.5446
+        ],
+        "rankseal": [
+          10.4401,
+          8.49167,
+          17.40019
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "607",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA062589-0077",
+        "FT934-1290",
+        "LA121790-0086",
+        "FT934-2039",
+        "FT944-17394"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.0788,
+          0.07702,
+          0.07512
+        ],
+        "rankfence": [
+          0.06843,
+          0.06112,
+          0.05772
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "607",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/FT934-1290",
+        "4/LA062589-0077",
+        "6/FT934-2039",
+        "5/FT944-17394",
+        "3/LA121790-0086"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "rankseal_local_merge": 960
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.57174,
+          0.59416,
+          0.58633
+        ],
+        "rankseal": [
+          6.6775,
+          8.72921,
+          6.20317
+        ],
+        "partitionfence": [
+          0.56172,
+          0.55193,
+          0.64845
+        ],
+        "rankseal_local_merge": [
+          1.65245,
+          1.39554,
+          1.52551
+        ],
+        "rankfence": [
+          4.42687,
+          4.25424,
+          4.54651
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "608",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA020490-0205",
+        "LA090689-0110",
+        "LA040190-0172",
+        "FT924-6213",
+        "FBIS4-25388"
+      ],
+      "entries": {
+        "rankfence": 3840,
+        "rankseal": 3840
+      },
+      "time_ms": {
+        "rankfence": [
+          8.01967,
+          4.39342,
+          3.95466
+        ],
+        "rankseal": [
+          41.78809,
+          6.3897,
+          6.17706
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "608",
+      "entries_available": 4000,
+      "exact_top": [
+        "7/LA020490-0205",
+        "1/LA040190-0172",
+        "3/FR941125-2-00099",
+        "6/LA090689-0110",
+        "7/FT924-6213"
+      ],
+      "entries": {
+        "partition_retire": 1344,
+        "rankseal": 4000,
+        "rankseal_local_merge": 3292,
+        "rankfence": 4000,
+        "partitionfence": 1536
+      },
+      "time_ms": {
+        "rankfence": [
+          4.04051,
+          14.06279,
+          4.73828
+        ],
+        "partition_retire": [
+          1.32672,
+          1.33801,
+          1.34971
+        ],
+        "partitionfence": [
+          1.33878,
+          1.4066,
+          1.60272
+        ],
+        "rankseal_local_merge": [
+          4.57343,
+          5.40699,
+          5.25955
+        ],
+        "rankseal": [
+          5.88066,
+          6.25539,
+          17.35109
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "609",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-9210",
+        "FBIS3-20587",
+        "LA070690-0084",
+        "LA030689-0022",
+        "FR940617-2-00242"
+      ],
+      "entries": {
+        "rankfence": 768,
+        "rankseal": 768
+      },
+      "time_ms": {
+        "rankfence": [
+          0.62047,
+          0.62902,
+          0.69273
+        ],
+        "rankseal": [
+          1.10887,
+          1.56379,
+          1.34905
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "609",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FBIS3-9210",
+        "3/FBIS3-20587",
+        "6/LA070690-0084",
+        "1/FR940617-2-00242",
+        "7/LA030689-0022"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "partition_retire": 832,
+        "rankseal_local_merge": 2885,
+        "partitionfence": 1024,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.87646,
+          0.84176,
+          0.88668
+        ],
+        "rankseal_local_merge": [
+          4.27315,
+          13.92877,
+          4.4818
+        ],
+        "rankfence": [
+          4.34358,
+          4.22884,
+          4.217
+        ],
+        "rankseal": [
+          6.12966,
+          5.89895,
+          5.58193
+        ],
+        "partitionfence": [
+          1.05215,
+          1.05544,
+          1.04098
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "610",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT921-280",
+        "FT924-9284",
+        "FT921-5263",
+        "FT934-14971",
+        "FR940830-1-00028"
+      ],
+      "entries": {
+        "rankseal": 448,
+        "rankfence": 448
+      },
+      "time_ms": {
+        "rankseal": [
+          0.64781,
+          0.57964,
+          0.50964
+        ],
+        "rankfence": [
+          0.52508,
+          0.35236,
+          0.36161
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "610",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FT921-280",
+        "3/FT924-9284",
+        "1/FT921-369",
+        "5/FT921-5263",
+        "5/FT934-14971"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "partition_retire": 512,
+        "rankseal_local_merge": 2162,
+        "rankfence": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankseal": [
+          7.05518,
+          16.5445,
+          6.20323
+        ],
+        "rankfence": [
+          4.72845,
+          4.56383,
+          4.83051
+        ],
+        "rankseal_local_merge": [
+          3.31241,
+          3.10553,
+          3.95638
+        ],
+        "partitionfence": [
+          0.59129,
+          0.57381,
+          0.48768
+        ],
+        "partition_retire": [
+          0.51898,
+          0.47846,
+          0.54011
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "611",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-19897",
+        "FBIS4-21941",
+        "FBIS3-19974",
+        "FBIS4-22118",
+        "FBIS4-46313"
+      ],
+      "entries": {
+        "rankseal": 128,
+        "rankfence": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.11721,
+          0.14248,
+          0.12713
+        ],
+        "rankseal": [
+          0.1537,
+          0.14239,
+          0.30089
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "611",
+      "entries_available": 4000,
+      "exact_top": [
+        "5/FBIS4-21941",
+        "2/FBIS4-22118",
+        "3/FBIS3-19897",
+        "0/FBIS3-19974",
+        "7/FBIS4-18073"
+      ],
+      "entries": {
+        "rankseal_local_merge": 768,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.57315,
+          0.56775,
+          0.54897
+        ],
+        "rankseal": [
+          6.30154,
+          6.35773,
+          6.46154
+        ],
+        "rankseal_local_merge": [
+          1.227,
+          1.21813,
+          1.1162
+        ],
+        "partitionfence": [
+          0.56389,
+          0.5472,
+          0.55914
+        ],
+        "rankfence": [
+          3.98129,
+          3.97665,
+          4.02212
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "612",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA030989-0104",
+        "LA030689-0004",
+        "LA012189-0056",
+        "LA013089-0055",
+        "FBIS4-24390"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankfence": [
+          0.06187,
+          0.06414,
+          0.05715
+        ],
+        "rankseal": [
+          0.08356,
+          0.07747,
+          0.07762
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "612",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA030689-0004",
+        "3/LA030989-0104",
+        "6/LA031489-0010",
+        "1/FBIS4-24470",
+        "4/LA013089-0055"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankseal_local_merge": 768,
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.62999,
+          0.57727,
+          0.60637
+        ],
+        "rankfence": [
+          4.63257,
+          4.39857,
+          4.36668
+        ],
+        "rankseal": [
+          6.99357,
+          6.63634,
+          6.05815
+        ],
+        "rankseal_local_merge": [
+          1.36197,
+          1.12688,
+          1.16023
+        ],
+        "partition_retire": [
+          0.78322,
+          0.58062,
+          0.63349
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "613",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA112089-0031",
+        "LA122389-0019",
+        "LA090290-0181",
+        "LA012890-0072",
+        "LA041390-0085"
+      ],
+      "entries": {
+        "rankseal": 128,
+        "rankfence": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.11546,
+          0.11521,
+          0.10475
+        ],
+        "rankseal": [
+          0.17668,
+          0.1483,
+          0.1475
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "613",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA112089-0031",
+        "2/LA111489-0164",
+        "4/LA041390-0085",
+        "7/LA012890-0072",
+        "7/LA090290-0181"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 640,
+        "rankseal": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.53595,
+          0.54119,
+          0.64722
+        ],
+        "partition_retire": [
+          0.69991,
+          0.59769,
+          0.60917
+        ],
+        "rankfence": [
+          4.41607,
+          4.58406,
+          5.07196
+        ],
+        "rankseal": [
+          17.32455,
+          7.20455,
+          6.65081
+        ],
+        "rankseal_local_merge": [
+          1.13923,
+          1.13487,
+          1.15798
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "614",
+      "entries_available": 4000,
+      "exact_top": [
+        "FR941003-2-00006",
+        "FR940523-2-00056",
+        "FT941-7775",
+        "FT943-15996",
+        "FT942-8796"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.11861,
+          0.07773,
+          0.07473
+        ],
+        "rankfence": [
+          0.06565,
+          0.05651,
+          0.05618
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "614",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FT941-7775",
+        "4/FR941003-2-00006",
+        "6/FT941-3180",
+        "7/FT942-8796",
+        "1/FR940523-2-00056"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 2465
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.93147,
+          0.60567,
+          0.53859
+        ],
+        "rankfence": [
+          8.55616,
+          4.20369,
+          4.99663
+        ],
+        "rankseal": [
+          10.906,
+          6.33079,
+          6.43168
+        ],
+        "rankseal_local_merge": [
+          9.8116,
+          3.68335,
+          3.53631
+        ],
+        "partition_retire": [
+          0.64929,
+          0.56507,
+          0.62323
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "615",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA051690-0109",
+        "LA011589-0113",
+        "LA062689-0014",
+        "LA062889-0008",
+        "LA082190-0004"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankfence": [
+          0.13259,
+          0.06703,
+          0.06604
+        ],
+        "rankseal": [
+          0.09393,
+          0.07929,
+          0.1163
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "615",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA011589-0113",
+        "2/LA051690-0109",
+        "3/LA062689-0014",
+        "6/LA062989-0101",
+        "1/FT932-10619"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal_local_merge": 1088,
+        "rankseal": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.51803,
+          0.89865,
+          0.78392
+        ],
+        "partition_retire": [
+          0.52387,
+          0.83707,
+          0.83241
+        ],
+        "rankseal_local_merge": [
+          1.56675,
+          2.32765,
+          2.32653
+        ],
+        "rankfence": [
+          4.41314,
+          6.19322,
+          6.25758
+        ],
+        "rankseal": [
+          18.90852,
+          18.24521,
+          8.73862
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "616",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT934-13096",
+        "FT944-6905",
+        "FT924-12512",
+        "FBIS3-29850",
+        "FT921-4982"
+      ],
+      "entries": {
+        "rankseal": 128,
+        "rankfence": 128
+      },
+      "time_ms": {
+        "rankseal": [
+          0.24481,
+          0.21294,
+          0.208
+        ],
+        "rankfence": [
+          0.16445,
+          0.15774,
+          0.15355
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "616",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/FT944-6905",
+        "4/FBIS3-29850",
+        "6/FT934-13096",
+        "1/FT921-4982",
+        "5/FT923-10115"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal_local_merge": 1024,
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          6.18691,
+          6.13812,
+          21.69237
+        ],
+        "partitionfence": [
+          0.82691,
+          0.79795,
+          9.0078
+        ],
+        "partition_retire": [
+          0.7804,
+          0.79321,
+          0.78718
+        ],
+        "rankseal": [
+          8.72923,
+          8.76424,
+          20.14062
+        ],
+        "rankseal_local_merge": [
+          2.12288,
+          2.13238,
+          2.42102
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "617",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-10222",
+        "FBIS4-38627",
+        "FT942-12807",
+        "FBIS3-51160",
+        "FT933-11808"
+      ],
+      "entries": {
+        "rankseal": 1088,
+        "rankfence": 1088
+      },
+      "time_ms": {
+        "rankfence": [
+          1.63418,
+          1.46549,
+          1.87897
+        ],
+        "rankseal": [
+          3.03573,
+          3.09691,
+          2.99811
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "617",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FBIS4-38627",
+        "7/FT942-12807",
+        "5/FBIS4-10222",
+        "0/FT943-3753",
+        "7/FBIS3-51160"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "rankseal_local_merge": 2240,
+        "partition_retire": 960,
+        "partitionfence": 1024
+      },
+      "time_ms": {
+        "partition_retire": [
+          1.41688,
+          1.42188,
+          1.5222
+        ],
+        "rankseal_local_merge": [
+          4.73055,
+          4.63271,
+          4.75819
+        ],
+        "partitionfence": [
+          1.44928,
+          1.49483,
+          1.48038
+        ],
+        "rankfence": [
+          6.80989,
+          6.22322,
+          6.08079
+        ],
+        "rankseal": [
+          10.5433,
+          8.69253,
+          10.35324
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "618",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA021590-0206",
+        "LA060690-0084",
+        "LA060589-0062",
+        "LA031889-0055",
+        "LA122790-0078"
+      ],
+      "entries": {
+        "rankfence": 192,
+        "rankseal": 192
+      },
+      "time_ms": {
+        "rankfence": [
+          0.25184,
+          0.27174,
+          0.24088
+        ],
+        "rankseal": [
+          0.38993,
+          0.34544,
+          0.32395
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "618",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/LA031889-0055",
+        "0/LA021590-0206",
+        "4/LA060589-0062",
+        "6/LA122790-0078",
+        "0/LA060690-0084"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "rankseal_local_merge": 576,
+        "partitionfence": 512,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankseal": [
+          6.68698,
+          6.30099,
+          7.40325
+        ],
+        "partitionfence": [
+          0.72149,
+          0.58553,
+          0.67827
+        ],
+        "rankfence": [
+          5.30175,
+          4.55704,
+          22.82608
+        ],
+        "partition_retire": [
+          0.64371,
+          0.68615,
+          0.56086
+        ],
+        "rankseal_local_merge": [
+          0.95375,
+          1.07241,
+          0.98439
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "619",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA051490-0058",
+        "LA021789-0053",
+        "LA052590-0178",
+        "LA080890-0154",
+        "LA022789-0050"
+      ],
+      "entries": {
+        "rankseal": 128,
+        "rankfence": 128
+      },
+      "time_ms": {
+        "rankseal": [
+          0.16191,
+          0.15257,
+          0.15042
+        ],
+        "rankfence": [
+          0.1237,
+          0.13184,
+          0.11059
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "619",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/LA050290-0157",
+        "6/LA030889-0103",
+        "7/LA021389-0032",
+        "2/LA022789-0050",
+        "3/LA051490-0058"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankseal_local_merge": 576,
+        "rankfence": 4000,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.59512,
+          0.59573,
+          0.5236
+        ],
+        "rankfence": [
+          4.83618,
+          5.23318,
+          4.84927
+        ],
+        "rankseal": [
+          9.56555,
+          6.56276,
+          6.45816
+        ],
+        "rankseal_local_merge": [
+          1.22909,
+          1.00267,
+          0.97175
+        ],
+        "partitionfence": [
+          0.63885,
+          0.72018,
+          0.59035
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "620",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT921-723",
+        "FBIS4-30449",
+        "FT933-16314",
+        "FT942-11106",
+        "FT911-2181"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.10078,
+          0.09355,
+          0.081
+        ],
+        "rankfence": [
+          0.06714,
+          0.20873,
+          0.07
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "620",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FBIS4-30449",
+        "2/FT911-2181",
+        "7/FT921-723",
+        "0/FT942-11106",
+        "3/FT932-5843"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 1152,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          8.72913,
+          4.80739,
+          7.58748
+        ],
+        "partitionfence": [
+          0.91107,
+          0.9724,
+          0.69762
+        ],
+        "partition_retire": [
+          0.80127,
+          0.84571,
+          0.76452
+        ],
+        "rankseal_local_merge": [
+          2.46507,
+          2.08398,
+          1.75212
+        ],
+        "rankseal": [
+          10.94923,
+          22.26644,
+          12.22543
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "621",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT924-9001",
+        "FT924-8156",
+        "LA011390-0037",
+        "FT924-10442",
+        "LA110789-0149"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.11619,
+          0.15478,
+          0.11733
+        ],
+        "rankfence": [
+          0.12071,
+          0.09864,
+          0.08829
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "621",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/FT924-9001",
+        "3/LA121789-0181",
+        "0/FT921-4820",
+        "4/LA040390-0124",
+        "6/FT924-8156"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "rankseal_local_merge": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          6.58282,
+          6.91829,
+          7.29197
+        ],
+        "rankseal_local_merge": [
+          1.24238,
+          1.34433,
+          1.29011
+        ],
+        "rankseal": [
+          12.02894,
+          11.23596,
+          10.99764
+        ],
+        "partitionfence": [
+          1.14703,
+          4.49115,
+          0.87254
+        ],
+        "partition_retire": [
+          0.97542,
+          0.91475,
+          0.87611
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "622",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA032190-0143",
+        "FT942-4386",
+        "FT944-7904",
+        "FT941-8771",
+        "FT944-8135"
+      ],
+      "entries": {
+        "rankseal": 896,
+        "rankfence": 896
+      },
+      "time_ms": {
+        "rankseal": [
+          1.76316,
+          1.69894,
+          1.67498
+        ],
+        "rankfence": [
+          1.08998,
+          0.99962,
+          1.02636
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "622",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/FT942-4386",
+        "4/FT941-8771",
+        "3/LA032190-0143",
+        "3/FT944-7904",
+        "1/FT934-12043"
+      ],
+      "entries": {
+        "rankseal_local_merge": 3965,
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          21.13169,
+          6.16292,
+          6.2722
+        ],
+        "rankseal_local_merge": [
+          11.06383,
+          9.0124,
+          9.18534
+        ],
+        "rankseal": [
+          10.09969,
+          8.62224,
+          9.84086
+        ],
+        "partition_retire": [
+          0.78478,
+          0.64562,
+          0.76516
+        ],
+        "partitionfence": [
+          0.68658,
+          0.70255,
+          0.77547
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "623",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-59903",
+        "FBIS3-43008",
+        "FBIS3-42970",
+        "FBIS4-66855",
+        "FBIS4-13633"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankfence": [
+          0.09356,
+          0.08559,
+          0.07932
+        ],
+        "rankseal": [
+          0.11007,
+          0.10272,
+          0.12696
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "623",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FBIS3-59903",
+        "5/FBIS3-21514",
+        "7/FBIS3-43008",
+        "3/FBIS4-66855",
+        "6/FBIS3-21513"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "rankseal_local_merge": 1216
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          4.0853,
+          6.29421,
+          2.52319
+        ],
+        "rankseal": [
+          9.70448,
+          11.31938,
+          7.30062
+        ],
+        "rankfence": [
+          4.79041,
+          35.02223,
+          4.59855
+        ],
+        "partition_retire": [
+          0.61128,
+          3.22067,
+          0.68927
+        ],
+        "partitionfence": [
+          0.52937,
+          0.94979,
+          0.58743
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "624",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA042690-0184",
+        "LA090889-0075",
+        "LA121089-0218",
+        "LA092789-0060",
+        "LA121489-0151"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.08684,
+          0.08604,
+          0.08121
+        ],
+        "rankfence": [
+          0.07541,
+          0.06442,
+          0.06689
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "624",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/LA090889-0075",
+        "4/LA042690-0184",
+        "5/LA121489-0151",
+        "1/LA121689-0092",
+        "0/LA101289-0116"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 512,
+        "rankseal": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          7.0788,
+          5.62415,
+          5.05828
+        ],
+        "partitionfence": [
+          0.58539,
+          0.55994,
+          0.56639
+        ],
+        "rankseal": [
+          8.13506,
+          7.61889,
+          9.40213
+        ],
+        "partition_retire": [
+          0.68932,
+          0.63211,
+          0.81832
+        ],
+        "rankseal_local_merge": [
+          0.95391,
+          0.86094,
+          0.93476
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "625",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-21838",
+        "FT931-5315",
+        "FBIS4-68065",
+        "FBIS4-58523",
+        "FBIS3-42326"
+      ],
+      "entries": {
+        "rankfence": 128,
+        "rankseal": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.18147,
+          0.17553,
+          0.21469
+        ],
+        "rankseal": [
+          0.23547,
+          0.24497,
+          0.22212
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "625",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FBIS4-21838",
+        "3/FBIS4-68065",
+        "0/FBIS3-23484",
+        "6/FBIS3-42326",
+        "5/FT931-4556"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankseal_local_merge": 2788,
+        "rankfence": 4000,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          4.33861,
+          4.60401,
+          4.36238
+        ],
+        "partition_retire": [
+          0.60969,
+          0.56376,
+          0.5658
+        ],
+        "rankfence": [
+          4.6603,
+          5.31486,
+          5.42716
+        ],
+        "partitionfence": [
+          0.64145,
+          0.56696,
+          0.51428
+        ],
+        "rankseal": [
+          7.77517,
+          8.36534,
+          8.20133
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "626",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT924-13949",
+        "FT923-8486",
+        "FBIS4-60291",
+        "FT942-7622",
+        "FBIS4-60493"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankseal": [
+          27.53919,
+          10.40337,
+          11.51704
+        ],
+        "rankfence": [
+          6.81416,
+          7.85083,
+          7.14438
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "626",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/FT923-8486",
+        "3/FT924-13949",
+        "4/LA071690-0111",
+        "2/LA020889-0137",
+        "1/FBIS4-45057"
+      ],
+      "entries": {
+        "partition_retire": 3968,
+        "rankseal_local_merge": 3942,
+        "partitionfence": 3982,
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankseal": [
+          8.12181,
+          7.46749,
+          7.43696
+        ],
+        "partition_retire": [
+          6.96483,
+          4.49685,
+          5.29412
+        ],
+        "rankseal_local_merge": [
+          11.45861,
+          5.60121,
+          5.96626
+        ],
+        "rankfence": [
+          8.62311,
+          4.96525,
+          4.21982
+        ],
+        "partitionfence": [
+          20.25937,
+          3.87602,
+          4.75415
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "627",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-2982",
+        "FBIS3-27290",
+        "FBIS3-27522",
+        "FBIS3-37832",
+        "FBIS4-16035"
+      ],
+      "entries": {
+        "rankfence": 2496,
+        "rankseal": 2496
+      },
+      "time_ms": {
+        "rankseal": [
+          3.76625,
+          4.09011,
+          4.85538
+        ],
+        "rankfence": [
+          2.59145,
+          2.67484,
+          2.38898
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "627",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FBIS3-2982",
+        "5/FBIS3-27290",
+        "7/FBIS3-27522",
+        "0/FBIS3-17307",
+        "6/FBIS3-42933"
+      ],
+      "entries": {
+        "partition_retire": 960,
+        "rankfence": 4000,
+        "rankseal_local_merge": 2924,
+        "partitionfence": 1024,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          4.30051,
+          4.17398,
+          6.54969
+        ],
+        "partition_retire": [
+          1.01574,
+          1.01025,
+          1.49724
+        ],
+        "rankseal": [
+          7.6963,
+          7.41723,
+          10.58211
+        ],
+        "partitionfence": [
+          1.0061,
+          0.96737,
+          0.92042
+        ],
+        "rankfence": [
+          4.13445,
+          4.99248,
+          5.79872
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "628",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA122189-0026",
+        "LA122189-0130",
+        "LA122589-0055",
+        "LA122289-0030",
+        "LA122589-0054"
+      ],
+      "entries": {
+        "rankseal": 192,
+        "rankfence": 192
+      },
+      "time_ms": {
+        "rankseal": [
+          0.37976,
+          0.38207,
+          0.37246
+        ],
+        "rankfence": [
+          0.31894,
+          0.27114,
+          0.30624
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "628",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/LA122189-0130",
+        "0/LA122589-0055",
+        "1/LA122189-0027",
+        "7/LA122189-0026",
+        "0/LA122289-0030"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal_local_merge": 832,
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          6.63219,
+          9.85518,
+          5.09364
+        ],
+        "partition_retire": [
+          0.91168,
+          0.77788,
+          0.85197
+        ],
+        "rankseal": [
+          18.45099,
+          12.4324,
+          31.86152
+        ],
+        "rankseal_local_merge": [
+          2.08253,
+          4.07521,
+          2.30906
+        ],
+        "partitionfence": [
+          0.98341,
+          1.40278,
+          0.5972
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "629",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT931-4191",
+        "LA031589-0019",
+        "LA012989-0104",
+        "LA070989-0212",
+        "LA011890-0207"
+      ],
+      "entries": {
+        "rankseal": 320,
+        "rankfence": 320
+      },
+      "time_ms": {
+        "rankseal": [
+          0.41695,
+          0.40231,
+          0.38486
+        ],
+        "rankfence": [
+          0.3059,
+          0.25299,
+          0.30378
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "629",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/LA040489-0064",
+        "2/LA041590-0152",
+        "2/LA031190-0213",
+        "6/FT931-4191",
+        "0/LA012989-0104"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankseal_local_merge": 960,
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          1.59738,
+          1.44378,
+          1.4547
+        ],
+        "partition_retire": [
+          0.7599,
+          0.67184,
+          0.65833
+        ],
+        "partitionfence": [
+          0.50716,
+          0.65069,
+          0.50155
+        ],
+        "rankseal": [
+          6.92837,
+          7.65915,
+          10.0334
+        ],
+        "rankfence": [
+          4.12475,
+          4.71057,
+          4.63198
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "630",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-41804",
+        "FBIS4-67633",
+        "FT944-16460",
+        "FT944-11095",
+        "FBIS3-22143"
+      ],
+      "entries": {
+        "rankfence": 128,
+        "rankseal": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.13667,
+          0.1237,
+          0.11439
+        ],
+        "rankseal": [
+          0.21024,
+          0.19661,
+          0.2253
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "630",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FT944-16460",
+        "6/FT944-11095",
+        "1/FBIS3-22143",
+        "7/FBIS3-41804",
+        "7/FBIS4-67633"
+      ],
+      "entries": {
+        "rankseal_local_merge": 2148,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          5.46285,
+          5.85665,
+          4.62682
+        ],
+        "partition_retire": [
+          0.75873,
+          0.64826,
+          0.55363
+        ],
+        "rankseal": [
+          8.21868,
+          20.32617,
+          6.85198
+        ],
+        "partitionfence": [
+          0.75155,
+          0.6582,
+          0.55327
+        ],
+        "rankseal_local_merge": [
+          3.27583,
+          3.39306,
+          3.6278
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "631",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS4-52427",
+        "FBIS4-49232",
+        "FBIS4-59405",
+        "LA021190-0179",
+        "FBIS4-49677"
+      ],
+      "entries": {
+        "rankseal": 640,
+        "rankfence": 640
+      },
+      "time_ms": {
+        "rankfence": [
+          0.52777,
+          0.52436,
+          0.50612
+        ],
+        "rankseal": [
+          0.95051,
+          0.83299,
+          0.88868
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "631",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FBIS4-52427",
+        "6/FBIS4-49232",
+        "4/FBIS4-59405",
+        "0/FBIS4-55563",
+        "5/LA021190-0179"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal_local_merge": 1216,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          4.79491,
+          18.36813,
+          13.96237
+        ],
+        "rankseal_local_merge": [
+          1.8186,
+          2.21055,
+          3.08491
+        ],
+        "rankseal": [
+          8.00383,
+          9.56042,
+          9.3751
+        ],
+        "partition_retire": [
+          0.58694,
+          0.49426,
+          0.72892
+        ],
+        "partitionfence": [
+          0.61491,
+          0.51259,
+          0.59927
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "632",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT932-11184",
+        "FT931-345",
+        "FT932-8569",
+        "FT942-9756",
+        "FT932-2680"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          7.79717,
+          24.6285,
+          4.43272
+        ],
+        "rankseal": [
+          11.49629,
+          8.69547,
+          6.65537
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "632",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FBIS4-2743",
+        "6/FBIS4-48987",
+        "3/FBIS3-7110",
+        "7/FBIS4-28050",
+        "5/FT931-345"
+      ],
+      "entries": {
+        "partition_retire": 2816,
+        "rankseal_local_merge": 3986,
+        "partitionfence": 3072,
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "partitionfence": [
+          4.03104,
+          3.25783,
+          3.6753
+        ],
+        "partition_retire": [
+          3.20656,
+          4.02136,
+          3.2307
+        ],
+        "rankseal_local_merge": [
+          6.54028,
+          5.90962,
+          6.38078
+        ],
+        "rankseal": [
+          7.449,
+          6.90582,
+          19.00159
+        ],
+        "rankfence": [
+          4.38128,
+          5.26404,
+          4.88956
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "633",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT922-15171",
+        "FT944-13056",
+        "FT921-6952",
+        "FT921-10574",
+        "FT922-13589"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankfence": [
+          0.15207,
+          0.08103,
+          0.08534
+        ],
+        "rankseal": [
+          0.14232,
+          0.12948,
+          0.22084
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "633",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/FT921-10574",
+        "1/FT922-13589",
+        "3/FT944-13056",
+        "4/FT922-15171",
+        "6/FT922-14090"
+      ],
+      "entries": {
+        "rankseal_local_merge": 1664,
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          5.45076,
+          61.30223,
+          10.04192
+        ],
+        "rankseal": [
+          35.3793,
+          40.29739,
+          27.65464
+        ],
+        "rankseal_local_merge": [
+          5.89903,
+          38.40792,
+          3.90954
+        ],
+        "partition_retire": [
+          1.36144,
+          1.23803,
+          1.8735
+        ],
+        "partitionfence": [
+          1.1725,
+          1.06863,
+          0.90919
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "634",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA032390-0070",
+        "LA061390-0007",
+        "LA071090-0010",
+        "LA020890-0085",
+        "LA071090-0055"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankfence": [
+          0.11345,
+          0.16648,
+          0.10647
+        ],
+        "rankseal": [
+          0.08922,
+          0.0981,
+          0.19597
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "634",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA032390-0070",
+        "1/LA071090-0055",
+        "5/LA061390-0007",
+        "6/LA020890-0085",
+        "2/LA071090-0010"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "rankseal_local_merge": 832,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "partitionfence": [
+          0.84532,
+          0.85978,
+          0.79437
+        ],
+        "rankfence": [
+          6.4503,
+          6.30563,
+          6.83856
+        ],
+        "rankseal": [
+          10.17906,
+          9.3958,
+          9.56838
+        ],
+        "partition_retire": [
+          0.83685,
+          0.8436,
+          0.84401
+        ],
+        "rankseal_local_merge": [
+          1.75469,
+          1.764,
+          1.74825
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "635",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA060690-0053",
+        "LA062190-0255",
+        "LA121490-0059",
+        "LA061690-0004",
+        "LA121390-0235"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.08786,
+          0.08052,
+          0.07726
+        ],
+        "rankfence": [
+          0.06705,
+          0.06128,
+          0.0559
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "635",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/LA062190-0255",
+        "4/LA121490-0059",
+        "5/LA061690-0005",
+        "6/LA060690-0053",
+        "0/LA061690-0003"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal_local_merge": 1344,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          15.23635,
+          7.18096,
+          6.33406
+        ],
+        "rankseal_local_merge": [
+          3.84654,
+          3.19172,
+          3.10833
+        ],
+        "partition_retire": [
+          1.29693,
+          0.78517,
+          0.55916
+        ],
+        "rankseal": [
+          13.39778,
+          33.74235,
+          12.15388
+        ],
+        "partitionfence": [
+          0.80975,
+          0.99643,
+          0.62936
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "636",
+      "entries_available": 4000,
+      "exact_top": [
+        "FR940727-0-00085",
+        "LA012089-0096",
+        "LA050289-0019",
+        "LA021789-0063",
+        "FR940727-0-00084"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          5.6398,
+          6.37933,
+          6.68559
+        ],
+        "rankseal": [
+          9.19878,
+          9.54267,
+          34.86681
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "636",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/FR940414-1-00021",
+        "1/LA050289-0019",
+        "1/LA012089-0096",
+        "0/LA081590-0083",
+        "5/FBIS4-68734"
+      ],
+      "entries": {
+        "partition_retire": 3981,
+        "rankseal_local_merge": 4000,
+        "rankfence": 4000,
+        "partitionfence": 4000,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          11.01782,
+          9.22821,
+          7.93132
+        ],
+        "rankseal": [
+          11.25031,
+          12.35106,
+          22.85126
+        ],
+        "rankfence": [
+          5.48424,
+          7.45986,
+          4.83906
+        ],
+        "partition_retire": [
+          11.28321,
+          5.62869,
+          5.54103
+        ],
+        "partitionfence": [
+          5.6894,
+          5.90043,
+          11.86519
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "637",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA122890-0150",
+        "LA092889-0142",
+        "LA010190-0021",
+        "LA092189-0166",
+        "LA110490-0091"
+      ],
+      "entries": {
+        "rankseal": 128,
+        "rankfence": 128
+      },
+      "time_ms": {
+        "rankseal": [
+          0.26152,
+          0.25801,
+          0.22121
+        ],
+        "rankfence": [
+          0.19363,
+          0.21246,
+          0.15371
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "637",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FT924-14004",
+        "6/FT932-1217",
+        "7/LA041789-0062",
+        "0/LA092889-0193",
+        "2/LA110490-0091"
+      ],
+      "entries": {
+        "rankseal_local_merge": 1216,
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankseal_local_merge": [
+          2.61246,
+          2.40096,
+          2.17903
+        ],
+        "partitionfence": [
+          0.62316,
+          0.65809,
+          0.59603
+        ],
+        "partition_retire": [
+          0.54245,
+          0.65412,
+          0.84746
+        ],
+        "rankfence": [
+          5.82629,
+          5.17419,
+          5.22092
+        ],
+        "rankseal": [
+          7.9905,
+          7.9936,
+          8.28405
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "638",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA042689-0016",
+        "LA122390-0123",
+        "LA011190-0084",
+        "LA032289-0026",
+        "LA031690-0082"
+      ],
+      "entries": {
+        "rankseal": 3328,
+        "rankfence": 3328
+      },
+      "time_ms": {
+        "rankseal": [
+          7.25684,
+          6.95951,
+          6.73666
+        ],
+        "rankfence": [
+          4.4247,
+          3.48782,
+          3.61516
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "638",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/LA042689-0016",
+        "6/LA122390-0123",
+        "6/LA120190-0130",
+        "4/FT942-13988",
+        "0/FT922-8629"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "partition_retire": 1024,
+        "rankseal_local_merge": 3200,
+        "partitionfence": 1024,
+        "rankseal": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          4.65371,
+          5.21484,
+          4.79911
+        ],
+        "partitionfence": [
+          1.02786,
+          1.1909,
+          1.06958
+        ],
+        "rankseal_local_merge": [
+          4.63359,
+          4.89923,
+          4.92369
+        ],
+        "partition_retire": [
+          1.58456,
+          1.80016,
+          1.11831
+        ],
+        "rankseal": [
+          9.63504,
+          8.68335,
+          23.04977
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "639",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT932-646",
+        "FT942-1663",
+        "FT934-7363",
+        "FT944-16689",
+        "FT932-3205"
+      ],
+      "entries": {
+        "rankseal": 896,
+        "rankfence": 896
+      },
+      "time_ms": {
+        "rankseal": [
+          1.46762,
+          1.20174,
+          1.55154
+        ],
+        "rankfence": [
+          1.06676,
+          0.74349,
+          0.83695
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "639",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FT932-646",
+        "6/FT934-7363",
+        "2/FT942-1663",
+        "0/FT932-3205",
+        "2/LA111989-0148"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankseal_local_merge": 3335,
+        "rankfence": 4000,
+        "partitionfence": 1536,
+        "partition_retire": 1216
+      },
+      "time_ms": {
+        "rankseal": [
+          12.10489,
+          9.57659,
+          8.36576
+        ],
+        "partition_retire": [
+          2.0046,
+          1.86609,
+          1.91749
+        ],
+        "rankseal_local_merge": [
+          7.16,
+          7.13637,
+          7.52929
+        ],
+        "rankfence": [
+          6.4886,
+          6.49438,
+          6.55384
+        ],
+        "partitionfence": [
+          2.16156,
+          2.16858,
+          2.28442
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "640",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT933-467",
+        "FT931-8172",
+        "FT944-15308",
+        "FT931-9324",
+        "FT944-15813"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.12369,
+          0.11729,
+          0.11061
+        ],
+        "rankfence": [
+          0.09479,
+          0.08414,
+          0.08858
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "640",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/FT931-9324",
+        "2/FT931-8172",
+        "4/FT944-15308",
+        "6/FT933-467",
+        "3/FT924-13064"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankseal": 4000,
+        "rankseal_local_merge": 576,
+        "rankfence": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          22.66922,
+          4.17897,
+          4.16403
+        ],
+        "rankseal_local_merge": [
+          0.89705,
+          0.85909,
+          0.86189
+        ],
+        "rankseal": [
+          6.66684,
+          5.62751,
+          5.68679
+        ],
+        "partitionfence": [
+          0.61527,
+          0.56241,
+          0.87279
+        ],
+        "partition_retire": [
+          0.51633,
+          0.5578,
+          0.53214
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "641",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA120989-0014",
+        "LA032589-0044",
+        "LA060189-0093",
+        "LA032789-0038",
+        "LA060589-0044"
+      ],
+      "entries": {
+        "rankseal": 192,
+        "rankfence": 192
+      },
+      "time_ms": {
+        "rankseal": [
+          0.23957,
+          0.22371,
+          0.23074
+        ],
+        "rankfence": [
+          0.16679,
+          0.16905,
+          0.16284
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "641",
+      "entries_available": 4000,
+      "exact_top": [
+        "1/LA032589-0044",
+        "3/LA120989-0014",
+        "7/LA060189-0093",
+        "0/LA032789-0038",
+        "7/LA052589-0145"
+      ],
+      "entries": {
+        "rankseal_local_merge": 704,
+        "rankseal": 4000,
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "partition_retire": 512
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.52497,
+          0.53546,
+          0.53641
+        ],
+        "rankfence": [
+          3.91339,
+          3.92203,
+          3.92025
+        ],
+        "rankseal": [
+          5.8005,
+          5.73843,
+          7.26741
+        ],
+        "rankseal_local_merge": [
+          1.03584,
+          0.99406,
+          1.01111
+        ],
+        "partitionfence": [
+          0.5513,
+          0.52705,
+          0.53711
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "642",
+      "entries_available": 4000,
+      "exact_top": [
+        "FBIS3-3664",
+        "FBIS3-3433",
+        "FBIS3-3418",
+        "FBIS4-2849",
+        "FBIS3-3663"
+      ],
+      "entries": {
+        "rankfence": 64,
+        "rankseal": 64
+      },
+      "time_ms": {
+        "rankfence": [
+          0.06614,
+          0.06132,
+          0.05569
+        ],
+        "rankseal": [
+          0.09118,
+          0.06921,
+          0.06875
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "642",
+      "entries_available": 4000,
+      "exact_top": [
+        "4/FBIS3-3663",
+        "5/FBIS3-3418",
+        "7/FBIS3-3433",
+        "7/FBIS3-3664",
+        "0/FBIS4-24379"
+      ],
+      "entries": {
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankseal_local_merge": 768
+      },
+      "time_ms": {
+        "rankfence": [
+          16.28022,
+          4.26561,
+          4.25176
+        ],
+        "rankseal_local_merge": [
+          1.29109,
+          1.22829,
+          1.30336
+        ],
+        "partition_retire": [
+          0.58674,
+          0.55379,
+          0.57617
+        ],
+        "rankseal": [
+          7.07763,
+          6.2034,
+          6.36941
+        ],
+        "partitionfence": [
+          0.5814,
+          0.61448,
+          0.56456
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "643",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT942-17447",
+        "FR941011-2-00026",
+        "FR940603-1-00034",
+        "FR940527-2-00133",
+        "FR940907-2-00003"
+      ],
+      "entries": {
+        "rankfence": 128,
+        "rankseal": 128
+      },
+      "time_ms": {
+        "rankfence": [
+          0.15201,
+          0.14624,
+          0.12921
+        ],
+        "rankseal": [
+          0.1502,
+          0.13737,
+          0.14385
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "643",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/FR940603-1-00034",
+        "3/FR940527-2-00133",
+        "5/FT942-17447",
+        "0/LA100189-0102",
+        "6/FR941011-2-00026"
+      ],
+      "entries": {
+        "rankseal_local_merge": 1472,
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "partition_retire": [
+          0.53446,
+          0.82072,
+          0.82994
+        ],
+        "rankfence": [
+          7.07943,
+          6.27341,
+          6.03788
+        ],
+        "partitionfence": [
+          0.83253,
+          0.84516,
+          0.80842
+        ],
+        "rankseal_local_merge": [
+          3.21912,
+          3.17826,
+          3.07543
+        ],
+        "rankseal": [
+          9.08703,
+          8.78543,
+          8.88523
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "644",
+      "entries_available": 4000,
+      "exact_top": [
+        "FR940628-1-00012",
+        "LA070190-0086",
+        "LA022289-0056",
+        "FT921-16211",
+        "FR940325-2-00119"
+      ],
+      "entries": {
+        "rankfence": 256,
+        "rankseal": 256
+      },
+      "time_ms": {
+        "rankseal": [
+          0.40186,
+          0.41411,
+          0.41585
+        ],
+        "rankfence": [
+          0.34033,
+          0.30719,
+          0.2971
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "644",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/LA070190-0086",
+        "5/FR940628-1-00012",
+        "3/LA022289-0056",
+        "0/FT921-16211",
+        "7/FR940325-2-00123"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankseal_local_merge": 2750,
+        "partition_retire": 512,
+        "partitionfence": 512,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          3.98795,
+          4.1913,
+          4.12414
+        ],
+        "rankseal": [
+          7.41768,
+          5.87123,
+          6.30972
+        ],
+        "partition_retire": [
+          0.56848,
+          0.50111,
+          0.49255
+        ],
+        "rankseal_local_merge": [
+          3.88849,
+          3.91558,
+          4.00226
+        ],
+        "partitionfence": [
+          0.52445,
+          0.55145,
+          0.54888
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "645",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT944-16684",
+        "FT931-8281",
+        "FT942-9936",
+        "FT932-5610",
+        "FT924-4322"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.08335,
+          0.10476,
+          0.07739
+        ],
+        "rankfence": [
+          0.06806,
+          0.0652,
+          0.05957
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "645",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FT924-2798",
+        "0/FT944-15783",
+        "1/LA102290-0109",
+        "2/FT944-16684",
+        "5/FT934-5574"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 576
+      },
+      "time_ms": {
+        "rankfence": [
+          4.28558,
+          17.6698,
+          4.23782
+        ],
+        "rankseal_local_merge": [
+          0.93977,
+          0.98894,
+          0.93827
+        ],
+        "rankseal": [
+          6.91054,
+          6.429,
+          6.37615
+        ],
+        "partition_retire": [
+          0.62523,
+          0.59362,
+          0.58491
+        ],
+        "partitionfence": [
+          0.58964,
+          0.54247,
+          0.60836
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "646",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA041590-0171",
+        "LA082190-0091",
+        "LA082090-0113",
+        "LA102190-0122",
+        "FR940119-1-00003"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankseal": [
+          0.08684,
+          0.07855,
+          0.07065
+        ],
+        "rankfence": [
+          0.07,
+          0.05851,
+          0.06442
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "646",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA102190-0122",
+        "3/LA082890-0006",
+        "5/FR940830-1-00099",
+        "6/FR941020-1-00008",
+        "7/LA082090-0113"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "rankseal_local_merge": 1259,
+        "partitionfence": 512,
+        "partition_retire": 512,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          4.09339,
+          4.18985,
+          6.56313
+        ],
+        "rankseal": [
+          5.97762,
+          6.38616,
+          8.77705
+        ],
+        "rankseal_local_merge": [
+          1.874,
+          2.83628,
+          2.80787
+        ],
+        "partition_retire": [
+          0.58177,
+          0.54451,
+          0.83537
+        ],
+        "partitionfence": [
+          0.51244,
+          0.52668,
+          0.85263
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "647",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA081290-0130",
+        "FBIS4-47519",
+        "LA071290-0149",
+        "LA110490-0015",
+        "FT931-7968"
+      ],
+      "entries": {
+        "rankfence": 192,
+        "rankseal": 192
+      },
+      "time_ms": {
+        "rankseal": [
+          0.33924,
+          0.33768,
+          0.34003
+        ],
+        "rankfence": [
+          0.23517,
+          0.24281,
+          0.2545
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "647",
+      "entries_available": 4000,
+      "exact_top": [
+        "2/FBIS4-47519",
+        "1/LA071290-0149",
+        "7/LA081290-0130",
+        "3/LA110490-0015",
+        "5/LA110890-0070"
+      ],
+      "entries": {
+        "partitionfence": 512,
+        "rankfence": 4000,
+        "partition_retire": 512,
+        "rankseal": 4000,
+        "rankseal_local_merge": 3368
+      },
+      "time_ms": {
+        "rankseal": [
+          6.36346,
+          6.17793,
+          5.46819
+        ],
+        "rankfence": [
+          5.00005,
+          4.19692,
+          4.10628
+        ],
+        "partitionfence": [
+          0.61839,
+          0.52785,
+          0.53177
+        ],
+        "partition_retire": [
+          0.49198,
+          0.51885,
+          0.49924
+        ],
+        "rankseal_local_merge": [
+          4.84168,
+          4.73025,
+          5.10591
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "648",
+      "entries_available": 4000,
+      "exact_top": [
+        "FR940314-2-00104",
+        "FR941011-1-00026",
+        "LA072689-0011",
+        "FT921-3529",
+        "FR940314-2-00097"
+      ],
+      "entries": {
+        "rankseal": 1984,
+        "rankfence": 1984
+      },
+      "time_ms": {
+        "rankfence": [
+          1.59405,
+          1.64494,
+          1.71553
+        ],
+        "rankseal": [
+          2.85262,
+          2.66211,
+          2.65052
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "648",
+      "entries_available": 4000,
+      "exact_top": [
+        "3/FR941011-1-00026",
+        "2/LA072689-0011",
+        "6/FR940314-2-00104",
+        "6/FT921-3529",
+        "5/FR940314-2-00099"
+      ],
+      "entries": {
+        "partition_retire": 2304,
+        "rankseal_local_merge": 3705,
+        "partitionfence": 2560,
+        "rankseal": 4000,
+        "rankfence": 4000
+      },
+      "time_ms": {
+        "rankfence": [
+          4.46673,
+          4.13692,
+          16.26894
+        ],
+        "rankseal": [
+          5.73187,
+          5.66363,
+          5.66856
+        ],
+        "rankseal_local_merge": [
+          5.6947,
+          5.48363,
+          5.53974
+        ],
+        "partitionfence": [
+          2.39226,
+          2.27463,
+          2.28292
+        ],
+        "partition_retire": [
+          2.32822,
+          2.32963,
+          2.49192
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "649",
+      "entries_available": 4000,
+      "exact_top": [
+        "FT921-5724",
+        "FT944-9024",
+        "LA101189-0094",
+        "LA101089-0139",
+        "FT921-4469"
+      ],
+      "entries": {
+        "rankseal": 64,
+        "rankfence": 64
+      },
+      "time_ms": {
+        "rankfence": [
+          0.06658,
+          0.06245,
+          0.05484
+        ],
+        "rankseal": [
+          0.08787,
+          0.07621,
+          0.07596
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "649",
+      "entries_available": 4000,
+      "exact_top": [
+        "0/LA101189-0094",
+        "1/FT921-5724",
+        "2/FBIS4-1556",
+        "6/LA101089-0139",
+        "3/LA101489-0161"
+      ],
+      "entries": {
+        "rankseal": 4000,
+        "partition_retire": 512,
+        "rankfence": 4000,
+        "partitionfence": 512,
+        "rankseal_local_merge": 832
+      },
+      "time_ms": {
+        "rankfence": [
+          4.09704,
+          4.29554,
+          4.09389
+        ],
+        "rankseal": [
+          6.1422,
+          6.08026,
+          5.91329
+        ],
+        "partitionfence": [
+          0.60974,
+          0.59825,
+          0.5973
+        ],
+        "rankseal_local_merge": [
+          1.32431,
+          1.2327,
+          1.40233
+        ],
+        "partition_retire": [
+          0.59428,
+          0.5544,
+          0.59528
+        ]
+      }
+    },
+    {
+      "case": "flat",
+      "topic": "650",
+      "entries_available": 4000,
+      "exact_top": [
+        "LA092590-0146",
+        "LA062689-0056",
+        "LA021189-0023",
+        "LA121989-0022",
+        "LA101790-0029"
+      ],
+      "entries": {
+        "rankseal": 256,
+        "rankfence": 256
+      },
+      "time_ms": {
+        "rankfence": [
+          0.21047,
+          0.21726,
+          0.20926
+        ],
+        "rankseal": [
+          0.33842,
+          0.29295,
+          0.33076
+        ]
+      }
+    },
+    {
+      "case": "hashed_shards",
+      "topic": "650",
+      "entries_available": 4000,
+      "exact_top": [
+        "7/LA092590-0146",
+        "5/LA101790-0029",
+        "3/LA062689-0056",
+        "5/LA021189-0023",
+        "6/LA121989-0022"
+      ],
+      "entries": {
+        "partition_retire": 512,
+        "rankseal_local_merge": 960,
+        "rankfence": 4000,
+        "rankseal": 4000,
+        "partitionfence": 512
+      },
+      "time_ms": {
+        "rankfence": [
+          4.05173,
+          16.83252,
+          4.20168
+        ],
+        "rankseal": [
+          5.68991,
+          5.97678,
+          5.54202
+        ],
+        "partition_retire": [
+          0.56202,
+          0.48806,
+          0.54395
+        ],
+        "rankseal_local_merge": [
+          1.37558,
+          1.44906,
+          1.38278
+        ],
+        "partitionfence": [
+          0.53331,
+          0.52849,
+          0.56447
+        ]
+      }
+    }
+  ]
+}

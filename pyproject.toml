@@ -1,58 +1,22 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "streamsieve"
+name = "rankfence"
 version = "0.1.0"
-description = "SIMD C++20 multi-agent streaming inference, anytime-valid e-process monitoring, VOI firehose sifting, and echo-free CRDT belief fusion."
+description = "Certified early stopping for reciprocal rank fusion over asynchronous ranked streams"
 readme = "README.md"
-license = {text = "Apache-2.0"}
-requires-python = ">=3.9"
-keywords = [
-    "streaming",
-    "time-series",
-    "multi-agent",
-    "e-values",
-    "e-process",
-    "anytime-valid",
-    "conformal-prediction",
-    "crdt",
-    "anomaly-detection",
-    "mcp",
-    "ai-agents",
-    "online-learning",
-    "simd",
-]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: C++",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: System :: Monitoring",
-]
-dependencies = []
-
-[project.optional-dependencies]
-numpy = ["numpy>=1.24"]
-dev = ["pytest>=8.0", "numpy>=1.24", "scipy>=1.11", "river>=0.21"]
-
-[project.scripts]
-streamsieve = "streamsieve.cli:main"
-sieve = "streamsieve.cli:main"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+keywords = ["reciprocal-rank-fusion", "retrieval", "asyncio", "top-k"]
 
 [project.urls]
-Homepage = "https://github.com/pgg898200-ship-it/streamsieve"
-Repository = "https://github.com/pgg898200-ship-it/streamsieve"
-Documentation = "https://github.com/pgg898200-ship-it/streamsieve/blob/main/docs/architecture.md"
-Benchmarks = "https://github.com/pgg898200-ship-it/streamsieve/blob/main/docs/benchmarks.md"
-Issues = "https://github.com/pgg898200-ship-it/streamsieve/issues"
+Homepage = "https://rankfence-pgg.tancurl3.chatgpt.site"
+Source = "https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0"
 
-[tool.setuptools.packages.find]
-where = ["python"]
+[project.scripts]
+rankfence = "rankfence.__main__:main"
 
-[tool.setuptools.package-data]
-streamsieve = ["_libstreamsieve.so", "_libstreamsieve.dylib", "_libstreamsieve.dll"]
+[tool.setuptools]
+packages = ["rankfence"]

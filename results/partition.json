@@ -1,0 +1,844 @@
+{
+  "schema": 1,
+  "config": {
+    "shards": 8,
+    "rankers": 3,
+    "depth": 512,
+    "page": 16,
+    "queries": 5,
+    "repeats": 3,
+    "k": 5,
+    "c": 60,
+    "seed": 119,
+    "trace": null,
+    "json": "results/partition.json"
+  },
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "sha256": {
+    "partition_replay.py": "65e95f0bfb765a0fe5e19bcae9213357e064d8463c71f72f3e3aad0ee3ec137c",
+    "bench.py": "04c29d54ae3d485b47c1bd9129733687f3760d3dbd98c3c85558713807ac5250",
+    "core.py": "a7aebf86cf6781fe3519cda7adeb892bada489d0604dbc7d105080449d15298b",
+    "partition.py": "76bfce074732ad14c64d300e3aaa20da2df677eadfa3984f8f0fe43ccae60128"
+  },
+  "summary": {
+    "agreement": {
+      "global": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 0,
+        "same_count_as_support_nra": 0,
+        "entries": 61440,
+        "p50_ms": 11.4494,
+        "p95_ms": 16.7308
+      },
+      "partition": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 5,
+        "same_count_as_support_nra": 5,
+        "entries": 1920,
+        "p50_ms": 0.5256,
+        "p95_ms": 0.5788
+      },
+      "local_merge": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 5,
+        "same_count_as_support_nra": 5,
+        "entries": 1920,
+        "p50_ms": 0.5245,
+        "p95_ms": 0.631
+      },
+      "partition_integer_nra": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 5,
+        "same_count_as_support_nra": 5,
+        "entries": 1920,
+        "p50_ms": 0.2303,
+        "p95_ms": 0.2461
+      },
+      "batch": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 0,
+        "same_count_as_support_nra": 0,
+        "entries": 61440,
+        "p50_ms": 2.4786,
+        "p95_ms": 2.5941
+      }
+    },
+    "hot_shard": {
+      "global": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 0,
+        "same_count_as_support_nra": 0,
+        "entries": 61440,
+        "p50_ms": 23.6119,
+        "p95_ms": 30.7554
+      },
+      "partition": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 5,
+        "same_count_as_support_nra": 5,
+        "entries": 1920,
+        "p50_ms": 0.5357,
+        "p95_ms": 0.6644
+      },
+      "local_merge": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 5,
+        "same_count_as_support_nra": 0,
+        "entries": 39984,
+        "p50_ms": 13.0157,
+        "p95_ms": 17.5678
+      },
+      "partition_integer_nra": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 5,
+        "same_count_as_support_nra": 5,
+        "entries": 1920,
+        "p50_ms": 0.4742,
+        "p95_ms": 0.5499
+      },
+      "batch": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 0,
+        "same_count_as_support_nra": 0,
+        "entries": 61440,
+        "p50_ms": 2.9101,
+        "p95_ms": 3.4119
+      }
+    },
+    "disagreement": {
+      "global": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 0,
+        "same_count_as_support_nra": 0,
+        "entries": 61440,
+        "p50_ms": 22.0118,
+        "p95_ms": 23.4793
+      },
+      "partition": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 5,
+        "same_count_as_support_nra": 5,
+        "entries": 29568,
+        "p50_ms": 6.2511,
+        "p95_ms": 15.6854
+      },
+      "local_merge": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 5,
+        "same_count_as_support_nra": 0,
+        "entries": 46848,
+        "p50_ms": 12.7185,
+        "p95_ms": 17.7737
+      },
+      "partition_integer_nra": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 5,
+        "same_count_as_support_nra": 5,
+        "entries": 29568,
+        "p50_ms": 14.338,
+        "p95_ms": 37.9856
+      },
+      "batch": {
+        "queries": 5,
+        "queries_stopping_before_exhaustion": 0,
+        "same_count_as_support_nra": 0,
+        "entries": 61440,
+        "p50_ms": 2.2085,
+        "p95_ms": 2.7308
+      }
+    }
+  },
+  "queries": [
+    {
+      "kind": "agreement",
+      "query": "0",
+      "exact_top": [
+        "0/d000409",
+        "1/d000428",
+        "2/d000422",
+        "3/d000012",
+        "4/d000295"
+      ],
+      "total": 12288,
+      "entries": {
+        "local_merge": 384,
+        "partition_integer_nra": 384,
+        "global": 12288,
+        "partition": 384,
+        "batch": 12288
+      },
+      "times_ms": {
+        "partition": [
+          0.58414,
+          0.57829,
+          0.5788
+        ],
+        "partition_integer_nra": [
+          0.23503,
+          0.24713,
+          0.24608
+        ],
+        "batch": [
+          2.66665,
+          2.57945,
+          2.59408
+        ],
+        "local_merge": [
+          0.63099,
+          0.58175,
+          0.71081
+        ],
+        "global": [
+          22.38752,
+          16.4622,
+          16.73081
+        ]
+      }
+    },
+    {
+      "kind": "agreement",
+      "query": "1",
+      "exact_top": [
+        "0/d000161",
+        "1/d000201",
+        "2/d000060",
+        "3/d000081",
+        "4/d000176"
+      ],
+      "total": 12288,
+      "entries": {
+        "partition_integer_nra": 384,
+        "global": 12288,
+        "partition": 384,
+        "batch": 12288,
+        "local_merge": 384
+      },
+      "times_ms": {
+        "local_merge": [
+          0.52452,
+          0.4971,
+          0.60367
+        ],
+        "partition_integer_nra": [
+          0.26187,
+          0.15362,
+          0.23027
+        ],
+        "batch": [
+          2.67776,
+          2.22268,
+          2.47864
+        ],
+        "global": [
+          13.21247,
+          9.66104,
+          11.44937
+        ],
+        "partition": [
+          10.35293,
+          0.40456,
+          0.52558
+        ]
+      }
+    },
+    {
+      "kind": "agreement",
+      "query": "2",
+      "exact_top": [
+        "0/d000047",
+        "1/d000103",
+        "2/d000076",
+        "3/d000213",
+        "4/d000137"
+      ],
+      "total": 12288,
+      "entries": {
+        "partition": 384,
+        "local_merge": 384,
+        "global": 12288,
+        "batch": 12288,
+        "partition_integer_nra": 384
+      },
+      "times_ms": {
+        "batch": [
+          2.53058,
+          16.47995,
+          1.7158
+        ],
+        "local_merge": [
+          0.61906,
+          0.44361,
+          0.4711
+        ],
+        "partition": [
+          0.54441,
+          0.59152,
+          0.40971
+        ],
+        "partition_integer_nra": [
+          0.23719,
+          0.23813,
+          0.14464
+        ],
+        "global": [
+          13.32847,
+          14.7483,
+          18.18459
+        ]
+      }
+    },
+    {
+      "kind": "agreement",
+      "query": "3",
+      "exact_top": [
+        "0/d000425",
+        "1/d000083",
+        "2/d000132",
+        "3/d000042",
+        "4/d000345"
+      ],
+      "total": 12288,
+      "entries": {
+        "global": 12288,
+        "batch": 12288,
+        "partition": 384,
+        "partition_integer_nra": 384,
+        "local_merge": 384
+      },
+      "times_ms": {
+        "global": [
+          10.06888,
+          10.12673,
+          9.61838
+        ],
+        "partition": [
+          0.49197,
+          0.57534,
+          0.3701
+        ],
+        "batch": [
+          1.81473,
+          2.32195,
+          1.79424
+        ],
+        "local_merge": [
+          1.02665,
+          0.41192,
+          0.47813
+        ],
+        "partition_integer_nra": [
+          0.33791,
+          0.15985,
+          0.17596
+        ]
+      }
+    },
+    {
+      "kind": "agreement",
+      "query": "4",
+      "exact_top": [
+        "0/d000129",
+        "1/d000177",
+        "2/d000306",
+        "3/d000262",
+        "4/d000136"
+      ],
+      "total": 12288,
+      "entries": {
+        "partition": 384,
+        "partition_integer_nra": 384,
+        "global": 12288,
+        "local_merge": 384,
+        "batch": 12288
+      },
+      "times_ms": {
+        "partition": [
+          0.40186,
+          0.41872,
+          0.39189
+        ],
+        "partition_integer_nra": [
+          0.14876,
+          0.16352,
+          0.16437
+        ],
+        "batch": [
+          1.93939,
+          2.12669,
+          1.61458
+        ],
+        "local_merge": [
+          0.60636,
+          0.39042,
+          0.73389
+        ],
+        "global": [
+          11.1844,
+          10.78226,
+          11.68909
+        ]
+      }
+    },
+    {
+      "kind": "hot_shard",
+      "query": "0",
+      "exact_top": [
+        "0/d000021",
+        "0/d000084",
+        "0/d000459",
+        "0/d000066",
+        "0/d000194"
+      ],
+      "total": 12288,
+      "entries": {
+        "partition": 384,
+        "local_merge": 8688,
+        "batch": 12288,
+        "global": 12288,
+        "partition_integer_nra": 384
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.26344,
+          0.47557,
+          0.47743
+        ],
+        "global": [
+          16.36115,
+          15.8409,
+          22.82427
+        ],
+        "batch": [
+          3.40983,
+          2.61422,
+          2.91013
+        ],
+        "local_merge": [
+          13.01569,
+          12.90338,
+          15.95649
+        ],
+        "partition": [
+          0.46645,
+          0.53573,
+          0.57101
+        ]
+      }
+    },
+    {
+      "kind": "hot_shard",
+      "query": "1",
+      "exact_top": [
+        "6/d000178",
+        "6/d000431",
+        "6/d000337",
+        "6/d000266",
+        "6/d000136"
+      ],
+      "total": 12288,
+      "entries": {
+        "local_merge": 7296,
+        "partition": 384,
+        "batch": 12288,
+        "partition_integer_nra": 384,
+        "global": 12288
+      },
+      "times_ms": {
+        "global": [
+          15.09174,
+          23.73335,
+          26.7716
+        ],
+        "partition_integer_nra": [
+          0.28794,
+          0.2618,
+          0.48043
+        ],
+        "batch": [
+          1.70835,
+          2.6332,
+          2.32432
+        ],
+        "local_merge": [
+          8.89649,
+          8.34596,
+          77.32972
+        ],
+        "partition": [
+          0.35818,
+          0.42905,
+          2.71687
+        ]
+      }
+    },
+    {
+      "kind": "hot_shard",
+      "query": "2",
+      "exact_top": [
+        "7/d000345",
+        "7/d000335",
+        "7/d000278",
+        "7/d000155",
+        "7/d000375"
+      ],
+      "total": 12288,
+      "entries": {
+        "partition_integer_nra": 384,
+        "partition": 384,
+        "batch": 12288,
+        "local_merge": 7248,
+        "global": 12288
+      },
+      "times_ms": {
+        "partition": [
+          0.55109,
+          0.41318,
+          0.71406
+        ],
+        "global": [
+          23.35507,
+          34.9542,
+          30.75539
+        ],
+        "batch": [
+          3.26925,
+          3.86975,
+          3.4119
+        ],
+        "partition_integer_nra": [
+          0.48521,
+          0.95753,
+          0.54992
+        ],
+        "local_merge": [
+          12.8981,
+          17.56775,
+          18.80508
+        ]
+      }
+    },
+    {
+      "kind": "hot_shard",
+      "query": "3",
+      "exact_top": [
+        "2/d000138",
+        "2/d000331",
+        "2/d000462",
+        "2/d000183",
+        "2/d000448"
+      ],
+      "total": 12288,
+      "entries": {
+        "partition_integer_nra": 384,
+        "local_merge": 8256,
+        "global": 12288,
+        "batch": 12288,
+        "partition": 384
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          0.45099,
+          0.55617,
+          0.47424
+        ],
+        "partition": [
+          0.7356,
+          0.66439,
+          0.54917
+        ],
+        "local_merge": [
+          13.96581,
+          131.77701,
+          13.91686
+        ],
+        "global": [
+          108.50215,
+          23.61189,
+          23.1502
+        ],
+        "batch": [
+          2.7047,
+          7.88062,
+          3.05197
+        ]
+      }
+    },
+    {
+      "kind": "hot_shard",
+      "query": "4",
+      "exact_top": [
+        "3/d000378",
+        "3/d000173",
+        "3/d000449",
+        "3/d000442",
+        "3/d000292"
+      ],
+      "total": 12288,
+      "entries": {
+        "global": 12288,
+        "batch": 12288,
+        "partition": 384,
+        "local_merge": 8496,
+        "partition_integer_nra": 384
+      },
+      "times_ms": {
+        "global": [
+          20.81381,
+          12.68995,
+          13.39108
+        ],
+        "partition_integer_nra": [
+          0.4377,
+          0.26984,
+          0.26792
+        ],
+        "partition": [
+          0.49421,
+          0.3699,
+          0.38956
+        ],
+        "local_merge": [
+          9.92484,
+          10.31876,
+          9.39792
+        ],
+        "batch": [
+          1.76327,
+          2.18813,
+          1.72704
+        ]
+      }
+    },
+    {
+      "kind": "disagreement",
+      "query": "0",
+      "exact_top": [
+        "2/d000115",
+        "3/d000486",
+        "1/d000000",
+        "5/d000288",
+        "4/d000304"
+      ],
+      "total": 12288,
+      "entries": {
+        "global": 12288,
+        "partition": 9216,
+        "partition_integer_nra": 9216,
+        "batch": 12288,
+        "local_merge": 9696
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          37.9856,
+          51.8668,
+          35.74203
+        ],
+        "batch": [
+          2.83116,
+          1.93114,
+          1.92039
+        ],
+        "global": [
+          23.34147,
+          23.45384,
+          15.86509
+        ],
+        "local_merge": [
+          19.54414,
+          12.62428,
+          12.40815
+        ],
+        "partition": [
+          16.12047,
+          15.6854,
+          11.59524
+        ]
+      }
+    },
+    {
+      "kind": "disagreement",
+      "query": "1",
+      "exact_top": [
+        "5/d000060",
+        "5/d000072",
+        "6/d000251",
+        "7/d000006",
+        "5/d000363"
+      ],
+      "total": 12288,
+      "entries": {
+        "partition": 4224,
+        "partition_integer_nra": 4224,
+        "local_merge": 8016,
+        "global": 12288,
+        "batch": 12288
+      },
+      "times_ms": {
+        "local_merge": [
+          14.39624,
+          12.71848,
+          12.42548
+        ],
+        "partition_integer_nra": [
+          16.39072,
+          14.33796,
+          10.32661
+        ],
+        "batch": [
+          2.9908,
+          2.73078,
+          2.50582
+        ],
+        "global": [
+          30.93676,
+          21.53592,
+          16.60792
+        ],
+        "partition": [
+          5.79745,
+          5.98294,
+          5.29423
+        ]
+      }
+    },
+    {
+      "kind": "disagreement",
+      "query": "2",
+      "exact_top": [
+        "4/d000354",
+        "5/d000009",
+        "3/d000382",
+        "0/d000385",
+        "3/d000462"
+      ],
+      "total": 12288,
+      "entries": {
+        "local_merge": 9024,
+        "partition": 3840,
+        "global": 12288,
+        "partition_integer_nra": 3840,
+        "batch": 12288
+      },
+      "times_ms": {
+        "partition": [
+          4.69235,
+          5.64038,
+          6.8037
+        ],
+        "partition_integer_nra": [
+          9.49487,
+          11.85983,
+          13.69648
+        ],
+        "local_merge": [
+          11.73524,
+          13.10884,
+          23.128
+        ],
+        "batch": [
+          2.59225,
+          2.63728,
+          3.71489
+        ],
+        "global": [
+          17.68556,
+          20.18983,
+          21.50242
+        ]
+      }
+    },
+    {
+      "kind": "disagreement",
+      "query": "3",
+      "exact_top": [
+        "2/d000097",
+        "0/d000507",
+        "7/d000425",
+        "0/d000399",
+        "7/d000292"
+      ],
+      "total": 12288,
+      "entries": {
+        "partition": 4224,
+        "local_merge": 9264,
+        "batch": 12288,
+        "global": 12288,
+        "partition_integer_nra": 4224
+      },
+      "times_ms": {
+        "partition_integer_nra": [
+          14.15038,
+          11.26567,
+          10.41479
+        ],
+        "local_merge": [
+          15.50963,
+          10.12019,
+          11.9954
+        ],
+        "partition": [
+          6.53706,
+          6.25108,
+          5.16308
+        ],
+        "global": [
+          22.01178,
+          17.1702,
+          27.05608
+        ],
+        "batch": [
+          12.52136,
+          2.16655,
+          2.20846
+        ]
+      }
+    },
+    {
+      "kind": "disagreement",
+      "query": "4",
+      "exact_top": [
+        "6/d000061",
+        "1/d000494",
+        "7/d000181",
+        "2/d000511",
+        "5/d000073"
+      ],
+      "total": 12288,
+      "entries": {
+        "local_merge": 10848,
+        "global": 12288,
+        "partition_integer_nra": 8064,
+        "partition": 8064,
+        "batch": 12288
+      },
+      "times_ms": {
+        "partition": [
+          19.46338,
+          11.28195,
+          9.2779
+        ],
+        "partition_integer_nra": [
+          30.16781,
+          49.68254,
+          26.47312
+        ],
+        "batch": [
+          2.03191,
+          2.97441,
+          1.99444
+        ],
+        "global": [
+          23.47929,
+          19.72736,
+          25.87531
+        ],
+        "local_merge": [
+          17.77373,
+          17.82884,
+          12.55373
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,1129 @@
+{
+  "schema": 1,
+  "parameters": {
+    "trace": "../trace-work/robust03.json",
+    "json": "results/loopback-paced.json",
+    "queries": 12,
+    "repeats": 3,
+    "page": 32,
+    "k": 5,
+    "c": 60,
+    "seed": 124,
+    "page_ms": 1.0,
+    "item_us": 10.0
+  },
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "sha256": {
+    "loopback.py": "8286dd128eca2bc210b5647b9228f15abf2e3478829ab92ceb55fc760eb8628c",
+    "bench.py": "04c29d54ae3d485b47c1bd9129733687f3760d3dbd98c3c85558713807ac5250",
+    "live.py": "bd3d539a039a720fff337266a733335775b440d9baca39b627c36edfde920267",
+    "core.py": "a7aebf86cf6781fe3519cda7adeb892bada489d0604dbc7d105080449d15298b",
+    "robust03.json": "0c4b02522c49436f2ac3eca6c44c6853b0f6acad217ee62e631564297e17c3ea"
+  },
+  "summary": {
+    "rankfence": {
+      "p50_topic_ms": 21.892,
+      "p95_topic_ms": 117.0459,
+      "mean_requests_sent": 45.33,
+      "mean_response_bytes_read": 21267.83,
+      "mean_ids_received": 1434.67
+    },
+    "paged_batch": {
+      "p50_topic_ms": 82.8385,
+      "p95_topic_ms": 104.1193,
+      "mean_requests_sent": 128.0,
+      "mean_response_bytes_read": 60654.17,
+      "mean_ids_received": 4000.0
+    },
+    "oneshot_batch": {
+      "p50_topic_ms": 15.7907,
+      "p95_topic_ms": 18.7574,
+      "mean_requests_sent": 4.0,
+      "mean_response_bytes_read": 59414.17,
+      "mean_ids_received": 4000.0
+    }
+  },
+  "observations": [
+    {
+      "topic": "303",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 83.3547,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 63097,
+      "ids_received": 4000
+    },
+    {
+      "topic": "303",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 14.9726,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 61857,
+      "ids_received": 4000
+    },
+    {
+      "topic": "303",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 3.8573,
+      "requests_sent": 4,
+      "request_bytes": 36,
+      "response_bytes_read": 2023,
+      "ids_received": 128
+    },
+    {
+      "topic": "303",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 3.7868,
+      "requests_sent": 4,
+      "request_bytes": 36,
+      "response_bytes_read": 2023,
+      "ids_received": 128
+    },
+    {
+      "topic": "303",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 14.922,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 61857,
+      "ids_received": 4000
+    },
+    {
+      "topic": "303",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 79.7127,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 63097,
+      "ids_received": 4000
+    },
+    {
+      "topic": "303",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 14.22,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 61857,
+      "ids_received": 4000
+    },
+    {
+      "topic": "303",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 3.1537,
+      "requests_sent": 4,
+      "request_bytes": 36,
+      "response_bytes_read": 2023,
+      "ids_received": 128
+    },
+    {
+      "topic": "303",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 75.9866,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 63097,
+      "ids_received": 4000
+    },
+    {
+      "topic": "336",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 39.4836,
+      "requests_sent": 56,
+      "request_bytes": 596,
+      "response_bytes_read": 27880,
+      "ids_received": 1792
+    },
+    {
+      "topic": "336",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 15.6964,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 60065,
+      "ids_received": 4000
+    },
+    {
+      "topic": "336",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 82.5325,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 61305,
+      "ids_received": 4000
+    },
+    {
+      "topic": "336",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 14.0805,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 60065,
+      "ids_received": 4000
+    },
+    {
+      "topic": "336",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 38.6669,
+      "requests_sent": 56,
+      "request_bytes": 596,
+      "response_bytes_read": 27880,
+      "ids_received": 1792
+    },
+    {
+      "topic": "336",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 79.1248,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 61305,
+      "ids_received": 4000
+    },
+    {
+      "topic": "336",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 39.4532,
+      "requests_sent": 56,
+      "request_bytes": 596,
+      "response_bytes_read": 27880,
+      "ids_received": 1792
+    },
+    {
+      "topic": "336",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 78.3485,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 61305,
+      "ids_received": 4000
+    },
+    {
+      "topic": "336",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 15.5553,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 60065,
+      "ids_received": 4000
+    },
+    {
+      "topic": "354",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 85.7391,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 63236,
+      "ids_received": 4000
+    },
+    {
+      "topic": "354",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 16.1921,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 61996,
+      "ids_received": 4000
+    },
+    {
+      "topic": "354",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 48.2821,
+      "requests_sent": 52,
+      "request_bytes": 552,
+      "response_bytes_read": 26443,
+      "ids_received": 1664
+    },
+    {
+      "topic": "354",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 82.2446,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 63236,
+      "ids_received": 4000
+    },
+    {
+      "topic": "354",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 16.2726,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 61996,
+      "ids_received": 4000
+    },
+    {
+      "topic": "354",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 37.0243,
+      "requests_sent": 52,
+      "request_bytes": 552,
+      "response_bytes_read": 26443,
+      "ids_received": 1664
+    },
+    {
+      "topic": "354",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 35.9611,
+      "requests_sent": 52,
+      "request_bytes": 552,
+      "response_bytes_read": 26443,
+      "ids_received": 1664
+    },
+    {
+      "topic": "354",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 15.2816,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 61996,
+      "ids_received": 4000
+    },
+    {
+      "topic": "354",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 77.7485,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 63236,
+      "ids_received": 4000
+    },
+    {
+      "topic": "378",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 15.251,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 53921,
+      "ids_received": 4000
+    },
+    {
+      "topic": "378",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 106.3305,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 55161,
+      "ids_received": 4000
+    },
+    {
+      "topic": "378",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 86.3255,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 55161,
+      "ids_received": 4000
+    },
+    {
+      "topic": "378",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 291.6839,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 55161,
+      "ids_received": 4000
+    },
+    {
+      "topic": "378",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 84.1125,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 55161,
+      "ids_received": 4000
+    },
+    {
+      "topic": "378",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 15.8587,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 53921,
+      "ids_received": 4000
+    },
+    {
+      "topic": "378",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 117.0459,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 55161,
+      "ids_received": 4000
+    },
+    {
+      "topic": "378",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 92.5467,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 55161,
+      "ids_received": 4000
+    },
+    {
+      "topic": "378",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 16.0003,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 53921,
+      "ids_received": 4000
+    },
+    {
+      "topic": "401",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 16.4848,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 56715,
+      "ids_received": 4000
+    },
+    {
+      "topic": "401",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 86.3898,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 57955,
+      "ids_received": 4000
+    },
+    {
+      "topic": "401",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 75.7411,
+      "requests_sent": 96,
+      "request_bytes": 1036,
+      "response_bytes_read": 44503,
+      "ids_received": 3072
+    },
+    {
+      "topic": "401",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 81.5752,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 57955,
+      "ids_received": 4000
+    },
+    {
+      "topic": "401",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 75.3853,
+      "requests_sent": 96,
+      "request_bytes": 1036,
+      "response_bytes_read": 44503,
+      "ids_received": 3072
+    },
+    {
+      "topic": "401",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 15.011,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 56715,
+      "ids_received": 4000
+    },
+    {
+      "topic": "401",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 73.0109,
+      "requests_sent": 96,
+      "request_bytes": 1036,
+      "response_bytes_read": 44503,
+      "ids_received": 3072
+    },
+    {
+      "topic": "401",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 16.032,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 56715,
+      "ids_received": 4000
+    },
+    {
+      "topic": "401",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 83.5866,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 57955,
+      "ids_received": 4000
+    },
+    {
+      "topic": "427",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 84.1133,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 63128,
+      "ids_received": 4000
+    },
+    {
+      "topic": "427",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 16.0377,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 61888,
+      "ids_received": 4000
+    },
+    {
+      "topic": "427",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 3.9588,
+      "requests_sent": 4,
+      "request_bytes": 36,
+      "response_bytes_read": 2073,
+      "ids_received": 128
+    },
+    {
+      "topic": "427",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 3.7735,
+      "requests_sent": 4,
+      "request_bytes": 36,
+      "response_bytes_read": 2073,
+      "ids_received": 128
+    },
+    {
+      "topic": "427",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 84.9847,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 63128,
+      "ids_received": 4000
+    },
+    {
+      "topic": "427",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 15.8777,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 61888,
+      "ids_received": 4000
+    },
+    {
+      "topic": "427",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 84.4099,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 63128,
+      "ids_received": 4000
+    },
+    {
+      "topic": "427",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 15.7147,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 61888,
+      "ids_received": 4000
+    },
+    {
+      "topic": "427",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 4.1417,
+      "requests_sent": 4,
+      "request_bytes": 36,
+      "response_bytes_read": 2073,
+      "ids_received": 128
+    },
+    {
+      "topic": "601",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 6.8672,
+      "requests_sent": 8,
+      "request_bytes": 76,
+      "response_bytes_read": 3864,
+      "ids_received": 256
+    },
+    {
+      "topic": "601",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 82.2018,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 60811,
+      "ids_received": 4000
+    },
+    {
+      "topic": "601",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 15.5919,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 59571,
+      "ids_received": 4000
+    },
+    {
+      "topic": "601",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 6.4908,
+      "requests_sent": 8,
+      "request_bytes": 76,
+      "response_bytes_read": 3864,
+      "ids_received": 256
+    },
+    {
+      "topic": "601",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 86.8391,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 60811,
+      "ids_received": 4000
+    },
+    {
+      "topic": "601",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 18.1022,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 59571,
+      "ids_received": 4000
+    },
+    {
+      "topic": "601",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 6.6786,
+      "requests_sent": 8,
+      "request_bytes": 76,
+      "response_bytes_read": 3864,
+      "ids_received": 256
+    },
+    {
+      "topic": "601",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 82.8203,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 60811,
+      "ids_received": 4000
+    },
+    {
+      "topic": "601",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 15.7227,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 59571,
+      "ids_received": 4000
+    },
+    {
+      "topic": "609",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 143.6642,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 59851,
+      "ids_received": 4000
+    },
+    {
+      "topic": "609",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 128.1801,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 58611,
+      "ids_received": 4000
+    },
+    {
+      "topic": "609",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 19.2557,
+      "requests_sent": 24,
+      "request_bytes": 244,
+      "response_bytes_read": 11402,
+      "ids_received": 768
+    },
+    {
+      "topic": "609",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 82.5761,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 59851,
+      "ids_received": 4000
+    },
+    {
+      "topic": "609",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 15.249,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 58611,
+      "ids_received": 4000
+    },
+    {
+      "topic": "609",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 16.0806,
+      "requests_sent": 24,
+      "request_bytes": 244,
+      "response_bytes_read": 11402,
+      "ids_received": 768
+    },
+    {
+      "topic": "609",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 78.1172,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 59851,
+      "ids_received": 4000
+    },
+    {
+      "topic": "609",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 14.9686,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 58611,
+      "ids_received": 4000
+    },
+    {
+      "topic": "609",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 17.2817,
+      "requests_sent": 24,
+      "request_bytes": 244,
+      "response_bytes_read": 11402,
+      "ids_received": 768
+    },
+    {
+      "topic": "617",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 27.0624,
+      "requests_sent": 36,
+      "request_bytes": 376,
+      "response_bytes_read": 16447,
+      "ids_received": 1152
+    },
+    {
+      "topic": "617",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 91.1279,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 57295,
+      "ids_received": 4000
+    },
+    {
+      "topic": "617",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 15.5684,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 56055,
+      "ids_received": 4000
+    },
+    {
+      "topic": "617",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 26.5022,
+      "requests_sent": 36,
+      "request_bytes": 376,
+      "response_bytes_read": 16447,
+      "ids_received": 1152
+    },
+    {
+      "topic": "617",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 15.4952,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 56055,
+      "ids_received": 4000
+    },
+    {
+      "topic": "617",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 83.6089,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 57295,
+      "ids_received": 4000
+    },
+    {
+      "topic": "617",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 14.7314,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 56055,
+      "ids_received": 4000
+    },
+    {
+      "topic": "617",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 81.4027,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 57295,
+      "ids_received": 4000
+    },
+    {
+      "topic": "617",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 25.5755,
+      "requests_sent": 36,
+      "request_bytes": 376,
+      "response_bytes_read": 16447,
+      "ids_received": 1152
+    },
+    {
+      "topic": "626",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 14.5876,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 60209,
+      "ids_received": 4000
+    },
+    {
+      "topic": "626",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 93.5799,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 61449,
+      "ids_received": 4000
+    },
+    {
+      "topic": "626",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 84.9152,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 61449,
+      "ids_received": 4000
+    },
+    {
+      "topic": "626",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 14.6473,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 60209,
+      "ids_received": 4000
+    },
+    {
+      "topic": "626",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 91.2785,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 61449,
+      "ids_received": 4000
+    },
+    {
+      "topic": "626",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 80.9327,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 61449,
+      "ids_received": 4000
+    },
+    {
+      "topic": "626",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 79.1745,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 61449,
+      "ids_received": 4000
+    },
+    {
+      "topic": "626",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 14.9377,
+      "requests_sent": 4,
+      "request_bytes": 44,
+      "response_bytes_read": 60209,
+      "ids_received": 4000
+    },
+    {
+      "topic": "626",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 92.2856,
+      "requests_sent": 128,
+      "request_bytes": 1388,
+      "response_bytes_read": 61449,
+      "ids_received": 4000
+    },
+    {
+      "topic": "634",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 3.4844,
+      "requests_sent": 4,
+      "request_bytes": 40,
+      "response_bytes_read": 2170,
+      "ids_received": 128
+    },
+    {
+      "topic": "634",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 15.8663,
+      "requests_sent": 4,
+      "request_bytes": 48,
+      "response_bytes_read": 63606,
+      "ids_received": 4000
+    },
+    {
+      "topic": "634",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 84.9173,
+      "requests_sent": 128,
+      "request_bytes": 1516,
+      "response_bytes_read": 64846,
+      "ids_received": 4000
+    },
+    {
+      "topic": "634",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 16.4418,
+      "requests_sent": 4,
+      "request_bytes": 48,
+      "response_bytes_read": 63606,
+      "ids_received": 4000
+    },
+    {
+      "topic": "634",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 82.8567,
+      "requests_sent": 128,
+      "request_bytes": 1516,
+      "response_bytes_read": 64846,
+      "ids_received": 4000
+    },
+    {
+      "topic": "634",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 4.1364,
+      "requests_sent": 4,
+      "request_bytes": 40,
+      "response_bytes_read": 2170,
+      "ids_received": 128
+    },
+    {
+      "topic": "634",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 3.7742,
+      "requests_sent": 4,
+      "request_bytes": 40,
+      "response_bytes_read": 2170,
+      "ids_received": 128
+    },
+    {
+      "topic": "634",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 82.3106,
+      "requests_sent": 128,
+      "request_bytes": 1516,
+      "response_bytes_read": 64846,
+      "ids_received": 4000
+    },
+    {
+      "topic": "634",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 16.193,
+      "requests_sent": 4,
+      "request_bytes": 48,
+      "response_bytes_read": 63606,
+      "ids_received": 4000
+    },
+    {
+      "topic": "642",
+      "repeat": 1,
+      "method": "paged_batch",
+      "ms": 104.1193,
+      "requests_sent": 128,
+      "request_bytes": 1516,
+      "response_bytes_read": 59716,
+      "ids_received": 4000
+    },
+    {
+      "topic": "642",
+      "repeat": 1,
+      "method": "rankfence",
+      "ms": 5.5288,
+      "requests_sent": 4,
+      "request_bytes": 40,
+      "response_bytes_read": 1799,
+      "ids_received": 128
+    },
+    {
+      "topic": "642",
+      "repeat": 1,
+      "method": "oneshot_batch",
+      "ms": 18.9378,
+      "requests_sent": 4,
+      "request_bytes": 48,
+      "response_bytes_read": 58476,
+      "ids_received": 4000
+    },
+    {
+      "topic": "642",
+      "repeat": 2,
+      "method": "rankfence",
+      "ms": 6.1249,
+      "requests_sent": 4,
+      "request_bytes": 40,
+      "response_bytes_read": 1799,
+      "ids_received": 128
+    },
+    {
+      "topic": "642",
+      "repeat": 2,
+      "method": "oneshot_batch",
+      "ms": 18.7574,
+      "requests_sent": 4,
+      "request_bytes": 48,
+      "response_bytes_read": 58476,
+      "ids_received": 4000
+    },
+    {
+      "topic": "642",
+      "repeat": 2,
+      "method": "paged_batch",
+      "ms": 102.6697,
+      "requests_sent": 128,
+      "request_bytes": 1516,
+      "response_bytes_read": 59716,
+      "ids_received": 4000
+    },
+    {
+      "topic": "642",
+      "repeat": 3,
+      "method": "paged_batch",
+      "ms": 162.448,
+      "requests_sent": 128,
+      "request_bytes": 1516,
+      "response_bytes_read": 59716,
+      "ids_received": 4000
+    },
+    {
+      "topic": "642",
+      "repeat": 3,
+      "method": "oneshot_batch",
+      "ms": 17.4006,
+      "requests_sent": 4,
+      "request_bytes": 48,
+      "response_bytes_read": 58476,
+      "ids_received": 4000
+    },
+    {
+      "topic": "642",
+      "repeat": 3,
+      "method": "rankfence",
+      "ms": 4.0696,
+      "requests_sent": 4,
+      "request_bytes": 40,
+      "response_bytes_read": 1799,
+      "ids_received": 128
+    }
+  ]
+}

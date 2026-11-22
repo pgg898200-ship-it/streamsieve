@@ -1,0 +1,251 @@
+{
+  "schema": 1,
+  "sha256": {
+    "bench.py": "04c29d54ae3d485b47c1bd9129733687f3760d3dbd98c3c85558713807ac5250",
+    "core.py": "a7aebf86cf6781fe3519cda7adeb892bada489d0604dbc7d105080449d15298b"
+  },
+  "timer": "perf_counter_ns",
+  "command": [
+    "python",
+    "bench.py",
+    "--workloads",
+    "partial_overlap",
+    "--sources",
+    "32",
+    "--depth",
+    "2048",
+    "--queries",
+    "3",
+    "--page",
+    "64",
+    "--repeats",
+    "3",
+    "--json",
+    "results/fanout32.json"
+  ],
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "config": {
+    "sources": 32,
+    "depth": 2048,
+    "queries": 3,
+    "page": 64,
+    "k": 5,
+    "c": 60,
+    "repeats": 3,
+    "seed": 1701,
+    "workloads": [
+      "partial_overlap"
+    ],
+    "mode": "ordered",
+    "trace": null,
+    "trace_limit": null,
+    "json": "results/fanout32.json"
+  },
+  "groups": {
+    "partial_overlap": {
+      "queries": 3,
+      "queries_certified_before_full_input": 0,
+      "modeled_break_even_us_per_skipped_item_vs_integer_batch": null,
+      "total_entries": 196608,
+      "entries_read": {
+        "integer_batch": 196608,
+        "exact_batch": 196608,
+        "fraction_nra": 196608,
+        "integer_nra": 196608,
+        "float_batch": 196608,
+        "rankfence": 196608
+      },
+      "entries_skipped_pct": {
+        "integer_batch": 0.0,
+        "exact_batch": 0.0,
+        "fraction_nra": 0.0,
+        "integer_nra": 0.0,
+        "float_batch": 0.0,
+        "rankfence": 0.0
+      },
+      "median_query_ms": {
+        "rankfence": 126.7502,
+        "exact_batch": 100.0931,
+        "float_batch": 11.2766,
+        "integer_batch": 27.0823,
+        "fraction_nra": 1558.0191,
+        "integer_nra": 429.5094
+      },
+      "p95_query_ms": {
+        "rankfence": 213.1532,
+        "exact_batch": 162.0658,
+        "float_batch": 11.6265,
+        "integer_batch": 34.4165,
+        "fraction_nra": 1790.8638,
+        "integer_nra": 499.5662
+      },
+      "float_order_disagreements": 0,
+      "same_stopping_round_as_nra": 3
+    }
+  },
+  "queries": {
+    "partial_overlap": [
+      {
+        "query": "0",
+        "total_entries": 65536,
+        "sources": 32,
+        "exact_top": [
+          "d0001314",
+          "d0001842",
+          "d0001169",
+          "d0001261",
+          "d0000688"
+        ],
+        "entries_read": {
+          "integer_batch": 65536,
+          "exact_batch": 65536,
+          "fraction_nra": 65536,
+          "integer_nra": 65536,
+          "float_batch": 65536,
+          "rankfence": 65536
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            103.030704,
+            168.527425,
+            86.666087
+          ],
+          "exact_batch": [
+            146.87974,
+            164.937902,
+            162.065796
+          ],
+          "float_batch": [
+            11.276598,
+            11.637793,
+            10.681386
+          ],
+          "integer_batch": [
+            21.363566,
+            32.422467,
+            27.082271
+          ],
+          "fraction_nra": [
+            1534.993924,
+            1526.831944,
+            1620.400263
+          ],
+          "integer_nra": [
+            411.647691,
+            431.232749,
+            429.509389
+          ]
+        }
+      },
+      {
+        "query": "1",
+        "total_entries": 65536,
+        "sources": 32,
+        "exact_top": [
+          "d0000280",
+          "d0000401",
+          "d0001511",
+          "d0001849",
+          "d0001444"
+        ],
+        "entries_read": {
+          "integer_batch": 65536,
+          "fraction_nra": 65536,
+          "exact_batch": 65536,
+          "float_batch": 65536,
+          "rankfence": 65536,
+          "integer_nra": 65536
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            126.750161,
+            158.052054,
+            112.757607
+          ],
+          "exact_batch": [
+            95.240991,
+            129.346249,
+            100.093094
+          ],
+          "float_batch": [
+            10.144534,
+            13.594024,
+            11.626473
+          ],
+          "integer_batch": [
+            19.134502,
+            26.27662,
+            18.406248
+          ],
+          "fraction_nra": [
+            1548.038666,
+            1558.019134,
+            1618.323309
+          ],
+          "integer_nra": [
+            407.811968,
+            384.33389,
+            390.252608
+          ]
+        }
+      },
+      {
+        "query": "2",
+        "total_entries": 65536,
+        "sources": 32,
+        "exact_top": [
+          "d0000075",
+          "d0001047",
+          "d0001443",
+          "d0001549",
+          "d0001302"
+        ],
+        "entries_read": {
+          "rankfence": 65536,
+          "integer_nra": 65536,
+          "fraction_nra": 65536,
+          "float_batch": 65536,
+          "exact_batch": 65536,
+          "integer_batch": 65536
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            341.145711,
+            213.153196,
+            157.987311
+          ],
+          "exact_batch": [
+            135.283332,
+            95.175512,
+            97.162594
+          ],
+          "float_batch": [
+            16.002085,
+            11.101468,
+            10.083465
+          ],
+          "integer_batch": [
+            34.416532,
+            38.678106,
+            28.402603
+          ],
+          "fraction_nra": [
+            1927.231223,
+            1759.387899,
+            1790.863845
+          ],
+          "integer_nra": [
+            594.360638,
+            478.013717,
+            499.566173
+          ]
+        }
+      }
+    ]
+  }
+}

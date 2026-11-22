@@ -1,0 +1,283 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="docs.css"><title>RankFence benchmark results</title></head><body><header><a class="brand" href="index.html">RankFence</a><nav><a href="workbench.html">Try your rankings</a><a href="rankfence-0.1.0.zip">Source .zip</a></nav></header><article><h1 id="rankfence-benchmark-results">RankFence benchmark results</h1>
+<h2 id="ranked-retrieval-replays">Ranked retrieval replays</h2>
+<p>Four TREC Robust 2003 submissions supplied 100 topics with 1,000 IDs per source per topic. The NFCorpus video-query ablation supplied 102 topics. For each topic it includes title, description and combined-text retrieval. Each BM25 run contributes 1,000 results and its cross-encoder rerank contributes 100. These six sources are correlated by construction.</p>
+<p>All runs used RRF constant 60, top 5, pages of 32 IDs and one page per active source per round. Ordered mode certifies the final rank order. Membership mode certifies the set a downstream reranker would receive. On both collections, each mode produced the same result as exhaustive exact fusion for every topic. RankFence and the independent no-random-access (NRA) implementation also stopped at the same page on every topic.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Collection</th>
+<th>Mode</th>
+<th style="text-align: right;">Topics stopping early</th>
+<th style="text-align: right;">Entries read / available</th>
+<th style="text-align: right;">Skipped</th>
+<th style="text-align: right;">RankFence p50 / p95, ms</th>
+<th style="text-align: right;">Integer NRA p50 / p95, ms</th>
+<th style="text-align: right;">Exact integer batch p50 / p95, ms</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Robust03</td>
+<td>Ordered</td>
+<td style="text-align: right;">93/100</td>
+<td style="text-align: right;">83,168 / 400,000</td>
+<td style="text-align: right;">79.21%</td>
+<td style="text-align: right;">0.262 / 4.166</td>
+<td style="text-align: right;">0.179 / 14.191</td>
+<td style="text-align: right;">0.914 / 1.395</td>
+</tr>
+<tr class="even">
+<td>Robust03</td>
+<td>Membership</td>
+<td style="text-align: right;">95/100</td>
+<td style="text-align: right;">70,560 / 400,000</td>
+<td style="text-align: right;">82.36%</td>
+<td style="text-align: right;">0.257 / 3.587</td>
+<td style="text-align: right;">0.167 / 13.916</td>
+<td style="text-align: right;">0.847 / 1.237</td>
+</tr>
+<tr class="odd">
+<td>NFCorpus</td>
+<td>Ordered</td>
+<td style="text-align: right;">93/102</td>
+<td style="text-align: right;">88,512 / 336,600</td>
+<td style="text-align: right;">73.70%</td>
+<td style="text-align: right;">0.469 / 3.701</td>
+<td style="text-align: right;">0.323 / 10.594</td>
+<td style="text-align: right;">0.645 / 0.994</td>
+</tr>
+<tr class="even">
+<td>NFCorpus</td>
+<td>Membership</td>
+<td style="text-align: right;">98/102</td>
+<td style="text-align: right;">78,408 / 336,600</td>
+<td style="text-align: right;">76.71%</td>
+<td style="text-align: right;">0.490 / 2.867</td>
+<td style="text-align: right;">0.313 / 6.887</td>
+<td style="text-align: right;">0.661 / 0.937</td>
+</tr>
+</tbody>
+</table>
+<p>The coordinator used fewer input entries than batch fusion. Integer NRA had lower median CPU-side elapsed time on these traces. RankFence had lower p95 CPU-side time than integer NRA in every row. The in-memory integer batch implementation had the lowest p95 among those three implementations.</p>
+<h2 id="tcp-loopback">TCP loopback</h2>
+<p>Four local TCP producers replayed the same 12 evenly sampled Robust03 topics in each scenario. A client opened one connection per source. The paged exhaustive client requested all 32-ID pages, the one-shot client requested each entire window in one message, and RankFence stopped requesting pages at certification. Both exhaustive clients used the exact integer batch implementation. Every method returned the same ordered top five.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Producer cost model</th>
+<th style="text-align: right;">RankFence p50 / p95, ms</th>
+<th style="text-align: right;">Paged exhaustive p50 / p95, ms</th>
+<th style="text-align: right;">One-shot exhaustive p50 / p95, ms</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No delay added</td>
+<td style="text-align: right;">3.03 / 16.39</td>
+<td style="text-align: right;">6.07 / 8.93</td>
+<td style="text-align: right;">2.78 / 4.13</td>
+</tr>
+<tr class="even">
+<td>1 ms per request + 10 µs per hit</td>
+<td style="text-align: right;">21.89 / 117.05</td>
+<td style="text-align: right;">82.84 / 104.12</td>
+<td style="text-align: right;">15.79 / 18.76</td>
+</tr>
+<tr class="odd">
+<td>1 ms per request + 100 µs per hit</td>
+<td style="text-align: right;">45.50 / 196.40</td>
+<td style="text-align: right;">180.88 / 188.14</td>
+<td style="text-align: right;">106.36 / 109.71</td>
+</tr>
+</tbody>
+</table>
+<p>RankFence received a mean 21,268 application response bytes across the sampled topics, compared with 60,654 for paged exhaustive and 59,414 for one-shot exhaustive. For the most expensive producer model, RankFence beat both alternatives at the median. The one-shot client retained the best p95 in every scenario. The delays are simulated with asynchronous timers. The socket traffic, decoding, connection setup, fusion and latency are measured. These are local experiments on precomputed rankings. A production backend can save retrieval work only if it can serve ranked prefixes incrementally and avoid or cancel work for the suffix.</p>
+<h2 id="scale-and-counterexamples">Scale and counterexamples</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Workload</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>64 identical ranked lists × 16,384 candidates</td>
+<td>Top five certified at 2,048 of 1,048,576 entries. This single deliberately favorable query took a median 1.10 ms over three timed repeats.</td>
+</tr>
+<tr class="even">
+<td>32 partially overlapping lists × 2,048 candidates</td>
+<td>All three queries required their entire input. RankFence took 126.75 ms at the median compared with 27.08 ms for exact integer batch and 429.51 ms for integer NRA.</td>
+</tr>
+<tr class="odd">
+<td>4 disjoint lists × 512 candidates</td>
+<td>Full reads on all five queries. The top documents have ties and each open source can still promote a competitor.</td>
+</tr>
+<tr class="even">
+<td>4 sources with short windows</td>
+<td>Every source fits in a single page. A coordinator cannot reduce transfer within that page.</td>
+</tr>
+</tbody>
+</table>
+<p>The synthetic sweep also covers partially shared shuffled prefixes and rotating ranks that produce exact ties. See the per-query results for ordering differences from the floating-point batch, which follows the usual sum-and-sort approach.</p>
+<h2 id="disjoint-index-partitions">Disjoint index partitions</h2>
+<p>A separate replay assigns each Robust03 document to one of eight shards by CRC32 of its ID. Each of the four real rankings is filtered to its shard and numbered again, giving 32 shard-local ranked streams. This models independent retrieval on disjoint indexes. RRF scores here use the new local ranks. The exhaustive reference uses exactly those same ranks.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Exact method</th>
+<th style="text-align: right;">Entries read, 100 topics</th>
+<th style="text-align: right;">Topics stopping early</th>
+<th style="text-align: right;">p50 / p95, ms</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Global Fence with unknown source overlap</td>
+<td style="text-align: right;">400,000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4.582 / 8.543</td>
+</tr>
+<tr class="even">
+<td>PartitionFence with shard declarations</td>
+<td style="text-align: right;">82,637</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: right;">0.708 / 4.105</td>
+</tr>
+<tr class="odd">
+<td>Independent local top-five, then score merge</td>
+<td style="text-align: right;">206,934</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: right;">2.415 / 6.667</td>
+</tr>
+<tr class="even">
+<td>Direct partition-aware integer NRA</td>
+<td style="text-align: right;">82,637</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: right;">0.338 / 4.772</td>
+</tr>
+<tr class="odd">
+<td>Exhaustive integer batch</td>
+<td style="text-align: right;">400,000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.746 / 1.288</td>
+</tr>
+</tbody>
+</table>
+<p>The local-merge baseline stops each shard independently once it can identify its five possible winners and prove their final scores. For example, a candidate seen in every local source already has its exact score. A global decision can often establish that a shard contains no competitive item before that shard can resolve its own five winners. Across five synthetic single-hot-shard queries, PartitionFence read 1,920 entries and local merge read 39,984. On five queries with perfectly agreeing rankers inside each shard, both read 1,920.</p>
+<p>The direct partition-aware NRA baseline uses the same shard information and a warm exact integer table. Its stopping rounds matched PartitionFence on all 100 transformed topics and all 15 synthetic queries. It won the median CPU timing on the transformed Robust03 topics. Results compare ordered top-five decisions over pull-based pages of 16. Latencies in this section are single-process coordinator experiments.</p>
+<h2 id="rankseal-comparison">RankSeal comparison</h2>
+<p>The actual <a href="https://huggingface.co/spaces/pgg-engineering/rankseal">RankSeal</a> Fusion API was replayed against the same 100 Robust03 topics. Every ordered top five matched exhaustive integer RRF. Both projects received the same ascending ID tie break, unit weights, rank constant 60 and 16-ID pages. This page size differs from the 32-ID headline replay.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Input</th>
+<th>Method</th>
+<th style="text-align: right;">Entries / 400,000</th>
+<th style="text-align: right;">p50 / p95, ms</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Four original rankings</td>
+<td>RankSeal</td>
+<td style="text-align: right;">79,904</td>
+<td style="text-align: right;">0.348 / 9.543</td>
+</tr>
+<tr class="even">
+<td>Four original rankings</td>
+<td>RankFence</td>
+<td style="text-align: right;">79,904</td>
+<td style="text-align: right;">0.242 / 7.107</td>
+</tr>
+<tr class="odd">
+<td>32 shard-local rankings</td>
+<td>RankSeal</td>
+<td style="text-align: right;">400,000</td>
+<td style="text-align: right;">8.825 / 18.451</td>
+</tr>
+<tr class="even">
+<td>32 shard-local rankings</td>
+<td>RankFence</td>
+<td style="text-align: right;">400,000</td>
+<td style="text-align: right;">5.389 / 13.962</td>
+</tr>
+<tr class="odd">
+<td>32 shard-local rankings</td>
+<td>One RankSeal per shard, then merge exact scores</td>
+<td style="text-align: right;">206,934</td>
+<td style="text-align: right;">3.865 / 9.334</td>
+</tr>
+<tr class="even">
+<td>32 shard-local rankings</td>
+<td>PartitionFence</td>
+<td style="text-align: right;">82,637</td>
+<td style="text-align: right;">0.813 / 3.148</td>
+</tr>
+<tr class="odd">
+<td>32 shard-local rankings</td>
+<td>PartitionFence with retirement of losing shards</td>
+<td style="text-align: right;">78,956</td>
+<td style="text-align: right;">0.770 / 2.713</td>
+</tr>
+</tbody>
+</table>
+<p>RankSeal and RankFence consumed identical aggregate input on the original rankings. In the sharded replay, both generic coordinators had to allow for unseen overlap across every stream. The local RankSeal wrapper gave each group its own coordinator, then waited for exact scores of local winners. PartitionFence could certify globally with 60.07% fewer entries than that wrapper. Retiring each losing shard as soon as its score ceiling fell strictly below the global cutoff reduced total reads to 78,956, or 61.84% fewer than the local RankSeal wrapper. RankSeal also exposes weighted RRF and a two-source hindsight page frontier. This comparison exercises its equal-weight streaming core.</p>
+<p>The comparison imports the MIT-licensed RankSeal core from the bundled benchmark reference or a supplied checkout and verifies SHA-256 <code>6b0603d10ef7aa4524558e06799e3e3c541eb52d94fbc1e82317f2de08804e6f</code> for its core implementation. The identical core bytes are in RankSeal revision <code>c27b8af7a9f982382a206d7a110e161a5ce4f4ca</code>. The top IDs, per-topic measurements and exact implementation hashes are in <a href="results/rankseal.json">rankseal.json</a>.</p>
+<h2 id="timing-and-baselines">Timing and baselines</h2>
+<p>The coordinator benchmark uses a single CPython 3.12.14 process on a Linux x86-64 host reporting an AMD EPYC 9V74. It preloads the rankings, warms all methods once per query and then shuffles method execution order across timed repeats. The tables report distributions of per-topic median elapsed times measured with <code>perf_counter_ns</code>. The p95 takes the nearest-rank 95th percentile. Each real query had three timed repeats. CPU scheduling was uncontrolled. All counts are exact for the specified inputs.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Baseline in the JSON</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>exact_batch</code></td>
+<td>Exhaustive rational arithmetic using Python Fraction scores and heap selection.</td>
+</tr>
+<tr class="even">
+<td><code>float_batch</code></td>
+<td>Exhaustive floating-point accumulation and heap selection. Rounding can change a tie.</td>
+</tr>
+<tr class="odd">
+<td><code>integer_batch</code></td>
+<td>Exhaustive exact integer arithmetic and heap selection. A warm table uses the least common multiple of all denominators in the known maximum rank window.</td>
+</tr>
+<tr class="even">
+<td><code>fraction_nra</code></td>
+<td>Independent exact interval evaluation on every page, using Fraction scores.</td>
+</tr>
+<tr class="odd">
+<td><code>integer_nra</code></td>
+<td>The same streaming certificate with exact integers and a warm known-depth denominator table.</td>
+</tr>
+</tbody>
+</table>
+<p>Each report contains per-topic timings, input counts, machine information and hashes of the source and trace bytes used. Input counts and top IDs can be checked on another machine. Absolute timings vary with hardware and system load.</p>
+<h2 id="reproduce">Reproduce</h2>
+<p>Run from the repository root with Python 3.10 or later. Prepare the two traces with the repository's hash-verifying fetch script, saving them locally as <code>robust03.json</code> and <code>nfcorpus-video.json</code>. Generated trace files contain document IDs in rank order.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> benchmarks/fetch_replay.py robust03 robust03.json</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> benchmarks/fetch_replay.py nfcorpus-video nfcorpus-video.json</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> bench.py <span class="at">--trace</span> robust03.json <span class="at">--page</span> 32 <span class="at">--repeats</span> 3</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> bench.py <span class="at">--trace</span> robust03.json <span class="at">--page</span> 32 <span class="at">--repeats</span> 3 <span class="at">--mode</span> members</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> bench.py <span class="at">--trace</span> nfcorpus-video.json <span class="at">--page</span> 32 <span class="at">--repeats</span> 3</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> bench.py <span class="at">--trace</span> nfcorpus-video.json <span class="at">--page</span> 32 <span class="at">--repeats</span> 3 <span class="at">--mode</span> members</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> bench.py <span class="at">--queries</span> 5 <span class="at">--repeats</span> 5 <span class="at">--depth</span> 512</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> bench.py <span class="at">--workloads</span> identical <span class="at">--sources</span> 64 <span class="at">--depth</span> 16384 <span class="at">--queries</span> 1 <span class="at">--page</span> 32 <span class="at">--repeats</span> 3</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> bench.py <span class="at">--workloads</span> partial_overlap <span class="at">--sources</span> 32 <span class="at">--depth</span> 2048 <span class="at">--queries</span> 3 <span class="at">--page</span> 64 <span class="at">--repeats</span> 3</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> examples/rankseal_replay.py <span class="at">--rankseal</span> benchmarks/reference <span class="at">--trace</span> robust03.json <span class="at">--json</span> rankseal-local.json</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> examples/partition_replay.py <span class="at">--trace</span> robust03.json <span class="at">--shards</span> 8 <span class="at">--queries</span> 100 <span class="at">--page</span> 16 <span class="at">--repeats</span> 3 <span class="at">--json</span> partition-trace-local.json</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> examples/partition_replay.py <span class="at">--shards</span> 8 <span class="at">--rankers</span> 3 <span class="at">--queries</span> 5 <span class="at">--depth</span> 512 <span class="at">--page</span> 16 <span class="at">--repeats</span> 3 <span class="at">--json</span> partition-local.json</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> examples/loopback.py <span class="at">--trace</span> robust03.json <span class="at">--queries</span> 12 <span class="at">--repeats</span> 3 <span class="at">--json</span> loopback-local.json</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> examples/loopback.py <span class="at">--trace</span> robust03.json <span class="at">--queries</span> 12 <span class="at">--repeats</span> 3 <span class="at">--page-ms</span> 1 <span class="at">--item-us</span> 10 <span class="at">--json</span> loopback-paced-local.json</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> examples/loopback.py <span class="at">--trace</span> robust03.json <span class="at">--queries</span> 12 <span class="at">--repeats</span> 3 <span class="at">--page-ms</span> 1 <span class="at">--item-us</span> 100 <span class="at">--json</span> loopback-expensive-local.json</span></code></pre></div>
+<p><code>bench.py --json PATH</code> writes a raw report. The optional <code>--trace-limit N</code> uses the first N topics in file order for a quick check.</p>
+<h2 id="live-sqlite-and-cursor-retirement">Live SQLite and cursor retirement</h2>
+<p>The SQLite example uses four independent FTS5 tables, three BM25 configurations per table, deterministic row-ID tie breaks and one consistent database transaction. Seven illustrative searches fetched 612 rows with the shard map, 900 by solving each shard and merging its exact scores, and 4,281 using either unrestricted fusion or exhaustive retrieval. The corresponding cursor fetch counts were 90, 126 and 579. All results and receipts were checked against full rational fusion. The tests measure rows delivered to the consumer; SQLite may perform its ranking before the first fetch. A service offering scored shard-local top k directly has different network costs. <a href="results/sqlite-fts.json">Raw SQLite observations</a></p>
+<p>In the asyncio cursor-retirement test, the losing readers occupied a median of 8.85 aggregate cursor-ms with retirement enabled and 1,193 cursor-ms otherwise. All 29 losing cursors closed before the deciding page in the pruning arm. This artificial slow-winner case measures resource release. <a href="results/retirement.json">Raw cancellation observations</a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> examples/sqlite_fts.py <span class="at">--shards</span> 4 <span class="at">--query</span> file <span class="at">--k</span> 3 <span class="at">--page-size</span> 8</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> examples/retirement.py <span class="at">--help</span></span></code></pre></div>
+</article></body></html>

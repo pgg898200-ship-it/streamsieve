@@ -1,0 +1,5391 @@
+{
+  "schema": 1,
+  "sha256": {
+    "bench.py": "04c29d54ae3d485b47c1bd9129733687f3760d3dbd98c3c85558713807ac5250",
+    "core.py": "a7aebf86cf6781fe3519cda7adeb892bada489d0604dbc7d105080449d15298b",
+    "robust03.json": "0c4b02522c49436f2ac3eca6c44c6853b0f6acad217ee62e631564297e17c3ea"
+  },
+  "timer": "perf_counter_ns",
+  "command": [
+    "python",
+    "bench.py",
+    "--trace",
+    "../trace-work/robust03.json",
+    "--page",
+    "32",
+    "--repeats",
+    "3",
+    "--json",
+    "results/robust03.json"
+  ],
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "config": {
+    "sources": 4,
+    "depth": 256,
+    "queries": 3,
+    "page": 32,
+    "k": 5,
+    "c": 60,
+    "repeats": 3,
+    "seed": 1701,
+    "workloads": [
+      "identical",
+      "partial_overlap",
+      "disjoint",
+      "late_overlap",
+      "short_window"
+    ],
+    "mode": "ordered",
+    "trace": "../trace-work/robust03.json",
+    "trace_limit": null,
+    "json": "results/robust03.json"
+  },
+  "groups": {
+    "trace": {
+      "queries": 100,
+      "queries_certified_before_full_input": 93,
+      "modeled_break_even_us_per_skipped_item_vs_integer_batch": 0.0,
+      "total_entries": 400000,
+      "entries_read": {
+        "integer_batch": 400000,
+        "exact_batch": 400000,
+        "fraction_nra": 83168,
+        "integer_nra": 83168,
+        "float_batch": 400000,
+        "rankfence": 83168
+      },
+      "entries_skipped_pct": {
+        "integer_batch": 0.0,
+        "exact_batch": 0.0,
+        "fraction_nra": 79.21,
+        "integer_nra": 79.21,
+        "float_batch": 0.0,
+        "rankfence": 79.21
+      },
+      "median_query_ms": {
+        "rankfence": 0.2615,
+        "exact_batch": 6.1364,
+        "float_batch": 0.6914,
+        "integer_batch": 0.9142,
+        "fraction_nra": 0.9559,
+        "integer_nra": 0.179
+      },
+      "p95_query_ms": {
+        "rankfence": 4.1655,
+        "exact_batch": 10.7931,
+        "float_batch": 1.0937,
+        "integer_batch": 1.3952,
+        "fraction_nra": 106.6398,
+        "integer_nra": 14.1912
+      },
+      "float_order_disagreements": 0,
+      "same_stopping_round_as_nra": 100
+    }
+  },
+  "queries": {
+    "trace": [
+      {
+        "query": "303",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA040190-0178",
+          "LA041490-0064",
+          "LA033090-0082",
+          "LA041090-0148",
+          "LA042590-0135"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "fraction_nra": 128,
+          "integer_nra": 128,
+          "float_batch": 4000,
+          "rankfence": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.149532,
+            0.235719,
+            0.2228
+          ],
+          "exact_batch": [
+            18.545839,
+            10.812279,
+            9.966497
+          ],
+          "float_batch": [
+            1.26307,
+            1.09374,
+            1.067962
+          ],
+          "integer_batch": [
+            1.955355,
+            1.469405,
+            1.325292
+          ],
+          "fraction_nra": [
+            0.610754,
+            0.572818,
+            0.582853
+          ],
+          "integer_nra": [
+            0.193166,
+            0.111485,
+            0.110744
+          ]
+        }
+      },
+      {
+        "query": "307",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FR940414-2-00020",
+          "FR940804-2-00061",
+          "FR940303-2-00030",
+          "FR940418-2-00054",
+          "FR940512-2-00030"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "fraction_nra": 512,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "rankfence": 512,
+          "integer_nra": 512
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.565777,
+            0.467382,
+            0.514702
+          ],
+          "exact_batch": [
+            7.609933,
+            5.866736,
+            6.146612
+          ],
+          "float_batch": [
+            0.722039,
+            0.652336,
+            0.770631
+          ],
+          "integer_batch": [
+            1.101851,
+            0.849287,
+            0.754708
+          ],
+          "fraction_nra": [
+            4.203774,
+            2.754978,
+            2.763351
+          ],
+          "integer_nra": [
+            0.602121,
+            0.430658,
+            0.43929
+          ]
+        }
+      },
+      {
+        "query": "310",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT931-11958",
+          "LA122490-0040",
+          "FT922-15435",
+          "LA100889-0041",
+          "FT921-7096"
+        ],
+        "entries_read": {
+          "rankfence": 2176,
+          "integer_nra": 2176,
+          "fraction_nra": 2176,
+          "float_batch": 4000,
+          "exact_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.106009,
+            1.908236,
+            2.024688
+          ],
+          "exact_batch": [
+            10.078102,
+            6.367217,
+            6.201092
+          ],
+          "float_batch": [
+            1.262279,
+            0.813725,
+            0.737272
+          ],
+          "integer_batch": [
+            0.909527,
+            0.977026,
+            0.902576
+          ],
+          "fraction_nra": [
+            41.151129,
+            51.466056,
+            38.622154
+          ],
+          "integer_nra": [
+            5.192157,
+            5.157015,
+            5.197164
+          ]
+        }
+      },
+      {
+        "query": "314",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA122589-0092",
+          "LA122890-0068",
+          "LA022389-0086",
+          "LA122589-0091",
+          "LA122790-0066"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 256,
+          "rankfence": 256,
+          "fraction_nra": 256
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.212455,
+            0.279564,
+            0.259624
+          ],
+          "exact_batch": [
+            6.273679,
+            6.324414,
+            6.3752
+          ],
+          "float_batch": [
+            0.672155,
+            0.691744,
+            0.664834
+          ],
+          "integer_batch": [
+            0.863889,
+            0.965539,
+            0.984868
+          ],
+          "fraction_nra": [
+            0.948695,
+            1.345201,
+            0.923076
+          ],
+          "integer_nra": [
+            0.184203,
+            0.170442,
+            0.166216
+          ]
+        }
+      },
+      {
+        "query": "320",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-59596",
+          "FBIS4-20470",
+          "FBIS4-20427",
+          "FBIS4-20428",
+          "FBIS4-10645"
+        ],
+        "entries_read": {
+          "fraction_nra": 128,
+          "rankfence": 128,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 128,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.170052,
+            0.129251,
+            0.202149
+          ],
+          "exact_batch": [
+            5.371092,
+            5.296152,
+            5.337903
+          ],
+          "float_batch": [
+            0.669111,
+            0.880854,
+            0.565207
+          ],
+          "integer_batch": [
+            0.834426,
+            0.83743,
+            0.906092
+          ],
+          "fraction_nra": [
+            0.331371,
+            0.320514,
+            0.33795
+          ],
+          "integer_nra": [
+            0.068251,
+            0.065938,
+            0.097624
+          ]
+        }
+      },
+      {
+        "query": "322",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA012889-0030",
+          "LA022189-0085",
+          "LA061790-0168",
+          "LA020889-0083",
+          "LA110890-0210"
+        ],
+        "entries_read": {
+          "rankfence": 2432,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 2432,
+          "float_batch": 4000,
+          "fraction_nra": 2432
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            2.120059,
+            2.40413,
+            3.157835
+          ],
+          "exact_batch": [
+            6.617778,
+            6.450971,
+            7.243525
+          ],
+          "float_batch": [
+            0.733727,
+            0.710302,
+            0.906863
+          ],
+          "integer_batch": [
+            0.99948,
+            0.881295,
+            1.220847
+          ],
+          "fraction_nra": [
+            47.702699,
+            53.080041,
+            62.679854
+          ],
+          "integer_nra": [
+            6.029087,
+            6.048756,
+            12.072184
+          ]
+        }
+      },
+      {
+        "query": "325",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA050889-0036",
+          "FT934-8727",
+          "LA010990-0026",
+          "LA051689-0033",
+          "FT944-16074"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "rankfence": 384,
+          "integer_nra": 384,
+          "fraction_nra": 384,
+          "integer_batch": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.455274,
+            0.491728,
+            0.553159
+          ],
+          "exact_batch": [
+            8.399206,
+            7.608946,
+            7.223225
+          ],
+          "float_batch": [
+            1.244622,
+            0.682511,
+            0.821236
+          ],
+          "integer_batch": [
+            1.259295,
+            0.896478,
+            1.075853
+          ],
+          "fraction_nra": [
+            2.024527,
+            2.112668,
+            2.026741
+          ],
+          "integer_nra": [
+            0.340273,
+            0.278712,
+            0.329688
+          ]
+        }
+      },
+      {
+        "query": "330",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-37040",
+          "FBIS4-43198",
+          "FBIS3-19414",
+          "FBIS4-26164",
+          "FBIS4-18528"
+        ],
+        "entries_read": {
+          "integer_nra": 2048,
+          "rankfence": 2048,
+          "fraction_nra": 2048,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            5.901948,
+            1.943087,
+            1.669051
+          ],
+          "exact_batch": [
+            6.017981,
+            5.838765,
+            6.016468
+          ],
+          "float_batch": [
+            0.766905,
+            0.69575,
+            0.689791
+          ],
+          "integer_batch": [
+            2.414795,
+            0.841075,
+            1.033771
+          ],
+          "fraction_nra": [
+            50.898862,
+            28.887732,
+            28.385418
+          ],
+          "integer_nra": [
+            4.686228,
+            3.808419,
+            3.974064
+          ]
+        }
+      },
+      {
+        "query": "336",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA091290-0156",
+          "LA020290-0063",
+          "LA081490-0114",
+          "LA071489-0030",
+          "LA100489-0072"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "fraction_nra": 1792,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 1792,
+          "rankfence": 1792
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.543516,
+            1.864701,
+            1.55301
+          ],
+          "exact_batch": [
+            6.51697,
+            6.55851,
+            6.30162
+          ],
+          "float_batch": [
+            0.738033,
+            2.240432,
+            0.989695
+          ],
+          "integer_batch": [
+            0.988424,
+            0.882086,
+            1.016245
+          ],
+          "fraction_nra": [
+            27.415833,
+            27.416719,
+            25.063358
+          ],
+          "integer_nra": [
+            3.683373,
+            3.856109,
+            3.406413
+          ]
+        }
+      },
+      {
+        "query": "341",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-68194",
+          "FBIS4-68195",
+          "LA031289-0199",
+          "FBIS4-19994",
+          "FT944-17076"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "integer_batch": 4000,
+          "fraction_nra": 128,
+          "rankfence": 128,
+          "exact_batch": 4000,
+          "integer_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.136392,
+            0.16892,
+            0.137634
+          ],
+          "exact_batch": [
+            5.256063,
+            5.541415,
+            5.384001
+          ],
+          "float_batch": [
+            0.586819,
+            0.596112,
+            0.615622
+          ],
+          "integer_batch": [
+            0.754687,
+            0.893142,
+            1.011087
+          ],
+          "fraction_nra": [
+            0.336999,
+            0.359342,
+            0.356248
+          ],
+          "integer_nra": [
+            0.125746,
+            0.079498,
+            0.066458
+          ]
+        }
+      },
+      {
+        "query": "344",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT923-1185",
+          "FT942-571",
+          "FT922-2176",
+          "FT944-1881",
+          "FT944-2088"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "fraction_nra": 768,
+          "float_batch": 4000,
+          "rankfence": 768,
+          "integer_nra": 768,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.562783,
+            0.624144,
+            0.592818
+          ],
+          "exact_batch": [
+            6.339286,
+            7.360618,
+            6.567755
+          ],
+          "float_batch": [
+            0.800836,
+            0.690823,
+            0.795048
+          ],
+          "integer_batch": [
+            0.864841,
+            0.925531,
+            0.877659
+          ],
+          "fraction_nra": [
+            5.512001,
+            5.377032,
+            5.468577
+          ],
+          "integer_nra": [
+            0.814466,
+            0.790851,
+            0.805473
+          ]
+        }
+      },
+      {
+        "query": "345",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA060590-0024",
+          "FT942-12006",
+          "LA052890-0066",
+          "LA022190-0068",
+          "LA051689-0153"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "fraction_nra": 256,
+          "integer_batch": 4000,
+          "rankfence": 256,
+          "integer_nra": 256,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.234417,
+            0.233135,
+            0.227637
+          ],
+          "exact_batch": [
+            5.320758,
+            13.777389,
+            5.130397
+          ],
+          "float_batch": [
+            0.596714,
+            0.573639,
+            0.601471
+          ],
+          "integer_batch": [
+            1.252474,
+            0.82441,
+            0.824401
+          ],
+          "fraction_nra": [
+            1.015193,
+            0.829568,
+            1.01953
+          ],
+          "integer_nra": [
+            0.218584,
+            0.178674,
+            0.159886
+          ]
+        }
+      },
+      {
+        "query": "346",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA062490-0198",
+          "FT932-13789",
+          "FR940303-2-00226",
+          "FR940503-2-00168",
+          "FR940711-2-00121"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "rankfence": 384,
+          "float_batch": 4000,
+          "fraction_nra": 384,
+          "integer_batch": 4000,
+          "integer_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.292663,
+            0.321136,
+            0.421874
+          ],
+          "exact_batch": [
+            5.998502,
+            6.235021,
+            5.681563
+          ],
+          "float_batch": [
+            0.700167,
+            0.720677,
+            0.628611
+          ],
+          "integer_batch": [
+            0.806655,
+            0.799975,
+            0.941995
+          ],
+          "fraction_nra": [
+            1.660538,
+            1.90427,
+            1.686196
+          ],
+          "integer_nra": [
+            0.284762,
+            0.285202,
+            0.307695
+          ]
+        }
+      },
+      {
+        "query": "347",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA051890-0071",
+          "LA062290-0170",
+          "FT922-8911",
+          "LA032090-0105",
+          "LA061690-0061"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "integer_batch": 4000,
+          "rankfence": 128,
+          "integer_nra": 128,
+          "exact_batch": 4000,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.137844,
+            0.139296,
+            0.177012
+          ],
+          "exact_batch": [
+            4.581112,
+            4.593571,
+            4.872474
+          ],
+          "float_batch": [
+            0.544336,
+            0.598075,
+            0.570795
+          ],
+          "integer_batch": [
+            0.671394,
+            0.650994,
+            0.67567
+          ],
+          "fraction_nra": [
+            0.281667,
+            0.470567,
+            0.489375
+          ],
+          "integer_nra": [
+            0.063074,
+            0.070564,
+            0.06758
+          ]
+        }
+      },
+      {
+        "query": "350",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA052290-0188",
+          "LA060690-0112",
+          "LA062390-0104",
+          "FT923-4291",
+          "LA100690-0107"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "integer_nra": 1024,
+          "rankfence": 1024,
+          "fraction_nra": 1024,
+          "exact_batch": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.317551,
+            1.209,
+            1.238003
+          ],
+          "exact_batch": [
+            10.40071,
+            10.013245,
+            9.783726
+          ],
+          "float_batch": [
+            0.861626,
+            1.106468,
+            1.138556
+          ],
+          "integer_batch": [
+            0.983897,
+            1.486841,
+            1.475806
+          ],
+          "fraction_nra": [
+            15.151914,
+            14.987731,
+            15.219634
+          ],
+          "integer_nra": [
+            1.464808,
+            2.102383,
+            2.027132
+          ]
+        }
+      },
+      {
+        "query": "353",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-67409",
+          "LA111690-0059",
+          "LA120389-0149",
+          "LA100389-0123",
+          "FBIS3-61405"
+        ],
+        "entries_read": {
+          "integer_nra": 256,
+          "integer_batch": 4000,
+          "rankfence": 256,
+          "exact_batch": 4000,
+          "fraction_nra": 256,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.362978,
+            0.341837,
+            0.307566
+          ],
+          "exact_batch": [
+            9.654434,
+            9.959567,
+            9.739971
+          ],
+          "float_batch": [
+            1.08721,
+            1.056414,
+            1.057616
+          ],
+          "integer_batch": [
+            1.466731,
+            1.436938,
+            1.216291
+          ],
+          "fraction_nra": [
+            1.373693,
+            1.346784,
+            1.582383
+          ],
+          "integer_nra": [
+            0.282509,
+            0.231974,
+            0.254226
+          ]
+        }
+      },
+      {
+        "query": "354",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA082489-0005",
+          "FBIS3-22921",
+          "FBIS3-58280",
+          "LA050390-0185",
+          "LA123089-0092"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "rankfence": 1664,
+          "integer_batch": 4000,
+          "integer_nra": 1664,
+          "fraction_nra": 1664,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.417579,
+            1.433843,
+            1.439972
+          ],
+          "exact_batch": [
+            7.541576,
+            6.562146,
+            6.356111
+          ],
+          "float_batch": [
+            1.066599,
+            0.739695,
+            0.794266
+          ],
+          "integer_batch": [
+            0.97942,
+            0.981563,
+            0.945079
+          ],
+          "fraction_nra": [
+            21.492242,
+            22.655704,
+            21.542727
+          ],
+          "integer_nra": [
+            4.797633,
+            3.055674,
+            2.924681
+          ]
+        }
+      },
+      {
+        "query": "355",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-40210",
+          "FBIS4-20436",
+          "FBIS3-40224",
+          "FBIS3-23683",
+          "FBIS4-47374"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "rankfence": 128,
+          "fraction_nra": 128,
+          "integer_batch": 4000,
+          "integer_nra": 128,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.167999,
+            0.173016,
+            0.260646
+          ],
+          "exact_batch": [
+            6.661513,
+            7.128625,
+            6.51758
+          ],
+          "float_batch": [
+            0.864811,
+            0.805002,
+            0.726686
+          ],
+          "integer_batch": [
+            1.036355,
+            1.307105,
+            1.175351
+          ],
+          "fraction_nra": [
+            0.383808,
+            0.382786,
+            0.386302
+          ],
+          "integer_nra": [
+            0.159626,
+            0.109552,
+            0.12155
+          ]
+        }
+      },
+      {
+        "query": "356",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA082890-0074",
+          "LA111589-0004",
+          "LA092890-0067",
+          "LA080289-0067",
+          "LA020589-0078"
+        ],
+        "entries_read": {
+          "rankfence": 128,
+          "exact_batch": 4000,
+          "integer_nra": 128,
+          "fraction_nra": 128,
+          "float_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.179586,
+            0.241678,
+            0.174869
+          ],
+          "exact_batch": [
+            10.513767,
+            10.890214,
+            11.0896
+          ],
+          "float_batch": [
+            0.758564,
+            1.151124,
+            1.173377
+          ],
+          "integer_batch": [
+            1.005038,
+            1.672085,
+            1.525748
+          ],
+          "fraction_nra": [
+            0.301707,
+            0.471228,
+            0.493581
+          ],
+          "integer_nra": [
+            0.082482,
+            0.147879,
+            0.089763
+          ]
+        }
+      },
+      {
+        "query": "362",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-2353",
+          "FT932-4965",
+          "FBIS4-66826",
+          "LA030189-0037",
+          "FBIS4-50246"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "rankfence": 1536,
+          "fraction_nra": 1536,
+          "float_batch": 4000,
+          "integer_nra": 1536,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.259304,
+            1.28346,
+            1.158114
+          ],
+          "exact_batch": [
+            5.463749,
+            5.63946,
+            5.74097
+          ],
+          "float_batch": [
+            0.649812,
+            0.914955,
+            0.68893
+          ],
+          "integer_batch": [
+            0.859072,
+            1.150073,
+            0.773996
+          ],
+          "fraction_nra": [
+            17.022754,
+            17.595773,
+            17.774927
+          ],
+          "integer_nra": [
+            2.667239,
+            2.815109,
+            2.373514
+          ]
+        }
+      },
+      {
+        "query": "363",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT944-11817",
+          "LA092290-0102",
+          "LA072490-0030",
+          "FT922-12816",
+          "LA060189-0057"
+        ],
+        "entries_read": {
+          "integer_nra": 512,
+          "float_batch": 4000,
+          "fraction_nra": 512,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "rankfence": 512
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.626748,
+            0.370659,
+            0.54685
+          ],
+          "exact_batch": [
+            5.736324,
+            5.728822,
+            6.181853
+          ],
+          "float_batch": [
+            0.702109,
+            0.642321,
+            0.705094
+          ],
+          "integer_batch": [
+            0.854245,
+            0.892672,
+            0.793605
+          ],
+          "fraction_nra": [
+            2.530857,
+            2.461494,
+            3.054102
+          ],
+          "integer_nra": [
+            0.393392,
+            0.384159,
+            0.420723
+          ]
+        }
+      },
+      {
+        "query": "367",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-2223",
+          "FT944-2053",
+          "FT944-1847",
+          "FBIS4-67139",
+          "FBIS4-48973"
+        ],
+        "entries_read": {
+          "integer_nra": 384,
+          "fraction_nra": 384,
+          "exact_batch": 4000,
+          "rankfence": 384,
+          "float_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.59452,
+            0.626778,
+            0.537977
+          ],
+          "exact_batch": [
+            10.967469,
+            10.79312,
+            10.766151
+          ],
+          "float_batch": [
+            1.255729,
+            1.152486,
+            1.179427
+          ],
+          "integer_batch": [
+            1.393523,
+            1.395235,
+            1.486762
+          ],
+          "fraction_nra": [
+            3.012385,
+            2.887134,
+            2.830921
+          ],
+          "integer_nra": [
+            0.368025,
+            0.424057,
+            0.416216
+          ]
+        }
+      },
+      {
+        "query": "372",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT942-12298",
+          "FT924-6336",
+          "FT941-15351",
+          "FT944-1462",
+          "LA060390-0083"
+        ],
+        "entries_read": {
+          "integer_nra": 256,
+          "rankfence": 256,
+          "float_batch": 4000,
+          "fraction_nra": 256,
+          "exact_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.368265,
+            0.267997,
+            0.397498
+          ],
+          "exact_batch": [
+            9.61116,
+            9.873359,
+            9.875051
+          ],
+          "float_batch": [
+            1.043936,
+            1.060821,
+            1.042594
+          ],
+          "integer_batch": [
+            1.092728,
+            1.368687,
+            1.325783
+          ],
+          "fraction_nra": [
+            1.458069,
+            2.118697,
+            1.578778
+          ],
+          "integer_nra": [
+            0.276008,
+            0.247426,
+            0.241858
+          ]
+        }
+      },
+      {
+        "query": "374",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA101289-0221",
+          "FT911-2323",
+          "LA080889-0027",
+          "LA072489-0070",
+          "FT924-13568"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "rankfence": 256,
+          "exact_batch": 4000,
+          "fraction_nra": 256,
+          "float_batch": 4000,
+          "integer_nra": 256
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.26943,
+            0.257603,
+            0.254488
+          ],
+          "exact_batch": [
+            5.261608,
+            5.016844,
+            5.035962
+          ],
+          "float_batch": [
+            0.562854,
+            0.59951,
+            0.556726
+          ],
+          "integer_batch": [
+            0.769712,
+            0.679388,
+            0.731756
+          ],
+          "fraction_nra": [
+            0.834966,
+            0.839346,
+            0.784675
+          ],
+          "integer_nra": [
+            0.162171,
+            0.139968,
+            0.152246
+          ]
+        }
+      },
+      {
+        "query": "375",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-20985",
+          "FBIS3-60383",
+          "FBIS3-59553",
+          "FBIS3-60662",
+          "FT944-16550"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "fraction_nra": 256,
+          "rankfence": 256,
+          "integer_nra": 256,
+          "exact_batch": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.263742,
+            0.257562,
+            0.263331
+          ],
+          "exact_batch": [
+            5.356108,
+            5.390528,
+            5.322498
+          ],
+          "float_batch": [
+            0.647871,
+            0.59305,
+            0.618508
+          ],
+          "integer_batch": [
+            0.857222,
+            0.764434,
+            0.808139
+          ],
+          "fraction_nra": [
+            0.791544,
+            0.809091,
+            0.813367
+          ],
+          "integer_nra": [
+            0.15506,
+            0.147819,
+            0.143253
+          ]
+        }
+      },
+      {
+        "query": "378",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT922-2274",
+          "FT942-10432",
+          "FT942-6780",
+          "FBIS3-19643",
+          "FT921-7322"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "rankfence": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 4000,
+          "fraction_nra": 4000,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            4.85226,
+            5.057555,
+            6.343752
+          ],
+          "exact_batch": [
+            7.389914,
+            7.732013,
+            6.519623
+          ],
+          "float_batch": [
+            0.778896,
+            0.693099,
+            0.665898
+          ],
+          "integer_batch": [
+            1.398946,
+            1.170797,
+            1.184067
+          ],
+          "fraction_nra": [
+            108.081537,
+            106.639768,
+            104.597926
+          ],
+          "integer_nra": [
+            14.242904,
+            14.018521,
+            16.027751
+          ]
+        }
+      },
+      {
+        "query": "379",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FR940919-2-00099",
+          "FR940919-2-00098",
+          "FR940919-2-00095",
+          "FR940919-2-00094",
+          "FR940419-2-00042"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "rankfence": 256,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 256,
+          "fraction_nra": 256
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.239856,
+            0.172146,
+            0.241278
+          ],
+          "exact_batch": [
+            5.707058,
+            5.880154,
+            5.889008
+          ],
+          "float_batch": [
+            0.711146,
+            0.639929,
+            0.671896
+          ],
+          "integer_batch": [
+            0.797343,
+            0.871323,
+            1.105841
+          ],
+          "fraction_nra": [
+            0.884482,
+            0.877171,
+            0.874518
+          ],
+          "integer_nra": [
+            0.149482,
+            0.184935,
+            0.155751
+          ]
+        }
+      },
+      {
+        "query": "383",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA011489-0048",
+          "LA010889-0051",
+          "FT933-4868",
+          "LA112389-0158",
+          "FT933-437"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "integer_nra": 256,
+          "fraction_nra": 256,
+          "integer_batch": 4000,
+          "rankfence": 256,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.504048,
+            0.221038,
+            0.241088
+          ],
+          "exact_batch": [
+            5.28392,
+            5.181218,
+            5.751083
+          ],
+          "float_batch": [
+            0.597627,
+            0.582564,
+            0.611297
+          ],
+          "integer_batch": [
+            0.7414,
+            0.873696,
+            0.746758
+          ],
+          "fraction_nra": [
+            0.819265,
+            0.819496,
+            0.821229
+          ],
+          "integer_nra": [
+            0.172346,
+            0.172265,
+            0.166588
+          ]
+        }
+      },
+      {
+        "query": "389",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FR940407-2-00136",
+          "FR940805-2-00049",
+          "FR940627-2-00077",
+          "FR940217-1-00026",
+          "FR941207-0-00147"
+        ],
+        "entries_read": {
+          "integer_nra": 1536,
+          "rankfence": 1536,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "fraction_nra": 1536
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.775665,
+            1.939673,
+            1.932277
+          ],
+          "exact_batch": [
+            6.182283,
+            6.998845,
+            6.172498
+          ],
+          "float_batch": [
+            0.836091,
+            1.169506,
+            0.652538
+          ],
+          "integer_batch": [
+            1.050088,
+            1.149586,
+            0.956159
+          ],
+          "fraction_nra": [
+            18.310678,
+            20.649989,
+            21.0757
+          ],
+          "integer_nra": [
+            3.49446,
+            2.567159,
+            2.476144
+          ]
+        }
+      },
+      {
+        "query": "393",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT924-15580",
+          "LA042190-0143",
+          "LA060789-0028",
+          "LA080190-0135",
+          "LA111590-0053"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "fraction_nra": 1408,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "rankfence": 1408,
+          "integer_nra": 1408
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.65821,
+            1.437222,
+            1.107393
+          ],
+          "exact_batch": [
+            9.557751,
+            10.443495,
+            11.515025
+          ],
+          "float_batch": [
+            1.269433,
+            1.168133,
+            1.226009
+          ],
+          "integer_batch": [
+            1.620555,
+            1.292558,
+            1.18676
+          ],
+          "fraction_nra": [
+            26.823989,
+            24.291233,
+            16.517067
+          ],
+          "integer_nra": [
+            3.493764,
+            3.393154,
+            3.111246
+          ]
+        }
+      },
+      {
+        "query": "394",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA101890-0207",
+          "LA031190-0045",
+          "LA010890-0013",
+          "LA101590-0098",
+          "LA021889-0045"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 3456,
+          "fraction_nra": 3456,
+          "rankfence": 3456,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            2.732073,
+            3.724877,
+            2.751232
+          ],
+          "exact_batch": [
+            6.058119,
+            6.278405,
+            6.122704
+          ],
+          "float_batch": [
+            0.639429,
+            0.735371,
+            0.64025
+          ],
+          "integer_batch": [
+            0.888809,
+            0.753087,
+            0.851904
+          ],
+          "fraction_nra": [
+            81.336923,
+            82.048889,
+            81.875923
+          ],
+          "integer_nra": [
+            10.960092,
+            10.598846,
+            10.218892
+          ]
+        }
+      },
+      {
+        "query": "397",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA072390-0100",
+          "LA020890-0157",
+          "LA121989-0061",
+          "LA021390-0016",
+          "LA120690-0090"
+        ],
+        "entries_read": {
+          "fraction_nra": 512,
+          "rankfence": 512,
+          "float_batch": 4000,
+          "integer_nra": 512,
+          "exact_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.490447,
+            0.485621,
+            0.588693
+          ],
+          "exact_batch": [
+            6.671449,
+            6.399274,
+            8.272685
+          ],
+          "float_batch": [
+            0.711937,
+            0.752586,
+            0.719047
+          ],
+          "integer_batch": [
+            0.976408,
+            1.010129,
+            1.028756
+          ],
+          "fraction_nra": [
+            3.456198,
+            3.05967,
+            3.042655
+          ],
+          "integer_nra": [
+            0.458721,
+            0.450919,
+            0.449227
+          ]
+        }
+      },
+      {
+        "query": "399",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT934-7286",
+          "LA081390-0044",
+          "FR940217-1-00140",
+          "FT924-3602",
+          "LA032289-0033"
+        ],
+        "entries_read": {
+          "rankfence": 256,
+          "integer_nra": 256,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "fraction_nra": 256
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.902569,
+            0.253066,
+            0.187508
+          ],
+          "exact_batch": [
+            6.260959,
+            7.192126,
+            8.230322
+          ],
+          "float_batch": [
+            0.664786,
+            0.672447,
+            0.705497
+          ],
+          "integer_batch": [
+            1.258777,
+            0.979253,
+            0.96397
+          ],
+          "fraction_nra": [
+            1.05156,
+            0.969539,
+            0.981286
+          ],
+          "integer_nra": [
+            0.173508,
+            0.193507,
+            0.2085
+          ]
+        }
+      },
+      {
+        "query": "401",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-18182",
+          "FBIS3-59436",
+          "FBIS4-9582",
+          "FBIS4-31704",
+          "FT934-15047"
+        ],
+        "entries_read": {
+          "fraction_nra": 3072,
+          "exact_batch": 4000,
+          "rankfence": 3072,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "integer_nra": 3072
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.189002,
+            2.840524,
+            2.924119
+          ],
+          "exact_batch": [
+            7.063511,
+            6.176304,
+            6.648245
+          ],
+          "float_batch": [
+            0.912073,
+            0.758135,
+            0.701161
+          ],
+          "integer_batch": [
+            1.007595,
+            1.090608,
+            0.97737
+          ],
+          "fraction_nra": [
+            69.137793,
+            69.688599,
+            70.16754
+          ],
+          "integer_nra": [
+            8.863361,
+            9.120393,
+            9.773151
+          ]
+        }
+      },
+      {
+        "query": "404",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-66076",
+          "FT934-11680",
+          "FT934-11487",
+          "FT944-14470",
+          "FT942-16203"
+        ],
+        "entries_read": {
+          "fraction_nra": 256,
+          "rankfence": 256,
+          "float_batch": 4000,
+          "integer_nra": 256,
+          "integer_batch": 4000,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.263691,
+            0.231143,
+            0.243842
+          ],
+          "exact_batch": [
+            4.997114,
+            5.433823,
+            5.307585
+          ],
+          "float_batch": [
+            0.578889,
+            0.548334,
+            0.562003
+          ],
+          "integer_batch": [
+            0.827357,
+            0.762832,
+            0.710654
+          ],
+          "fraction_nra": [
+            0.879735,
+            0.974266,
+            0.885474
+          ],
+          "integer_nra": [
+            0.18184,
+            0.186947,
+            0.157494
+          ]
+        }
+      },
+      {
+        "query": "408",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA062590-0054",
+          "LA120389-0130",
+          "LA102090-0035",
+          "LA082990-0118",
+          "LA101390-0102"
+        ],
+        "entries_read": {
+          "integer_nra": 256,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "rankfence": 256,
+          "exact_batch": 4000,
+          "fraction_nra": 256
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.285302,
+            0.310449,
+            0.287927
+          ],
+          "exact_batch": [
+            5.992523,
+            5.678448,
+            6.035667
+          ],
+          "float_batch": [
+            0.638526,
+            0.776791,
+            0.598906
+          ],
+          "integer_batch": [
+            0.946812,
+            0.771783,
+            0.882156
+          ],
+          "fraction_nra": [
+            1.04046,
+            0.849778,
+            0.953742
+          ],
+          "integer_nra": [
+            0.16884,
+            0.151445,
+            0.188459
+          ]
+        }
+      },
+      {
+        "query": "409",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT923-13692",
+          "LA092189-0137",
+          "FT923-13817",
+          "LA110489-0092",
+          "LA122289-0117"
+        ],
+        "entries_read": {
+          "fraction_nra": 128,
+          "integer_nra": 128,
+          "integer_batch": 4000,
+          "rankfence": 128,
+          "exact_batch": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.171184,
+            0.152726,
+            0.144064
+          ],
+          "exact_batch": [
+            5.778366,
+            5.850983,
+            5.950531
+          ],
+          "float_batch": [
+            0.635281,
+            0.624965,
+            0.626808
+          ],
+          "integer_batch": [
+            0.916767,
+            0.922806,
+            0.894645
+          ],
+          "fraction_nra": [
+            0.343859,
+            0.483356,
+            0.343388
+          ],
+          "integer_nra": [
+            0.092006,
+            0.097435,
+            0.08771
+          ]
+        }
+      },
+      {
+        "query": "414",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT944-12369",
+          "FT921-9644",
+          "FT943-1006",
+          "FT923-3729",
+          "FT944-11926"
+        ],
+        "entries_read": {
+          "fraction_nra": 128,
+          "rankfence": 128,
+          "integer_nra": 128,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.163913,
+            0.149802,
+            0.18218
+          ],
+          "exact_batch": [
+            5.744486,
+            5.807499,
+            6.290084
+          ],
+          "float_batch": [
+            0.629372,
+            0.625336,
+            0.704083
+          ],
+          "integer_batch": [
+            0.773566,
+            0.832803,
+            1.211534
+          ],
+          "fraction_nra": [
+            0.374895,
+            0.370018,
+            0.524176
+          ],
+          "integer_nra": [
+            0.074721,
+            0.078285,
+            0.1147
+          ]
+        }
+      },
+      {
+        "query": "416",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-25805",
+          "FBIS4-66355",
+          "FBIS3-3711",
+          "FBIS3-45089",
+          "FBIS3-46276"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 256,
+          "fraction_nra": 256,
+          "rankfence": 256,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.272013,
+            0.180608,
+            0.257391
+          ],
+          "exact_batch": [
+            6.184067,
+            6.288602,
+            6.593173
+          ],
+          "float_batch": [
+            0.691874,
+            0.776329,
+            0.683222
+          ],
+          "integer_batch": [
+            1.081632,
+            1.019199,
+            0.808016
+          ],
+          "fraction_nra": [
+            0.730171,
+            0.696412,
+            0.810891
+          ],
+          "integer_nra": [
+            0.278693,
+            0.165846,
+            0.16886
+          ]
+        }
+      },
+      {
+        "query": "419",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA040190-0174",
+          "FBIS3-41645",
+          "LA022190-0069",
+          "LA121389-0085",
+          "FBIS4-67400"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "integer_nra": 128,
+          "fraction_nra": 128,
+          "rankfence": 128,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.22238,
+            0.206916,
+            0.185985
+          ],
+          "exact_batch": [
+            10.039916,
+            9.838999,
+            9.815965
+          ],
+          "float_batch": [
+            1.103874,
+            1.069013,
+            1.126417
+          ],
+          "integer_batch": [
+            1.550146,
+            1.517837,
+            1.415566
+          ],
+          "fraction_nra": [
+            0.591115,
+            0.591476,
+            0.580489
+          ],
+          "integer_nra": [
+            0.152746,
+            0.116323,
+            0.1078
+          ]
+        }
+      },
+      {
+        "query": "426",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA031490-0004",
+          "FR940114-1-00046",
+          "LA051990-0141",
+          "FR940114-1-00047",
+          "FR940114-1-00044"
+        ],
+        "entries_read": {
+          "integer_nra": 256,
+          "fraction_nra": 256,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "rankfence": 256,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.300935,
+            0.237762,
+            0.244252
+          ],
+          "exact_batch": [
+            7.006975,
+            6.141564,
+            5.846668
+          ],
+          "float_batch": [
+            1.021272,
+            0.692766,
+            0.694228
+          ],
+          "integer_batch": [
+            1.28988,
+            0.878551,
+            0.964368
+          ],
+          "fraction_nra": [
+            0.962375,
+            0.958078,
+            0.948204
+          ],
+          "integer_nra": [
+            0.296028,
+            0.177964,
+            0.163673
+          ]
+        }
+      },
+      {
+        "query": "427",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA082089-0008",
+          "FT923-10771",
+          "FR941028-2-00203",
+          "LA070389-0031",
+          "FR941028-2-00213"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "rankfence": 128,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "fraction_nra": 128,
+          "integer_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.136913,
+            0.140789,
+            0.124915
+          ],
+          "exact_batch": [
+            5.861179,
+            5.756334,
+            5.733099
+          ],
+          "float_batch": [
+            0.683963,
+            0.672356,
+            0.731443
+          ],
+          "integer_batch": [
+            0.820865,
+            0.920473,
+            1.117345
+          ],
+          "fraction_nra": [
+            0.287205,
+            0.301556,
+            0.303069
+          ],
+          "integer_nra": [
+            0.058457,
+            0.091726,
+            0.07478
+          ]
+        }
+      },
+      {
+        "query": "433",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA080690-0141",
+          "FT941-4064",
+          "FT944-9935",
+          "FT924-9527",
+          "FT923-4572"
+        ],
+        "entries_read": {
+          "rankfence": 384,
+          "integer_nra": 384,
+          "fraction_nra": 384,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.319433,
+            0.321626,
+            0.305263
+          ],
+          "exact_batch": [
+            6.524392,
+            5.773729,
+            6.17274
+          ],
+          "float_batch": [
+            0.638957,
+            0.638005,
+            0.685385
+          ],
+          "integer_batch": [
+            0.853183,
+            0.847465,
+            0.846343
+          ],
+          "fraction_nra": [
+            1.792534,
+            1.746346,
+            1.878132
+          ],
+          "integer_nra": [
+            0.288487,
+            0.308416,
+            0.370048
+          ]
+        }
+      },
+      {
+        "query": "435",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT941-12411",
+          "FT931-892",
+          "FT933-15872",
+          "FT943-5505",
+          "FT943-3422"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "integer_nra": 256,
+          "integer_batch": 4000,
+          "rankfence": 256,
+          "exact_batch": 4000,
+          "fraction_nra": 256
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.24978,
+            0.23637,
+            0.232244
+          ],
+          "exact_batch": [
+            5.803103,
+            5.856943,
+            5.746389
+          ],
+          "float_batch": [
+            0.642802,
+            0.652095,
+            0.697092
+          ],
+          "integer_batch": [
+            1.125807,
+            0.846283,
+            0.904941
+          ],
+          "fraction_nra": [
+            0.919182,
+            0.971408,
+            0.924299
+          ],
+          "integer_nra": [
+            0.179406,
+            0.211063,
+            0.160277
+          ]
+        }
+      },
+      {
+        "query": "436",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT931-15371",
+          "FT944-5690",
+          "FT941-11908",
+          "FT931-12906",
+          "FT933-6495"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "integer_nra": 4000,
+          "fraction_nra": 4000,
+          "rankfence": 4000,
+          "exact_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            4.318795,
+            4.845145,
+            5.076757
+          ],
+          "exact_batch": [
+            6.477382,
+            7.374159,
+            6.923482
+          ],
+          "float_batch": [
+            0.687919,
+            0.821447,
+            0.788377
+          ],
+          "integer_batch": [
+            1.015804,
+            1.117274,
+            1.166808
+          ],
+          "fraction_nra": [
+            129.574538,
+            127.253882,
+            157.143811
+          ],
+          "integer_nra": [
+            15.995726,
+            16.177185,
+            21.5632
+          ]
+        }
+      },
+      {
+        "query": "439",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FR940627-2-00078",
+          "LA100589-0058",
+          "FBIS3-23562",
+          "FT942-14635",
+          "FT932-6180"
+        ],
+        "entries_read": {
+          "rankfence": 384,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "fraction_nra": 384,
+          "float_batch": 4000,
+          "integer_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.558096,
+            0.392622,
+            0.404659
+          ],
+          "exact_batch": [
+            7.13849,
+            17.28844,
+            6.583979
+          ],
+          "float_batch": [
+            0.721579,
+            0.710763,
+            0.664203
+          ],
+          "integer_batch": [
+            1.099228,
+            1.027632,
+            1.139818
+          ],
+          "fraction_nra": [
+            1.778634,
+            1.686077,
+            1.790181
+          ],
+          "integer_nra": [
+            0.277781,
+            0.302327,
+            0.278933
+          ]
+        }
+      },
+      {
+        "query": "442",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA071090-0093",
+          "FBIS4-59518",
+          "LA121090-0007",
+          "FBIS4-36655",
+          "FBIS4-36664"
+        ],
+        "entries_read": {
+          "fraction_nra": 4000,
+          "rankfence": 4000,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "integer_nra": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            4.081544,
+            4.165458,
+            4.364192
+          ],
+          "exact_batch": [
+            6.433706,
+            6.397543,
+            6.811005
+          ],
+          "float_batch": [
+            0.740847,
+            0.880213,
+            0.74255
+          ],
+          "integer_batch": [
+            0.841376,
+            0.861565,
+            1.099889
+          ],
+          "fraction_nra": [
+            125.315431,
+            126.806239,
+            126.432536
+          ],
+          "integer_nra": [
+            16.68101,
+            16.4714,
+            16.901537
+          ]
+        }
+      },
+      {
+        "query": "443",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT941-4190",
+          "FT921-14694",
+          "FT944-17976",
+          "FT933-858",
+          "FT923-1945"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "integer_nra": 512,
+          "float_batch": 4000,
+          "rankfence": 512,
+          "fraction_nra": 512
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.441895,
+            0.476405,
+            0.440642
+          ],
+          "exact_batch": [
+            5.967827,
+            5.879937,
+            5.872525
+          ],
+          "float_batch": [
+            0.667228,
+            0.653437,
+            0.662611
+          ],
+          "integer_batch": [
+            1.203171,
+            0.883107,
+            0.913964
+          ],
+          "fraction_nra": [
+            2.435176,
+            2.423739,
+            2.446143
+          ],
+          "integer_nra": [
+            0.451879,
+            0.408635,
+            0.381044
+          ]
+        }
+      },
+      {
+        "query": "445",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA110789-0149",
+          "LA040390-0124",
+          "FT934-408",
+          "LA102790-0157",
+          "FT924-8156"
+        ],
+        "entries_read": {
+          "fraction_nra": 384,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "exact_batch": 4000,
+          "integer_nra": 384,
+          "rankfence": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.367234,
+            0.416096,
+            0.266985
+          ],
+          "exact_batch": [
+            5.876943,
+            5.987797,
+            5.921778
+          ],
+          "float_batch": [
+            0.692145,
+            0.689821,
+            0.690863
+          ],
+          "integer_batch": [
+            0.921245,
+            0.874445,
+            0.901525
+          ],
+          "fraction_nra": [
+            1.524878,
+            1.519791,
+            1.505159
+          ],
+          "integer_nra": [
+            0.252384,
+            0.262558,
+            0.254527
+          ]
+        }
+      },
+      {
+        "query": "448",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT931-16636",
+          "FT921-11935",
+          "FR940217-1-00130",
+          "FR941221-1-00019",
+          "FBIS4-15452"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "rankfence": 4000,
+          "integer_nra": 4000,
+          "fraction_nra": 4000,
+          "exact_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            4.432052,
+            15.615473,
+            5.045001
+          ],
+          "exact_batch": [
+            10.881163,
+            6.376452,
+            11.917557
+          ],
+          "float_batch": [
+            0.693878,
+            0.829788,
+            1.097445
+          ],
+          "integer_batch": [
+            1.23579,
+            0.961634,
+            0.805302
+          ],
+          "fraction_nra": [
+            161.081132,
+            129.739528,
+            144.67622
+          ],
+          "integer_nra": [
+            22.02982,
+            13.939461,
+            14.658456
+          ]
+        }
+      },
+      {
+        "query": "601",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT923-11593",
+          "FT931-13722",
+          "FT931-10200",
+          "FT923-9764",
+          "FT944-10568"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "fraction_nra": 256,
+          "float_batch": 4000,
+          "rankfence": 256,
+          "integer_nra": 256,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.751453,
+            0.259033,
+            0.258973
+          ],
+          "exact_batch": [
+            5.947066,
+            6.373858,
+            7.180463
+          ],
+          "float_batch": [
+            2.454724,
+            0.83701,
+            0.735389
+          ],
+          "integer_batch": [
+            1.166768,
+            0.845151,
+            1.095142
+          ],
+          "fraction_nra": [
+            1.196081,
+            1.067751,
+            1.113499
+          ],
+          "integer_nra": [
+            0.203561,
+            0.304011,
+            0.290791
+          ]
+        }
+      },
+      {
+        "query": "602",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT922-1680",
+          "FT922-1536",
+          "FT922-1498",
+          "FT934-11227",
+          "FT922-1409"
+        ],
+        "entries_read": {
+          "rankfence": 128,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 128,
+          "fraction_nra": 128,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.171965,
+            0.163122,
+            0.125095
+          ],
+          "exact_batch": [
+            6.112942,
+            6.957182,
+            5.575566
+          ],
+          "float_batch": [
+            0.658815,
+            0.678986,
+            0.627289
+          ],
+          "integer_batch": [
+            0.886983,
+            0.773836,
+            0.771072
+          ],
+          "fraction_nra": [
+            0.376808,
+            0.381205,
+            0.436876
+          ],
+          "integer_nra": [
+            0.077615,
+            0.100048,
+            0.073729
+          ]
+        }
+      },
+      {
+        "query": "603",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT944-3264",
+          "LA072790-0059",
+          "FT942-1181",
+          "FT942-15472",
+          "LA081990-0051"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "fraction_nra": 384,
+          "float_batch": 4000,
+          "integer_nra": 384,
+          "rankfence": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.328236,
+            0.430558,
+            0.413893
+          ],
+          "exact_batch": [
+            6.13127,
+            5.980906,
+            6.340148
+          ],
+          "float_batch": [
+            0.688209,
+            0.624285,
+            0.611396
+          ],
+          "integer_batch": [
+            0.897539,
+            0.880884,
+            0.785203
+          ],
+          "fraction_nra": [
+            1.722811,
+            1.496696,
+            1.806836
+          ],
+          "integer_nra": [
+            0.246324,
+            0.326463,
+            0.343228
+          ]
+        }
+      },
+      {
+        "query": "604",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA092090-0248",
+          "LA112690-0027",
+          "LA061389-0087",
+          "LA071989-0117",
+          "LA073090-0058"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "rankfence": 128,
+          "exact_batch": 4000,
+          "fraction_nra": 128,
+          "integer_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.194818,
+            0.215379,
+            0.203251
+          ],
+          "exact_batch": [
+            5.722183,
+            6.329783,
+            6.060093
+          ],
+          "float_batch": [
+            0.68175,
+            0.633798,
+            0.754888
+          ],
+          "integer_batch": [
+            1.178215,
+            0.929346,
+            0.828417
+          ],
+          "fraction_nra": [
+            0.337219,
+            0.327635,
+            0.325302
+          ],
+          "integer_nra": [
+            0.085487,
+            0.06755,
+            0.059929
+          ]
+        }
+      },
+      {
+        "query": "605",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA060489-0030",
+          "FR940527-1-00247",
+          "LA040990-0065",
+          "LA061790-0021",
+          "LA013089-0099"
+        ],
+        "entries_read": {
+          "rankfence": 384,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "fraction_nra": 384,
+          "integer_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.467762,
+            0.437738,
+            1.0879
+          ],
+          "exact_batch": [
+            6.535457,
+            6.431814,
+            6.776715
+          ],
+          "float_batch": [
+            0.65465,
+            0.715259,
+            0.716751
+          ],
+          "integer_batch": [
+            0.945029,
+            1.223261,
+            0.92512
+          ],
+          "fraction_nra": [
+            2.044157,
+            1.764974,
+            1.756341
+          ],
+          "integer_nra": [
+            0.270731,
+            0.307936,
+            0.28404
+          ]
+        }
+      },
+      {
+        "query": "606",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA052489-0063",
+          "LA042889-0181",
+          "LA040390-0013",
+          "LA091489-0077",
+          "LA082390-0001"
+        ],
+        "entries_read": {
+          "rankfence": 128,
+          "float_batch": 4000,
+          "exact_batch": 4000,
+          "integer_nra": 128,
+          "integer_batch": 4000,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.159155,
+            0.166046,
+            0.144484
+          ],
+          "exact_batch": [
+            6.024271,
+            6.957222,
+            6.467988
+          ],
+          "float_batch": [
+            0.629842,
+            0.682921,
+            0.747978
+          ],
+          "integer_batch": [
+            0.769229,
+            1.102072,
+            1.012049
+          ],
+          "fraction_nra": [
+            0.356087,
+            0.404229,
+            0.355036
+          ],
+          "integer_nra": [
+            0.089132,
+            0.280044,
+            0.070314
+          ]
+        }
+      },
+      {
+        "query": "607",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA062589-0077",
+          "FT934-1290",
+          "LA121790-0086",
+          "FT934-2039",
+          "FT944-17394"
+        ],
+        "entries_read": {
+          "integer_nra": 128,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "rankfence": 128,
+          "fraction_nra": 128,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.120728,
+            0.24315,
+            0.199235
+          ],
+          "exact_batch": [
+            6.892431,
+            6.30069,
+            6.10558
+          ],
+          "float_batch": [
+            0.596994,
+            0.60777,
+            0.600009
+          ],
+          "integer_batch": [
+            0.724273,
+            1.040802,
+            1.005669
+          ],
+          "fraction_nra": [
+            0.318542,
+            0.427312,
+            0.338521
+          ],
+          "integer_nra": [
+            0.071726,
+            0.131604,
+            0.075762
+          ]
+        }
+      },
+      {
+        "query": "608",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA020490-0205",
+          "LA090689-0110",
+          "LA040190-0172",
+          "FT924-6213",
+          "FBIS4-25388"
+        ],
+        "entries_read": {
+          "integer_nra": 3840,
+          "exact_batch": 4000,
+          "rankfence": 3840,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "fraction_nra": 3840
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            5.137096,
+            3.854467,
+            3.70757
+          ],
+          "exact_batch": [
+            6.831446,
+            6.5366,
+            8.33342
+          ],
+          "float_batch": [
+            0.894415,
+            0.719536,
+            0.634149
+          ],
+          "integer_batch": [
+            1.086128,
+            1.22259,
+            1.106228
+          ],
+          "fraction_nra": [
+            124.954006,
+            97.824384,
+            98.156105
+          ],
+          "integer_nra": [
+            12.7702,
+            12.344299,
+            14.362076
+          ]
+        }
+      },
+      {
+        "query": "609",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-9210",
+          "FBIS3-20587",
+          "LA070690-0084",
+          "LA030689-0022",
+          "FR940617-2-00242"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "rankfence": 768,
+          "fraction_nra": 768,
+          "integer_nra": 768,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.073599,
+            0.73618,
+            0.735059
+          ],
+          "exact_batch": [
+            9.416283,
+            7.014096,
+            6.328917
+          ],
+          "float_batch": [
+            1.059929,
+            0.731873,
+            0.740156
+          ],
+          "integer_batch": [
+            1.493612,
+            1.165596,
+            1.095392
+          ],
+          "fraction_nra": [
+            7.302995,
+            5.94947,
+            6.43553
+          ],
+          "integer_nra": [
+            1.292173,
+            0.922886,
+            0.97219
+          ]
+        }
+      },
+      {
+        "query": "610",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT921-280",
+          "FT924-9284",
+          "FT921-5263",
+          "FT934-14971",
+          "FR940830-1-00028"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "rankfence": 512,
+          "integer_nra": 512,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "fraction_nra": 512
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.525749,
+            0.524447,
+            0.60767
+          ],
+          "exact_batch": [
+            7.974638,
+            6.539513,
+            6.478674
+          ],
+          "float_batch": [
+            0.943577,
+            0.652777,
+            0.725855
+          ],
+          "integer_batch": [
+            1.29,
+            0.83092,
+            0.914434
+          ],
+          "fraction_nra": [
+            3.351412,
+            2.730793,
+            2.442086
+          ],
+          "integer_nra": [
+            0.477477,
+            0.391831,
+            0.397228
+          ]
+        }
+      },
+      {
+        "query": "611",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-19897",
+          "FBIS4-21941",
+          "FBIS3-19974",
+          "FBIS4-22118",
+          "FBIS4-46313"
+        ],
+        "entries_read": {
+          "fraction_nra": 128,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "integer_nra": 128,
+          "rankfence": 128,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.152757,
+            0.18231,
+            0.161499
+          ],
+          "exact_batch": [
+            4.586792,
+            4.62671,
+            5.997341
+          ],
+          "float_batch": [
+            0.535042,
+            1.012299,
+            0.49957
+          ],
+          "integer_batch": [
+            0.709611,
+            0.666176,
+            0.64167
+          ],
+          "fraction_nra": [
+            0.320775,
+            0.315558,
+            0.35097
+          ],
+          "integer_nra": [
+            0.073459,
+            0.077715,
+            0.080359
+          ]
+        }
+      },
+      {
+        "query": "612",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA030989-0104",
+          "LA030689-0004",
+          "LA012189-0056",
+          "LA013089-0055",
+          "FBIS4-24390"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "fraction_nra": 128,
+          "rankfence": 128,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "integer_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            4.448247,
+            0.170542,
+            0.139646
+          ],
+          "exact_batch": [
+            8.269009,
+            5.310003,
+            5.099521
+          ],
+          "float_batch": [
+            1.624786,
+            0.598165,
+            0.58714
+          ],
+          "integer_batch": [
+            0.881475,
+            0.70204,
+            0.785874
+          ],
+          "fraction_nra": [
+            0.319654,
+            0.280475,
+            0.294656
+          ],
+          "integer_nra": [
+            0.118986,
+            0.075472,
+            0.071867
+          ]
+        }
+      },
+      {
+        "query": "613",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA112089-0031",
+          "LA122389-0019",
+          "LA090290-0181",
+          "LA012890-0072",
+          "LA041390-0085"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "fraction_nra": 128,
+          "rankfence": 128,
+          "float_batch": 4000,
+          "integer_nra": 128,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.165695,
+            0.125085,
+            0.144284
+          ],
+          "exact_batch": [
+            5.313437,
+            5.331004,
+            5.333889
+          ],
+          "float_batch": [
+            0.615411,
+            0.625035,
+            0.615371
+          ],
+          "integer_batch": [
+            0.796269,
+            0.801206,
+            0.799754
+          ],
+          "fraction_nra": [
+            0.331151,
+            0.31082,
+            0.33784
+          ],
+          "integer_nra": [
+            0.072658,
+            0.06063,
+            0.084195
+          ]
+        }
+      },
+      {
+        "query": "614",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FR941003-2-00006",
+          "FR940523-2-00056",
+          "FT941-7775",
+          "FT943-15996",
+          "FT942-8796"
+        ],
+        "entries_read": {
+          "integer_nra": 128,
+          "fraction_nra": 128,
+          "rankfence": 128,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.145516,
+            0.133388,
+            0.138485
+          ],
+          "exact_batch": [
+            5.469298,
+            5.508757,
+            5.503459
+          ],
+          "float_batch": [
+            0.624184,
+            0.649812,
+            0.624956
+          ],
+          "integer_batch": [
+            0.827525,
+            0.737773,
+            0.804461
+          ],
+          "fraction_nra": [
+            0.302538,
+            0.295187,
+            0.334865
+          ],
+          "integer_nra": [
+            0.061511,
+            0.066759,
+            0.073469
+          ]
+        }
+      },
+      {
+        "query": "615",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA051690-0109",
+          "LA011589-0113",
+          "LA062689-0014",
+          "LA062889-0008",
+          "LA082190-0004"
+        ],
+        "entries_read": {
+          "fraction_nra": 128,
+          "float_batch": 4000,
+          "integer_batch": 4000,
+          "rankfence": 128,
+          "exact_batch": 4000,
+          "integer_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.193706,
+            0.176392,
+            0.200567
+          ],
+          "exact_batch": [
+            6.151619,
+            5.957642,
+            6.048466
+          ],
+          "float_batch": [
+            0.801146,
+            0.6955,
+            0.672816
+          ],
+          "integer_batch": [
+            1.087481,
+            1.456988,
+            0.81709
+          ],
+          "fraction_nra": [
+            0.325532,
+            0.460592,
+            0.339562
+          ],
+          "integer_nra": [
+            0.08817,
+            0.251713,
+            0.131915
+          ]
+        }
+      },
+      {
+        "query": "616",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT934-13096",
+          "FT944-6905",
+          "FT924-12512",
+          "FBIS3-29850",
+          "FT921-4982"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "rankfence": 128,
+          "integer_batch": 4000,
+          "integer_nra": 128,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.12134,
+            0.202871,
+            0.122041
+          ],
+          "exact_batch": [
+            5.580493,
+            5.913106,
+            5.99715
+          ],
+          "float_batch": [
+            0.666537,
+            0.599047,
+            0.586278
+          ],
+          "integer_batch": [
+            0.785102,
+            0.730712,
+            0.801828
+          ],
+          "fraction_nra": [
+            0.307365,
+            0.340164,
+            0.333674
+          ],
+          "integer_nra": [
+            0.066869,
+            0.08783,
+            0.083103
+          ]
+        }
+      },
+      {
+        "query": "617",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-10222",
+          "FBIS4-38627",
+          "FT942-12807",
+          "FBIS3-51160",
+          "FT933-11808"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "fraction_nra": 1152,
+          "float_batch": 4000,
+          "integer_nra": 1152,
+          "rankfence": 1152
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.920413,
+            0.949516,
+            0.861876
+          ],
+          "exact_batch": [
+            5.99729,
+            5.78751,
+            5.34137
+          ],
+          "float_batch": [
+            0.68163,
+            0.632176,
+            0.671304
+          ],
+          "integer_batch": [
+            0.848035,
+            0.727557,
+            0.801296
+          ],
+          "fraction_nra": [
+            10.863076,
+            10.619996,
+            18.735533
+          ],
+          "integer_nra": [
+            1.585087,
+            1.530506,
+            1.484197
+          ]
+        }
+      },
+      {
+        "query": "618",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA021590-0206",
+          "LA060690-0084",
+          "LA060589-0062",
+          "LA031889-0055",
+          "LA122790-0078"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "integer_batch": 4000,
+          "rankfence": 256,
+          "integer_nra": 256,
+          "exact_batch": 4000,
+          "fraction_nra": 256
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.213676,
+            0.24306,
+            0.30328
+          ],
+          "exact_batch": [
+            5.892766,
+            5.279187,
+            5.964963
+          ],
+          "float_batch": [
+            0.58118,
+            0.590164,
+            0.588822
+          ],
+          "integer_batch": [
+            0.718413,
+            0.765433,
+            0.902106
+          ],
+          "fraction_nra": [
+            0.74241,
+            0.813495,
+            0.806784
+          ],
+          "integer_nra": [
+            0.145946,
+            0.181709,
+            0.19549
+          ]
+        }
+      },
+      {
+        "query": "619",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA051490-0058",
+          "LA021789-0053",
+          "LA052590-0178",
+          "LA080890-0154",
+          "LA022789-0050"
+        ],
+        "entries_read": {
+          "integer_nra": 128,
+          "float_batch": 4000,
+          "exact_batch": 4000,
+          "rankfence": 128,
+          "fraction_nra": 128,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.106597,
+            0.17517,
+            0.170262
+          ],
+          "exact_batch": [
+            5.033523,
+            6.51051,
+            7.898185
+          ],
+          "float_batch": [
+            0.537526,
+            0.79638,
+            0.8309
+          ],
+          "integer_batch": [
+            0.679987,
+            0.989645,
+            0.995254
+          ],
+          "fraction_nra": [
+            0.284802,
+            0.497647,
+            0.538287
+          ],
+          "integer_nra": [
+            0.063264,
+            0.13531,
+            0.104315
+          ]
+        }
+      },
+      {
+        "query": "620",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT921-723",
+          "FBIS4-30449",
+          "FT933-16314",
+          "FT942-11106",
+          "FT911-2181"
+        ],
+        "entries_read": {
+          "rankfence": 128,
+          "integer_nra": 128,
+          "float_batch": 4000,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.145085,
+            0.145756,
+            0.135731
+          ],
+          "exact_batch": [
+            5.62536,
+            5.843132,
+            5.830473
+          ],
+          "float_batch": [
+            0.671644,
+            0.647399,
+            0.600479
+          ],
+          "integer_batch": [
+            0.90444,
+            0.810701,
+            0.858651
+          ],
+          "fraction_nra": [
+            0.33068,
+            0.369006,
+            0.3913
+          ],
+          "integer_nra": [
+            0.071246,
+            0.086348,
+            0.234447
+          ]
+        }
+      },
+      {
+        "query": "621",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT924-9001",
+          "FT924-8156",
+          "LA011390-0037",
+          "FT924-10442",
+          "LA110789-0149"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "exact_batch": 4000,
+          "rankfence": 128,
+          "integer_nra": 128,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.120618,
+            0.128761,
+            0.165184
+          ],
+          "exact_batch": [
+            5.336322,
+            5.480235,
+            4.988817
+          ],
+          "float_batch": [
+            0.6956,
+            0.591646,
+            0.595181
+          ],
+          "integer_batch": [
+            0.757943,
+            0.697543,
+            0.790931
+          ],
+          "fraction_nra": [
+            0.314025,
+            0.395756,
+            0.305953
+          ],
+          "integer_nra": [
+            0.075011,
+            0.078276,
+            0.104115
+          ]
+        }
+      },
+      {
+        "query": "622",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA032190-0143",
+          "FT942-4386",
+          "FT944-7904",
+          "FT941-8771",
+          "FT944-8135"
+        ],
+        "entries_read": {
+          "rankfence": 896,
+          "integer_batch": 4000,
+          "integer_nra": 896,
+          "float_batch": 4000,
+          "exact_batch": 4000,
+          "fraction_nra": 896
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.782929,
+            0.963036,
+            0.788657
+          ],
+          "exact_batch": [
+            6.879347,
+            6.85489,
+            7.830965
+          ],
+          "float_batch": [
+            0.858431,
+            0.874475,
+            1.01277
+          ],
+          "integer_batch": [
+            1.023917,
+            1.441545,
+            1.280155
+          ],
+          "fraction_nra": [
+            7.917684,
+            7.740903,
+            8.811017
+          ],
+          "integer_nra": [
+            1.239816,
+            1.138565,
+            1.295809
+          ]
+        }
+      },
+      {
+        "query": "623",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-59903",
+          "FBIS3-43008",
+          "FBIS3-42970",
+          "FBIS4-66855",
+          "FBIS4-13633"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "rankfence": 128,
+          "integer_nra": 128,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.151885,
+            0.150884,
+            0.115892
+          ],
+          "exact_batch": [
+            5.772508,
+            5.550739,
+            5.250024
+          ],
+          "float_batch": [
+            0.585507,
+            0.568782,
+            0.592507
+          ],
+          "integer_batch": [
+            0.764663,
+            0.689161,
+            0.771682
+          ],
+          "fraction_nra": [
+            0.346002,
+            0.326864,
+            0.342748
+          ],
+          "integer_nra": [
+            0.074651,
+            0.083384,
+            0.086408
+          ]
+        }
+      },
+      {
+        "query": "624",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA042690-0184",
+          "LA090889-0075",
+          "LA121089-0218",
+          "LA092789-0060",
+          "LA121489-0151"
+        ],
+        "entries_read": {
+          "integer_nra": 128,
+          "exact_batch": 4000,
+          "rankfence": 128,
+          "fraction_nra": 128,
+          "integer_batch": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.209971,
+            0.154569,
+            0.172545
+          ],
+          "exact_batch": [
+            9.32661,
+            12.943712,
+            10.802667
+          ],
+          "float_batch": [
+            0.967643,
+            0.665225,
+            0.948825
+          ],
+          "integer_batch": [
+            1.523897,
+            0.950157,
+            1.10719
+          ],
+          "fraction_nra": [
+            0.353173,
+            0.289658,
+            0.32361
+          ],
+          "integer_nra": [
+            0.12172,
+            0.063063,
+            0.131124
+          ]
+        }
+      },
+      {
+        "query": "625",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-21838",
+          "FT931-5315",
+          "FBIS4-68065",
+          "FBIS4-58523",
+          "FBIS3-42326"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "fraction_nra": 128,
+          "integer_nra": 128,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "rankfence": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.099317,
+            0.165045,
+            0.168129
+          ],
+          "exact_batch": [
+            6.71248,
+            6.445003,
+            7.227884
+          ],
+          "float_batch": [
+            0.801546,
+            0.812413,
+            0.758443
+          ],
+          "integer_batch": [
+            0.91196,
+            0.994833,
+            1.430538
+          ],
+          "fraction_nra": [
+            0.408034,
+            0.338531,
+            0.356678
+          ],
+          "integer_nra": [
+            0.080039,
+            0.071947,
+            0.086769
+          ]
+        }
+      },
+      {
+        "query": "626",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT924-13949",
+          "FT923-8486",
+          "FBIS4-60291",
+          "FT942-7622",
+          "FBIS4-60493"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "fraction_nra": 4000,
+          "integer_batch": 4000,
+          "rankfence": 4000,
+          "float_batch": 4000,
+          "integer_nra": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.851493,
+            4.467535,
+            3.874227
+          ],
+          "exact_batch": [
+            6.711038,
+            7.140123,
+            6.327479
+          ],
+          "float_batch": [
+            0.690232,
+            0.653968,
+            0.678204
+          ],
+          "integer_batch": [
+            0.971028,
+            0.967192,
+            0.821727
+          ],
+          "fraction_nra": [
+            116.423165,
+            123.165723,
+            108.799315
+          ],
+          "integer_nra": [
+            14.191173,
+            14.212105,
+            13.869677
+          ]
+        }
+      },
+      {
+        "query": "627",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-2982",
+          "FBIS3-27290",
+          "FBIS3-27522",
+          "FBIS3-37832",
+          "FBIS4-16035"
+        ],
+        "entries_read": {
+          "rankfence": 2560,
+          "integer_batch": 4000,
+          "integer_nra": 2560,
+          "fraction_nra": 2560,
+          "exact_batch": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.600351,
+            2.712988,
+            2.075053
+          ],
+          "exact_batch": [
+            5.870383,
+            7.492293,
+            6.370433
+          ],
+          "float_batch": [
+            0.944128,
+            1.041582,
+            0.639797
+          ],
+          "integer_batch": [
+            1.214849,
+            0.846964,
+            0.94599
+          ],
+          "fraction_nra": [
+            46.407148,
+            50.962923,
+            54.017708
+          ],
+          "integer_nra": [
+            8.587216,
+            7.298228,
+            6.342491
+          ]
+        }
+      },
+      {
+        "query": "628",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA122189-0026",
+          "LA122189-0130",
+          "LA122589-0055",
+          "LA122289-0030",
+          "LA122589-0054"
+        ],
+        "entries_read": {
+          "fraction_nra": 256,
+          "integer_batch": 4000,
+          "integer_nra": 256,
+          "rankfence": 256,
+          "exact_batch": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.308647,
+            0.287625,
+            0.292373
+          ],
+          "exact_batch": [
+            5.662475,
+            6.146806,
+            5.808441
+          ],
+          "float_batch": [
+            0.5808,
+            0.640107,
+            0.590244
+          ],
+          "integer_batch": [
+            0.940803,
+            1.043605,
+            0.807706
+          ],
+          "fraction_nra": [
+            0.920523,
+            1.017166,
+            0.843258
+          ],
+          "integer_nra": [
+            0.156893,
+            0.162281,
+            0.159897
+          ]
+        }
+      },
+      {
+        "query": "629",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT931-4191",
+          "LA031589-0019",
+          "LA012989-0104",
+          "LA070989-0212",
+          "LA011890-0207"
+        ],
+        "entries_read": {
+          "integer_nra": 384,
+          "fraction_nra": 384,
+          "float_batch": 4000,
+          "exact_batch": 4000,
+          "rankfence": 384,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.383688,
+            0.359122,
+            0.393112
+          ],
+          "exact_batch": [
+            5.443431,
+            5.789683,
+            6.223286
+          ],
+          "float_batch": [
+            0.60121,
+            0.700257,
+            0.665926
+          ],
+          "integer_batch": [
+            0.705074,
+            0.843349,
+            1.711604
+          ],
+          "fraction_nra": [
+            1.414004,
+            1.422907,
+            1.461003
+          ],
+          "integer_nra": [
+            0.24362,
+            0.254707,
+            0.270741
+          ]
+        }
+      },
+      {
+        "query": "630",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-41804",
+          "FBIS4-67633",
+          "FT944-16460",
+          "FT944-11095",
+          "FBIS3-22143"
+        ],
+        "entries_read": {
+          "fraction_nra": 128,
+          "integer_nra": 128,
+          "float_batch": 4000,
+          "rankfence": 128,
+          "integer_batch": 4000,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.171664,
+            0.20923,
+            0.138465
+          ],
+          "exact_batch": [
+            6.282603,
+            5.575396,
+            5.607032
+          ],
+          "float_batch": [
+            0.623123,
+            0.605277,
+            0.83768
+          ],
+          "integer_batch": [
+            0.799944,
+            1.071416,
+            0.728869
+          ],
+          "fraction_nra": [
+            0.407704,
+            0.358741,
+            0.377679
+          ],
+          "integer_nra": [
+            0.098146,
+            0.092708,
+            0.096073
+          ]
+        }
+      },
+      {
+        "query": "631",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS4-52427",
+          "FBIS4-49232",
+          "FBIS4-59405",
+          "LA021190-0179",
+          "FBIS4-49677"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "rankfence": 640,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "integer_nra": 640,
+          "fraction_nra": 640
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.597565,
+            0.448934,
+            0.619658
+          ],
+          "exact_batch": [
+            4.575515,
+            4.90216,
+            4.728953
+          ],
+          "float_batch": [
+            0.554081,
+            0.561481,
+            0.525288
+          ],
+          "integer_batch": [
+            0.695691,
+            0.858572,
+            1.028273
+          ],
+          "fraction_nra": [
+            3.509777,
+            3.950991,
+            3.589766
+          ],
+          "integer_nra": [
+            0.67483,
+            0.58716,
+            0.972199
+          ]
+        }
+      },
+      {
+        "query": "632",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT932-11184",
+          "FT931-345",
+          "FT932-8569",
+          "FT942-9756",
+          "FT932-2680"
+        ],
+        "entries_read": {
+          "integer_nra": 4000,
+          "integer_batch": 4000,
+          "rankfence": 4000,
+          "float_batch": 4000,
+          "fraction_nra": 4000,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            4.387527,
+            3.818424,
+            4.216074
+          ],
+          "exact_batch": [
+            5.978432,
+            14.484168,
+            5.78059
+          ],
+          "float_batch": [
+            0.687658,
+            0.660048,
+            0.662521
+          ],
+          "integer_batch": [
+            0.965911,
+            0.775689,
+            1.021693
+          ],
+          "fraction_nra": [
+            123.292571,
+            99.708033,
+            100.514217
+          ],
+          "integer_nra": [
+            13.25019,
+            13.427943,
+            13.433622
+          ]
+        }
+      },
+      {
+        "query": "633",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT922-15171",
+          "FT944-13056",
+          "FT921-6952",
+          "FT921-10574",
+          "FT922-13589"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "rankfence": 128,
+          "exact_batch": 4000,
+          "integer_nra": 128,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.163612,
+            0.119567,
+            0.186797
+          ],
+          "exact_batch": [
+            5.018151,
+            4.914607,
+            7.694584
+          ],
+          "float_batch": [
+            0.548001,
+            0.701579,
+            0.80375
+          ],
+          "integer_batch": [
+            0.885301,
+            0.731633,
+            0.816199
+          ],
+          "fraction_nra": [
+            0.313865,
+            0.315397,
+            0.396427
+          ],
+          "integer_nra": [
+            0.062883,
+            0.072076,
+            0.071776
+          ]
+        }
+      },
+      {
+        "query": "634",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA032390-0070",
+          "LA061390-0007",
+          "LA071090-0010",
+          "LA020890-0085",
+          "LA071090-0055"
+        ],
+        "entries_read": {
+          "integer_nra": 128,
+          "rankfence": 128,
+          "integer_batch": 4000,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.132887,
+            0.159617,
+            0.111254
+          ],
+          "exact_batch": [
+            6.108465,
+            6.592421,
+            6.229565
+          ],
+          "float_batch": [
+            0.778152,
+            0.670403,
+            0.727447
+          ],
+          "integer_batch": [
+            0.854566,
+            0.895025,
+            0.788247
+          ],
+          "fraction_nra": [
+            0.312763,
+            0.355486,
+            0.354775
+          ],
+          "integer_nra": [
+            0.099567,
+            0.06742,
+            0.068261
+          ]
+        }
+      },
+      {
+        "query": "635",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA060690-0053",
+          "LA062190-0255",
+          "LA121490-0059",
+          "LA061690-0004",
+          "LA121390-0235"
+        ],
+        "entries_read": {
+          "fraction_nra": 128,
+          "exact_batch": 4000,
+          "rankfence": 128,
+          "float_batch": 4000,
+          "integer_nra": 128,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.251373,
+            0.247437,
+            0.230662
+          ],
+          "exact_batch": [
+            7.423743,
+            8.975551,
+            8.980823
+          ],
+          "float_batch": [
+            0.792584,
+            0.944569,
+            0.865553
+          ],
+          "integer_batch": [
+            0.979,
+            1.292413,
+            1.2754
+          ],
+          "fraction_nra": [
+            0.341475,
+            0.56091,
+            0.56052
+          ],
+          "integer_nra": [
+            0.151704,
+            0.114078,
+            0.113358
+          ]
+        }
+      },
+      {
+        "query": "636",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FR940727-0-00085",
+          "LA012089-0096",
+          "LA050289-0019",
+          "LA021789-0063",
+          "FR940727-0-00084"
+        ],
+        "entries_read": {
+          "rankfence": 4000,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "integer_nra": 4000,
+          "fraction_nra": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            4.526396,
+            4.492126,
+            4.685612
+          ],
+          "exact_batch": [
+            6.200236,
+            6.650373,
+            6.377579
+          ],
+          "float_batch": [
+            0.731384,
+            0.747457,
+            0.764903
+          ],
+          "integer_batch": [
+            0.841858,
+            0.814106,
+            0.814506
+          ],
+          "fraction_nra": [
+            118.51661,
+            118.143978,
+            122.892313
+          ],
+          "integer_nra": [
+            16.040076,
+            15.925546,
+            17.016072
+          ]
+        }
+      },
+      {
+        "query": "637",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA122890-0150",
+          "LA092889-0142",
+          "LA010190-0021",
+          "LA092189-0166",
+          "LA110490-0091"
+        ],
+        "entries_read": {
+          "integer_nra": 128,
+          "float_batch": 4000,
+          "fraction_nra": 128,
+          "exact_batch": 4000,
+          "integer_batch": 4000,
+          "rankfence": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.100599,
+            0.144013,
+            0.104605
+          ],
+          "exact_batch": [
+            6.425561,
+            20.75433,
+            9.153282
+          ],
+          "float_batch": [
+            0.707458,
+            0.744984,
+            0.826244
+          ],
+          "integer_batch": [
+            0.876038,
+            0.879503,
+            1.169013
+          ],
+          "fraction_nra": [
+            0.362597,
+            0.430138,
+            0.547872
+          ],
+          "integer_nra": [
+            0.078186,
+            0.084335,
+            0.068582
+          ]
+        }
+      },
+      {
+        "query": "638",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA042689-0016",
+          "LA122390-0123",
+          "LA011190-0084",
+          "LA032289-0026",
+          "LA031690-0082"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "fraction_nra": 3328,
+          "float_batch": 4000,
+          "rankfence": 3328,
+          "exact_batch": 4000,
+          "integer_nra": 3328
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.583779,
+            3.178891,
+            3.353418
+          ],
+          "exact_batch": [
+            6.366383,
+            5.923327,
+            5.814035
+          ],
+          "float_batch": [
+            0.650273,
+            0.649963,
+            0.743301
+          ],
+          "integer_batch": [
+            0.820066,
+            0.830731,
+            0.868177
+          ],
+          "fraction_nra": [
+            66.92555,
+            68.210063,
+            71.368863
+          ],
+          "integer_nra": [
+            12.584125,
+            9.261392,
+            10.449993
+          ]
+        }
+      },
+      {
+        "query": "639",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT932-646",
+          "FT942-1663",
+          "FT934-7363",
+          "FT944-16689",
+          "FT932-3205"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "integer_nra": 896,
+          "rankfence": 896,
+          "fraction_nra": 896,
+          "float_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.798373,
+            0.954914,
+            0.916328
+          ],
+          "exact_batch": [
+            6.015503,
+            8.479253,
+            5.929265
+          ],
+          "float_batch": [
+            0.739546,
+            0.859013,
+            0.880394
+          ],
+          "integer_batch": [
+            0.945711,
+            0.939713,
+            1.25582
+          ],
+          "fraction_nra": [
+            7.273998,
+            6.834486,
+            7.884121
+          ],
+          "integer_nra": [
+            0.986331,
+            1.322399,
+            1.058549
+          ]
+        }
+      },
+      {
+        "query": "640",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT933-467",
+          "FT931-8172",
+          "FT944-15308",
+          "FT931-9324",
+          "FT944-15813"
+        ],
+        "entries_read": {
+          "fraction_nra": 128,
+          "integer_nra": 128,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "rankfence": 128,
+          "exact_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.158495,
+            0.162931,
+            0.325192
+          ],
+          "exact_batch": [
+            5.933392,
+            6.335167,
+            6.732025
+          ],
+          "float_batch": [
+            0.705224,
+            0.748418,
+            1.031909
+          ],
+          "integer_batch": [
+            1.134521,
+            0.856068,
+            1.410189
+          ],
+          "fraction_nra": [
+            0.4589,
+            0.366894,
+            0.515243
+          ],
+          "integer_nra": [
+            0.072648,
+            0.080509,
+            0.098196
+          ]
+        }
+      },
+      {
+        "query": "641",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA120989-0014",
+          "LA032589-0044",
+          "LA060189-0093",
+          "LA032789-0038",
+          "LA060589-0044"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "fraction_nra": 256,
+          "rankfence": 256,
+          "integer_nra": 256,
+          "integer_batch": 4000,
+          "float_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.237672,
+            0.263701,
+            0.256961
+          ],
+          "exact_batch": [
+            5.30543,
+            5.379431,
+            5.834084
+          ],
+          "float_batch": [
+            0.518408,
+            0.740397,
+            0.53329
+          ],
+          "integer_batch": [
+            0.727037,
+            0.70851,
+            0.771714
+          ],
+          "fraction_nra": [
+            0.764593,
+            0.89748,
+            0.871912
+          ],
+          "integer_nra": [
+            0.150273,
+            0.164664,
+            0.147409
+          ]
+        }
+      },
+      {
+        "query": "642",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FBIS3-3664",
+          "FBIS3-3433",
+          "FBIS3-3418",
+          "FBIS4-2849",
+          "FBIS3-3663"
+        ],
+        "entries_read": {
+          "integer_nra": 128,
+          "float_batch": 4000,
+          "fraction_nra": 128,
+          "exact_batch": 4000,
+          "rankfence": 128,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.129663,
+            0.180668,
+            0.134149
+          ],
+          "exact_batch": [
+            5.8444,
+            6.053649,
+            4.897025
+          ],
+          "float_batch": [
+            0.611997,
+            0.558077,
+            0.574191
+          ],
+          "integer_batch": [
+            0.683503,
+            0.672487,
+            0.747918
+          ],
+          "fraction_nra": [
+            0.336288,
+            0.520521,
+            0.33067
+          ],
+          "integer_nra": [
+            0.075532,
+            0.100529,
+            0.071325
+          ]
+        }
+      },
+      {
+        "query": "643",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT942-17447",
+          "FR941011-2-00026",
+          "FR940603-1-00034",
+          "FR940527-2-00133",
+          "FR940907-2-00003"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "fraction_nra": 128,
+          "integer_batch": 4000,
+          "integer_nra": 128,
+          "float_batch": 4000,
+          "rankfence": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.101511,
+            0.158484,
+            0.139667
+          ],
+          "exact_batch": [
+            5.453911,
+            5.551646,
+            5.912069
+          ],
+          "float_batch": [
+            0.604576,
+            0.593209,
+            0.670203
+          ],
+          "integer_batch": [
+            1.236643,
+            0.779034,
+            0.750802
+          ],
+          "fraction_nra": [
+            0.466752,
+            0.348656,
+            0.56008
+          ],
+          "integer_nra": [
+            0.081941,
+            0.123102,
+            0.080279
+          ]
+        }
+      },
+      {
+        "query": "644",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FR940628-1-00012",
+          "LA070190-0086",
+          "LA022289-0056",
+          "FT921-16211",
+          "FR940325-2-00119"
+        ],
+        "entries_read": {
+          "fraction_nra": 256,
+          "exact_batch": 4000,
+          "integer_nra": 256,
+          "rankfence": 256,
+          "float_batch": 4000,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.348847,
+            0.336068,
+            0.333364
+          ],
+          "exact_batch": [
+            6.031016,
+            5.622221,
+            6.375306
+          ],
+          "float_batch": [
+            0.724404,
+            0.718154,
+            0.63451
+          ],
+          "integer_batch": [
+            0.763812,
+            0.84343,
+            0.861026
+          ],
+          "fraction_nra": [
+            1.001674,
+            0.862899,
+            0.795909
+          ],
+          "integer_nra": [
+            0.24265,
+            0.148129,
+            0.190201
+          ]
+        }
+      },
+      {
+        "query": "645",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT944-16684",
+          "FT931-8281",
+          "FT942-9936",
+          "FT932-5610",
+          "FT924-4322"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "rankfence": 128,
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "integer_nra": 128,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.139456,
+            0.149121,
+            0.13513
+          ],
+          "exact_batch": [
+            5.378148,
+            5.016282,
+            5.0414
+          ],
+          "float_batch": [
+            0.61374,
+            0.556404,
+            0.56694
+          ],
+          "integer_batch": [
+            0.733477,
+            0.739095,
+            0.698716
+          ],
+          "fraction_nra": [
+            0.416017,
+            0.28362,
+            0.274177
+          ],
+          "integer_nra": [
+            0.065998,
+            0.063404,
+            0.061271
+          ]
+        }
+      },
+      {
+        "query": "646",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA041590-0171",
+          "LA082190-0091",
+          "LA082090-0113",
+          "LA102190-0122",
+          "FR940119-1-00003"
+        ],
+        "entries_read": {
+          "exact_batch": 4000,
+          "integer_nra": 128,
+          "float_batch": 4000,
+          "rankfence": 128,
+          "integer_batch": 4000,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.140067,
+            0.314496,
+            0.106257
+          ],
+          "exact_batch": [
+            6.900624,
+            6.705575,
+            6.260626
+          ],
+          "float_batch": [
+            0.869488,
+            0.805724,
+            0.689913
+          ],
+          "integer_batch": [
+            1.052269,
+            0.922136,
+            0.969206
+          ],
+          "fraction_nra": [
+            0.33085,
+            0.383118,
+            0.346413
+          ],
+          "integer_nra": [
+            0.081641,
+            0.070294,
+            0.073429
+          ]
+        }
+      },
+      {
+        "query": "647",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA081290-0130",
+          "FBIS4-47519",
+          "LA071290-0149",
+          "LA110490-0015",
+          "FT931-7968"
+        ],
+        "entries_read": {
+          "rankfence": 256,
+          "integer_batch": 4000,
+          "fraction_nra": 256,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "integer_nra": 256
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.304911,
+            0.217913,
+            0.339703
+          ],
+          "exact_batch": [
+            6.22956,
+            6.501904,
+            6.01978
+          ],
+          "float_batch": [
+            0.656723,
+            0.636633,
+            0.665696
+          ],
+          "integer_batch": [
+            0.823,
+            0.828367,
+            0.895787
+          ],
+          "fraction_nra": [
+            0.927975,
+            1.07994,
+            1.081102
+          ],
+          "integer_nra": [
+            0.151935,
+            0.162371,
+            0.165205
+          ]
+        }
+      },
+      {
+        "query": "648",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FR940314-2-00104",
+          "FR941011-1-00026",
+          "LA072689-0011",
+          "FT921-3529",
+          "FR940314-2-00097"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "float_batch": 4000,
+          "fraction_nra": 2048,
+          "exact_batch": 4000,
+          "rankfence": 2048,
+          "integer_nra": 2048
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            2.610027,
+            1.80165,
+            1.781048
+          ],
+          "exact_batch": [
+            11.636932,
+            14.235782,
+            8.476128
+          ],
+          "float_batch": [
+            1.108833,
+            0.78928,
+            0.740397
+          ],
+          "integer_batch": [
+            0.94494,
+            1.084056,
+            1.015284
+          ],
+          "fraction_nra": [
+            43.043064,
+            35.553487,
+            36.832453
+          ],
+          "integer_nra": [
+            10.900301,
+            4.879971,
+            5.179123
+          ]
+        }
+      },
+      {
+        "query": "649",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "FT921-5724",
+          "FT944-9024",
+          "LA101189-0094",
+          "LA101089-0139",
+          "FT921-4469"
+        ],
+        "entries_read": {
+          "integer_batch": 4000,
+          "rankfence": 128,
+          "integer_nra": 128,
+          "exact_batch": 4000,
+          "float_batch": 4000,
+          "fraction_nra": 128
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.162951,
+            0.189611,
+            0.117103
+          ],
+          "exact_batch": [
+            5.8785,
+            6.567111,
+            6.086849
+          ],
+          "float_batch": [
+            0.613098,
+            0.723151,
+            0.684284
+          ],
+          "integer_batch": [
+            0.76937,
+            0.881356,
+            0.734248
+          ],
+          "fraction_nra": [
+            0.356899,
+            0.299734,
+            0.297631
+          ],
+          "integer_nra": [
+            0.06727,
+            0.06081,
+            0.06732
+          ]
+        }
+      },
+      {
+        "query": "650",
+        "total_entries": 4000,
+        "sources": 4,
+        "exact_top": [
+          "LA092590-0146",
+          "LA062689-0056",
+          "LA021189-0023",
+          "LA121989-0022",
+          "LA101790-0029"
+        ],
+        "entries_read": {
+          "float_batch": 4000,
+          "integer_nra": 256,
+          "exact_batch": 4000,
+          "rankfence": 256,
+          "fraction_nra": 256,
+          "integer_batch": 4000
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.333374,
+            0.290901,
+            0.256289
+          ],
+          "exact_batch": [
+            7.582745,
+            6.048972,
+            5.584966
+          ],
+          "float_batch": [
+            0.69505,
+            0.60115,
+            0.674049
+          ],
+          "integer_batch": [
+            1.053431,
+            1.05284,
+            0.730673
+          ],
+          "fraction_nra": [
+            1.227339,
+            0.886223,
+            0.969566
+          ],
+          "integer_nra": [
+            0.210842,
+            0.16862,
+            0.163802
+          ]
+        }
+      }
+    ]
+  }
+}

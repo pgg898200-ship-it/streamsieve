@@ -1,0 +1,5497 @@
+{
+  "schema": 1,
+  "sha256": {
+    "bench.py": "04c29d54ae3d485b47c1bd9129733687f3760d3dbd98c3c85558713807ac5250",
+    "core.py": "a7aebf86cf6781fe3519cda7adeb892bada489d0604dbc7d105080449d15298b",
+    "nfcorpus-video.json": "ba2e300a5a2a3b238e01fbf0e88d20abab777d9c43cee6053000145e5502e037"
+  },
+  "timer": "perf_counter_ns",
+  "command": [
+    "python",
+    "bench.py",
+    "--trace",
+    "../trace-work/nfcorpus-video.json",
+    "--page",
+    "32",
+    "--repeats",
+    "3",
+    "--json",
+    "results/nfcorpus.json"
+  ],
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "config": {
+    "sources": 4,
+    "depth": 256,
+    "queries": 3,
+    "page": 32,
+    "k": 5,
+    "c": 60,
+    "repeats": 3,
+    "seed": 1701,
+    "workloads": [
+      "identical",
+      "partial_overlap",
+      "disjoint",
+      "late_overlap",
+      "short_window"
+    ],
+    "mode": "ordered",
+    "trace": "../trace-work/nfcorpus-video.json",
+    "trace_limit": null,
+    "json": "results/nfcorpus.json"
+  },
+  "groups": {
+    "trace": {
+      "queries": 102,
+      "queries_certified_before_full_input": 93,
+      "modeled_break_even_us_per_skipped_item_vs_integer_batch": 0.082,
+      "total_entries": 336600,
+      "entries_read": {
+        "integer_batch": 336600,
+        "exact_batch": 336600,
+        "fraction_nra": 88512,
+        "integer_nra": 88512,
+        "float_batch": 336600,
+        "rankfence": 88512
+      },
+      "entries_skipped_pct": {
+        "integer_batch": 0.0,
+        "exact_batch": 0.0,
+        "fraction_nra": 73.7,
+        "integer_nra": 73.7,
+        "float_batch": 0.0,
+        "rankfence": 73.7
+      },
+      "median_query_ms": {
+        "rankfence": 0.4687,
+        "exact_batch": 4.5923,
+        "float_batch": 0.5054,
+        "integer_batch": 0.6452,
+        "fraction_nra": 1.7588,
+        "integer_nra": 0.3234
+      },
+      "p95_query_ms": {
+        "rankfence": 3.7013,
+        "exact_batch": 6.8596,
+        "float_batch": 0.783,
+        "integer_batch": 0.9943,
+        "fraction_nra": 83.3634,
+        "integer_nra": 10.5937
+      },
+      "float_order_disagreements": 0,
+      "same_stopping_round_as_nra": 102
+    }
+  },
+  "queries": {
+    "trace": [
+      {
+        "query": "PLAIN-2430",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-994",
+          "MED-980",
+          "MED-986",
+          "MED-982",
+          "MED-2664"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "fraction_nra": 684,
+          "integer_nra": 684,
+          "float_batch": 3300,
+          "rankfence": 684
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.478621,
+            0.603145,
+            0.568674
+          ],
+          "exact_batch": [
+            8.126755,
+            4.842149,
+            4.72878
+          ],
+          "float_batch": [
+            0.584949,
+            0.623616,
+            0.48479
+          ],
+          "integer_batch": [
+            0.827979,
+            0.711286,
+            0.652939
+          ],
+          "fraction_nra": [
+            3.032111,
+            2.942088,
+            2.675612
+          ],
+          "integer_nra": [
+            0.495736,
+            0.454825,
+            0.584107
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2440",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2951",
+          "MED-4689",
+          "MED-4394",
+          "MED-1478",
+          "MED-1053"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "fraction_nra": 684,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "rankfence": 684,
+          "integer_nra": 684
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.810012,
+            0.583767,
+            0.563447
+          ],
+          "exact_batch": [
+            9.708808,
+            5.103005,
+            4.459781
+          ],
+          "float_batch": [
+            0.540492,
+            0.55278,
+            0.51186
+          ],
+          "integer_batch": [
+            0.697646,
+            0.736023,
+            0.551509
+          ],
+          "fraction_nra": [
+            5.867902,
+            2.928478,
+            2.839215
+          ],
+          "integer_nra": [
+            0.650626,
+            0.455896,
+            0.422407
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2450",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1178",
+          "MED-1151",
+          "MED-1162",
+          "MED-1169",
+          "MED-1164"
+        ],
+        "entries_read": {
+          "rankfence": 192,
+          "integer_nra": 192,
+          "fraction_nra": 192,
+          "float_batch": 3300,
+          "exact_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.243832,
+            0.186116,
+            0.17498
+          ],
+          "exact_batch": [
+            5.976112,
+            4.296909,
+            4.305672
+          ],
+          "float_batch": [
+            0.506412,
+            0.544308,
+            0.467044
+          ],
+          "integer_batch": [
+            0.668393,
+            0.604197,
+            0.588423
+          ],
+          "fraction_nra": [
+            0.53273,
+            0.476578,
+            0.440574
+          ],
+          "integer_nra": [
+            0.10739,
+            0.095912,
+            0.104756
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2460",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1236",
+          "MED-1237",
+          "MED-5233",
+          "MED-2002",
+          "MED-5007"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "integer_batch": 3300,
+          "integer_nra": 384,
+          "rankfence": 384,
+          "fraction_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.313315,
+            0.324321,
+            0.326866
+          ],
+          "exact_batch": [
+            4.148048,
+            4.451819,
+            4.274175
+          ],
+          "float_batch": [
+            0.463098,
+            0.470779,
+            0.53192
+          ],
+          "integer_batch": [
+            0.551639,
+            0.724276,
+            0.564087
+          ],
+          "fraction_nra": [
+            1.126472,
+            1.132722,
+            1.086784
+          ],
+          "integer_nra": [
+            0.20902,
+            0.211353,
+            0.210182
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2470",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1337",
+          "MED-1340",
+          "MED-5189",
+          "MED-1338",
+          "MED-2771"
+        ],
+        "entries_read": {
+          "fraction_nra": 384,
+          "rankfence": 384,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "integer_nra": 384,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.49142,
+            0.30982,
+            0.582004
+          ],
+          "exact_batch": [
+            4.45943,
+            4.659818,
+            5.526715
+          ],
+          "float_batch": [
+            0.608724,
+            0.47846,
+            0.473673
+          ],
+          "integer_batch": [
+            0.878865,
+            0.770234,
+            0.919716
+          ],
+          "fraction_nra": [
+            1.171279,
+            1.129547,
+            1.290536
+          ],
+          "integer_nra": [
+            0.204374,
+            0.253366,
+            0.266926
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2480",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3964",
+          "MED-1184",
+          "MED-1421",
+          "MED-2811",
+          "MED-1576"
+        ],
+        "entries_read": {
+          "rankfence": 192,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "integer_nra": 192,
+          "float_batch": 3300,
+          "fraction_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.177333,
+            0.186837,
+            0.177434
+          ],
+          "exact_batch": [
+            4.353743,
+            6.146945,
+            4.368966
+          ],
+          "float_batch": [
+            0.51856,
+            0.480914,
+            0.475816
+          ],
+          "integer_batch": [
+            0.605258,
+            0.586901,
+            0.609525
+          ],
+          "fraction_nra": [
+            0.540974,
+            0.489867,
+            0.527243
+          ],
+          "integer_nra": [
+            0.105907,
+            0.099378,
+            0.103814
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2490",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1490",
+          "MED-1488",
+          "MED-2527",
+          "MED-1486",
+          "MED-4127"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "rankfence": 384,
+          "integer_nra": 384,
+          "fraction_nra": 384,
+          "integer_batch": 3300,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.467754,
+            0.295719,
+            0.308478
+          ],
+          "exact_batch": [
+            4.552869,
+            4.57335,
+            4.437108
+          ],
+          "float_batch": [
+            0.47799,
+            0.481545,
+            0.512891
+          ],
+          "integer_batch": [
+            0.604568,
+            0.57927,
+            0.665908
+          ],
+          "fraction_nra": [
+            1.356634,
+            1.296715,
+            1.202856
+          ],
+          "integer_nra": [
+            0.244914,
+            0.293716,
+            0.279094
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2500",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1366",
+          "MED-5014",
+          "MED-1556",
+          "MED-4893",
+          "MED-1781"
+        ],
+        "entries_read": {
+          "integer_nra": 1452,
+          "rankfence": 1452,
+          "fraction_nra": 1452,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.187433,
+            1.233942,
+            1.0513
+          ],
+          "exact_batch": [
+            5.151768,
+            4.647399,
+            4.68212
+          ],
+          "float_batch": [
+            0.483408,
+            2.98386,
+            0.484018
+          ],
+          "integer_batch": [
+            0.591348,
+            0.658798,
+            0.766078
+          ],
+          "fraction_nra": [
+            14.296944,
+            15.672847,
+            14.937295
+          ],
+          "integer_nra": [
+            1.946049,
+            2.059918,
+            1.976144
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2510",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1640",
+          "MED-1649",
+          "MED-1621",
+          "MED-5245",
+          "MED-5123"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "fraction_nra": 384,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "integer_nra": 384,
+          "rankfence": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.354166,
+            0.405722,
+            0.357591
+          ],
+          "exact_batch": [
+            14.311726,
+            4.339643,
+            4.46595
+          ],
+          "float_batch": [
+            0.479622,
+            0.556546,
+            0.575995
+          ],
+          "integer_batch": [
+            0.660681,
+            0.624788,
+            0.637677
+          ],
+          "fraction_nra": [
+            1.074616,
+            1.081205,
+            1.097199
+          ],
+          "integer_nra": [
+            0.221329,
+            0.214929,
+            0.216361
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2520",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3273",
+          "MED-1712",
+          "MED-2513",
+          "MED-1724",
+          "MED-1723"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_batch": 3300,
+          "fraction_nra": 684,
+          "rankfence": 684,
+          "exact_batch": 3300,
+          "integer_nra": 684
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.515576,
+            0.925755,
+            0.515676
+          ],
+          "exact_batch": [
+            4.403307,
+            8.255095,
+            6.461152
+          ],
+          "float_batch": [
+            0.731066,
+            0.783023,
+            0.786728
+          ],
+          "integer_batch": [
+            0.828019,
+            1.008808,
+            0.952154
+          ],
+          "fraction_nra": [
+            2.884883,
+            3.809936,
+            3.723407
+          ],
+          "integer_nra": [
+            0.625879,
+            0.648002,
+            0.439222
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2530",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1804",
+          "MED-1798",
+          "MED-1808",
+          "MED-4766",
+          "MED-1796"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "fraction_nra": 192,
+          "float_batch": 3300,
+          "rankfence": 192,
+          "integer_nra": 192,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.238824,
+            0.211684,
+            0.293866
+          ],
+          "exact_batch": [
+            6.990598,
+            7.720922,
+            7.893438
+          ],
+          "float_batch": [
+            0.843513,
+            0.477218,
+            0.80838
+          ],
+          "integer_batch": [
+            0.902921,
+            0.953145,
+            0.92327
+          ],
+          "fraction_nra": [
+            0.721821,
+            0.912194,
+            0.822621
+          ],
+          "integer_nra": [
+            0.157133,
+            0.098166,
+            0.158015
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2540",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1884",
+          "MED-1968",
+          "MED-2372",
+          "MED-3198",
+          "MED-1882"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "fraction_nra": 384,
+          "integer_batch": 3300,
+          "rankfence": 384,
+          "integer_nra": 384,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.27575,
+            0.285814,
+            0.307717
+          ],
+          "exact_batch": [
+            4.342427,
+            4.705656,
+            4.258112
+          ],
+          "float_batch": [
+            0.492431,
+            0.588725,
+            0.463939
+          ],
+          "integer_batch": [
+            0.561433,
+            0.627141,
+            0.574132
+          ],
+          "fraction_nra": [
+            1.125911,
+            1.280531,
+            1.097499
+          ],
+          "integer_nra": [
+            0.197443,
+            0.218124,
+            0.265013
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2550",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4613",
+          "MED-4255",
+          "MED-2525",
+          "MED-2111",
+          "MED-2527"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "rankfence": 384,
+          "float_batch": 3300,
+          "fraction_nra": 384,
+          "integer_batch": 3300,
+          "integer_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.307917,
+            0.318092,
+            0.326164
+          ],
+          "exact_batch": [
+            4.767437,
+            4.286374,
+            4.4527
+          ],
+          "float_batch": [
+            0.495997,
+            0.468015,
+            0.47846
+          ],
+          "integer_batch": [
+            0.563486,
+            0.595785,
+            0.553682
+          ],
+          "fraction_nra": [
+            1.105011,
+            1.095537,
+            1.106983
+          ],
+          "integer_nra": [
+            0.230553,
+            0.219496,
+            0.20882
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2560",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2055",
+          "MED-2060",
+          "MED-2063",
+          "MED-2057",
+          "MED-2062"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_batch": 3300,
+          "rankfence": 384,
+          "integer_nra": 384,
+          "exact_batch": 3300,
+          "fraction_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.321727,
+            0.32948,
+            0.341467
+          ],
+          "exact_batch": [
+            4.557385,
+            4.987765,
+            4.499349
+          ],
+          "float_batch": [
+            0.52601,
+            0.690375,
+            0.513282
+          ],
+          "integer_batch": [
+            0.614362,
+            0.609955,
+            0.569886
+          ],
+          "fraction_nra": [
+            1.184448,
+            1.096868,
+            1.113122
+          ],
+          "integer_nra": [
+            0.207108,
+            0.21522,
+            0.2085
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2570",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3583",
+          "MED-2009",
+          "MED-2145",
+          "MED-3733",
+          "MED-2144"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "integer_nra": 972,
+          "rankfence": 972,
+          "fraction_nra": 972,
+          "exact_batch": 3300,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.844013,
+            0.755571,
+            0.811425
+          ],
+          "exact_batch": [
+            4.738174,
+            4.400142,
+            8.056105
+          ],
+          "float_batch": [
+            0.47821,
+            0.526832,
+            0.493372
+          ],
+          "integer_batch": [
+            0.616095,
+            0.604417,
+            0.674291
+          ],
+          "fraction_nra": [
+            5.50994,
+            5.589197,
+            5.838588
+          ],
+          "integer_nra": [
+            0.942259,
+            1.019574,
+            0.832476
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2580",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2220",
+          "MED-5018",
+          "MED-749",
+          "MED-2717",
+          "MED-3718"
+        ],
+        "entries_read": {
+          "integer_nra": 576,
+          "integer_batch": 3300,
+          "rankfence": 576,
+          "exact_batch": 3300,
+          "fraction_nra": 576,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.448236,
+            0.556887,
+            0.443409
+          ],
+          "exact_batch": [
+            4.38531,
+            4.440372,
+            4.512039
+          ],
+          "float_batch": [
+            0.527082,
+            0.480644,
+            0.576757
+          ],
+          "integer_batch": [
+            0.60616,
+            0.744935,
+            0.627181
+          ],
+          "fraction_nra": [
+            1.872991,
+            1.963705,
+            3.021135
+          ],
+          "integer_nra": [
+            0.347826,
+            0.369719,
+            0.347536
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2590",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4163",
+          "MED-2294",
+          "MED-1723",
+          "MED-5325",
+          "MED-4313"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "rankfence": 384,
+          "integer_batch": 3300,
+          "integer_nra": 384,
+          "fraction_nra": 384,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.321568,
+            0.303942,
+            0.291583
+          ],
+          "exact_batch": [
+            4.184862,
+            4.176691,
+            4.203641
+          ],
+          "float_batch": [
+            0.463899,
+            0.460964,
+            0.491589
+          ],
+          "integer_batch": [
+            0.627913,
+            0.616615,
+            0.550357
+          ],
+          "fraction_nra": [
+            1.076408,
+            1.067475,
+            1.058221
+          ],
+          "integer_nra": [
+            0.231644,
+            0.20238,
+            0.199496
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2600",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4324",
+          "MED-2371",
+          "MED-2372",
+          "MED-4429",
+          "MED-1890"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "rankfence": 384,
+          "fraction_nra": 384,
+          "integer_batch": 3300,
+          "integer_nra": 384,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.332203,
+            0.317862,
+            0.310311
+          ],
+          "exact_batch": [
+            4.401704,
+            4.754378,
+            4.317138
+          ],
+          "float_batch": [
+            0.49893,
+            0.549366,
+            0.501394
+          ],
+          "integer_batch": [
+            0.63972,
+            0.610236,
+            0.63285
+          ],
+          "fraction_nra": [
+            1.08474,
+            1.09117,
+            1.082528
+          ],
+          "integer_nra": [
+            0.237182,
+            0.220617,
+            0.210393
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2610",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2458",
+          "MED-2951",
+          "MED-2460",
+          "MED-4689",
+          "MED-5072"
+        ],
+        "entries_read": {
+          "rankfence": 576,
+          "exact_batch": 3300,
+          "integer_nra": 576,
+          "fraction_nra": 576,
+          "float_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.429167,
+            0.452332,
+            0.436598
+          ],
+          "exact_batch": [
+            4.355916,
+            4.286284,
+            4.328095
+          ],
+          "float_batch": [
+            0.493352,
+            0.481655,
+            0.500794
+          ],
+          "integer_batch": [
+            0.547332,
+            0.578358,
+            0.609435
+          ],
+          "fraction_nra": [
+            1.787334,
+            1.797479,
+            1.770329
+          ],
+          "integer_nra": [
+            0.317881,
+            0.344241,
+            0.317822
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2620",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2988",
+          "MED-3832",
+          "MED-3551",
+          "MED-4650",
+          "MED-4544"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "rankfence": 384,
+          "fraction_nra": 384,
+          "float_batch": 3300,
+          "integer_nra": 384,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.309129,
+            0.342388,
+            0.331332
+          ],
+          "exact_batch": [
+            3.891607,
+            3.947671,
+            3.943624
+          ],
+          "float_batch": [
+            0.448366,
+            0.876762,
+            0.430008
+          ],
+          "integer_batch": [
+            0.569695,
+            0.623996,
+            0.560462
+          ],
+          "fraction_nra": [
+            1.10442,
+            1.120213,
+            1.14485
+          ],
+          "integer_nra": [
+            0.214889,
+            0.218514,
+            0.222049
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2630",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2650",
+          "MED-4728",
+          "MED-2658",
+          "MED-5323",
+          "MED-2643"
+        ],
+        "entries_read": {
+          "integer_nra": 576,
+          "float_batch": 3300,
+          "fraction_nra": 576,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "rankfence": 576
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.477369,
+            0.411871,
+            0.428556
+          ],
+          "exact_batch": [
+            4.391359,
+            4.326183,
+            4.322887
+          ],
+          "float_batch": [
+            0.539171,
+            0.480984,
+            0.523467
+          ],
+          "integer_batch": [
+            0.733039,
+            0.634802,
+            0.570447
+          ],
+          "fraction_nra": [
+            1.662478,
+            1.632664,
+            1.604612
+          ],
+          "integer_nra": [
+            0.308869,
+            0.306345,
+            0.287968
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2640",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2745",
+          "MED-4429",
+          "MED-3880",
+          "MED-3651",
+          "MED-3889"
+        ],
+        "entries_read": {
+          "integer_nra": 384,
+          "fraction_nra": 384,
+          "exact_batch": 3300,
+          "rankfence": 384,
+          "float_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.287066,
+            0.291022,
+            0.307927
+          ],
+          "exact_batch": [
+            4.203711,
+            4.529284,
+            4.508232
+          ],
+          "float_batch": [
+            0.467434,
+            0.463098,
+            0.479792
+          ],
+          "integer_batch": [
+            0.575495,
+            0.549837,
+            0.621703
+          ],
+          "fraction_nra": [
+            1.081946,
+            1.07792,
+            1.07764
+          ],
+          "integer_nra": [
+            0.210623,
+            0.223312,
+            0.217173
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2650",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2800",
+          "MED-2819",
+          "MED-2817",
+          "MED-2810",
+          "MED-2608"
+        ],
+        "entries_read": {
+          "integer_nra": 192,
+          "rankfence": 192,
+          "float_batch": 3300,
+          "fraction_nra": 192,
+          "exact_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.192776,
+            0.151045,
+            0.188961
+          ],
+          "exact_batch": [
+            4.584506,
+            4.57305,
+            4.433442
+          ],
+          "float_batch": [
+            0.586701,
+            0.486643,
+            0.485851
+          ],
+          "integer_batch": [
+            0.718797,
+            0.6404,
+            0.705698
+          ],
+          "fraction_nra": [
+            0.414385,
+            0.41772,
+            0.43795
+          ],
+          "integer_nra": [
+            0.174989,
+            0.082963,
+            0.089583
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2660",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4551",
+          "MED-2905",
+          "MED-4376",
+          "MED-3032",
+          "MED-3023"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "rankfence": 1356,
+          "exact_batch": 3300,
+          "fraction_nra": 1356,
+          "float_batch": 3300,
+          "integer_nra": 1356
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.115727,
+            1.638112,
+            1.159687
+          ],
+          "exact_batch": [
+            4.850641,
+            6.887945,
+            4.470946
+          ],
+          "float_batch": [
+            0.5995,
+            0.751725,
+            0.476455
+          ],
+          "integer_batch": [
+            0.665158,
+            0.603986,
+            0.641419
+          ],
+          "fraction_nra": [
+            13.061881,
+            14.550253,
+            12.46028
+          ],
+          "integer_nra": [
+            1.692863,
+            1.841724,
+            1.765433
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2670",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2994",
+          "MED-2618",
+          "MED-3351",
+          "MED-3766",
+          "MED-4050"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "fraction_nra": 684,
+          "rankfence": 684,
+          "integer_nra": 684,
+          "exact_batch": 3300,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.577064,
+            0.531486,
+            0.582091
+          ],
+          "exact_batch": [
+            4.352802,
+            4.727266,
+            4.611956
+          ],
+          "float_batch": [
+            0.518467,
+            0.482514,
+            0.483565
+          ],
+          "integer_batch": [
+            0.679586,
+            0.701128,
+            0.796509
+          ],
+          "fraction_nra": [
+            2.494062,
+            2.462925,
+            2.663432
+          ],
+          "integer_nra": [
+            0.415184,
+            0.491037,
+            0.563033
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2680",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3100",
+          "MED-3102",
+          "MED-3109",
+          "MED-1961",
+          "MED-5102"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "rankfence": 192,
+          "integer_batch": 3300,
+          "integer_nra": 192,
+          "fraction_nra": 192,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.18945,
+            0.170842,
+            0.13468
+          ],
+          "exact_batch": [
+            4.18283,
+            4.165384,
+            4.179877
+          ],
+          "float_batch": [
+            0.489184,
+            0.503805,
+            0.462795
+          ],
+          "integer_batch": [
+            0.564866,
+            0.579467,
+            0.593909
+          ],
+          "fraction_nra": [
+            0.465519,
+            0.456325,
+            0.473881
+          ],
+          "integer_nra": [
+            0.09453,
+            0.104755,
+            0.095451
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2690",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3288",
+          "MED-3515",
+          "MED-3169",
+          "MED-4818",
+          "MED-3175"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "rankfence": 384,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "integer_nra": 384,
+          "fraction_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.343979,
+            0.280154,
+            0.414884
+          ],
+          "exact_batch": [
+            4.325001,
+            4.517736,
+            4.793354
+          ],
+          "float_batch": [
+            0.4659,
+            0.476095,
+            0.571476
+          ],
+          "integer_batch": [
+            0.573489,
+            0.556724,
+            0.827846
+          ],
+          "fraction_nra": [
+            1.043584,
+            1.124474,
+            1.096232
+          ],
+          "integer_nra": [
+            0.199145,
+            0.211323,
+            0.20957
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2700",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3253",
+          "MED-4255",
+          "MED-4613",
+          "MED-2376",
+          "MED-3577"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_nra": 684,
+          "fraction_nra": 684,
+          "integer_batch": 3300,
+          "rankfence": 684,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.649391,
+            0.544135,
+            0.622742
+          ],
+          "exact_batch": [
+            4.102762,
+            4.442044,
+            4.379141
+          ],
+          "float_batch": [
+            0.484807,
+            0.479821,
+            0.45294
+          ],
+          "integer_batch": [
+            0.585137,
+            0.569153,
+            0.585126
+          ],
+          "fraction_nra": [
+            2.375195,
+            2.39873,
+            2.593509
+          ],
+          "integer_nra": [
+            0.409947,
+            0.519358,
+            0.446191
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2710",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3380",
+          "MED-3382",
+          "MED-3381",
+          "MED-5062",
+          "MED-4655"
+        ],
+        "entries_read": {
+          "integer_nra": 192,
+          "rankfence": 192,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "fraction_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.179175,
+            0.165435,
+            0.149261
+          ],
+          "exact_batch": [
+            4.197342,
+            4.174078,
+            4.191643
+          ],
+          "float_batch": [
+            0.502363,
+            0.485869,
+            0.48677
+          ],
+          "integer_batch": [
+            0.577996,
+            0.603413,
+            0.556313
+          ],
+          "fraction_nra": [
+            0.481122,
+            0.586718,
+            0.487301
+          ],
+          "integer_nra": [
+            0.102381,
+            0.099477,
+            0.118155
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2720",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3483",
+          "MED-4392",
+          "MED-3479",
+          "MED-2083",
+          "MED-2265"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "fraction_nra": 384,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "rankfence": 384,
+          "integer_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.33731,
+            0.31057,
+            0.612256
+          ],
+          "exact_batch": [
+            4.496535,
+            4.396217,
+            8.144303
+          ],
+          "float_batch": [
+            0.505738,
+            0.498878,
+            0.516835
+          ],
+          "integer_batch": [
+            0.625105,
+            0.563053,
+            0.680216
+          ],
+          "fraction_nra": [
+            1.085256,
+            1.065106,
+            1.45906
+          ],
+          "integer_nra": [
+            0.201508,
+            0.207657,
+            0.197292
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2730",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2573",
+          "MED-3548",
+          "MED-3553",
+          "MED-2357",
+          "MED-3551"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_batch": 3300,
+          "integer_nra": 192,
+          "fraction_nra": 192,
+          "rankfence": 192,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.219364,
+            0.16839,
+            0.268207
+          ],
+          "exact_batch": [
+            4.349046,
+            6.085446,
+            7.314526
+          ],
+          "float_batch": [
+            0.714187,
+            0.56124,
+            0.779564
+          ],
+          "integer_batch": [
+            0.602652,
+            0.596212,
+            0.961163
+          ],
+          "fraction_nra": [
+            0.496234,
+            0.493901,
+            0.808657
+          ],
+          "integer_nra": [
+            0.099547,
+            0.097013,
+            0.161429
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2740",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3627",
+          "MED-3624",
+          "MED-3623",
+          "MED-2940",
+          "MED-3562"
+        ],
+        "entries_read": {
+          "fraction_nra": 576,
+          "rankfence": 576,
+          "float_batch": 3300,
+          "integer_nra": 576,
+          "exact_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.56767,
+            0.470487,
+            0.549243
+          ],
+          "exact_batch": [
+            4.149201,
+            4.430627,
+            4.589592
+          ],
+          "float_batch": [
+            0.45269,
+            0.596603,
+            0.460031
+          ],
+          "integer_batch": [
+            0.596783,
+            0.579878,
+            0.58787
+          ],
+          "fraction_nra": [
+            2.08805,
+            2.895225,
+            1.847935
+          ],
+          "integer_nra": [
+            0.338491,
+            0.357308,
+            0.343248
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2750",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3680",
+          "MED-3692",
+          "MED-3683",
+          "MED-3691",
+          "MED-3695"
+        ],
+        "entries_read": {
+          "rankfence": 192,
+          "integer_nra": 192,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "fraction_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.239244,
+            0.197402,
+            0.172615
+          ],
+          "exact_batch": [
+            6.063104,
+            4.874354,
+            4.930767
+          ],
+          "float_batch": [
+            0.583273,
+            0.477147,
+            0.789599
+          ],
+          "integer_batch": [
+            0.776159,
+            0.623242,
+            0.597644
+          ],
+          "fraction_nra": [
+            0.700526,
+            0.464257,
+            0.534391
+          ],
+          "integer_nra": [
+            0.133337,
+            0.102572,
+            0.112046
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2760",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3900",
+          "MED-1212",
+          "MED-5220",
+          "MED-3770",
+          "MED-3769"
+        ],
+        "entries_read": {
+          "fraction_nra": 3300,
+          "exact_batch": 3300,
+          "rankfence": 3300,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "integer_nra": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.75058,
+            6.133447,
+            3.254877
+          ],
+          "exact_batch": [
+            4.487231,
+            6.972278,
+            4.555923
+          ],
+          "float_batch": [
+            0.929245,
+            1.066078,
+            0.584014
+          ],
+          "integer_batch": [
+            0.677452,
+            0.718264,
+            0.589322
+          ],
+          "fraction_nra": [
+            96.304479,
+            90.800753,
+            89.80905
+          ],
+          "integer_nra": [
+            10.708468,
+            11.938349,
+            10.044285
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2770",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1825",
+          "MED-3836",
+          "MED-2437",
+          "MED-3799",
+          "MED-1826"
+        ],
+        "entries_read": {
+          "fraction_nra": 780,
+          "rankfence": 780,
+          "float_batch": 3300,
+          "integer_nra": 780,
+          "integer_batch": 3300,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.873252,
+            0.846163,
+            0.675239
+          ],
+          "exact_batch": [
+            13.855937,
+            5.556684,
+            4.529504
+          ],
+          "float_batch": [
+            1.228924,
+            1.80363,
+            0.483976
+          ],
+          "integer_batch": [
+            0.6355,
+            0.856087,
+            0.630914
+          ],
+          "fraction_nra": [
+            3.659225,
+            8.23608,
+            3.822006
+          ],
+          "integer_nra": [
+            0.655971,
+            0.701157,
+            0.703071
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2780",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3896",
+          "MED-2595",
+          "MED-4291",
+          "MED-4707",
+          "MED-4292"
+        ],
+        "entries_read": {
+          "integer_nra": 192,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "rankfence": 192,
+          "exact_batch": 3300,
+          "fraction_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.218713,
+            0.261347,
+            0.192365
+          ],
+          "exact_batch": [
+            4.359272,
+            4.697343,
+            4.442905
+          ],
+          "float_batch": [
+            0.652285,
+            0.568231,
+            0.929525
+          ],
+          "integer_batch": [
+            0.654017,
+            0.615952,
+            0.615971
+          ],
+          "fraction_nra": [
+            0.464297,
+            0.599047,
+            0.63506
+          ],
+          "integer_nra": [
+            0.106167,
+            0.104525,
+            0.089773
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2790",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3960",
+          "MED-3970",
+          "MED-3969",
+          "MED-3963",
+          "MED-3964"
+        ],
+        "entries_read": {
+          "fraction_nra": 192,
+          "integer_nra": 192,
+          "integer_batch": 3300,
+          "rankfence": 192,
+          "exact_batch": 3300,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.300375,
+            0.225334,
+            0.268186
+          ],
+          "exact_batch": [
+            6.62175,
+            6.625825,
+            6.625617
+          ],
+          "float_batch": [
+            0.777691,
+            0.778592,
+            0.773044
+          ],
+          "integer_batch": [
+            0.997877,
+            0.889336,
+            1.045507
+          ],
+          "fraction_nra": [
+            0.831671,
+            0.777981,
+            0.72969
+          ],
+          "integer_nra": [
+            0.184764,
+            0.14869,
+            0.165515
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2800",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4040",
+          "MED-2070",
+          "MED-2075",
+          "MED-2064",
+          "MED-5206"
+        ],
+        "entries_read": {
+          "fraction_nra": 576,
+          "rankfence": 576,
+          "integer_nra": 576,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.469204,
+            0.455544,
+            0.740196
+          ],
+          "exact_batch": [
+            4.375385,
+            4.622261,
+            6.697302
+          ],
+          "float_batch": [
+            0.500892,
+            0.526619,
+            0.735579
+          ],
+          "integer_batch": [
+            0.602472,
+            0.673527,
+            0.623253
+          ],
+          "fraction_nra": [
+            1.64829,
+            1.651124,
+            2.329598
+          ],
+          "integer_nra": [
+            0.292552,
+            0.293825,
+            0.487822
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2810",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1792",
+          "MED-4590",
+          "MED-5019",
+          "MED-2491",
+          "MED-4580"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_batch": 3300,
+          "integer_nra": 192,
+          "fraction_nra": 192,
+          "rankfence": 192,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.282739,
+            0.258793,
+            0.213886
+          ],
+          "exact_batch": [
+            6.1752,
+            5.717943,
+            6.421223
+          ],
+          "float_batch": [
+            0.472639,
+            0.753335,
+            1.606587
+          ],
+          "integer_batch": [
+            0.632296,
+            0.793835,
+            0.83806
+          ],
+          "fraction_nra": [
+            0.791261,
+            0.73631,
+            3.593303
+          ],
+          "integer_nra": [
+            0.131355,
+            0.161749,
+            0.127899
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2820",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2698",
+          "MED-1233",
+          "MED-4106",
+          "MED-1677",
+          "MED-1329"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "integer_nra": 2508,
+          "fraction_nra": 2508,
+          "rankfence": 2508,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            2.835716,
+            2.565387,
+            3.650112
+          ],
+          "exact_batch": [
+            4.292213,
+            4.348014,
+            4.396236
+          ],
+          "float_batch": [
+            0.666226,
+            0.502373,
+            0.578155
+          ],
+          "integer_batch": [
+            0.853603,
+            0.660367,
+            0.625035
+          ],
+          "fraction_nra": [
+            49.691196,
+            48.529984,
+            44.491347
+          ],
+          "integer_nra": [
+            5.546759,
+            6.917789,
+            6.315657
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2830",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5054",
+          "MED-4120",
+          "MED-5057",
+          "MED-1625",
+          "MED-5053"
+        ],
+        "entries_read": {
+          "integer_nra": 1644,
+          "fraction_nra": 1644,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "rankfence": 1644,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.731523,
+            1.641419,
+            1.74999
+          ],
+          "exact_batch": [
+            5.175139,
+            4.516886,
+            5.127869
+          ],
+          "float_batch": [
+            0.722529,
+            0.554381,
+            0.525778
+          ],
+          "integer_batch": [
+            0.82433,
+            0.698684,
+            0.686787
+          ],
+          "fraction_nra": [
+            27.221938,
+            20.650131,
+            24.416386
+          ],
+          "integer_nra": [
+            2.735318,
+            2.474702,
+            2.970667
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2840",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4150",
+          "MED-4415",
+          "MED-2595",
+          "MED-3535",
+          "MED-4443"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "rankfence": 1068,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "fraction_nra": 1068,
+          "integer_nra": 1068
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.152596,
+            1.229199,
+            1.098536
+          ],
+          "exact_batch": [
+            6.17543,
+            5.78388,
+            4.673406
+          ],
+          "float_batch": [
+            0.568641,
+            0.792744,
+            0.504317
+          ],
+          "integer_batch": [
+            0.839473,
+            0.837269,
+            0.708849
+          ],
+          "fraction_nra": [
+            9.437998,
+            9.184974,
+            8.792963
+          ],
+          "integer_nra": [
+            1.271291,
+            1.388055,
+            1.584666
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2850",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4747",
+          "MED-4626",
+          "MED-4182",
+          "MED-4166",
+          "MED-5110"
+        ],
+        "entries_read": {
+          "rankfence": 1068,
+          "integer_nra": 1068,
+          "fraction_nra": 1068,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.887804,
+            1.171373,
+            1.440982
+          ],
+          "exact_batch": [
+            7.902105,
+            7.090745,
+            5.434273
+          ],
+          "float_batch": [
+            0.759254,
+            0.775738,
+            0.849006
+          ],
+          "integer_batch": [
+            1.160818,
+            0.873843,
+            0.968143
+          ],
+          "fraction_nra": [
+            14.34434,
+            9.974732,
+            10.431328
+          ],
+          "integer_nra": [
+            1.655089,
+            1.746124,
+            1.32441
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2860",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4186",
+          "MED-4185",
+          "MED-4992",
+          "MED-891",
+          "MED-3421"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_nra": 384,
+          "integer_batch": 3300,
+          "rankfence": 384,
+          "exact_batch": 3300,
+          "fraction_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.392151,
+            0.443576,
+            0.445359
+          ],
+          "exact_batch": [
+            5.487041,
+            4.891209,
+            5.191884
+          ],
+          "float_batch": [
+            0.508693,
+            0.602462,
+            0.846173
+          ],
+          "integer_batch": [
+            0.768738,
+            0.873642,
+            0.956236
+          ],
+          "fraction_nra": [
+            1.242639,
+            1.370999,
+            1.670462
+          ],
+          "integer_nra": [
+            0.315266,
+            0.221317,
+            0.299544
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2870",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3378",
+          "MED-2253",
+          "MED-3592",
+          "MED-2491",
+          "MED-4908"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_nra": 384,
+          "fraction_nra": 384,
+          "rankfence": 384,
+          "exact_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.533459,
+            0.483335,
+            0.492028
+          ],
+          "exact_batch": [
+            6.821475,
+            6.698173,
+            5.72245
+          ],
+          "float_batch": [
+            0.596192,
+            0.510715,
+            0.705744
+          ],
+          "integer_batch": [
+            1.19595,
+            1.685214,
+            1.094009
+          ],
+          "fraction_nra": [
+            1.605797,
+            1.543534,
+            2.553069
+          ],
+          "integer_nra": [
+            0.381074,
+            0.238573,
+            0.562993
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2880",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1723",
+          "MED-1712",
+          "MED-4220",
+          "MED-1874",
+          "MED-1714"
+        ],
+        "entries_read": {
+          "rankfence": 3300,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "fraction_nra": 3300,
+          "float_batch": 3300,
+          "integer_nra": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.270421,
+            3.289048,
+            3.920552
+          ],
+          "exact_batch": [
+            4.611736,
+            4.923836,
+            4.86519
+          ],
+          "float_batch": [
+            0.548763,
+            0.535022,
+            0.524536
+          ],
+          "integer_batch": [
+            0.66943,
+            0.686126,
+            0.595351
+          ],
+          "fraction_nra": [
+            101.691802,
+            94.231445,
+            80.478246
+          ],
+          "integer_nra": [
+            11.298372,
+            11.247286,
+            10.622992
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2890",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3896",
+          "MED-4284",
+          "MED-1538",
+          "MED-4250",
+          "MED-1651"
+        ],
+        "entries_read": {
+          "fraction_nra": 3300,
+          "rankfence": 3300,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "integer_nra": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.500391,
+            3.952289,
+            5.300234
+          ],
+          "exact_batch": [
+            6.271672,
+            5.39892,
+            7.6152
+          ],
+          "float_batch": [
+            0.575812,
+            0.573719,
+            0.730801
+          ],
+          "integer_batch": [
+            0.597955,
+            0.607639,
+            1.004026
+          ],
+          "fraction_nra": [
+            95.353626,
+            103.694426,
+            104.512926
+          ],
+          "integer_nra": [
+            10.163872,
+            10.593694,
+            14.717031
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2900",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4271",
+          "MED-1417",
+          "MED-2105",
+          "MED-1420",
+          "MED-3679"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "integer_nra": 576,
+          "float_batch": 3300,
+          "rankfence": 576,
+          "fraction_nra": 576
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.663252,
+            0.910488,
+            0.732884
+          ],
+          "exact_batch": [
+            6.698905,
+            6.859603,
+            7.656051
+          ],
+          "float_batch": [
+            1.29753,
+            0.788998,
+            0.827285
+          ],
+          "integer_batch": [
+            0.947733,
+            1.086288,
+            1.034801
+          ],
+          "fraction_nra": [
+            2.934583,
+            2.83098,
+            2.855886
+          ],
+          "integer_nra": [
+            0.541431,
+            0.549333,
+            0.504277
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2910",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4296",
+          "MED-4295",
+          "MED-4831",
+          "MED-3197",
+          "MED-1997"
+        ],
+        "entries_read": {
+          "fraction_nra": 1644,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "exact_batch": 3300,
+          "integer_nra": 1644,
+          "rankfence": 1644
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.429185,
+            1.998678,
+            1.81089
+          ],
+          "exact_batch": [
+            10.299863,
+            5.76312,
+            6.476655
+          ],
+          "float_batch": [
+            0.521792,
+            0.752233,
+            0.526309
+          ],
+          "integer_batch": [
+            0.739244,
+            1.060479,
+            1.124134
+          ],
+          "fraction_nra": [
+            21.62174,
+            21.609542,
+            25.13484
+          ],
+          "integer_nra": [
+            2.586397,
+            2.948664,
+            2.780004
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2920",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5365",
+          "MED-3532",
+          "MED-3518",
+          "MED-4309",
+          "MED-1352"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "rankfence": 684,
+          "integer_nra": 684,
+          "fraction_nra": 684,
+          "exact_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.607786,
+            0.542238,
+            0.678861
+          ],
+          "exact_batch": [
+            4.448858,
+            4.529677,
+            4.974911
+          ],
+          "float_batch": [
+            0.489349,
+            0.566374,
+            0.645282
+          ],
+          "integer_batch": [
+            0.63124,
+            0.619372,
+            0.605392
+          ],
+          "fraction_nra": [
+            2.505523,
+            2.520535,
+            3.817978
+          ],
+          "integer_nra": [
+            0.421919,
+            0.52352,
+            0.41658
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2930",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4325",
+          "MED-1008",
+          "MED-1016",
+          "MED-1006",
+          "MED-1009"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "fraction_nra": 192,
+          "float_batch": 3300,
+          "rankfence": 192,
+          "integer_nra": 192,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.277824,
+            0.254739,
+            0.299636
+          ],
+          "exact_batch": [
+            7.166295,
+            4.326355,
+            4.666831
+          ],
+          "float_batch": [
+            0.702937,
+            0.777067,
+            0.504892
+          ],
+          "integer_batch": [
+            0.902854,
+            0.835189,
+            0.706963
+          ],
+          "fraction_nra": [
+            0.679822,
+            0.675927,
+            0.411563
+          ],
+          "integer_nra": [
+            0.159608,
+            0.102573,
+            0.147079
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2940",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1576",
+          "MED-1425",
+          "MED-3961",
+          "MED-1582",
+          "MED-3967"
+        ],
+        "entries_read": {
+          "rankfence": 576,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "integer_nra": 576,
+          "fraction_nra": 576,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.493505,
+            0.560475,
+            0.631931
+          ],
+          "exact_batch": [
+            4.317391,
+            4.239856,
+            4.690617
+          ],
+          "float_batch": [
+            0.471903,
+            0.491002,
+            0.533585
+          ],
+          "integer_batch": [
+            0.578602,
+            0.769857,
+            0.637931
+          ],
+          "fraction_nra": [
+            1.811248,
+            2.306055,
+            1.781583
+          ],
+          "integer_nra": [
+            0.451663,
+            0.332996,
+            0.355039
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2950",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2742",
+          "MED-4747",
+          "MED-4429",
+          "MED-2339",
+          "MED-5347"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "fraction_nra": 2700,
+          "float_batch": 3300,
+          "integer_nra": 2700,
+          "rankfence": 2700
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            2.237333,
+            2.391893,
+            2.384312
+          ],
+          "exact_batch": [
+            5.240837,
+            4.606252,
+            4.479563
+          ],
+          "float_batch": [
+            0.506364,
+            0.505483,
+            0.501277
+          ],
+          "integer_batch": [
+            0.761053,
+            0.677198,
+            0.591672
+          ],
+          "fraction_nra": [
+            52.795326,
+            64.310407,
+            51.448438
+          ],
+          "integer_nra": [
+            6.942311,
+            6.604508,
+            6.400584
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2960",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4372",
+          "MED-4371",
+          "MED-4374",
+          "MED-4370",
+          "MED-5123"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "rankfence": 192,
+          "exact_batch": 3300,
+          "fraction_nra": 192,
+          "integer_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.17463,
+            0.16081,
+            0.219227
+          ],
+          "exact_batch": [
+            4.279875,
+            13.05686,
+            4.242128
+          ],
+          "float_batch": [
+            0.496098,
+            0.551191,
+            0.53678
+          ],
+          "integer_batch": [
+            0.641175,
+            0.66407,
+            0.69154
+          ],
+          "fraction_nra": [
+            0.448388,
+            0.564421,
+            0.477952
+          ],
+          "integer_nra": [
+            0.101841,
+            0.100589,
+            0.089263
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2970",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4382",
+          "MED-5145",
+          "MED-1106",
+          "MED-1137",
+          "MED-1723"
+        ],
+        "entries_read": {
+          "rankfence": 2508,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "fraction_nra": 2508,
+          "integer_nra": 2508
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            2.462749,
+            2.285485,
+            2.343971
+          ],
+          "exact_batch": [
+            4.386234,
+            5.239996,
+            4.374506
+          ],
+          "float_batch": [
+            0.48334,
+            0.479755,
+            0.596679
+          ],
+          "integer_batch": [
+            0.62433,
+            0.686923,
+            0.634605
+          ],
+          "fraction_nra": [
+            44.393158,
+            44.801656,
+            45.084649
+          ],
+          "integer_nra": [
+            5.945837,
+            6.06878,
+            5.781452
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2981",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4403",
+          "MED-5109",
+          "MED-335",
+          "MED-2775",
+          "MED-4751"
+        ],
+        "entries_read": {
+          "rankfence": 192,
+          "float_batch": 3300,
+          "exact_batch": 3300,
+          "integer_nra": 192,
+          "integer_batch": 3300,
+          "fraction_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.251154,
+            0.252567,
+            0.1945
+          ],
+          "exact_batch": [
+            4.435067,
+            4.616727,
+            4.523118
+          ],
+          "float_batch": [
+            0.473254,
+            0.472254,
+            0.623568
+          ],
+          "integer_batch": [
+            0.615507,
+            0.676418,
+            1.376009
+          ],
+          "fraction_nra": [
+            0.489158,
+            0.45644,
+            0.674334
+          ],
+          "integer_nra": [
+            0.104095,
+            0.109083,
+            0.088322
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-2991",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1663",
+          "MED-4424",
+          "MED-1657",
+          "MED-1667",
+          "MED-1664"
+        ],
+        "entries_read": {
+          "integer_nra": 684,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "rankfence": 684,
+          "fraction_nra": 684,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.842645,
+            0.911157,
+            0.948783
+          ],
+          "exact_batch": [
+            7.27726,
+            7.327816,
+            5.040698
+          ],
+          "float_batch": [
+            0.750939,
+            0.733182,
+            0.518042
+          ],
+          "integer_batch": [
+            0.864728,
+            0.944437,
+            1.10797
+          ],
+          "fraction_nra": [
+            3.938927,
+            4.071054,
+            4.09473
+          ],
+          "integer_nra": [
+            0.623549,
+            0.618982,
+            0.602758
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3001",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4436",
+          "MED-1114",
+          "MED-3314",
+          "MED-1817",
+          "MED-4484"
+        ],
+        "entries_read": {
+          "integer_nra": 384,
+          "exact_batch": 3300,
+          "rankfence": 384,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "fraction_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.361728,
+            0.343752,
+            0.311945
+          ],
+          "exact_batch": [
+            4.693281,
+            4.469698,
+            4.617788
+          ],
+          "float_batch": [
+            0.517921,
+            0.582057,
+            0.52374
+          ],
+          "integer_batch": [
+            0.606874,
+            0.61082,
+            0.666603
+          ],
+          "fraction_nra": [
+            1.10046,
+            1.159908,
+            1.090093
+          ],
+          "integer_nra": [
+            0.20791,
+            0.214409,
+            0.216733
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3014",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2075",
+          "MED-2066",
+          "MED-3199",
+          "MED-2070",
+          "MED-3452"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "rankfence": 684,
+          "fraction_nra": 684,
+          "integer_nra": 684,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.601326,
+            0.597019,
+            0.640474
+          ],
+          "exact_batch": [
+            4.878526,
+            4.374897,
+            4.965305
+          ],
+          "float_batch": [
+            0.509359,
+            0.49015,
+            0.492253
+          ],
+          "integer_batch": [
+            0.643088,
+            0.735676,
+            0.613003
+          ],
+          "fraction_nra": [
+            2.663047,
+            3.136332,
+            3.351272
+          ],
+          "integer_nra": [
+            0.512013,
+            0.427377,
+            0.623869
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3026",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1601",
+          "MED-5188",
+          "MED-4976",
+          "MED-5034",
+          "MED-4057"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "rankfence": 384,
+          "integer_nra": 384,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "fraction_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.422029,
+            0.418734,
+            0.620364
+          ],
+          "exact_batch": [
+            4.391331,
+            4.513203,
+            4.797756
+          ],
+          "float_batch": [
+            0.477411,
+            0.471502,
+            0.507175
+          ],
+          "integer_batch": [
+            0.625592,
+            0.81276,
+            0.663158
+          ],
+          "fraction_nra": [
+            1.178105,
+            1.313557,
+            1.420497
+          ],
+          "integer_nra": [
+            0.264584,
+            0.227529,
+            0.489288
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3037",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2787",
+          "MED-745",
+          "MED-4508",
+          "MED-3924",
+          "MED-2229"
+        ],
+        "entries_read": {
+          "fraction_nra": 3300,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "integer_nra": 3300,
+          "rankfence": 3300,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.666892,
+            3.763626,
+            3.701283
+          ],
+          "exact_batch": [
+            4.688895,
+            4.489538,
+            4.972186
+          ],
+          "float_batch": [
+            0.502669,
+            0.626073,
+            0.504732
+          ],
+          "integer_batch": [
+            0.69846,
+            0.603119,
+            0.656267
+          ],
+          "fraction_nra": [
+            79.671349,
+            80.231223,
+            80.432112
+          ],
+          "integer_nra": [
+            10.769402,
+            10.436937,
+            10.223209
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3053",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4525",
+          "MED-4526",
+          "MED-3465",
+          "MED-4544",
+          "MED-2523"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "fraction_nra": 684,
+          "rankfence": 684,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "integer_nra": 684
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.556729,
+            0.610099,
+            0.625752
+          ],
+          "exact_batch": [
+            4.511421,
+            4.289119,
+            4.742905
+          ],
+          "float_batch": [
+            0.467657,
+            0.469269,
+            0.509799
+          ],
+          "integer_batch": [
+            0.642837,
+            0.66491,
+            0.600375
+          ],
+          "fraction_nra": [
+            2.647464,
+            2.627785,
+            2.773752
+          ],
+          "integer_nra": [
+            0.417883,
+            0.418203,
+            0.491973
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3063",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4712",
+          "MED-2886",
+          "MED-5084",
+          "MED-2966",
+          "MED-3738"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "fraction_nra": 192,
+          "rankfence": 192,
+          "float_batch": 3300,
+          "integer_nra": 192,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.169883,
+            0.1546,
+            0.184645
+          ],
+          "exact_batch": [
+            4.113648,
+            4.154599,
+            4.293305
+          ],
+          "float_batch": [
+            0.470411,
+            0.464973,
+            0.484071
+          ],
+          "integer_batch": [
+            0.556178,
+            0.563149,
+            0.567626
+          ],
+          "fraction_nra": [
+            0.453806,
+            0.448648,
+            0.457301
+          ],
+          "integer_nra": [
+            0.096103,
+            0.088482,
+            0.105497
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3074",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4555",
+          "MED-3180",
+          "MED-4424",
+          "MED-4423",
+          "MED-1512"
+        ],
+        "entries_read": {
+          "integer_nra": 576,
+          "fraction_nra": 576,
+          "rankfence": 576,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.634365,
+            0.59064,
+            0.477611
+          ],
+          "exact_batch": [
+            4.404091,
+            4.993278,
+            4.872488
+          ],
+          "float_batch": [
+            0.498152,
+            0.477722,
+            0.577901
+          ],
+          "integer_batch": [
+            0.65131,
+            0.787082,
+            1.116253
+          ],
+          "fraction_nra": [
+            2.149202,
+            1.891197,
+            2.639252
+          ],
+          "integer_nra": [
+            0.332435,
+            0.337533,
+            0.312886
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3085",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4573",
+          "MED-716",
+          "MED-919",
+          "MED-3987",
+          "MED-921"
+        ],
+        "entries_read": {
+          "fraction_nra": 384,
+          "float_batch": 3300,
+          "integer_batch": 3300,
+          "rankfence": 384,
+          "exact_batch": 3300,
+          "integer_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.5372,
+            0.372865,
+            0.312205
+          ],
+          "exact_batch": [
+            4.595415,
+            4.861521,
+            4.294056
+          ],
+          "float_batch": [
+            0.573214,
+            0.476139,
+            0.487166
+          ],
+          "integer_batch": [
+            0.860461,
+            0.633744,
+            0.549609
+          ],
+          "fraction_nra": [
+            1.528958,
+            1.23527,
+            1.112377
+          ],
+          "integer_nra": [
+            0.274318,
+            0.218635,
+            0.219367
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3097",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4590",
+          "MED-4580",
+          "MED-1792",
+          "MED-5019",
+          "MED-4591"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "rankfence": 192,
+          "integer_batch": 3300,
+          "integer_nra": 192,
+          "fraction_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.15459,
+            0.162041,
+            0.148902
+          ],
+          "exact_batch": [
+            4.259876,
+            4.274177,
+            4.552822
+          ],
+          "float_batch": [
+            0.505073,
+            0.474306,
+            0.484452
+          ],
+          "integer_batch": [
+            0.580085,
+            0.595407,
+            1.190654
+          ],
+          "fraction_nra": [
+            0.488258,
+            0.468859,
+            0.447516
+          ],
+          "integer_nra": [
+            0.094,
+            0.093339,
+            0.119137
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3116",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3718",
+          "MED-1558",
+          "MED-4255",
+          "MED-1363",
+          "MED-4613"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "fraction_nra": 384,
+          "float_batch": 3300,
+          "integer_nra": 384,
+          "rankfence": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.362099,
+            0.329651,
+            0.301329
+          ],
+          "exact_batch": [
+            4.612992,
+            4.114479,
+            5.694242
+          ],
+          "float_batch": [
+            0.578592,
+            0.465333,
+            0.450641
+          ],
+          "integer_batch": [
+            0.590599,
+            0.621566,
+            0.58383
+          ],
+          "fraction_nra": [
+            1.185285,
+            1.202101,
+            1.335209
+          ],
+          "integer_nra": [
+            0.270392,
+            0.205897,
+            0.376551
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3131",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4619",
+          "MED-2435",
+          "MED-2574",
+          "MED-5001",
+          "MED-3447"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_batch": 3300,
+          "rankfence": 3300,
+          "integer_nra": 3300,
+          "exact_batch": 3300,
+          "fraction_nra": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.640613,
+            3.633282,
+            4.634394
+          ],
+          "exact_batch": [
+            4.527785,
+            4.423899,
+            4.891786
+          ],
+          "float_batch": [
+            0.600003,
+            0.809916,
+            0.553134
+          ],
+          "integer_batch": [
+            0.855464,
+            0.651471,
+            0.601737
+          ],
+          "fraction_nra": [
+            80.686101,
+            80.748494,
+            80.488397
+          ],
+          "integer_nra": [
+            10.345051,
+            10.839747,
+            10.791646
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3141",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5226",
+          "MED-4642",
+          "MED-4644",
+          "MED-4751",
+          "MED-5184"
+        ],
+        "entries_read": {
+          "integer_nra": 1164,
+          "float_batch": 3300,
+          "exact_batch": 3300,
+          "rankfence": 1164,
+          "fraction_nra": 1164,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.162541,
+            1.30231,
+            1.36258
+          ],
+          "exact_batch": [
+            9.181968,
+            5.828081,
+            4.656376
+          ],
+          "float_batch": [
+            0.621345,
+            0.580975,
+            0.593675
+          ],
+          "integer_batch": [
+            0.734173,
+            0.655517,
+            0.687754
+          ],
+          "fraction_nra": [
+            8.957052,
+            9.563035,
+            9.920007
+          ],
+          "integer_nra": [
+            1.404772,
+            1.535237,
+            1.643308
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3151",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4664",
+          "MED-4660",
+          "MED-4662",
+          "MED-4666",
+          "MED-3445"
+        ],
+        "entries_read": {
+          "rankfence": 192,
+          "integer_nra": 192,
+          "float_batch": 3300,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "fraction_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.229241,
+            0.183213,
+            0.249412
+          ],
+          "exact_batch": [
+            4.898296,
+            4.855793,
+            4.697868
+          ],
+          "float_batch": [
+            0.492063,
+            0.603609,
+            0.487356
+          ],
+          "integer_batch": [
+            0.59086,
+            0.721274,
+            0.631951
+          ],
+          "fraction_nra": [
+            0.472444,
+            0.715726,
+            0.484281
+          ],
+          "integer_nra": [
+            0.133849,
+            0.110214,
+            0.102123
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3161",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4677",
+          "MED-1416",
+          "MED-4394",
+          "MED-2063",
+          "MED-2774"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "exact_batch": 3300,
+          "rankfence": 384,
+          "integer_nra": 384,
+          "fraction_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.331003,
+            0.602338,
+            0.545983
+          ],
+          "exact_batch": [
+            4.918216,
+            5.859278,
+            7.567423
+          ],
+          "float_batch": [
+            0.502979,
+            0.519614,
+            0.734154
+          ],
+          "integer_batch": [
+            0.626473,
+            0.653103,
+            0.859711
+          ],
+          "fraction_nra": [
+            1.515387,
+            1.536379,
+            1.952709
+          ],
+          "integer_nra": [
+            0.500615,
+            0.310713,
+            0.278344
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3171",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1021",
+          "MED-1502",
+          "MED-4153",
+          "MED-3718",
+          "MED-1343"
+        ],
+        "entries_read": {
+          "rankfence": 1548,
+          "integer_batch": 3300,
+          "integer_nra": 1548,
+          "float_batch": 3300,
+          "exact_batch": 3300,
+          "fraction_nra": 1548
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.712881,
+            1.562578,
+            1.545382
+          ],
+          "exact_batch": [
+            5.003914,
+            4.803826,
+            5.181299
+          ],
+          "float_batch": [
+            0.620404,
+            0.686673,
+            0.546554
+          ],
+          "integer_batch": [
+            1.601655,
+            0.733813,
+            0.870848
+          ],
+          "fraction_nra": [
+            18.920665,
+            17.020553,
+            18.537844
+          ],
+          "integer_nra": [
+            2.713962,
+            2.24841,
+            2.502228
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3181",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4366",
+          "MED-4620",
+          "MED-5010",
+          "MED-5022",
+          "MED-1262"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "rankfence": 576,
+          "integer_nra": 576,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "fraction_nra": 576
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.591471,
+            0.652437,
+            0.437822
+          ],
+          "exact_batch": [
+            4.710878,
+            4.881051,
+            4.3634
+          ],
+          "float_batch": [
+            0.530209,
+            0.581907,
+            0.478363
+          ],
+          "integer_batch": [
+            0.60425,
+            0.645141,
+            0.593895
+          ],
+          "fraction_nra": [
+            1.964947,
+            1.757537,
+            1.71849
+          ],
+          "integer_nra": [
+            0.303682,
+            0.310763,
+            1.901583
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3191",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4943",
+          "MED-928",
+          "MED-1831",
+          "MED-4730",
+          "MED-4731"
+        ],
+        "entries_read": {
+          "integer_nra": 192,
+          "exact_batch": 3300,
+          "rankfence": 192,
+          "fraction_nra": 192,
+          "integer_batch": 3300,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.300177,
+            0.20817,
+            0.20793
+          ],
+          "exact_batch": [
+            5.066783,
+            4.505131,
+            4.086226
+          ],
+          "float_batch": [
+            0.483129,
+            0.499604,
+            0.573464
+          ],
+          "integer_batch": [
+            0.902555,
+            0.741905,
+            0.608296
+          ],
+          "fraction_nra": [
+            0.460566,
+            0.457201,
+            0.457081
+          ],
+          "integer_nra": [
+            0.114049,
+            0.092328,
+            0.174019
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3201",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4752",
+          "MED-4897",
+          "MED-2124",
+          "MED-5106",
+          "MED-4394"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "fraction_nra": 384,
+          "integer_nra": 384,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "rankfence": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.266697,
+            0.410562,
+            0.2952
+          ],
+          "exact_batch": [
+            5.097944,
+            4.763886,
+            4.729114
+          ],
+          "float_batch": [
+            0.481187,
+            0.498963,
+            0.493245
+          ],
+          "integer_batch": [
+            0.63824,
+            0.746963,
+            0.660484
+          ],
+          "fraction_nra": [
+            1.525933,
+            1.155462,
+            1.154039
+          ],
+          "integer_nra": [
+            0.216984,
+            0.212226,
+            0.22817
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3211",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2098",
+          "MED-2064",
+          "MED-4040",
+          "MED-4738",
+          "MED-1604"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "fraction_nra": 3300,
+          "integer_batch": 3300,
+          "rankfence": 3300,
+          "float_batch": 3300,
+          "integer_nra": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.489177,
+            3.626993,
+            3.323241
+          ],
+          "exact_batch": [
+            14.311979,
+            4.1086,
+            4.651428
+          ],
+          "float_batch": [
+            0.456931,
+            0.720774,
+            0.462479
+          ],
+          "integer_batch": [
+            0.624029,
+            0.592753,
+            0.6043
+          ],
+          "fraction_nra": [
+            77.688686,
+            76.407106,
+            76.470742
+          ],
+          "integer_nra": [
+            8.977433,
+            9.413702,
+            9.760438
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3221",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2216",
+          "MED-4790",
+          "MED-1705",
+          "MED-2212",
+          "MED-4791"
+        ],
+        "entries_read": {
+          "rankfence": 576,
+          "integer_batch": 3300,
+          "integer_nra": 576,
+          "fraction_nra": 576,
+          "exact_batch": 3300,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.512463,
+            0.768324,
+            0.532734
+          ],
+          "exact_batch": [
+            4.698859,
+            5.226546,
+            4.464801
+          ],
+          "float_batch": [
+            0.511862,
+            0.495408,
+            0.506345
+          ],
+          "integer_batch": [
+            0.63781,
+            0.699101,
+            0.601807
+          ],
+          "fraction_nra": [
+            2.100779,
+            1.676327,
+            2.874772
+          ],
+          "integer_nra": [
+            0.401899,
+            0.34889,
+            0.321729
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3231",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4486",
+          "MED-1106",
+          "MED-4482",
+          "MED-5035",
+          "MED-4751"
+        ],
+        "entries_read": {
+          "fraction_nra": 684,
+          "integer_batch": 3300,
+          "integer_nra": 684,
+          "rankfence": 684,
+          "exact_batch": 3300,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.587244,
+            0.639993,
+            0.518752
+          ],
+          "exact_batch": [
+            4.623637,
+            4.465502,
+            4.621114
+          ],
+          "float_batch": [
+            0.482589,
+            0.48334,
+            0.514786
+          ],
+          "integer_batch": [
+            0.602127,
+            0.677159,
+            0.65787
+          ],
+          "fraction_nra": [
+            2.462749,
+            2.526924,
+            2.471541
+          ],
+          "integer_nra": [
+            0.434307,
+            0.40276,
+            0.404703
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3241",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1399",
+          "MED-2821",
+          "MED-2580",
+          "MED-5256",
+          "MED-3790"
+        ],
+        "entries_read": {
+          "integer_nra": 3300,
+          "fraction_nra": 3300,
+          "float_batch": 3300,
+          "exact_batch": 3300,
+          "rankfence": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            5.496788,
+            4.060168,
+            4.402738
+          ],
+          "exact_batch": [
+            6.163531,
+            7.750075,
+            4.39702
+          ],
+          "float_batch": [
+            0.848704,
+            0.501206,
+            0.718621
+          ],
+          "integer_batch": [
+            0.930476,
+            0.869505,
+            2.254268
+          ],
+          "fraction_nra": [
+            81.924815,
+            90.401943,
+            83.36338
+          ],
+          "integer_nra": [
+            15.567019,
+            9.912325,
+            9.862511
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3251",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4861",
+          "MED-1380",
+          "MED-2304",
+          "MED-1146",
+          "MED-967"
+        ],
+        "entries_read": {
+          "fraction_nra": 3300,
+          "integer_nra": 3300,
+          "float_batch": 3300,
+          "rankfence": 3300,
+          "integer_batch": 3300,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            4.197423,
+            4.862393,
+            4.455817
+          ],
+          "exact_batch": [
+            4.942853,
+            5.246044,
+            5.138697
+          ],
+          "float_batch": [
+            0.615647,
+            0.50673,
+            0.49314
+          ],
+          "integer_batch": [
+            0.652852,
+            0.714685,
+            0.881195
+          ],
+          "fraction_nra": [
+            88.202868,
+            87.779705,
+            106.599988
+          ],
+          "integer_nra": [
+            14.193523,
+            12.669526,
+            13.549841
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3261",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5157",
+          "MED-4873",
+          "MED-5158",
+          "MED-4930",
+          "MED-3491"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "rankfence": 2412,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "integer_nra": 2412,
+          "fraction_nra": 2412
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            2.43208,
+            1.948815,
+            3.479171
+          ],
+          "exact_batch": [
+            6.025611,
+            4.630915,
+            7.942649
+          ],
+          "float_batch": [
+            0.741799,
+            0.49295,
+            0.867294
+          ],
+          "integer_batch": [
+            0.659957,
+            0.788898,
+            0.96573
+          ],
+          "fraction_nra": [
+            46.885102,
+            49.443459,
+            70.402478
+          ],
+          "integer_nra": [
+            7.057248,
+            5.655793,
+            8.417482
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3271",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4450",
+          "MED-1781",
+          "MED-1556",
+          "MED-4823",
+          "MED-1873"
+        ],
+        "entries_read": {
+          "integer_nra": 384,
+          "integer_batch": 3300,
+          "rankfence": 384,
+          "float_batch": 3300,
+          "fraction_nra": 384,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.625726,
+            0.575212,
+            0.620859
+          ],
+          "exact_batch": [
+            7.064699,
+            6.986233,
+            6.967165
+          ],
+          "float_batch": [
+            0.728228,
+            0.698894,
+            0.700998
+          ],
+          "integer_batch": [
+            0.981803,
+            0.915966,
+            0.929276
+          ],
+          "fraction_nra": [
+            1.808638,
+            1.899042,
+            1.729
+          ],
+          "integer_nra": [
+            0.382336,
+            0.32406,
+            0.328927
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3281",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4909",
+          "MED-1844",
+          "MED-1850",
+          "MED-1849",
+          "MED-1851"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "rankfence": 192,
+          "exact_batch": 3300,
+          "integer_nra": 192,
+          "fraction_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.212875,
+            0.18272,
+            0.177122
+          ],
+          "exact_batch": [
+            4.403469,
+            4.560432,
+            4.395187
+          ],
+          "float_batch": [
+            0.513129,
+            0.505388,
+            0.481072
+          ],
+          "integer_batch": [
+            0.652005,
+            0.640398,
+            0.617394
+          ],
+          "fraction_nra": [
+            0.531947,
+            0.541952,
+            0.56715
+          ],
+          "integer_nra": [
+            0.12816,
+            0.113127,
+            0.103734
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3292",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2761",
+          "MED-2758",
+          "MED-2757",
+          "MED-4645",
+          "MED-2760"
+        ],
+        "entries_read": {
+          "integer_nra": 384,
+          "rankfence": 384,
+          "integer_batch": 3300,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "fraction_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.342137,
+            0.359802,
+            0.361735
+          ],
+          "exact_batch": [
+            4.591337,
+            4.703704,
+            4.523317
+          ],
+          "float_batch": [
+            0.513841,
+            0.510526,
+            0.501192
+          ],
+          "integer_batch": [
+            0.653828,
+            0.713326,
+            0.686126
+          ],
+          "fraction_nra": [
+            1.16231,
+            1.176121,
+            1.223922
+          ],
+          "integer_nra": [
+            0.221157,
+            0.217001,
+            0.219545
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3302",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2410",
+          "MED-4946",
+          "MED-5099",
+          "MED-4733",
+          "MED-5097"
+        ],
+        "entries_read": {
+          "fraction_nra": 384,
+          "exact_batch": 3300,
+          "rankfence": 384,
+          "float_batch": 3300,
+          "integer_nra": 384,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.35793,
+            0.320855,
+            0.308788
+          ],
+          "exact_batch": [
+            4.353194,
+            4.26244,
+            4.294148
+          ],
+          "float_batch": [
+            0.475303,
+            0.483516,
+            0.496585
+          ],
+          "integer_batch": [
+            0.592267,
+            0.654119,
+            0.652646
+          ],
+          "fraction_nra": [
+            1.079969,
+            1.079738,
+            1.098036
+          ],
+          "integer_nra": [
+            0.217492,
+            0.226646,
+            0.223861
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3312",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4966",
+          "MED-1570",
+          "MED-4959",
+          "MED-1272",
+          "MED-1572"
+        ],
+        "entries_read": {
+          "rankfence": 576,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "integer_nra": 576,
+          "fraction_nra": 576,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.475033,
+            0.453442,
+            0.461763
+          ],
+          "exact_batch": [
+            4.495836,
+            4.335128,
+            4.335218
+          ],
+          "float_batch": [
+            0.786385,
+            0.480491,
+            0.498278
+          ],
+          "integer_batch": [
+            0.658244,
+            0.612107,
+            0.565317
+          ],
+          "fraction_nra": [
+            1.832473,
+            1.860674,
+            1.902827
+          ],
+          "integer_nra": [
+            0.36512,
+            0.356879,
+            0.358781
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3322",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2189",
+          "MED-2205",
+          "MED-4714",
+          "MED-3745",
+          "MED-4089"
+        ],
+        "entries_read": {
+          "integer_nra": 1356,
+          "float_batch": 3300,
+          "fraction_nra": 1356,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "rankfence": 1356
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.968434,
+            1.16146,
+            1.01336
+          ],
+          "exact_batch": [
+            4.330932,
+            4.301679,
+            4.549145
+          ],
+          "float_batch": [
+            0.478388,
+            0.485149,
+            0.538758
+          ],
+          "integer_batch": [
+            0.712395,
+            0.613258,
+            0.865251
+          ],
+          "fraction_nra": [
+            12.284627,
+            12.550671,
+            12.898896
+          ],
+          "integer_nra": [
+            1.786885,
+            1.737433,
+            2.399042
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3332",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4994",
+          "MED-3696",
+          "MED-3762",
+          "MED-3768",
+          "MED-1678"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "fraction_nra": 576,
+          "float_batch": 3300,
+          "rankfence": 576,
+          "exact_batch": 3300,
+          "integer_nra": 576
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.497256,
+            0.473461,
+            0.504637
+          ],
+          "exact_batch": [
+            4.624186,
+            4.347206,
+            4.359223
+          ],
+          "float_batch": [
+            0.482234,
+            0.492198,
+            0.577254
+          ],
+          "integer_batch": [
+            0.713707,
+            0.693777,
+            0.611986
+          ],
+          "fraction_nra": [
+            1.807886,
+            1.813345,
+            1.821837
+          ],
+          "integer_nra": [
+            0.346193,
+            0.343819,
+            0.379331
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3342",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5014",
+          "MED-5012",
+          "MED-4000",
+          "MED-4002",
+          "MED-5016"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "integer_nra": 384,
+          "rankfence": 384,
+          "fraction_nra": 384,
+          "float_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.318211,
+            0.417238,
+            0.34411
+          ],
+          "exact_batch": [
+            4.280898,
+            4.260358,
+            4.278213
+          ],
+          "float_batch": [
+            0.497446,
+            0.472019,
+            0.492779
+          ],
+          "integer_batch": [
+            0.647368,
+            0.694668,
+            0.641249
+          ],
+          "fraction_nra": [
+            1.125657,
+            1.153007,
+            1.153107
+          ],
+          "integer_nra": [
+            0.21617,
+            0.22303,
+            0.229029
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3352",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4833",
+          "MED-1257",
+          "MED-5014",
+          "MED-4578",
+          "MED-4315"
+        ],
+        "entries_read": {
+          "fraction_nra": 684,
+          "integer_nra": 684,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "rankfence": 684,
+          "exact_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.60756,
+            0.587439,
+            0.747066
+          ],
+          "exact_batch": [
+            4.45148,
+            4.452112,
+            7.235663
+          ],
+          "float_batch": [
+            0.503235,
+            0.468083,
+            0.646337
+          ],
+          "integer_batch": [
+            0.671984,
+            0.63487,
+            0.995324
+          ],
+          "fraction_nra": [
+            3.042314,
+            2.660989,
+            3.53292
+          ],
+          "integer_nra": [
+            0.447402,
+            0.457918,
+            0.528262
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3362",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5042",
+          "MED-5041",
+          "MED-2227",
+          "MED-1540",
+          "MED-2824"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "fraction_nra": 1740,
+          "rankfence": 1740,
+          "integer_nra": 1740,
+          "integer_batch": 3300,
+          "float_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.611936,
+            1.60058,
+            1.547762
+          ],
+          "exact_batch": [
+            4.715892,
+            4.479362,
+            4.659148
+          ],
+          "float_batch": [
+            0.670883,
+            0.539829,
+            0.562613
+          ],
+          "integer_batch": [
+            0.726776,
+            0.670453,
+            0.642512
+          ],
+          "fraction_nra": [
+            22.051697,
+            25.06629,
+            21.2099
+          ],
+          "integer_nra": [
+            2.884009,
+            2.989545,
+            2.818824
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3372",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5054",
+          "MED-1625",
+          "MED-4120",
+          "MED-4868",
+          "MED-1627"
+        ],
+        "entries_read": {
+          "integer_nra": 192,
+          "float_batch": 3300,
+          "fraction_nra": 192,
+          "exact_batch": 3300,
+          "rankfence": 192,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.153417,
+            0.150072,
+            0.164753
+          ],
+          "exact_batch": [
+            4.13437,
+            4.8703,
+            4.388176
+          ],
+          "float_batch": [
+            0.495022,
+            0.51324,
+            0.475404
+          ],
+          "integer_batch": [
+            0.555061,
+            0.628881,
+            0.543284
+          ],
+          "fraction_nra": [
+            0.453572,
+            0.503025,
+            0.476555
+          ],
+          "integer_nra": [
+            0.095381,
+            0.12187,
+            0.089393
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3382",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-3382",
+          "MED-3381",
+          "MED-3380",
+          "MED-5062",
+          "MED-5054"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "fraction_nra": 192,
+          "integer_batch": 3300,
+          "integer_nra": 192,
+          "float_batch": 3300,
+          "rankfence": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.167127,
+            0.200397,
+            0.171975
+          ],
+          "exact_batch": [
+            4.744845,
+            4.53929,
+            4.513892
+          ],
+          "float_batch": [
+            0.535302,
+            0.501423,
+            0.582131
+          ],
+          "integer_batch": [
+            0.616132,
+            0.678704,
+            0.720216
+          ],
+          "fraction_nra": [
+            0.474482,
+            0.550195,
+            0.568642
+          ],
+          "integer_nra": [
+            0.111115,
+            0.102501,
+            0.10101
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3392",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1150",
+          "MED-1646",
+          "MED-3533",
+          "MED-1162",
+          "MED-2155"
+        ],
+        "entries_read": {
+          "fraction_nra": 3300,
+          "exact_batch": 3300,
+          "integer_nra": 3300,
+          "rankfence": 3300,
+          "float_batch": 3300,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            3.600911,
+            5.199538,
+            3.835949
+          ],
+          "exact_batch": [
+            4.682392,
+            7.569997,
+            4.406293
+          ],
+          "float_batch": [
+            0.507592,
+            0.835227,
+            0.482845
+          ],
+          "integer_batch": [
+            0.81044,
+            0.962605,
+            0.670052
+          ],
+          "fraction_nra": [
+            79.097997,
+            127.127188,
+            91.945868
+          ],
+          "integer_nra": [
+            11.274522,
+            14.846359,
+            10.391054
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3402",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4413",
+          "MED-2951",
+          "MED-4689",
+          "MED-5056",
+          "MED-3734"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "rankfence": 576,
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "integer_nra": 576,
+          "fraction_nra": 576
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.451869,
+            0.459531,
+            0.458519
+          ],
+          "exact_batch": [
+            4.220499,
+            4.668351,
+            3.922657
+          ],
+          "float_batch": [
+            0.491007,
+            0.450917,
+            0.448193
+          ],
+          "integer_batch": [
+            0.565217,
+            0.597585,
+            0.661339
+          ],
+          "fraction_nra": [
+            1.760065,
+            1.727738,
+            2.187359
+          ],
+          "integer_nra": [
+            0.403988,
+            0.319544,
+            0.358191
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3412",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-4682",
+          "MED-2055",
+          "MED-1226",
+          "MED-2136",
+          "MED-5192"
+        ],
+        "entries_read": {
+          "exact_batch": 3300,
+          "integer_nra": 384,
+          "float_batch": 3300,
+          "rankfence": 384,
+          "integer_batch": 3300,
+          "fraction_nra": 384
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.330319,
+            0.338621,
+            0.282718
+          ],
+          "exact_batch": [
+            3.9784,
+            4.037958,
+            4.040472
+          ],
+          "float_batch": [
+            0.462344,
+            0.440452,
+            0.439871
+          ],
+          "integer_batch": [
+            0.536003,
+            0.555112,
+            0.542063
+          ],
+          "fraction_nra": [
+            1.108251,
+            1.074601,
+            1.169071
+          ],
+          "integer_nra": [
+            0.205864,
+            0.204472,
+            0.223892
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3422",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2762",
+          "MED-4929",
+          "MED-4924",
+          "MED-4872",
+          "MED-4930"
+        ],
+        "entries_read": {
+          "rankfence": 684,
+          "integer_batch": 3300,
+          "fraction_nra": 684,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "integer_nra": 684
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.928265,
+            0.95228,
+            0.860334
+          ],
+          "exact_batch": [
+            8.169525,
+            7.803723,
+            8.232248
+          ],
+          "float_batch": [
+            0.789288,
+            0.764242,
+            0.799965
+          ],
+          "integer_batch": [
+            1.092007,
+            0.994292,
+            0.968333
+          ],
+          "fraction_nra": [
+            4.731905,
+            4.810002,
+            4.999111
+          ],
+          "integer_nra": [
+            0.688449,
+            0.727257,
+            0.731343
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3432",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5040",
+          "MED-5283",
+          "MED-2227",
+          "MED-5148",
+          "MED-4782"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "float_batch": 3300,
+          "fraction_nra": 192,
+          "exact_batch": 3300,
+          "rankfence": 192,
+          "integer_nra": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.226966,
+            0.277351,
+            0.34421
+          ],
+          "exact_batch": [
+            7.59858,
+            5.776021,
+            5.474886
+          ],
+          "float_batch": [
+            0.773915,
+            0.789669,
+            0.482414
+          ],
+          "integer_batch": [
+            1.064606,
+            0.90491,
+            1.017566
+          ],
+          "fraction_nra": [
+            0.721277,
+            0.722079,
+            0.523355
+          ],
+          "integer_nra": [
+            0.16165,
+            0.140147,
+            0.1143
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3442",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5026",
+          "MED-759",
+          "MED-2098",
+          "MED-2201",
+          "MED-4496"
+        ],
+        "entries_read": {
+          "integer_batch": 3300,
+          "rankfence": 576,
+          "integer_nra": 576,
+          "exact_batch": 3300,
+          "float_batch": 3300,
+          "fraction_nra": 576
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.781487,
+            0.530546,
+            0.490977
+          ],
+          "exact_batch": [
+            6.623065,
+            3.934064,
+            4.130335
+          ],
+          "float_batch": [
+            0.652937,
+            0.454022,
+            0.427734
+          ],
+          "integer_batch": [
+            0.843138,
+            0.832071,
+            0.727467
+          ],
+          "fraction_nra": [
+            3.39118,
+            2.953548,
+            2.040611
+          ],
+          "integer_nra": [
+            0.511988,
+            0.340163,
+            0.41214
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3452",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-5175",
+          "MED-4810",
+          "MED-2294",
+          "MED-4637",
+          "MED-1430"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_nra": 1644,
+          "exact_batch": 3300,
+          "rankfence": 1644,
+          "fraction_nra": 1644,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            1.599749,
+            1.358121,
+            1.366693
+          ],
+          "exact_batch": [
+            4.100971,
+            4.495034,
+            4.689773
+          ],
+          "float_batch": [
+            0.441294,
+            0.509825,
+            0.45981
+          ],
+          "integer_batch": [
+            0.707458,
+            0.588852,
+            0.63467
+          ],
+          "fraction_nra": [
+            18.331259,
+            18.403586,
+            21.631294
+          ],
+          "integer_nra": [
+            2.872903,
+            2.31008,
+            2.727548
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3462",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-1373",
+          "MED-1390",
+          "MED-5273",
+          "MED-5260",
+          "MED-5269"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "integer_nra": 192,
+          "exact_batch": 3300,
+          "integer_batch": 3300,
+          "fraction_nra": 192,
+          "rankfence": 192
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.150353,
+            0.164353,
+            0.160638
+          ],
+          "exact_batch": [
+            4.137996,
+            4.128903,
+            4.169843
+          ],
+          "float_batch": [
+            0.472749,
+            0.458318,
+            0.472029
+          ],
+          "integer_batch": [
+            0.566218,
+            0.567961,
+            0.571486
+          ],
+          "fraction_nra": [
+            0.420442,
+            0.455464,
+            0.427123
+          ],
+          "integer_nra": [
+            0.091125,
+            0.098296,
+            0.086308
+          ]
+        }
+      },
+      {
+        "query": "PLAIN-3472",
+        "total_entries": 3300,
+        "sources": 6,
+        "exact_top": [
+          "MED-2435",
+          "MED-2082",
+          "MED-1353",
+          "MED-2154",
+          "MED-5303"
+        ],
+        "entries_read": {
+          "float_batch": 3300,
+          "fraction_nra": 576,
+          "exact_batch": 3300,
+          "rankfence": 576,
+          "integer_nra": 576,
+          "integer_batch": 3300
+        },
+        "float_matches_exact": true,
+        "times_ms": {
+          "rankfence": [
+            0.444348,
+            0.468163,
+            0.570685
+          ],
+          "exact_batch": [
+            4.699888,
+            4.59321,
+            4.274488
+          ],
+          "float_batch": [
+            0.49307,
+            0.472229,
+            0.478419
+          ],
+          "integer_batch": [
+            0.56747,
+            0.642722,
+            0.657133
+          ],
+          "fraction_nra": [
+            1.859252,
+            1.97188,
+            2.10091
+          ],
+          "integer_nra": [
+            0.339693,
+            0.348606,
+            0.322747
+          ]
+        }
+      }
+    ]
+  }
+}
