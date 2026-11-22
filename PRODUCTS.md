@@ -1,6 +1,6 @@
 # PGG Engineering tools
 
-Choose a tool by the operation your application needs. Each entry links to its source and a working example. [Browse the illustrated index of all 25 tools](docs/product-art/README.md).
+Choose a tool by the operation your application needs. Each entry links to its source and a working example. [Open the interactive tool index](https://pgg898200-ship-it.github.io/cachepin/tools/) · [Browse the editable artwork](docs/product-art/README.md).
 
 ![Five product families illustrated by a ranked page, two timers, a coalesced update, a signal trace, and a tally of votes.](docs/product-families.svg)
 
