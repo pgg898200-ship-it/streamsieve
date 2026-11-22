@@ -4,7 +4,7 @@
 
 Put StreamSieve between a metrics collector and an alerting service or monitoring agent. Feed it one row of numeric measurements per tick. It returns a ranked brief with flagged channels, estimated change points and handles for reading back exact samples held in memory.
 
-[Try the Python example](#try-it) · [Use the CLI or MCP server](#quickstart) · [Benchmark results](docs/benchmarks.md) · [Agent reference](llms.txt)
+[Try the Python example](#try-it) · [Use the CLI or MCP server](#quickstart) · [Benchmark results](docs/benchmarks.md) · [Agent reference](llms.txt) · [Find a tool by task](PRODUCTS.md)
 
 ![Two simulated latency streams over 256 ticks. Worker B shifts from 40–41 ms to 50–51 ms. StreamSieve flags B and returns the range ch:1@t=80..256.](docs/worker-latency.png)
 
@@ -228,7 +228,6 @@ Every engine obeys **bit-exact zero-lookahead causality** verified by [`assert_c
 
 ## Documentation & Comparisons
 
-[Find related tools by integration point in the PGG Engineering product guide.](https://github.com/pgg898200-ship-it/backfold/blob/main/docs/PRODUCTS.md)
 
 - **Technical Specification & Math:** [`docs/architecture.md`](https://github.com/pgg898200-ship-it/streamsieve/blob/main/docs/architecture.md)
 - **Full Benchmark Report (`StreamSwarmBench`):** [`docs/benchmarks.md`](https://github.com/pgg898200-ship-it/streamsieve/blob/main/docs/benchmarks.md) | [`benchmarks/results.json`](https://github.com/pgg898200-ship-it/streamsieve/blob/main/benchmarks/results.json)
