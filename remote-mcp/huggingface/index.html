@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f4eb">
+<meta name="description" content="Replay keyword and vector search results to find the first page where exact reciprocal rank fusion can stop.">
+<title>RankFence · Exact early stopping for hybrid search</title>
+<style>
+:root{color-scheme:light;--paper:#f5f4eb;--ink:#192f2b;--muted:#4c615b;--rule:#becabd;--accent:#185147;--lime:#d1f479;--panel:#fffef8;background:var(--paper);color:var(--ink);font:16px/1.48 system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0}header,main{width:min(100% - 2rem,62rem);margin:auto}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--rule);padding:1rem 0}header strong{display:flex;gap:.6rem;align-items:center}.mark{display:inline-block;width:1.5rem;height:1.1rem;border-bottom:4px solid var(--ink);transform:skew(-12deg);background:repeating-linear-gradient(90deg,var(--ink) 0 3px,transparent 3px 6px)}a{color:var(--accent);text-underline-offset:.2em}a:focus-visible,button:focus-visible{outline:3px solid #a1481b;outline-offset:3px}h1,h2,h3,p{margin:0}h1{font:500 clamp(2.7rem,6vw,4.6rem)/1.0 Georgia,serif;letter-spacing:-.055em;max-width:15ch;text-wrap:balance}.intro{padding:clamp(2rem,5vw,3.5rem) 0 1.6rem}.intro p{margin:1rem 0;max-width:66ch;font-size:1.05rem}.cta{display:inline-block;background:var(--accent);color:white;padding:.55rem .85rem;text-decoration:none;font-weight:650}.cta:hover{background:var(--ink)}
+.lab{background:var(--panel);border:1px solid var(--ink);border-radius:4px;overflow:hidden}.top{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:space-between;align-items:center;padding:1rem clamp(.7rem,3vw,1.5rem);border-bottom:1px solid var(--rule)}h2{font-size:1.2rem;line-height:1.3}.choices{display:flex;gap:.35rem;flex-wrap:wrap}.choices button{border:1px solid var(--rule);color:var(--ink);border-radius:3px;padding:.44rem .65rem;background:transparent;font:inherit;font-size:.9rem;cursor:pointer}.choices button[aria-pressed=true]{background:var(--lime);border-color:var(--ink);font-weight:650}.result{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:1.1rem;align-items:center;padding:1.2rem clamp(.7rem,3vw,1.5rem)}.big{font-size:clamp(2.7rem,6vw,4rem);line-height:1;letter-spacing:-.06em;font-weight:720}.big span{font-size:.5em;color:var(--muted)}.caption,.legend{font-size:.87rem;color:var(--muted)}.result h3{font:650 1.08rem/1.4 ui-monospace,monospace;overflow-wrap:anywhere}.result p{margin-top:.3rem;max-width:49ch}.box{padding:0 clamp(.7rem,3vw,1.5rem) .85rem;overflow-x:auto}.legend{margin-top:.7rem}table{width:100%;border-collapse:collapse;font-size:.94rem;text-align:left}th,td{border-bottom:1px solid var(--rule);padding:.45rem}.seen{background:#e1efd8;font-weight:700}.skipped{color:var(--muted);background:repeating-linear-gradient(135deg,#fcfbf5 0 8px,#f1f1e8 8px 9px)}.cut{border-right:3px solid var(--accent)}thead{font-size:.8rem;color:var(--muted)}td{font-family:ui-monospace,monospace}.note{border-top:1px solid var(--rule);padding:.85rem clamp(.7rem,3vw,1.5rem);font-size:.91rem;color:var(--muted)}.use{padding:1.6rem 0 2.4rem}.use p{max-width:75ch;margin:.6rem 0}.links{display:flex;flex-wrap:wrap;gap:.5rem 1.3rem}@media(max-width:540px){.result{grid-template-columns:1fr;gap:.85rem}table{font-size:.76rem}td,th{padding:.4rem .2rem}}
+</style>
+</head>
+<body>
+<header><strong><i class="mark" aria-hidden="true"></i>RankFence</strong><a href="https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0">GitHub source ↗</a></header>
+<main>
+<section class="intro"><h1>Know when to stop searching.</h1><p>RankFence sits between paged retrievers and your reranker. It stops reading when the remaining keyword and vector results cannot change the exact reciprocal rank fusion order.</p><a class="cta" href="https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html">Try your own rankings ↗</a></section>
+<section class="lab" aria-labelledby="lab-title"><div class="top"><h2 id="lab-title">Replay a sharded search</h2><div class="choices" role="group" aria-label="Example rankings"><button id="agree" type="button" aria-pressed="true">Shared first choice</button><button id="split" type="button" aria-pressed="false">Split first choices</button></div></div>
+<div class="result" aria-live="polite" aria-atomic="true"><div><div class="big"><b id="count">4</b> <span>/ 12</span></div><p class="caption">ranked IDs read in replay</p></div><div><h3 id="winner">Winner · west/alpha</h3><p id="reason">Both west retrievers put alpha first. After one result from each cursor, no rival can catch it.</p></div></div>
+<div class="box"><table aria-label="Ranked document IDs by source, with read prefixes highlighted"><thead><tr><th>Retriever</th><th>Rank 1</th><th>Rank 2</th><th>Rank 3</th></tr></thead><tbody id="ranks"></tbody></table><p class="legend" id="legend"></p></div>
+<p class="note">Each round reads one ID per cursor. Every document belongs to one shard. The browser has all 12 IDs and checks the replay winner against exhaustive fusion.</p><noscript><p>Enable JavaScript to switch examples.</p></noscript></section>
+<section class="use"><h2>Use it in your retrieval stack</h2><p>Feed stable, append-only ranked pages to the Python coordinator. Declare disjoint shards only when a document cannot appear in both. Use one group when namespaces overlap. Savings depend on how your service fetches pages.</p><div class="links"><a href="https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0#use-live-retrieval-cursors">Connect Python cursors ↗</a><a href="https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0#let-an-agent-measure-its-own-workload">Connect an MCP client ↗</a><a href="https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0/results">Benchmark data ↗</a></div></section>
+</main>
+<script>
+'use strict';
+const cases = {
+ agree:[['alpha','beta','gamma'],['alpha','gamma','beta'],['delta','epsilon','zeta'],['epsilon','zeta','delta']],
+ split:[['alpha','beta','gamma'],['gamma','beta','alpha'],['delta','epsilon','zeta'],['zeta','epsilon','delta']]
+};
+const groups=['west','west','east','east'];
+const labels=['West · keyword','West · vector','East · keyword','East · vector'];
+// Scale each fixture score by this common denominator to compare exact integers.
+const unit=61*62*63;
+function term(rank){return unit/(60+rank);}
+function atDepth(lists,depth){
+ const scores=new Map();
+ lists.forEach((rows,source)=>{
+  rows.slice(0,depth).forEach((shortId,i)=>{
+   const id=groups[source]+'/'+shortId;
+   if(!scores.has(id)) scores.set(id,{id,score:0,seen:0});
+   const doc=scores.get(id);
+   doc.score+=term(i+1); doc.seen++;
+  });
+ });
+ const sorted=[...scores.values()].sort((a,b)=>b.score-a.score || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+ const best=sorted[0];
+ if(depth===3) return best.id;
+ // An unseen document can occur in at most the two cursors of its shard.
+ const next=term(depth+1);
+ if(best.score<=2*next) return null;
+ for(const rival of sorted.slice(1)){
+  const upper=rival.score+(2-rival.seen)*next;
+  if(upper>best.score || (upper===best.score && rival.id<best.id)) return null;
+ }
+ return best.id;
+}
+function replay(lists){
+ const exhaustive=atDepth(lists,3);
+ for(let depth=1;depth<=3;depth++){
+  const winner=atDepth(lists,depth);
+  if(winner!==null) return {depth,winner,exhaustive};
+ }
+}
+function show(key){
+ const lists=cases[key];
+ const {depth,winner,exhaustive}=replay(lists);
+ if(winner!==exhaustive) throw Error('Replay and exhaustive fusion disagree');
+ Object.keys(cases).forEach(id=>document.getElementById(id).setAttribute('aria-pressed',String(id===key)));
+ document.getElementById('count').textContent=depth*4;
+ document.getElementById('winner').textContent='Winner · '+winner;
+ document.getElementById('reason').textContent=key==='agree'
+  ? 'Both west retrievers put alpha first. After one result from each cursor, no rival can catch it.'
+  : 'Both shards split their first choices. The final round reveals a tie for first place. Document ID order gives east/delta the win.';
+ const rows=lists.map((ids,source)=>{
+  const row=document.createElement('tr');
+  const th=document.createElement('th');
+  th.scope='row'; th.textContent=labels[source]; row.append(th);
+  ids.forEach((id,i)=>{
+   const td=document.createElement('td');
+   td.className=i<depth?'seen':'skipped';
+   if(i+1===depth) td.className+=' cut';
+   td.textContent=id;
+   td.setAttribute('aria-label',id+(i<depth?', read':', skipped'));
+   row.append(td);
+  });
+  return row;
+ });
+ document.getElementById('ranks').replaceChildren(...rows);
+ document.getElementById('legend').textContent=depth===3?'All 12 IDs were read. The winner matches exhaustive fusion.':'Four filled cells were read. Eight hatched cells can be skipped. The winner matches exhaustive fusion.';
+}
+Object.keys(cases).forEach(key=>document.getElementById(key).addEventListener('click',()=>show(key)));
+show('agree');
+</script>
+</body></html>
