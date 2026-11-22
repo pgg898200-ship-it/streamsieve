@@ -56,3 +56,22 @@ print(f"90% AgACI coverage: {covered/n*100:.2f}% | Agents: {[(a.agent_id, round(
 tc.close()
 '
 ```
+
+### Merge overlapping deadline reports from multiple collectors
+
+Two collectors can report the same missed heartbeat. `pulsefold_lattice.py` counts unique expiry and recovery transitions from Pulsefold's scalar replay or live output. Each input goes into its own `EvidenceLattice` before the example merges the replicas. PGG Engineering maintains both projects. [Pulsefold release](https://pulsefold.tancurl3.chatgpt.site)
+
+Run this offline from the StreamSieve root on a supported native build. The two collectors below see three rows each and overlap on two transitions.
+
+```sh
+make lib
+tmpdir=$(mktemp -d)
+printf '9 0 0 stale\n10 0 0 fresh\n15 0 0 stale\n' > "$tmpdir/collector-a"
+printf '10 0 0 fresh\n15 0 0 stale\n22 0 1 stale\n' > "$tmpdir/collector-b"
+PYTHONPATH=python python3 examples/pulsefold_lattice.py --source 'lab:epoch1:ttl5,12' \
+  --tick-ns 1000000 "$tmpdir/collector-a" "$tmpdir/collector-b"
+```
+
+Expected output is `{"input_rows": 6, "unique": {"stale": 3, "fresh": 1}, "duplicate_rows": 2}`. Omit the paths to read `TIME FEED SUBSCRIBER stale|fresh` on stdin. `--tick-ns` is 1,000 for microsecond replay ticks or 1,000,000 for Pulsefold live milliseconds. Live replicas must share the same timestamp origin. Separately launched live monitors have independent origins, so collect the same monitor’s output or normalize the clocks first.
+
+Use one `--source` for copies sharing an epoch, feed map and subscriber policy. Change it when a clock restarts or these definitions change. Provenance uses StreamSieve's 64-bit hash of the source, timestamp, feed, subscriber and transition kind. Each observation has neutral `llr=0` and `log_e=0` because it records a deadline event. The example keeps one record per unique transition in a bounded capture and emits its counts at EOF. Its `ingest()` function also accepts an existing lattice for wire sync using `to_bytes()` and `from_bytes()`.
