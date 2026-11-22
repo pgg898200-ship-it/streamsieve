@@ -6,6 +6,8 @@ Score a changing ensemble of point forecasts after every revision. Each agent ha
 
 [Replay Hurricane Lee](https://huggingface.co/spaces/pgg-engineering/recastcrps) · [Native benchmarks](bench/README.md) · [Python comparison with scoringrules](comparison/README.md) · [Replay data and provenance](replay/README.md)
 
+[Recompute a member withdrawal in JupyterLab](https://jupyter.org/try-jupyter/lab/index.html?fromURL=https%3A%2F%2Fraw.githubusercontent.com%2Fpgg898200-ship-it%2Fstreamsieve%2Fmain%2Fintegrations%2Frecastcrps%2Freplay%2Fwithdraw-member.ipynb). Run all cells in your browser with the Python (Pyodide) kernel. [Read the executed notebook](https://nbviewer.org/github/pgg898200-ship-it/streamsieve/blob/main/integrations/recastcrps/replay/withdraw-member.ipynb).
+
 ## What we measured
 
 On one AMD EPYC 9V74 core, a revision followed immediately by a best-and-worst withdrawal query took **202 ns** with 4,096 unit-weight forecasts. A dedicated ordered-set/Fenwick implementation took **245 ns**. Enumerating all the leave-one-out scores took **37,875 ns**. These are medians of seven run averages. For a static ensemble, the sorted-prefix comparator won, **63 ns** to **186 ns**. [Native measurements and crossover cases](bench/README.md).
