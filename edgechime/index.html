@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A dependency-free spatial index for exact enter and exit events. Try moving an agent through overlapping rectangular geofences and replay the benchmarks.">
+<link rel="alternate" type="text/markdown" href="https://huggingface.co/spaces/pgg-engineering/edgechime/resolve/main/README.md" title="EdgeChime API and benchmark guide">
+<meta name="theme-color" content="#f7f6ef">
+<title>EdgeChime · Live region membership</title>
+<style>
+:root{--ink:#182926;--muted:#51645c;--line:#c7cec2;--page:#f7f6ef;--paper:#fffef9;--green:#155b46;--orange:#bd4d22;--mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;--sans:"Instrument Sans",Arial,Helvetica,sans-serif}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--page);font-family:var(--sans);font-size:16px}main{max-width:1180px;margin:auto;padding:0 clamp(18px,4.5vw,64px) 32px}header{display:flex;align-items:center;justify-content:space-between;gap:1em;padding:22px 0 19px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:10px;font:700 1.05rem var(--mono);letter-spacing:-.06em}.mark{height:30px;width:30px;background:var(--ink);position:relative;display:inline-block}.mark::before{content:"";position:absolute;inset:5px 10px 10px 5px;border:2px solid #b9edb0}.mark::after{content:"";position:absolute;inset:12px 4px 4px 12px;border:2px solid #fa9564}.source{font:600 .81rem var(--mono);color:var(--green);text-underline-offset:4px}.intro{display:flex;align-items:flex-end;gap:2em;justify-content:space-between;padding:36px 0 27px}.intro h1{font-size:clamp(2.25rem,5.25vw,4.35rem);letter-spacing:-.076em;line-height:.98;margin:0;max-width:660px}.intro p{max-width:292px;color:var(--muted);font-size:.98rem;line-height:1.48;margin:0}.instrument{border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--paper)}.controls{display:flex;align-items:center;justify-content:space-between;gap:1em;padding:12px 15px;background:#e9ede3;border-bottom:1px solid var(--line)}.buttons{display:flex;gap:6px;flex-wrap:wrap;align-items:center}button,select{background:var(--paper);color:var(--ink);font:600 .82rem var(--mono);border:1px solid #a2ada0;border-radius:4px;min-height:36px;padding:6px 11px;cursor:pointer}button:hover,select:hover{border-color:var(--green)}button:focus-visible,select:focus-visible,a:focus-visible,canvas:focus-visible{outline:3px solid #bd4d22;outline-offset:2px}#play{background:var(--green);color:white;border-color:var(--green);min-width:98px}#reset{background:transparent}.density{display:flex;align-items:center;gap:8px;font:600 .77rem var(--mono)}.work{display:grid;grid-template-columns:minmax(0,1fr) minmax(225px,.43fr)}.field{min-width:0;display:flex;flex-direction:column;background:#142e2d;color:#f1f7e9}.fieldHead{display:flex;align-items:center;justify-content:space-between;gap:1em;padding:15px 17px 10px;font: .74rem var(--mono);color:#c1d6c7}.fieldHead strong{font-weight:600;font-size:.83rem;color:var(--paper)}.plot{margin:0 12px;position:relative}canvas{width:100%;height:auto;aspect-ratio:7 / 5;display:block;background:#16302f;border-radius:3px;touch-action:manipulation;cursor:crosshair}.hint{padding:12px 17px 16px;font:.73rem/1.5 var(--mono);color:#cee0d2;margin:0}.readout{padding:19px 19px 14px;display:flex;flex-direction:column;gap:15px}.readout h2{margin:0;font-size:1.22rem;letter-spacing:-.04em}.stepno{display:block;margin-top:4px;font:.72rem var(--mono);color:var(--muted)}dl{display:grid;grid-template-columns:1fr auto;row-gap:7px;align-items:center;margin:0;border-top:1px solid var(--line);padding-top:12px}dt{font-size:.91rem;font-weight:600}dd{margin:0;font:600 1.55rem/1.05 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.07em}.entered{color:var(--green)}.exited{color:#984420}dt.total,dd.total{margin-top:5px;padding-top:10px;border-top:1px solid var(--line)}.ledger{border-top:1px solid var(--line);padding-top:11px}h3{margin:0 0 6px;font-size:.83rem}.changes{display:flex;flex-wrap:wrap;gap:4px;min-height:22px;align-content:flex-start}.chip{padding:3px 5px;border-radius:3px;background:#e1f0dd;color:#25553a;font:600 .72rem var(--mono)}.chip.out{color:#79391d;background:#fae6d7}.quiet{font:.76rem/1.5 var(--mono);color:var(--muted)}.legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;border-top:1px solid var(--line);padding:11px 15px;font:.73rem var(--mono);color:var(--muted)}.legend span{display:inline-flex;align-items:center;gap:6px}.key{width:12px;height:12px;background:#233e3b;border:1px solid #869f8d}.key.active{background:#326857;border-color:#8bdbab}.key.agent{width:9px;height:9px;background:#df6d30;border:1px solid #a14322;border-radius:50%}.explain{margin:16px 1px 0;font-size:.89rem;line-height:1.5;color:var(--muted)}code{font-family:var(--mono);font-size:.89em;color:var(--green)}.sr{position:absolute;overflow:hidden;clip:rect(0,0,0,0);width:1px;height:1px}.error{color:#a83e25}.filehint{display:none;padding:14px}
+@media(max-width:740px){.intro{display:block;padding:25px 0 21px}.intro p{max-width:520px;margin-top:12px}.work{grid-template-columns:1fr}.readout{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;padding:15px}.readout h2{font-size:1.11rem}.readout>div:first-child{grid-column:1/-1}dl{grid-column:1}.ledger{grid-column:2}.legend{font-size:.66rem}}
+@media(max-width:455px){main{padding:0 12px 20px}.controls{padding:9px;gap:6px;flex-wrap:wrap}.density{margin-left:auto}.density select{padding:6px 4px}.buttons{gap:4px}button{padding:6px 8px}#play{min-width:78px}.intro h1{font-size:2.5rem}.legend{gap:8px}header{padding:15px 0}.fieldHead{padding:12px}.plot{margin:0 7px}.hint{padding:9px 12px 12px}.readout{padding:12px}.density label{font-size:.7rem}dd{font-size:1.23rem}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="brand"><span class="mark" aria-hidden="true"></span>EdgeChime</div><a class="source" href="https://huggingface.co/spaces/pgg-engineering/edgechime/resolve/main/source.zip">Download source</a></header>
+<section class="intro"><h1>Which regions changed?</h1><p>Move one agent through overlapping subscriptions. EdgeChime reports each region the agent enters or leaves between two positions.</p></section>
+<div class="instrument">
+<div class="controls">
+<div class="buttons"><button id="play" type="button" aria-pressed="false">Play route</button><button id="step" type="button">Step</button><button id="reset" type="button">Reset</button></div>
+<div class="density"><label for="density">Regions</label><select id="density"><option>32</option><option selected>256</option><option>1024</option><option>4096</option></select></div>
+</div>
+<div id="filehint" class="filehint error" role="alert"></div>
+<div class="work"><section class="field" aria-label="Interactive region map">
+<div class="fieldHead"><strong>Region map</strong><span id="coord">X — · Y —</span></div>
+<div class="plot"><canvas id="map" width="700" height="500" tabindex="0" aria-label="Region map. Click or tap to move the agent, or use the arrow keys." aria-describedby="hint">Use the Step or Play route buttons to move the agent. The membership readout gives exact change counts.</canvas></div>
+<p class="hint" id="hint">Click or tap to move. Focus the map and use arrow keys for finer steps.</p>
+</section>
+<aside class="readout"><div><h2>Membership delta</h2><span id="stepno" class="stepno">Initial position</span></div>
+<dl><dt class="entered">Entered</dt><dd class="entered" id="entered">—</dd><dt class="exited">Exited</dt><dd class="exited" id="exited">—</dd><dt>Retained</dt><dd id="retained">—</dd><dt class="total">Now inside</dt><dd class="total" id="inside">—</dd></dl>
+<div class="ledger"><h3>Changed region IDs</h3><div class="changes" id="changes"></div></div>
+</aside></div>
+<div class="legend"><span><i class="key" aria-hidden="true"></i>Subscription</span><span><i class="key active" aria-hidden="true"></i>Current membership</span><span><i class="key agent" aria-hidden="true"></i>Agent position</span></div>
+</div>
+<p class="explain"><code>at()</code> finds the starting memberships. Each subsequent <code>move()</code> emits entered and exited region IDs. Regions containing both endpoints stay in the retained count.</p>
+<p class="explain"><a href="https://github.com/pgg898200-ship-it/streamsieve/tree/edgechime-v0.1/edgechime#use-it">API and installation</a> · <a href="https://huggingface.co/spaces/pgg-engineering/edgechime/resolve/main/bench/results.json">Benchmark measurements (JSON)</a></p>
+<span class="sr" id="announce" role="status" aria-live="polite"></span>
+<noscript>Enable JavaScript to run the live region index.</noscript>
+</main>
+<script type="module">
+const element=id=>document.getElementById(id);
+const canvas=element("map"),ctx=canvas.getContext("2d");
+const W=700,H=500;
+const route=[[85,170],[195,120],[340,155],[470,95],[605,160],[577,310],[460,392],[317,298],[205,385],[125,304]];
+let EdgeChime,boxes=[],index,active=new Set(),point,trail,stepNo,routeIndex,timer=null,last;
+function generate(count){
+  let seed=0xcf0d8ab;
+  function random(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}
+  return Array.from({length:count},()=>{
+    const w=Math.floor(25+random()*130),h=Math.floor(19+random()*100);
+    const x=Math.floor(random()*(W+w))-w/2,y=Math.floor(random()*(H+h))-h/2;
+    return [Math.floor(x),Math.floor(y),Math.floor(x+w),Math.floor(y+h)];
+  });
+}
+function draw(){
+  const rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
+  const width=Math.max(1,Math.round(rect.width*dpr)),height=Math.max(1,Math.round(rect.height*dpr));
+  if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height}
+  ctx.setTransform(width/W,0,0,height/H,0,0);ctx.clearRect(0,0,W,H);
+  ctx.lineWidth=1;ctx.strokeStyle="#294541";ctx.beginPath();
+  for(let i=0;i<=W;i+=50){ctx.moveTo(i,0);ctx.lineTo(i,H)}
+  for(let i=0;i<=H;i+=50){ctx.moveTo(0,i);ctx.lineTo(W,i)}ctx.stroke();
+  const outline=(b)=>ctx.strokeRect(b[0],b[1],b[2]-b[0],b[3]-b[1]);
+  ctx.lineWidth=1;ctx.strokeStyle=boxes.length<=32?"#678878":boxes.length<=256?"rgba(139,174,149,.28)":boxes.length<=1024?"rgba(139,174,149,.11)":"rgba(139,174,149,.045)";
+  boxes.forEach(outline);
+  ctx.fillStyle=active.size>55?"rgba(120,217,157,.015)":"rgba(120,217,157,.045)";
+  ctx.strokeStyle=active.size>55?"rgba(148,227,173,.29)":"rgba(164,236,183,.72)";ctx.lineWidth=1.4;
+  for(const id of active){const b=boxes[id];ctx.fillRect(b[0],b[1],b[2]-b[0],b[3]-b[1]);outline(b)}
+  ctx.beginPath();ctx.setLineDash([3,5]);ctx.strokeStyle="#ffc69e";ctx.lineWidth=1.9;
+  trail.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();ctx.setLineDash([]);
+  const [x,y]=point;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,11,0,2*Math.PI);ctx.strokeStyle="#f4ae75";ctx.stroke();
+  ctx.beginPath();ctx.arc(x,y,5,0,2*Math.PI);ctx.fillStyle="#ff9d5d";ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle="#263a34";ctx.stroke();
+}
+function render(announce=false){
+  const {enters,exits}=last;
+  element("stepno").textContent=stepNo?"Move "+stepNo:"Initial position";element("coord").textContent="X "+point[0]+" · Y "+point[1];
+  element("entered").textContent=enters.length;element("exited").textContent=exits.length;element("retained").textContent=stepNo?active.size-enters.length:"—";element("inside").textContent=active.size;
+  const changes=element("changes");changes.replaceChildren();
+  const ids=[...enters.map(id=>[id,true]),...exits.map(id=>[id,false])];
+  if(!ids.length){const msg=document.createElement("span");msg.className="quiet";msg.textContent=stepNo?"No membership changes.":"Starting memberships loaded.";changes.append(msg)}
+  ids.slice(0,12).forEach(([id,entered])=>{const chip=document.createElement("span");chip.className=entered?"chip":"chip out";chip.textContent=(entered?"+":"−")+"R"+id;changes.append(chip)});
+  if(ids.length>12){const extra=document.createElement("span");extra.className="quiet";extra.textContent="and "+(ids.length-12)+" more";changes.append(extra)}
+  if(announce)element("announce").textContent=stepNo?"Move "+stepNo+". Entered "+enters.length+", exited "+exits.length+", now inside "+active.size+".":"Reset. Inside "+active.size+" regions.";
+  draw();
+}
+function pause(){if(timer!==null)clearInterval(timer);timer=null;element("play").textContent="Play route";element("play").setAttribute("aria-pressed","false")}
+function reset(announce=true){pause();boxes=generate(Number(element("density").value));index=new EdgeChime(boxes);point=route[0].slice();stepNo=routeIndex=0;trail=[point];active=new Set();index.at(...point,id=>active.add(id));last={enters:[],exits:[]};render(announce)}
+function move(x,y,announce=true){
+  const enters=[],exits=[];index.move(...point,x,y,(id,entered)=>{if(entered){active.add(id);enters.push(id)}else{active.delete(id);exits.push(id)}});
+  point=[x,y];trail.push(point);if(trail.length>25)trail.shift();stepNo++;last={enters,exits};render(announce)
+}
+function advance(announce){
+  routeIndex=(routeIndex+1)%(route.length*8);
+  const i=Math.floor(routeIndex/8),t=(routeIndex%8)/8,a=route[i],b=route[(i+1)%route.length];
+  move(Math.round(a[0]+(b[0]-a[0])*t),Math.round(a[1]+(b[1]-a[1])*t),announce)
+}
+try{
+  ({EdgeChime}=await import("./index.js"));reset(false);
+  element("play").onclick=()=>{if(timer!==null){pause();return}element("play").textContent="Pause";element("play").setAttribute("aria-pressed","true");advance(true);timer=setInterval(()=>advance(false),window.matchMedia("(prefers-reduced-motion: reduce)").matches?1000:330)};
+  element("step").onclick=()=>{pause();advance(true)};element("reset").onclick=()=>reset();
+  element("density").onchange=()=>reset();
+  canvas.addEventListener("pointerdown",event=>{if(!event.isPrimary||event.button!==0)return;pause();const rect=canvas.getBoundingClientRect();move(Math.max(0,Math.min(W,Math.round((event.clientX-rect.left)*W/rect.width))),Math.max(0,Math.min(H,Math.round((event.clientY-rect.top)*H/rect.height))))});
+  canvas.addEventListener("keydown",event=>{const delta={ArrowRight:[8,0],ArrowLeft:[-8,0],ArrowUp:[0,-8],ArrowDown:[0,8]}[event.key];if(!delta)return;event.preventDefault();pause();move(Math.max(0,Math.min(W,point[0]+delta[0])),Math.max(0,Math.min(H,point[1]+delta[1])))});
+  new ResizeObserver(draw).observe(canvas);document.addEventListener("visibilitychange",()=>{if(document.hidden)pause()});
+}catch(error){const warning=element("filehint");warning.style.display="block";warning.textContent="The region index could not start. Serve this directory over HTTP with index.js beside this page.";for(const id of ["play","step","reset","density"])element(id).disabled=true;console.error(error)}
+</script>
+</body>
+</html>

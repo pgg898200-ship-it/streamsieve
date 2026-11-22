@@ -1,0 +1,15 @@
+{
+  "type": "map", "version": "1.10", "orientation": "orthogonal",
+  "tilewidth": 16, "tileheight": 16, "width": 8, "height": 4,
+  "nextlayerid": 3, "nextobjectid": 21, "tilesets": [],
+  "layers": [{
+    "id": 1, "type": "group", "name": "Station", "offsetx": 10, "offsety": 4,
+    "layers": [{
+      "id": 2, "type": "objectgroup", "name": "Zones", "offsetx": 6, "offsety": -4,
+      "objects": [
+        {"id": 10, "name": "Platform", "x": 0, "y": 0, "width": 32, "height": 16},
+        {"id": 20, "name": "Concourse", "x": 32, "y": 0, "width": 32, "height": 16}
+      ]
+    }]
+  }]
+}

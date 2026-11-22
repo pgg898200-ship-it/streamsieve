@@ -1,0 +1,38 @@
+{
+  "node": "v24.22.3",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "fences": 100000,
+  "agents": 10000,
+  "rounds": 10,
+  "updates": 100000,
+  "coordinateBytes": 160000,
+  "buildMs": 238.019298,
+  "samples": [
+    {
+      "ms": 74.57145400000002,
+      "edges": 139493,
+      "checksum": -32790721
+    },
+    {
+      "ms": 48.86913400000003,
+      "edges": 139493,
+      "checksum": -32790721
+    },
+    {
+      "ms": 47.87459100000001,
+      "edges": 139493,
+      "checksum": -32790721
+    },
+    {
+      "ms": 73.79684099999997,
+      "edges": 139493,
+      "checksum": -32790721
+    },
+    {
+      "ms": 316.13375499999995,
+      "edges": 139493,
+      "checksum": -32790721
+    }
+  ],
+  "medianUpdatesPerSecond": 1355071.55380811
+}

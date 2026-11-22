@@ -1,0 +1,393 @@
+{
+  "runtime": "Hugging Face CPU-basic job, node:22-bookworm-slim",
+  "runs": [
+    {
+      "formatVersion": 1,
+      "timestamp": "2026-11-22T20:23:55.332Z",
+      "node": "v22.23.5",
+      "cpu": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz",
+      "platform": "linux",
+      "arch": "x64",
+      "config": {
+        "boxes": 100000,
+        "steps": 2048,
+        "repeats": 5,
+        "scenario": "wide-local",
+        "seed": 270113
+      },
+      "blockSize": 64,
+      "flatbushVersion": "4.7.0",
+      "scenarios": [
+        {
+          "name": "wide-local",
+          "updates": 2048,
+          "agents": 16,
+          "events": 84551,
+          "meanStartMembers": 12211.6875,
+          "bounds": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "boxDimensionsAsFractionOfBounds": [
+            0.15,
+            0.55
+          ],
+          "timings": {
+            "edgechime": {
+              "buildMs": 234.66912,
+              "runnerSetupMs": [
+                0.0014890000002196757,
+                0.0016089999999167048,
+                0.0013699999999516876,
+                0.0012710000000879518,
+                0.0012850000002799788
+              ],
+              "meanUsPerUpdateSamples": [
+                4.552510253905684,
+                3.7267241210927615,
+                4.198156249998419,
+                3.5975732421871243,
+                3.990286132813381
+              ],
+              "medianMeanUsPerUpdate": 3.990286132813381,
+              "p95BlockMeanUsPerUpdate": 6.572953124994285
+            },
+            "flatbush": {
+              "buildMs": 44.105614,
+              "runnerSetupMs": [
+                6.883339999999862,
+                6.496627999999873,
+                6.7518019999997705,
+                6.381143999999949,
+                7.265672999999879
+              ],
+              "meanUsPerUpdateSamples": [
+                451.1152084960939,
+                462.2522451171869,
+                453.3724677734376,
+                458.0710664062506,
+                457.040841796875
+              ],
+              "medianMeanUsPerUpdate": 457.040841796875,
+              "p95BlockMeanUsPerUpdate": 497.4033906249957
+            },
+            "perimeterGrid": {
+              "buildMs": 219.80753999999996,
+              "runnerSetupMs": [
+                0.001649999999699503,
+                0.0015419999999721767,
+                0.004778000000442262,
+                0.0013399999998000567,
+                0.00136099999963335
+              ],
+              "meanUsPerUpdateSamples": [
+                38.70633251953093,
+                39.62201269531151,
+                38.88611523437335,
+                37.891285156249396,
+                39.39312304687492
+              ],
+              "medianMeanUsPerUpdate": 38.88611523437335,
+              "p95BlockMeanUsPerUpdate": 45.70853124999985,
+              "gridSide": 141,
+              "gridPostings": 12771186
+            }
+          }
+        }
+      ]
+    },
+    {
+      "formatVersion": 1,
+      "timestamp": "2026-11-22T20:24:03.314Z",
+      "node": "v22.23.5",
+      "cpu": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz",
+      "platform": "linux",
+      "arch": "x64",
+      "config": {
+        "boxes": 8192,
+        "steps": 4469,
+        "repeats": 5,
+        "scenario": "porto",
+        "seed": 270113
+      },
+      "blockSize": 64,
+      "flatbushVersion": "4.7.0",
+      "scenarios": [
+        {
+          "name": "porto",
+          "updates": 4469,
+          "agents": 99,
+          "events": 16414,
+          "meanStartMembers": 35.717171717171716,
+          "bounds": [
+            -8729766,
+            41124987,
+            -8376696,
+            41562351
+          ],
+          "boxDimensionsAsFractionOfBounds": [
+            0.02,
+            0.12
+          ],
+          "timings": {
+            "edgechime": {
+              "buildMs": 28.682935999999998,
+              "runnerSetupMs": [
+                0.0007619999999803895,
+                0.0006290000000035434,
+                0.0004749999999944521,
+                0.0013390000000015334,
+                0.0004910000000108994
+              ],
+              "meanUsPerUpdateSamples": [
+                0.4527279033340821,
+                0.45517968225555167,
+                0.44228977399864017,
+                0.3924840008950656,
+                0.3757214141866207
+              ],
+              "medianMeanUsPerUpdate": 0.44228977399864017,
+              "p95BlockMeanUsPerUpdate": 0.603859375000404
+            },
+            "flatbush": {
+              "buildMs": 16.097229999999996,
+              "runnerSetupMs": [
+                0.4156979999999919,
+                0.4507109999999841,
+                0.6168220000000133,
+                0.2858969999999772,
+                0.2892360000000167
+              ],
+              "meanUsPerUpdateSamples": [
+                1.9796601029313259,
+                1.9686104273887153,
+                2.6508200939807334,
+                1.8827558737972534,
+                1.879799507719867
+              ],
+              "medianMeanUsPerUpdate": 1.9686104273887153,
+              "p95BlockMeanUsPerUpdate": 2.9359062499998423
+            },
+            "perimeterGrid": {
+              "buildMs": 11.804592,
+              "runnerSetupMs": [
+                0.0006689999999878182,
+                0.0009469999999964784,
+                0.0023659999999949832,
+                0.0011719999999968422,
+                0.0011499999999955435
+              ],
+              "meanUsPerUpdateSamples": [
+                0.5928404564779475,
+                0.5848626090848146,
+                0.6066166927724521,
+                0.5684515551577617,
+                0.5508129335421645
+              ],
+              "medianMeanUsPerUpdate": 0.5848626090848146,
+              "p95BlockMeanUsPerUpdate": 0.7775625000001618,
+              "gridSide": 128,
+              "gridPostings": 263280
+            }
+          }
+        }
+      ]
+    },
+    {
+      "formatVersion": 1,
+      "timestamp": "2026-11-22T20:24:03.570Z",
+      "node": "v22.23.5",
+      "cpu": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz",
+      "platform": "linux",
+      "arch": "x64",
+      "config": {
+        "boxes": 8192,
+        "steps": 2048,
+        "repeats": 5,
+        "scenario": "sparse-local",
+        "seed": 270113
+      },
+      "blockSize": 64,
+      "flatbushVersion": "4.7.0",
+      "scenarios": [
+        {
+          "name": "sparse-local",
+          "updates": 2048,
+          "agents": 16,
+          "events": 188,
+          "meanStartMembers": 0.4375,
+          "bounds": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "boxDimensionsAsFractionOfBounds": [
+            0.001,
+            0.01
+          ],
+          "timings": {
+            "edgechime": {
+              "buildMs": 30.689732999999997,
+              "runnerSetupMs": [
+                0.0004160000000013042,
+                0.0006759999999985666,
+                0.0008420000000057826,
+                0.000729000000006863,
+                0.00023500000000353793
+              ],
+              "meanUsPerUpdateSamples": [
+                0.5413989257812696,
+                0.3651660156250361,
+                0.3653671875,
+                0.3650053710937823,
+                0.1689931640624226
+              ],
+              "medianMeanUsPerUpdate": 0.3651660156250361,
+              "p95BlockMeanUsPerUpdate": 0.5187031250000196
+            },
+            "flatbush": {
+              "buildMs": 13.609792999999996,
+              "runnerSetupMs": [
+                0.04290100000000052,
+                0.036177999999992494,
+                0.06203299999998535,
+                0.05553199999999947,
+                0.05382500000001755
+              ],
+              "meanUsPerUpdateSamples": [
+                0.7445478515625201,
+                0.42656445312500013,
+                0.7098769531250215,
+                0.6356162109374952,
+                0.49817968749998887
+              ],
+              "medianMeanUsPerUpdate": 0.6356162109374952,
+              "p95BlockMeanUsPerUpdate": 0.675750000000086
+            },
+            "perimeterGrid": {
+              "buildMs": 8.298360000000002,
+              "runnerSetupMs": [
+                0.0005489999999923612,
+                0.0004829999999884649,
+                0.0024450000000086902,
+                0.0007439999999974134,
+                0.0005380000000059226
+              ],
+              "meanUsPerUpdateSamples": [
+                0.45333398437499145,
+                0.46671435546874473,
+                0.8989589843749826,
+                0.22041992187493697,
+                0.09748242187501699
+              ],
+              "medianMeanUsPerUpdate": 0.45333398437499145,
+              "p95BlockMeanUsPerUpdate": 0.7846093749999117,
+              "gridSide": 128,
+              "gridPostings": 23540
+            }
+          }
+        }
+      ]
+    },
+    {
+      "formatVersion": 1,
+      "timestamp": "2026-11-22T20:24:03.707Z",
+      "node": "v22.23.5",
+      "cpu": "Intel(R) Xeon(R) Platinum 8375C CPU @ 2.90GHz",
+      "platform": "linux",
+      "arch": "x64",
+      "config": {
+        "boxes": 8192,
+        "steps": 2048,
+        "repeats": 5,
+        "scenario": "wide-teleport",
+        "seed": 270113
+      },
+      "blockSize": 64,
+      "flatbushVersion": "4.7.0",
+      "scenarios": [
+        {
+          "name": "wide-teleport",
+          "updates": 2048,
+          "agents": 16,
+          "events": 2902347,
+          "meanStartMembers": 1002.625,
+          "bounds": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "boxDimensionsAsFractionOfBounds": [
+            0.15,
+            0.55
+          ],
+          "timings": {
+            "edgechime": {
+              "buildMs": 30.571452999999998,
+              "runnerSetupMs": [
+                0.002637999999933527,
+                0.0017709999997350678,
+                0.0010839999999916472,
+                0.001119999999900756,
+                0.0012720000004264875
+              ],
+              "meanUsPerUpdateSamples": [
+                76.76527197265682,
+                77.48338916015562,
+                77.98533837890575,
+                77.07222753906228,
+                76.98418749999946
+              ],
+              "medianMeanUsPerUpdate": 77.07222753906228,
+              "p95BlockMeanUsPerUpdate": 82.9649062500053
+            },
+            "flatbush": {
+              "buildMs": 14.731184999999996,
+              "runnerSetupMs": [
+                0.5648890000002211,
+                0.5957490000000689,
+                0.5823279999999613,
+                0.5875960000003033,
+                0.5863449999997101
+              ],
+              "meanUsPerUpdateSamples": [
+                38.18730419921845,
+                38.53806933593762,
+                39.624203125000705,
+                37.928980468750154,
+                39.023937011717805
+              ],
+              "medianMeanUsPerUpdate": 38.53806933593762,
+              "p95BlockMeanUsPerUpdate": 43.72757812500083
+            },
+            "perimeterGrid": {
+              "buildMs": 19.782999999999987,
+              "runnerSetupMs": [
+                0.0012849999998252315,
+                0.0012149999997745908,
+                0.005703999999695952,
+                0.0025500000001557055,
+                0.0013689999996131519
+              ],
+              "meanUsPerUpdateSamples": [
+                110.45414404296805,
+                111.22186474609452,
+                110.08410986328032,
+                109.59256494140601,
+                111.53704882812532
+              ],
+              "medianMeanUsPerUpdate": 110.45414404296805,
+              "p95BlockMeanUsPerUpdate": 122.10568749999595,
+              "gridSide": 128,
+              "gridPostings": 955642
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
