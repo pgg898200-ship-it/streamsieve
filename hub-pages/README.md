@@ -1,5 +1,18 @@
 # Hugging Face product pages
 
+The 14 public PGG Engineering Spaces share an editable visual identity. Each product card explains its input, result and place in an application, and links to an example. The vector sources and social-card generator are in the [illustrated product directory](https://github.com/pgg898200-ship-it/streamsieve/tree/main/docs/product-art).
+
+| Release files | Contents |
+| --- | --- |
+| [Native packages and browser demos](product-pages.zip) | The original eight-Space bundle described below. |
+| [Product copy and workbench](text-overlays.zip) | Revised cards and the RankFence workbench controls. |
+| [Worked figures and interactive replays](product-figures.zip) | Checked examples for Afterkey, PathProbe DAG and Racecurve, plus the RankFence and KthWake guides and interactive pages. |
+| [Social previews](product-social.zip) | Fourteen 1200 × 630 PNGs generated from the product marks. |
+
+[Open the published Spaces](https://huggingface.co/pgg-engineering) · [Replay RankFence](https://huggingface.co/spaces/pgg-engineering/rankfence) · [Try KthWake](https://huggingface.co/spaces/pgg-engineering/kthwake)
+
+## Original native release bundle
+
 This bundle pairs the native RankFence and KthWake releases with their browser demos, installation instructions and benchmark evidence. It also repairs product links and descriptions on six existing Spaces.
 
 | Space | Material in this bundle |
