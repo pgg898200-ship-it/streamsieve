@@ -184,7 +184,7 @@ async function handle(request) {
   if (url.pathname === "/" && request.method === "GET") {
     const html = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RankFence MCP</title>' +
       '<main><h1>RankFence MCP</h1><p>Replay paged search rankings and count how many document IDs you can leave unread while preserving the exact top results.</p>' +
-      '<p>In your MCP client add a remote server, select Streamable HTTP, and use the <a href="/mcp">/mcp</a> endpoint. Call <code>rankfence_analyze</code> with a complete example query.</p>' +
+      '<p>In your MCP client add a remote server, select Streamable HTTP, and use <code>https://rankfence-tools-pgg.tancurl3.chatgpt.site/rpc</code> as the endpoint. Call <code>rankfence_analyze</code> with a complete example query.</p>' +
       '<pre>{"rankings":[["a","b"],["a","c"]],"k":1,"page_size":1}</pre>' +
       '<p>This example reads two of four IDs. Supplied IDs are processed for the request. Use the local Python tool for private inputs.</p>' +
       '<p><a href="' + guide + '">RankFence guide</a> · <a href="' + source + '">Source and tests</a></p></main></html>';
