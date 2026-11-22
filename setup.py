@@ -56,7 +56,9 @@ ext_modules = [
     Extension(
         name="streamsieve._libstreamsieve",
         sources=["csrc/streamsieve_capi.cpp"],
+        depends=["csrc/streamsieve_capi.h", "csrc/streamsieve_core.hpp"],
         include_dirs=["csrc"],
+        define_macros=[("STREAMSIEVE_BUILDING_DLL", "1")] if sys.platform == "win32" else [],
         language="c++",
         extra_compile_args=_compile_args(),
         extra_link_args=_link_args(),

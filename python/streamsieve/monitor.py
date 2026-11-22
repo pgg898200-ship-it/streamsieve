@@ -6,6 +6,7 @@ from array import array
 import ctypes
 from ctypes import byref, c_double, c_uint32
 from dataclasses import dataclass
+import math
 import re
 from typing import Any, Sequence
 
@@ -22,6 +23,18 @@ from ._native import (
     validate_uint32,
     version,
 )
+
+
+def _sanitize_cfg(val: float, default: float, lo: float, hi: float) -> float:
+    """Mirror C++ sanitize_cfg(v, fallback, lo, hi) so Python properties match native state."""
+    fv = float(val)
+    if not math.isfinite(fv):
+        return default
+    if fv < lo:
+        return lo
+    if fv > hi:
+        return hi
+    return fv
 
 _MODE_NAMES = {
     0: "calm",
@@ -180,6 +193,8 @@ class EStream:
         burst_tail_p0: float = 0.025,
         ewma_reset_decay: float = 0.0,
         two_sided: bool = True,
+        season_period: int = 0,
+        detrend_alpha: float = 0.0,
         names: Sequence[str] | None = None,
     ) -> None:
         self._ptr: int | None = None
@@ -193,12 +208,23 @@ class EStream:
 
         cfg = SSEStreamConfig()
         self._lib.ss_estream_default_config(byref(cfg), n_ch)
-        cfg.warmup = validate_uint32(warmup, "warmup")
-        cfg.ring_capacity = validate_uint32(ring_capacity, "ring_capacity")
-        cfg.alpha = float(alpha)
-        cfg.burst_tail_p0 = float(burst_tail_p0)
+        req_warmup = validate_uint32(warmup, "warmup")
+        req_ring = validate_uint32(ring_capacity, "ring_capacity")
+        req_season = validate_uint32(season_period, "season_period")
+        eff_warmup = max(12, req_warmup)
+        eff_alpha = _sanitize_cfg(alpha, 0.05, 1e-9, 0.5)
+        eff_burst_p0 = _sanitize_cfg(burst_tail_p0, 0.025, 1e-4, 0.25)
+        eff_season = min(req_season, 4096) if req_season >= 2 else 0
+        eff_detrend = _sanitize_cfg(detrend_alpha, 0.0, 0.0, 1.0)
+
+        cfg.warmup = eff_warmup
+        cfg.ring_capacity = req_ring
+        cfg.alpha = eff_alpha
+        cfg.burst_tail_p0 = eff_burst_p0
         cfg.ewma_reset_decay = float(ewma_reset_decay)
         cfg.two_sided = 1 if two_sided else 0
+        cfg.season_period = eff_season
+        cfg.detrend_alpha = eff_detrend
 
         ptr = self._lib.ss_estream_create(byref(cfg))
         if not ptr:
@@ -206,9 +232,11 @@ class EStream:
 
         self._ptr = ptr
         self._n_channels = n_ch
-        self._warmup = int(cfg.warmup)
-        self._ring_capacity = int(cfg.ring_capacity)
-        self._alpha = float(cfg.alpha)
+        self._warmup = eff_warmup
+        self._ring_capacity = req_ring
+        self._alpha = eff_alpha
+        self._season_period = eff_season
+        self._detrend_alpha = eff_detrend
         self._names: list[str] | None = [str(n) for n in names] if names is not None else None
 
     def _require_open(self) -> int:
@@ -257,6 +285,14 @@ class EStream:
         return self._ring_capacity
 
     @property
+    def season_period(self) -> int:
+        return self._season_period
+
+    @property
+    def detrend_alpha(self) -> float:
+        return self._detrend_alpha
+
+    @property
     def names(self) -> list[str] | None:
         return list(self._names) if self._names is not None else None
 
@@ -303,7 +339,7 @@ class EStream:
     def ebh_reject(self, alpha: float | None = None) -> list[int]:
         """Run exact anytime-valid online e-BH across all channels at level ``alpha``."""
         ptr = self._require_open()
-        a = self._alpha if alpha is None else float(alpha)
+        a = self._alpha if alpha is None else _sanitize_cfg(alpha, self._alpha, 1e-9, 0.5)
         out_arr = (c_uint32 * self._n_channels)()
         out_count = c_uint32(0)
         rc = self._lib.ss_estream_ebh_reject(
@@ -365,8 +401,10 @@ class EStream:
 
         ticks = self.tick_count
         rejected_set: set[int] | None = None
-        if alpha is not None and float(alpha) != self._alpha:
-            rejected_set = set(self.ebh_reject(alpha))
+        if alpha is not None:
+            eff_a = _sanitize_cfg(alpha, self._alpha, 1e-9, 0.5)
+            if eff_a != self._alpha:
+                rejected_set = set(self.ebh_reject(eff_a))
 
         result: list[ChannelStatus] = []
         for i in range(out_count.value):
@@ -463,7 +501,7 @@ class EStream:
         alpha: float | None = None,
     ) -> StreamBrief:
         """Generate an ultra-compact agent-ready e-BH brief with lossless drill-down handles."""
-        a = self._alpha if alpha is None else float(alpha)
+        a = self._alpha if alpha is None else _sanitize_cfg(alpha, self._alpha, 1e-9, 0.5)
         rejected = self.ebh_reject(a)
         top = self.topk(max_channels, names=names, alpha=a)
         return StreamBrief(

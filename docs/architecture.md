@@ -1,7 +1,7 @@
 # `streamsieve` Technical Architecture & Mathematical Specification
 
-> **Version:** `0.1.0`  
-> **Runtime:** Zero-dependency C++20 (`-O3 -march=native -ffp-contract=off`) with AVX2 SIMD acceleration and an exception-free C ABI (`csrc/streamsieve_capi.h`).  
+> **Version:** `0.2.0`  
+> **Runtime:** Zero-dependency C++20 (`-O3 -march=native -ffp-contract=off`, portable MSVC/Clang/GCC) with 8-wide cache-tiled AVX2 SIMD acceleration and an exception-free C ABI (`csrc/streamsieve_capi.h`).  
 > **Scope of this document:** Verified mathematical formulations, algebraic invariants, SIMD/memory architecture, complexity bounds, and honest failure boundaries derived directly from `csrc/streamsieve_core.hpp`, `csrc/streamsieve_capi.h`, `csrc/streamsieve_capi.cpp`, and `csrc/streamsieve_cli.cpp`. Empirical benchmark tables are produced separately by `benchmarks/run_all.py` and are intentionally not duplicated or estimated here.
 
 ---
@@ -10,7 +10,7 @@
 
 `streamsieve` is a deterministic, strictly causal streaming inference runtime engineered for AI agents and multi-agent systems operating over high-frequency telemetry, metrics, and asynchronous tool outputs. It comprises **four co-designed engines** exposed through a single opaque-handle C ABI (`csrc/streamsieve_capi.h`):
 
-1. **`EStreamEngine` (`ss_estream_t`)** — AVX2 4-wide Structure-of-Arrays (SoA) dual-resolution anytime-valid e-process detector with exact online e-BH FDR control and a lossless raw-tick drill-down ring buffer.
+1. **`EStreamEngine` (`ss_estream_t`)** — 8-wide cache-tiled AVX2 Structure-of-Arrays (SoA) dual-resolution anytime-valid e-process detector with optional causal deseasonalizing & detrending, exact online e-BH FDR control, and a lossless raw-tick drill-down ring buffer.
 2. **`EvidenceLattice` (`ss_lattice_t`)** — State-based join-semilattice CRDT for provenance-deduplicated, echo-free multi-agent belief fusion with dual Bayesian log-odds and Vovk–Wang admissible e-value readouts plus a compact binary wire format (`SSLT` v1).
 3. **`VOISifter` (`ss_sifter_t`)** — Hierarchical `site × channel × tick` mean-field Bayesian posterior tracker with exact sparse-burst mixture LLR and zero-overlap greedy Expected Brier-Risk Reduction allocation across multiple agents.
 4. **`TrustCalibrator` (`ss_trust_t`)** — Strictly causal delayed-label agent weighting, non-negative online Platt shrinkage, discounted fixed-share BOA/Hedge, Ville e-value quarantine and shadow recovery martingales, multi-rate delayed AgACI conformal intervals, and Bayes-optimal cost-asymmetric actions.
@@ -18,11 +18,11 @@
 ```mermaid
 flowchart LR
     subgraph RawStream["High-Frequency Stream (N channels x T ticks)"]
-        S1["Raw Telemetry / Metrics / Tool Feeds"]
+        S1["Raw Telemetry / CSV / JSONL / Tool Feeds"]
     end
 
     subgraph Core["C++20 / AVX2 Core (csrc/streamsieve_core.hpp)"]
-        E1["1. EStreamEngine\nShifted Winsorized-MAD\n4-wide AVX2 SoA Squash\nDual-Res E-Process + e-BH\nLossless Ring Buffer"]
+        E1["1. EStreamEngine\nCausal Detrend + Season Pre-Filter\nOverflow-Free Winsorized-MAD\n8-wide Cache-Tiled AVX2 SoA\nDual-Res E-Process + e-BH\nLossless Raw Ring Buffer"]
         E3["3. VOISifter\nHierarchical Site x Ch x Tick\nNoise-Normalized Sparse-Burst LLR\nZero-Overlap Greedy VOI"]
         E2["2. EvidenceLattice\nProvenance-Keyed CRDT\nStrict Total-Order Join\nBayes Log-Odds + Vovk-Wang E\nSSLT v1 Binary Wire"]
         E4["4. TrustCalibrator\nCausal Delayed-Label Buffer\nNon-Negative Platt + Fixed-Share BOA\nVille Quarantine + AgACI\nCost-Asymmetric Optimal Action"]
@@ -30,8 +30,8 @@ flowchart LR
 
     subgraph Surface["Distribution Surfaces"]
         CAPI["Exception-Free C ABI\n(streamsieve_capi.h)"]
-        CLI["Native CLI (<3ms start)\n(streamsieve_cli.cpp)"]
-        PY["Zero-Dep Python ctypes & MCP Server"]
+        CLI["Native CLI (<4ms start, --jsonl)\n(streamsieve_cli.cpp)"]
+        PY["Zero-Dep Python SDK, river/sklearn Adapters & MCP Server"]
     end
 
     S1 --> E1
@@ -49,76 +49,65 @@ flowchart LR
 
 | Property | Specification | Source |
 |---|---|---|
-| Compiler flags | `-std=c++20 -O3 -march=native -ffp-contract=off -Wall -Wextra -Wpedantic -fPIC` | `Makefile` |
-| Sanitizer verification | `-std=c++20 -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined` | `Makefile` (`test-san`) |
+| Compiler flags | `-std=c++20 -O3 -march=native -ffp-contract=off -Wall -Wextra -Wpedantic -fPIC` (plus `clang++ -Werror` & MSVC `/std:c++20 /O2 /fp:precise`) | `Makefile`, `setup.py` |
+| Sanitizer verification | `-std=c++20 -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined,float-cast-overflow` | `Makefile` (`test-san`) |
 | Floating-point determinism | `-ffp-contract=off` disables cross-target FMA contraction drift | `Makefile` |
 | SIMD detection | Compile-time `#if defined(__AVX2__)` queried via `ss_has_avx2()` | `streamsieve_core.hpp`, `streamsieve_capi.cpp` |
-| ABI exception safety | All `extern "C"` entry points catch all C++ exceptions and return status codes (`SS_OK = 0`, `SS_ERR_NULL = -1`, `SS_ERR_INVALID_ARG = -2`, `SS_ERR_OOM = -3`, `SS_ERR_BOUNDS = -4`, `SS_ERR_PARSE = -5`, `SS_ERR_BUFFER_SMALL = -6`) | `streamsieve_capi.h`, `streamsieve_capi.cpp` |
+| ABI exception safety | All `extern "C"` entry points (`SS_API`) catch all C++ exceptions and return status codes (`SS_OK = 0`, `SS_ERR_NULL = -1`, `SS_ERR_INVALID_ARG = -2`, `SS_ERR_OOM = -3`, `SS_ERR_BOUNDS = -4`, `SS_ERR_PARSE = -5`, `SS_ERR_BUFFER_SMALL = -6`) | `streamsieve_capi.h`, `streamsieve_capi.cpp` |
 | Provenance hash | `ss_hash_provenance(data, len)`: 64-bit FNV-1a (`0xcbf29ce484222325 ^ len`, prime `0x100000001b3`) followed by SplitMix64 avalanche (`>>30`, `*0xbf58476d1ce4e5b9`, `>>27`, `*0x94d049bb133111eb`, `>>31`) | `streamsieve_core.hpp` |
 | Normal quantile $\Phi^{-1}(p)$ | Acklam rational approximation `norm_ppf(p)` on $p \in [10^{-12}, 1-10^{-12}]$, max error $< 1.15 \times 10^{-9}$ | `streamsieve_core.hpp` |
-| Safe transcendental helpers | `sigmoid_d(x)` clamped at $\pm 60$, `logit_d(p)` clamped to $[10^{-12}, 1-10^{-12}]$, `log_sum_exp(a, b)` handling $-\infty$ | `streamsieve_core.hpp` |
+| Safe transcendental helpers | `sigmoid_d(x)` clamped at $\pm 60$, `logit_d(p)` clamped to $[10^{-12}, 1-10^{-12}]$, `log_sum_exp(a, b)` with $d < -37$ 0-ULP skip, `fast_log1p_pos`, and `fast_xlogx[4097]` | `streamsieve_core.hpp` |
 
 ---
 
-## 2. Engine 1: `EStreamEngine` — AVX2 Anytime-Valid Dual-Resolution E-Process & Online e-BH
+## 2. Engine 1: `EStreamEngine` — 8-Wide AVX2 Anytime-Valid Dual-Resolution E-Process & Online e-BH
 
 **C Handle & Structs:** `ss_estream_t`, `ss_estream_config_t`, `ss_channel_status_t`  
 **Core Class:** `streamsieve::EStreamEngine`
 
-`EStreamEngine` monitors $M = \texttt{n\_channels}$ streams strictly causally (outputs at tick $t$ depend solely on $x[0 \dots t]$), compresses firehose matrices into compact flagged briefs, supports continuous peeking at arbitrary stopping times without p-hacking inflation, and preserves lossless raw tick drill-down.
+`EStreamEngine` monitors $M = \texttt{n\_channels}$ streams strictly causally (outputs at tick $t$ depend solely on $x[0 \dots t]$), optionally pre-filters diurnal seasonality (`season_period`) and trends/random walks (`detrend_alpha`), compresses firehose matrices into compact flagged briefs, supports continuous peeking at arbitrary stopping times without p-hacking inflation, and preserves bit-exact lossless raw tick drill-down.
 
 ```mermaid
 flowchart TD
-    IN["Incoming Row x[0..M-1] at tick t"] --> RING["Lossless Ring Buffer\n(optional, ring_capacity > 0)"]
-    IN --> CHECK{"all_warmed_?"}
-    CHECK -- "No (t <= W0)" --> WBUF["Per-Channel Warmup Buffer\nCollect W0 finite ticks"]
-    WBUF -->|"seen == W0"| FIN["finalize_warmup(c)\nDirect-Sort Median + MAD/IQR\nWinsorized +/-3r Sample Std"]
-    FIN -->|"loc_c, inv_scale_c"| HOT
-    CHECK -- "Yes (t > W0)" --> HOT["update_row_warm_simd (AVX2 4-wide SoA)\n1. Finite check |x| < +inf\n2. z = clamp((x - loc) * inv_scale, -1e6, 1e6)\n3. u = 0.4z / sqrt(1 + (0.4z)^2)\n4. h = max(0, |u| - 0.55)\n5. Accumulate sum_u, sum_u2, sum_tail, sum_tail2\n6. Bitmask cnt_sign, cnt_burst, cnt_ext_burst"]
+    IN["Incoming Row x[0..M-1] at tick t"] --> RING["Lossless Raw Ring Buffer\n(always stores raw pre-filter x)"]
+    IN --> DET["Stage 1 (Optional): Causal Detrender\ndetrend_alpha=1.0: 1st diff\n0 < alpha < 1: 5-sample median EWMA"]
+    DET --> CHECK{"all_warmed_?"}
+    CHECK -- "No (t <= eff_warmup)" --> WBUF["Per-Channel Warmup Buffer\nCollect eff_warmup = max(W0, 3*P) ticks"]
+    WBUF -->|"seen == eff_warmup"| FIN["finalize_warmup(c)\nFrozen Per-Phase Median (if P>=2)\nOverflow-Free Winsorized-MAD + OOS DoF Scale"]
+    FIN -->|"loc_c, inv_scale_c, season_template"| HOT
+    CHECK -- "Yes (t > eff_warmup)" --> HOT["8-Wide Cache-Tiled AVX2 Batch / 4-Wide SIMD Row\n1. Branchless finite check + seasonal subtract\n2. z = clamp((x_eff - loc) * inv_scale, -1e6, 1e6)\n3. u = 0.4z / sqrt(1 + (0.4z)^2)\n4. h = max(0, |u| - 0.55)\n5. Register-pinned sum_u, sum_u2, sum_tail, sum_tail2\n6. Packed 8x32-bit SIMD cnt_sign, cnt_burst, cnt_ext_burst"]
     HOT -->|"Every ~1.5x post-warmup ticks\n(<= 24 checkpoints)"| SNAP["Record Snapshot s_k\n(n0, tick, sums, counts)"]
-    HOT -->|"O(1) synchronized counter bump\n(sync_post_n_ += 1)"| LAZY["Lazy Dirty Flag"]
-    LAZY -->|"On Query:\nebh_reject / topk / get_channel"| RECOMP["recompute_channel_evalue(c)\nDyadic Mixture pi_k = 1/((k+1)(k+2))\nE_mean = 0.5*E_BB(sign) + 0.5*E_JZS(u)\nE_burst = 0.50*E_JZS(h) + 0.30*E_BB(ext) + 0.20*E_BB(burst)\nE_comb = 0.5*E_mean + 0.5*E_burst"]
-    RECOMP --> EBH["Exact Online e-BH\nSort E_(1) >= ... >= E_(M)\nLargest k*: E_(k*) >= M / (alpha * k*)"]
+    HOT -->|"O(1) synchronized counter bump\n(sync_post_n_ += tile_len)"| LAZY["Lazy Dirty Flag"]
+    LAZY -->|"On Query:\nebh_reject / topk / get_channel"| RECOMP["recompute_channel_evalue(c)\nCached (n0,n1) JZS Geometry + fast_xlogx\nDyadic Mixture pi_k = 1/((k+1)(k+2))\nE_comb = 0.5*E_mean + 0.5*E_burst"]
+    RECOMP --> EBH["Exact Online e-BH\nNaN-Safe Sort E_(1) >= ... >= E_(M)\nLargest k*: E_(k*) >= M / (alpha * k*)"]
 ```
 
-### 2.1 Causal Warmup: Median-Centered Winsorized-MAD Normalization
+### 2.1 Causal Pre-Filtering & Overflow-Free Winsorized-MAD Normalization
 
-Before betting begins, each channel collects $W_0 = \max(\texttt{cfg.warmup}, 12)$ finite ticks (default $32$). Non-finite values (`NaN`, `±Inf`) are ignored without mutating state.
+Lossless raw inputs $x_t$ are always pushed to the per-channel ring buffer *before* any pre-filtering so `fetch_raw` drill-down returns the exact unmodified stream.
 
-1. **Direct-sort exact median:** Sorting the raw warmup samples $\{x_i\}_{i=0}^{W_0-1}$ yields the exact median $\hat{\mu}_c$ (using `a + 0.5 * (b - a)` for even $W_0$ to prevent overflow), and centering every sample around $\hat{\mu}_c$:
-   $$d_i = x_{(i)} - \hat{\mu}_c, \qquad i = 0, \dots, W_0 - 1$$
-   Centering around the exact median (rather than the first sample $x_0$) simultaneously eliminates IEEE-754 catastrophic cancellation on $10^{10} + \mathcal{N}(0, 1)$ DC offsets **and** prevents a $10^{17}$ spike landing on tick 0 from wiping out the mantissa bits of normal warmup ticks.
-2. **Robust initial spread:** From the sorted centered deviations $\{d_i\}$, `finalize_warmup` computes $\operatorname{MAD}_c = \operatorname{median}(|d_i|)$ and empirical quartiles $q_{25} = d_{\lfloor W_0/4 \rfloor}$, $q_{75} = d_{\lfloor 3W_0/4 \rfloor}$:
-   $$r_c = \max\!\left(\frac{\operatorname{MAD}_c}{0.67448975},\; \frac{q_{75} - q_{25}}{1.3489795},\; 10^{-12}\right)$$
-3. **Winsorized high-efficiency scale:** To combine 50% breakdown robustness (total immunity to $10^{15}\text{–}10^{17}$ warmup outlier spikes) with $\sim 95\%$ Gaussian efficiency ($\sim 2.6\times$ lower scale estimation variance than raw MAD), each centered deviation is Winsorized to $\tilde{d}_i = \operatorname{clamp}(d_i,\; -3 r_c,\; +3 r_c)$, and its sample standard deviation is computed:
-   $$s_w = \sqrt{\frac{1}{\max(1, W_0 - 1)}\sum_{i=0}^{W_0 - 1}(\tilde{d}_i - \bar{\tilde{d}})^2}$$
-4. **Frozen causal parameters:**
-   $$\texttt{loc\_}[c] = \hat{\mu}_c, \qquad \hat{\sigma}_c = \max\!\left(s_w,\; 0.5\, r_c,\; 10^{-12}\right), \qquad \texttt{inv\_scale\_}[c] = \frac{1}{\hat{\sigma}_c}$$
-   The first post-warmup checkpoint threshold is scheduled at $\texttt{next\_snap\_n\_}[c] = \max(W_0, 24)$.
+- **Optional Stage 1 — Causal Detrender (`detrend_alpha` $\in (0, 1]$):**
+  - `detrend_alpha = 1.0`: **causal first difference** $r_t = x_t - x_{t-1}$ (eliminates arbitrarily steep linear trends and unit-step random walks in 1 tick with 0 transient; slope breaks become sustained step shifts).
+  - `0 < detrend_alpha < 1.0`: **EWMA high-pass filter** initialized from the **5-sample median** (`median5`, immune to up to 2 simultaneous $10^{15}$ warmup spikes) with clamped burn-in $\min(W_0, \lceil 3 / \max(\alpha, 10^{-6}) \rceil)$ ticks, intended for slow baseline drift rather than steep ramps.
+- **Optional Stage 2 — Frozen Causal Per-Phase Deseasonalizer (`season_period` $P \in [2, 4096]$):**
+  - Extends effective warmup to $W_{\text{eff}} = \max(W_0, 3P)$ ticks so every phase $p \in \{0, \dots, P-1\}$ collects at least 3 warmup samples.
+  - At `finalize_warmup`, computes the per-phase median $\hat{s}_{c,p}$ (stored phase-major `[p * n_ch_ + c]` for contiguous SIMD loads) and freezes it permanently so post-warmup step shifts are never absorbed.
+  - Applies an analytical out-of-sample median variance & in-sample DoF scale correction factor $\sqrt{\frac{1 + \pi/(2\bar{m})}{\max(1 - 1.55/\bar{m}, 0.25)}}$ where $\bar{m} = W_{\text{eff}}/P$, restoring exact OOS variance calibration.
+- **Overflow-Free Winsorized-MAD Baseline (`finalize_warmup`):**
+  1. Direct-sort exact median using `0.5 * lo + 0.5 * hi` (never overflows even on alternating $\pm 10^{308}$ inputs) and safe IQR `(q75 / 1.3489795) - (q25 / 1.3489795)`.
+  2. Normalizes centered deviations by `robust_r` *before* Winsorizing to $[-3, +3]$ and squaring ($d_i^2 \le 9$, preventing `d * d` overflow on $\pm 10^{155}\text{–}10^{308}$ inputs), then scales back by `robust_r` and clamps `scale_[c]` to $[10^{-12}, 10^{300}]$.
+  3. Zero per-channel heap allocations during warmup finalization via reusable member scratch vectors (`w_sorted_`, `w_tmp_`, `w_abs_`, `w_clip_`).
 
-### 2.2 AVX2 4-Wide Structure-of-Arrays (SoA) Hot Path
+### 2.2 8-Wide Cache-Tiled AVX2 Batch & 4-Wide SIMD Row Hot Paths
 
-All per-channel hot accumulators (`loc_`, `inv_scale_`, `last_z_`, `sum_u_`, `sum_u2_`, `sum_tail_`, `sum_tail2_`, `cnt_sign_`, `cnt_burst_`, `cnt_ext_burst_`) are stored in contiguous Structure-of-Arrays (SoA) `std::vector` buffers.
+All per-channel hot accumulators (`loc_`, `inv_scale_`, `last_z_`, `sum_u_`, `sum_u2_`, `sum_tail_`, `sum_tail2_`, `cnt_sign_`, `cnt_burst_`, `cnt_ext_burst_`) live in contiguous Structure-of-Arrays (SoA) `std::vector` buffers.
 
-Once `all_warmed_` becomes `true`, `update_row` dispatches to `update_row_warm_simd`, processing **4 `double` lanes per iteration** via `__m256d` AVX2 intrinsics (with a bit-exact scalar epilogue for `n_ch_ % 4` or non-AVX2 hosts):
-
-1. **Vectorized finiteness guard:** Computes `|x| = x & 0x7fffffffffffffff` and checks `_mm256_movemask_pd(_mm256_cmp_pd(vabsx, v_inf, _CMP_LT_OQ)) == 0xF`. Any lane containing `NaN` or `±Inf` safely desynchronizes `sync_post_` and falls back to scalar `update_one_impl` for those 4 lanes.
-2. **Clamped causal z-score:**
-   $$z_c = \operatorname{clamp}\!\big((x_c - \hat{\mu}_c)\cdot \hat{\sigma}_c^{-1},\; -10^6,\; +10^6\big)$$
-   Clamping $z_c$ via `_mm256_max_pd` / `_mm256_min_pd` (and matching scalar `clamp_z`) guarantees that even a finite $\pm 10^{300}$ spike on a constant-zero channel ($\hat{\sigma}_c^{-1} = 10^{12}$) never overflows $z_c$ to $\pm\infty$ or produces $\infty/\infty = \texttt{NaN}$ in `bounded_squash`.
-3. **Zero-transcendental bounded algebraic squash (`bounded_squash`):**
-   $$u_c = \frac{0.4\, z_c}{\sqrt{1 + (0.4\, z_c)^2}} \in (-1, 1)$$
-   Because $u_c$ uses only vector multiply, add, `vsqrtpd`, and `vdivpd`, the hot loop performs **zero transcendental calls** (`tanh`/`exp`/`log`), remains strictly monotone and odd, and prevents post-warmup $10^{15}\text{–}10^{300}$ spikes from exploding `sum_u_` or `sum_u2_`.
-4. **Continuous tail hinge (`kTailHinge = 0.55`):**
-   $$h_c = \max\!\left(0,\; |u_c| - 0.55\right) \in [0, 0.45)$$
-   Algebraically, $|u_c| > 0.55 \iff |z_c| > \frac{0.55}{0.4\sqrt{1 - 0.55^2}} \approx 1.646$. This isolates tail energy without saturating as harshly as a binary indicator.
-5. **Running moments & dual-threshold indicators:**
-   - Vector adds accumulate `sum_u_`, `sum_u2_`, `sum_tail_`, `sum_tail2_`.
-   - Vector comparisons + `movemask` accumulate three `uint32_t` counters:
-     - `cnt_sign_`: $\mathbf{1}\{z_c > 0\}$
-     - `cnt_burst_`: $\mathbf{1}\{|z_c| > z_{\text{burst}}\}$, with $z_{\text{burst}} = \max\!\left(1.8,\; \Phi^{-1}(1 - 0.5 p_0)\right)$ ($\approx 2.2414$ at default $p_0 = 0.025$)
-     - `cnt_ext_burst_`: $\mathbf{1}\{|z_c| > z_{\text{ext}}\}$, with $z_{\text{ext}} = \max(z_{\text{burst}} + 0.75,\; 3.0)$ ($3.0$ at default $p_0 = 0.025$).
-6. **Synchronized counter hoisting (`sync_post_`):** When all channels ingest synchronously without NaNs or sparse `update_one` calls, per-channel updates to `n_seen_`, `n_post_`, and `dirty_` are hoisted out of the $O(M)$ loop into a single scalar increment (`sync_post_n_ += 1; all_dirty_ = true;`) and materialized only on the $\le 24$ checkpoint ticks or lazily upon query (`materialize_sync` / `flush_evalues`).
+- **Primary `update_batch` Hot Path (`update_batch_tile_warm`):** Once all channels are warmed and synchronized (`sync_post_ == true`, no active detrend/season), `update_batch` tiles time into cache-friendly blocks (`max_tile = 16` for $M \ge 2048$, else `32`, clipped at checkpoint boundaries) to eliminate L1d set-associativity thrashing on power-of-2 channel strides (`1024`, `4096`).
+  1. **8-channel (full 64-byte cache line) register-pinned loop:** Holds `vlz`, `vsu`, `vsu2`, `vst`, `vst2` in two `__m256d` register halves across the entire tile, prefetching 4 rows ahead for wide matrices (`stride >= 64`).
+  2. **Branchless finiteness & packed 8×32-bit counters:** Accumulates `v_all_fin` across the tile with zero inner-loop branches and packs sign/burst/extreme-burst comparison masks from 8 doubles into single `__m256i` 8×32-bit counters via `_mm256_shuffle_ps(..., 0x88)` + `_mm256_sub_epi32` (lane permutation `{0,1,4,5,2,3,6,7}`). On any mid-tile `NaN`/`±Inf`, safely rolls back that 8-channel strip to exact scalar `update_one_impl` with 0-ULP parity.
+  3. **4-wide AVX2 remainder + scalar epilogue** cover arbitrary non-multiple-of-8 channel counts (`1, 3, 5, 7, ...`) and non-AVX2 hosts bit-identically.
+- **Per-Row `update_row_warm_simd` Path:** Processes 4 `double` lanes per iteration via `__m256d` (including contiguous SIMD seasonal subtraction and finiteness checks on both raw `x` and seasonal residual `x_eff`), clamping $z_c \in [-10^6, +10^6]$, applying the zero-transcendental algebraic squash $u_c = 0.4 z_c / \sqrt{1 + (0.4 z_c)^2} \in (-1, 1)$, and accumulating the tail hinge $h_c = \max(0, |u_c| - 0.55)$ and counters with $O(1)$ hoisted `sync_post_n_` tracking.
+- **Query Acceleration (`flush_evalues`):** Caches shared `(n0, n1)` JZS geometry (`g0`, `g1`, `0.5*log(g0)`, `0.5*log(g1)`) across synchronized channels, replaces `std::log` in the Beta-Binomial pooled denominator with a 4,097-entry `fast_xlogx` table, precomputes all 5 static `log_beta` constants at initialization, and uses a zero-allocation `rank_scratch_` buffer with NaN-safe strict weak ordering (`rank_greater`).
 
 ### 2.3 Dual-Resolution Anytime-Valid E-Processes & Dyadic Checkpoint Mixture
 
@@ -441,26 +430,27 @@ Let $M$ = channels, $W_0$ = warmup ticks, $R_{\text{ring}}$ = ring capacity, $C 
 
 Rigorous engineering requires stating exactly where statistical and architectural guarantees hold — and where they break down.
 
-1. **Warmup window $W_0$ & baseline contamination (`EStreamEngine`):**
-   - No betting or e-value accumulation occurs during the first $W_0 = \max(\texttt{warmup}, 12)$ ticks (default 32), nor until the first snapshot is recorded at post-warmup tick $n^{(0)} = \max(W_0, 24)$ plus at least 5 post-split ticks (`n1 > 4`; and `n1 >= 8` for the JZS component). Thus, under default `warmup = 32`, the earliest non-trivial combined e-value occurs at tick $32 + 32 + 5 = 69$.
+1. **Warmup window $W_{\text{eff}}$ & baseline contamination (`EStreamEngine`):**
+   - No betting or e-value accumulation occurs during the first $W_{\text{eff}} = \max(\texttt{warmup}, 12, 3P)$ ticks (default 32 when `season_period == 0`), nor until the first snapshot is recorded at post-warmup tick $n^{(0)} = \max(W_0, 24)$ plus at least 5 post-split ticks (`n1 > 4`; and `n1 >= 8` for the JZS component). Thus, under default `warmup = 32, season_period = 0`, the earliest non-trivial combined e-value occurs at tick $32 + 32 + 5 = 69$.
    - A permanent regime shift occurring *inside* the warmup window becomes part of the baseline $(\hat{\mu}_c, \hat{\sigma}_c)$ and will not be flagged as a post-warmup changepoint.
-   - Although `ss_estream_config_t` exposes `ewma_reset_decay`, v0.1.0 keeps $(\hat{\mu}_c, \hat{\sigma}_c)$ fixed after warmup; slow benign baseline drift over hours or days will eventually be detected as a real mean shift.
+   - Although `ss_estream_config_t` reserves `ewma_reset_decay`, v0.2.0 keeps $(\hat{\mu}_c, \hat{\sigma}_c)$ fixed after warmup so sustained step shifts are never absorbed; enable `detrend_alpha` (`1.0` for linear ramps/random walks, or `0 < alpha < 1` for slow drift) when baselines drift over time.
 
 2. **Minimum baseline sample size $n_0$ & wide-panel e-BH power on sparse bursts (`EStreamEngine`):**
    - Under online e-BH across $M$ channels with only $k^*$ active signals, rejection requires $E_{(k^*)} \ge M / (\alpha k^*)$ (e.g., $E \ge 20{,}000$ for 1 active channel out of $M = 1{,}000$ at $\alpha = 0.05$).
    - Because the Beta-Binomial e-process must estimate the unknown baseline burst rate $p_0$ from the pre-split window $n_0$ (universal inference denominator), **too small a pre-split baseline $n_0$ limits maximum achievable burst e-values** on rare spikes: when $n_0 = 32$ and $k_0 = 0$, a small pre-split denominator limits evidence growth until $n_0$ and $n_1$ accumulate enough samples. For very wide panels ($M \ge 1{,}000$) monitoring rare bursts ($p_b \le 0.05$), ensure sufficient baseline ticks before onset or pair `EStreamEngine` with hierarchical `VOISifter` site-level triage.
 
-3. **Stationary / exchangeable null assumption (`EStreamEngine`):**
+3. **Stationary null assumption & built-in causal pre-filter boundaries (`EStreamEngine`):**
    - Exact anytime-valid null calibration ($\mathbb{E}_{H_0}[E_\tau] \le 1$) holds for **i.i.d. or exchangeable stationary** streams (including heavy-tailed Student-$t$, skewed LogNormal, $10^{10}$ DC offsets, and $1000\times$ scale heterogeneity).
-   - **Failure mode:** Strongly seasonal, trending, or positively autocorrelated raw time series (e.g., diurnal CPU curves or random walks) violate exchangeability and will inflate false alarms. Always feed **pre-differenced, deseasonalized, or one-step prediction residuals** when monitoring non-stationary metrics.
+   - For **diurnal/periodic** streams with known integer period $P \in [2, 4096]$, enable `season_period = P` (uses 3+ warmup cycles to freeze per-phase medians with analytical OOS variance scaling). For **arbitrarily steep linear trends or unit-step random walks**, enable `detrend_alpha = 1.0` (causal first difference, 0 transient). Values `0 < detrend_alpha < 1` run a 5-sample-median-initialized EWMA high-pass filter suitable for slow drift (converging in $\approx 3/\alpha$ ticks), not steep ramps.
+   - **Failure mode:** Streams with non-integer or time-varying seasonal periods or strong positive AR($p$) autocorrelation without pre-filtering violate exchangeability and should be residualized externally before feeding `EStream`.
 
 4. **Checkpointing horizon (`EStreamEngine`):**
    - `kMaxCheckpoints = 24` places snapshots on a $\sim 1.5\times$ geometric grid out to $\sim 3.6 \times 10^5$ post-warmup ticks (at default `warmup = 32`). Streams running for millions of ticks still accumulate valid evidence against snapshot 24, but a late changepoint at tick $10^7$ will mix pre-change and post-change samples inside the post-snapshot window $n_1$, diluting detection speed unless the engine is periodically reset on validated regime boundaries.
 
 5. **Provenance integrity, memory growth & endianness (`EvidenceLattice`):**
    - Deduplication guarantees zero double counting **only when identical underlying observations share the same `provenance_id`** (e.g., via deterministic content hashing with `ss_hash_provenance`). A Sybil adversary fabricating distinct `provenance_id`s for copied content is outside the CRDT scope and must be mitigated via `TrustCalibrator` quarantine and per-agent weighting.
-   - `EvidenceLattice` retains all unique provenance items in memory (`O(P)`); v0.1.0 does not perform automatic TTL pruning or tombstone compaction.
-   - In `query`, Bayesian log-odds assumes unique provenance items are conditionally independent given $h$; when cross-agent dependence cannot be ruled out, rely on `merged_e_value` (Vovk–Wang arithmetic mean). Note also that setting an agent's weight to `0.0` zeroes its LLR contribution, whereas the Vovk–Wang e-merger treats unset or non-positive weights as `1.0`—exclude quarantined agents' evidence or remove them prior to lattice ingestion if you want zero e-merge contribution.
+   - `EvidenceLattice` retains all unique provenance items in memory (`O(P)`); v0.2.0 does not perform automatic TTL pruning or tombstone compaction.
+   - In `query`, Bayesian log-odds assumes unique provenance items are conditionally independent given $h$; when cross-agent dependence cannot be ruled out, rely on `merged_e_value` (Vovk–Wang arithmetic mean). Setting an agent's weight to `0.0` via `set_agent_weight` strictly mutes both its LLR and Vovk–Wang `merged_e_value` contributions.
    - `SSLT` v1 serialization copies IEEE-754 doubles and integers directly via `std::memcpy`, assuming little-endian hosts (standard on x86_64 and ARM64).
 
 6. **Parametric priors & myopic allocation (`VOISifter`):**

@@ -32,6 +32,8 @@ void ss_estream_default_config(ss_estream_config_t* cfg, uint32_t n_channels) {
     cfg->burst_tail_p0 = 0.025;
     cfg->ewma_reset_decay = 0.0;
     cfg->two_sided = 1;
+    cfg->season_period = 0;
+    cfg->detrend_alpha = 0.0;
 }
 
 ss_estream_t* ss_estream_create(const ss_estream_config_t* cfg) {

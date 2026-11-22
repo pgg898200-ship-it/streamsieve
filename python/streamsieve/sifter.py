@@ -244,6 +244,9 @@ def sift_matrix(
     warmup: int = 32,
     max_channels: int = 10,
     ring_capacity: int = 256,
+    *,
+    season_period: int = 0,
+    detrend_alpha: float = 0.0,
 ) -> tuple[EStream, StreamBrief]:
     """One-line firehose sifter: ingest a multivariate stream and return ``(EStream, StreamBrief)``.
 
@@ -259,6 +262,8 @@ def sift_matrix(
         warmup=warmup,
         ring_capacity=ring_capacity,
         alpha=alpha,
+        season_period=season_period,
+        detrend_alpha=detrend_alpha,
         names=names,
     )
     if n_ticks > 0:

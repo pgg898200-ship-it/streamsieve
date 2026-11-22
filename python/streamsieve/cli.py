@@ -13,7 +13,13 @@ from typing import Sequence
 from ._native import has_avx2, version
 from .causality import verify_estream_causality
 from .lattice import EvidenceLattice
-from .mcp_server import _parse_csv_rows, _parse_json_stream, serve_stdio
+from .mcp_server import (
+    _parse_csv_rows,
+    _parse_json_stream,
+    _parse_jsonl_rows,
+    _sanitize_json,
+    serve_stdio,
+)
 from .monitor import EStream
 from .sifter import VOISifter
 from .trust import TrustCalibrator
@@ -41,7 +47,9 @@ def _cmd_sift(args: argparse.Namespace) -> int:
         print("streamsieve: empty input stream", file=sys.stderr)
         return 1
 
-    if stripped.startswith("["):
+    if args.jsonl or stripped.startswith("{"):
+        rows, names = _parse_jsonl_rows(raw_text)
+    elif stripped.startswith("["):
         rows, names = _parse_json_stream(stripped)
     else:
         rows, names = _parse_csv_rows(raw_text)
@@ -59,17 +67,25 @@ def _cmd_sift(args: argparse.Namespace) -> int:
         warmup=args.warmup,
         ring_capacity=args.ring_capacity,
         alpha=args.alpha,
+        season_period=args.season,
+        detrend_alpha=args.detrend,
         names=use_names,
     ) as est:
         est.update_batch(rows)
-        brief = est.brief(max_channels=args.top, names=use_names, alpha=args.alpha)
+        brief = est.brief(max_channels=args.top, names=use_names, alpha=est.alpha)
+        eff_season = est.season_period
+        eff_detrend = est.detrend_alpha
+        eff_alpha = est.alpha
     elapsed_ms = (time.perf_counter() - t0) * 1e3
 
     if args.as_json:
         out = dict(brief)
+        out["alpha"] = eff_alpha
         out["raw_bytes"] = len(raw_text.encode("utf-8"))
+        out["season_period"] = eff_season
+        out["detrend_alpha"] = eff_detrend
         out["elapsed_ms"] = round(elapsed_ms, 3)
-        print(json.dumps(out, separators=(",", ":")))
+        print(json.dumps(_sanitize_json(out), separators=(",", ":"), allow_nan=False))
     else:
         print(brief.to_compact_text())
     return 0
@@ -206,11 +222,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="command")
 
-    p_sift = sub.add_parser("sift", help="Sift CSV/TSV/JSON numeric stream into compact e-BH brief")
+    p_sift = sub.add_parser("sift", help="Sift CSV/TSV/JSONL/JSON stream into compact e-BH brief")
     p_sift.add_argument("file", nargs="?", default="-", help="Input file path or '-' for stdin")
     p_sift.add_argument("--alpha", type=float, default=0.05, help="e-BH FDR level (default: 0.05)")
     p_sift.add_argument("--top", type=int, default=10, help="Max channels in brief (default: 10)")
     p_sift.add_argument("--warmup", type=int, default=32, help="Causal warmup ticks (default: 32)")
+    p_sift.add_argument("--season", type=int, default=0, help="Causal seasonal period P >= 2 (default: 0 = off)")
+    p_sift.add_argument("--detrend", type=float, default=0.0, help="Causal detrend alpha in (0, 1]; 1.0 = first diff")
+    p_sift.add_argument("--jsonl", action="store_true", help="Parse newline-delimited JSON objects (auto-detected)")
     p_sift.add_argument("--ring-capacity", type=int, default=256, help="Raw ring buffer capacity")
     p_sift.add_argument("--json", dest="as_json", action="store_true", help="Emit JSON brief")
     p_sift.set_defaults(func=_cmd_sift)

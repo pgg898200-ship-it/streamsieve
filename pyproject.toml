@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "streamsieve"
-version = "0.1.0"
+version = "0.2.0"
 description = "SIMD C++20 multi-agent streaming inference, anytime-valid e-process monitoring, VOI firehose sifting, and echo-free CRDT belief fusion."
 readme = "README.md"
 license = {text = "Apache-2.0"}

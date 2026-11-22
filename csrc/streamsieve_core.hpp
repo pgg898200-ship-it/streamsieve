@@ -33,9 +33,29 @@
 #include <immintrin.h>
 #endif
 
+#if defined(__GNUC__) || defined(__clang__)
+  #define SS_LIKELY(x)   __builtin_expect(!!(x), 1)
+  #define SS_UNLIKELY(x) __builtin_expect(!!(x), 0)
+  #define SS_RESTRICT    __restrict__
+#elif defined(_MSC_VER)
+  #define SS_LIKELY(x)   (x)
+  #define SS_UNLIKELY(x) (x)
+  #define SS_RESTRICT    __restrict
+#else
+  #define SS_LIKELY(x)   (x)
+  #define SS_UNLIKELY(x) (x)
+  #define SS_RESTRICT
+#endif
+
 namespace streamsieve {
 
-static constexpr const char* kVersion = "0.1.0";
+static constexpr const char* kVersion = "0.2.0";
+
+static constexpr double kLog2    =  0.69314718055994530941723212145818;
+static constexpr double kLogHalf = -0.69314718055994530941723212145818;
+static constexpr double kLog050  = -0.69314718055994530941723212145818;
+static constexpr double kLog030  = -1.20397280432593602963018037193372;
+static constexpr double kLog020  = -1.60943791243410037460075933322619;
 
 inline bool has_avx2() noexcept {
 #if defined(__AVX2__)
@@ -74,7 +94,9 @@ inline double log_sum_exp(double a, double b) noexcept {
     if (a == -std::numeric_limits<double>::infinity()) return b;
     if (b == -std::numeric_limits<double>::infinity()) return a;
     double m = a > b ? a : b;
-    return m + std::log(std::exp(a - m) + std::exp(b - m));
+    double d = (a > b ? b : a) - m;
+    if (d < -37.0) return m; /* exp(-37) < 0.5 ULP of 1.0 -> exact fast-skip */
+    return m + std::log(1.0 + std::exp(d));
 }
 
 /* SplitMix64 / FNV-1a-avalanche deterministic 64-bit provenance hash */
@@ -137,33 +159,43 @@ inline double norm_ppf(double p) noexcept {
  *
  * Mathematical Guarantees:
  *   - Strictly causal: outputs at tick t depend ONLY on x[0..t].
- *   - Location & scale invariant: shifted-anchor Welford + warmup median/MAD
- *     immune to 1e10 DC offsets, 1e15 outlier spikes, and 1000x loud channels.
- *   - Distribution-free anytime-valid e-processes:
- *       (a) Two-sample Universal-Inference Beta-Binomial e-process on causal
- *           sign exceedances (median shift) and dual tail exceedances (rare bursts),
- *           exact E_H0[E_tau] <= 1 for ANY continuous/discrete stationary null
- *           at EVERY stopping time tau (Turner, Ly, Grunwald 2024; Wasserman et al. 2020).
- *       (b) Bounded-tanh two-sample Group-Invariant JZS sequential t-test e-process
- *           for high-power smooth shift detection, with conservative variance floor.
- *       (c) Dyadic checkpoint mixture with exact summable weights pi_k = 1/((k+1)(k+2))
- *           catching changes at ANY unknown changepoint t* in [W0, 10^6+].
- *   - Online e-BH (Wang & Ramdas 2022) controls FDR <= alpha under arbitrary
- *     cross-channel and cross-agent dependence.
+ *   - Location & scale invariant: Winsorized-MAD warmup immune to 1e10 DC
+ *     offsets, 1e15 outlier spikes, and 1000x loud channels.
+ *   - Optional causal pre-filtering:
+ *       * season_period P >= 2: frozen per-phase warmup median subtraction
+ *         (3+ warmup cycles -> outlier-immune, 0% step-shift absorption).
+ *       * detrend_alpha in (0, 1]:
+ *           - 1.0: causal first-difference eliminating arbitrarily steep linear
+ *             trends & random walks in 1 tick (0 transient).
+ *           - (0, 1): EWMA high-pass filter for slow drift (converges in ~3/alpha
+ *             ticks, initialized by 5-sample median immune to 2 warmup spikes).
+ *   - Distribution-free anytime-valid e-processes + dyadic checkpoints + exact e-BH.
  * ========================================================================= */
 
 class EStreamEngine {
 public:
     static constexpr uint32_t kMaxCheckpoints = 24; /* 1.5x spacing covers > 500k ticks */
+    static constexpr uint32_t kMaxSeasonPeriod = 4096;
+    static constexpr uint32_t kDetrendInitN = 5;
 
     explicit EStreamEngine(const ss_estream_config_t& cfg)
         : n_ch_(cfg.n_channels),
           warmup_(std::max<uint32_t>(cfg.warmup, 12)),
+          season_period_(cfg.season_period >= 2 ? std::min<uint32_t>(cfg.season_period, kMaxSeasonPeriod) : 0U),
+          eff_warmup_(season_period_ >= 2 ? std::max<uint32_t>(warmup_, 3U * season_period_) : warmup_),
           ring_cap_(cfg.ring_capacity),
           alpha_(sanitize_cfg(cfg.alpha, 0.05, 1e-9, 0.5)),
           burst_p0_(sanitize_cfg(cfg.burst_tail_p0, 0.025, 1e-4, 0.25)),
+          detrend_alpha_(sanitize_cfg(cfg.detrend_alpha, 0.0, 0.0, 1.0)),
+          detrend_burnin_(0),
           two_sided_(cfg.two_sided != 0),
           tick_count_(0) {
+        if (detrend_alpha_ > 0.0 && detrend_alpha_ < 1.0) {
+            /* Clamp in double BEFORE casting to uint32_t to prevent float-cast-overflow UB */
+            double raw_b = std::ceil(3.0 / std::max(detrend_alpha_, 1e-6));
+            double capped_b = std::min<double>(static_cast<double>(warmup_), raw_b);
+            detrend_burnin_ = std::max<uint32_t>(1U, static_cast<uint32_t>(capped_b));
+        }
         allocate();
     }
 
@@ -171,6 +203,7 @@ public:
         tick_count_ = 0;
         std::fill(n_seen_.begin(), n_seen_.end(), 0);
         std::fill(n_post_.begin(), n_post_.end(), 0);
+        std::fill(ch_tick_.begin(), ch_tick_.end(), 0);
         std::fill(loc_.begin(), loc_.end(), 0.0);
         std::fill(scale_.begin(), scale_.end(), 1.0);
         std::fill(inv_scale_.begin(), inv_scale_.end(), 1.0);
@@ -183,7 +216,8 @@ public:
         std::fill(cnt_burst_.begin(), cnt_burst_.end(), 0);
         std::fill(cnt_ext_burst_.begin(), cnt_ext_burst_.end(), 0);
         std::fill(n_snaps_.begin(), n_snaps_.end(), 0);
-        std::fill(next_snap_n_.begin(), next_snap_n_.end(), warmup_);
+        const uint32_t first_snap = std::max<uint32_t>(warmup_, 24U);
+        std::fill(next_snap_n_.begin(), next_snap_n_.end(), first_snap);
         std::fill(best_log_e_mean_.begin(), best_log_e_mean_.end(), 0.0);
         std::fill(best_log_e_burst_.begin(), best_log_e_burst_.end(), 0.0);
         std::fill(combined_e_.begin(), combined_e_.end(), 1.0);
@@ -192,11 +226,16 @@ public:
         std::fill(ring_pos_.begin(), ring_pos_.end(), 0);
         std::fill(ring_len_.begin(), ring_len_.end(), 0);
         std::fill(warmup_buf_.begin(), warmup_buf_.end(), 0.0);
+        if (!warmup_phase_.empty()) std::fill(warmup_phase_.begin(), warmup_phase_.end(), 0);
+        if (!season_template_.empty()) std::fill(season_template_.begin(), season_template_.end(), 0.0);
+        if (!detrend_level_.empty()) std::fill(detrend_level_.begin(), detrend_level_.end(), 0.0);
+        if (!detrend_seen_.empty()) std::fill(detrend_seen_.begin(), detrend_seen_.end(), 0);
+        if (!detrend_init_buf_.empty()) std::fill(detrend_init_buf_.begin(), detrend_init_buf_.end(), 0.0);
         std::fill(dirty_.begin(), dirty_.end(), 0);
         all_warmed_ = false;
         sync_post_ = false;
         sync_post_n_ = 0;
-        sync_next_snap_ = std::max<uint32_t>(warmup_, 24);
+        sync_next_snap_ = first_snap;
         all_dirty_ = false;
         ebh_cache_valid_ = false;
         ebh_thresh_ = std::numeric_limits<double>::infinity();
@@ -208,7 +247,7 @@ public:
         ebh_cache_valid_ = false;
         const uint32_t cur_tick = static_cast<uint32_t>(tick_count_);
 
-        /* Fast check: once all channels are past warmup, execute vectorized SoA hot loop! */
+        /* Fast path: all channels past warmup and no scalar detrend state */
         if (all_warmed_) {
             update_row_warm_simd(values, cur_tick);
             return SS_OK;
@@ -217,24 +256,58 @@ public:
         uint32_t warmed_count = 0;
         uint32_t zero_post_count = 0;
         for (uint32_t c = 0; c < n_ch_; ++c) {
+            ch_tick_[c] = cur_tick;
             update_one_impl(c, values[c], cur_tick);
-            if (n_seen_[c] >= warmup_) {
+            if (n_seen_[c] >= eff_warmup_) {
                 ++warmed_count;
                 if (n_post_[c] == 0) ++zero_post_count;
             }
         }
-        all_warmed_ = (warmed_count == n_ch_);
-        if (all_warmed_ && zero_post_count == n_ch_) {
-            sync_post_ = true;
-            sync_post_n_ = 0;
-            sync_next_snap_ = (n_ch_ > 0) ? next_snap_n_[0] : std::numeric_limits<uint32_t>::max();
+        if (detrend_alpha_ == 0.0 && warmed_count == n_ch_) {
+            all_warmed_ = true;
+            if (zero_post_count == n_ch_) {
+                sync_post_ = true;
+                sync_post_n_ = 0;
+                sync_next_snap_ = (n_ch_ > 0) ? next_snap_n_[0] : std::numeric_limits<uint32_t>::max();
+            }
         }
         return SS_OK;
     }
 
     int update_batch(const double* matrix, uint32_t n_ticks, uint32_t n_channels) noexcept {
         if (!matrix || n_channels != n_ch_) return SS_ERR_INVALID_ARG;
-        for (uint32_t t = 0; t < n_ticks; ++t) {
+        if (n_ticks == 0) return SS_OK;
+
+        uint32_t t = 0;
+        /* Prefix: run row-by-row until all channels are warmed & synchronized (or if detrend/season active) */
+        while (t < n_ticks && (!all_warmed_ || !sync_post_ || season_period_ != 0 || detrend_alpha_ != 0.0)) {
+            const double* row = matrix + static_cast<size_t>(t) * n_ch_;
+            int rc = update_row(row, n_ch_);
+            if (rc != SS_OK) return rc;
+            ++t;
+        }
+        if (t >= n_ticks) return SS_OK;
+
+        /* Cache-tiled, 8-wide full-cache-line register-pinned AVX2 hot path (0 ULP bit-exact) */
+        ebh_cache_valid_ = false;
+        const uint32_t max_tile = (n_ch_ >= 2048U) ? 16U : 32U;
+        while (t < n_ticks && sync_post_) {
+            uint32_t rem = n_ticks - t;
+            uint32_t tile_len = std::min(rem, max_tile);
+            bool hit_snap = false;
+            if (n_ch_ > 0 && n_snaps_[0] < kMaxCheckpoints && sync_next_snap_ > sync_post_n_) {
+                uint32_t to_snap = sync_next_snap_ - sync_post_n_;
+                if (tile_len >= to_snap) {
+                    tile_len = to_snap;
+                    hit_snap = true;
+                }
+            }
+            update_batch_tile_warm(matrix + static_cast<size_t>(t) * n_ch_, tile_len, hit_snap);
+            t += tile_len;
+        }
+
+        /* Suffix fallback if a mid-batch NaN/Inf broke sync_post_ */
+        for (; t < n_ticks; ++t) {
             const double* row = matrix + static_cast<size_t>(t) * n_ch_;
             int rc = update_row(row, n_ch_);
             if (rc != SS_OK) return rc;
@@ -246,7 +319,7 @@ public:
         if (c >= n_ch_) return SS_ERR_BOUNDS;
         materialize_sync();
         ebh_cache_valid_ = false;
-        uint32_t cur_tick = n_seen_[c] + 1;
+        uint32_t cur_tick = ++ch_tick_[c];
         if (static_cast<uint64_t>(cur_tick) > tick_count_) tick_count_ = cur_tick;
         all_warmed_ = false;
         sync_post_ = false;
@@ -256,9 +329,11 @@ public:
 
     void materialize_sync() const noexcept {
         if (sync_post_) {
+            const uint32_t cur_t = static_cast<uint32_t>(tick_count_);
             for (uint32_t c = 0; c < n_ch_; ++c) {
                 n_post_[c] = sync_post_n_;
-                n_seen_[c] = warmup_ + sync_post_n_;
+                n_seen_[c] = eff_warmup_ + sync_post_n_;
+                ch_tick_[c] = cur_t;
                 if (all_dirty_) dirty_[c] = 1;
             }
             all_dirty_ = false;
@@ -267,23 +342,42 @@ public:
 
     void flush_evalues() const noexcept {
         materialize_sync();
+        /* Cache shared (n0, n1) -> JZS g0/g1/log(g) across synchronized channels */
+        uint32_t cached_n0[kMaxCheckpoints]{};
+        uint32_t cached_n1[kMaxCheckpoints]{};
+        double cached_g0[kMaxCheckpoints]{};
+        double cached_g1[kMaxCheckpoints]{};
+        double cached_hlg0[kMaxCheckpoints]{};
+        double cached_hlg1[kMaxCheckpoints]{};
+        bool cached_valid[kMaxCheckpoints]{};
         for (uint32_t c = 0; c < n_ch_; ++c) {
             if (dirty_[c]) {
-                recompute_channel_evalue(c);
+                recompute_channel_evalue(c, cached_n0, cached_n1, cached_g0, cached_g1,
+                                         cached_hlg0, cached_hlg1, cached_valid);
                 dirty_[c] = 0;
             }
         }
     }
 
+    static inline bool rank_greater(const std::pair<double, uint32_t>& x,
+                                    const std::pair<double, uint32_t>& y) noexcept {
+        const double xv = std::isfinite(x.first) ? x.first : -1.0;
+        const double yv = std::isfinite(y.first) ? y.first : -1.0;
+        if (xv != yv) return xv > yv;
+        return x.second < y.second;
+    }
+
     void ensure_ebh_cache() const {
         if (ebh_cache_valid_) return;
         flush_evalues();
-        std::vector<double> vals = combined_e_;
-        std::sort(vals.begin(), vals.end(), std::greater<double>());
+        for (uint32_t c = 0; c < n_ch_; ++c) {
+            rank_scratch_[c] = {combined_e_[c], c};
+        }
+        std::sort(rank_scratch_.begin(), rank_scratch_.end(), rank_greater);
         uint32_t k_star = 0;
         const double inv_a = static_cast<double>(n_ch_) / alpha_;
         for (uint32_t k = 1; k <= n_ch_; ++k) {
-            if (vals[k - 1] >= inv_a / static_cast<double>(k)) {
+            if (rank_scratch_[k - 1].first >= inv_a / static_cast<double>(k)) {
                 k_star = k;
             }
         }
@@ -295,20 +389,15 @@ public:
     int ebh_reject(double alpha, uint32_t* out_indices, uint32_t max_out, uint32_t* out_count) const {
         if (!out_count) return SS_ERR_NULL;
         flush_evalues();
-        double a = sanitize_cfg(alpha, alpha_, 1e-12, 1.0);
-        std::vector<std::pair<double, uint32_t>> ranked(n_ch_);
+        double a = sanitize_cfg(alpha, alpha_, 1e-9, 0.5);
         for (uint32_t c = 0; c < n_ch_; ++c) {
-            ranked[c] = {combined_e_[c], c};
+            rank_scratch_[c] = {combined_e_[c], c};
         }
-        std::sort(ranked.begin(), ranked.end(),
-                  [](const auto& x, const auto& y) {
-                      if (x.first != y.first) return x.first > y.first;
-                      return x.second < y.second;
-                  });
+        std::sort(rank_scratch_.begin(), rank_scratch_.end(), rank_greater);
         uint32_t k_star = 0;
         const double inv_a = static_cast<double>(n_ch_) / a;
         for (uint32_t k = 1; k <= n_ch_; ++k) {
-            if (ranked[k - 1].first >= inv_a / static_cast<double>(k)) {
+            if (rank_scratch_[k - 1].first >= inv_a / static_cast<double>(k)) {
                 k_star = k;
             }
         }
@@ -321,7 +410,7 @@ public:
         if (out_indices && k_star > 0) {
             uint32_t n_copy = std::min(k_star, max_out);
             for (uint32_t i = 0; i < n_copy; ++i) {
-                out_indices[i] = ranked[i].second;
+                out_indices[i] = rank_scratch_[i].second;
             }
         }
         return SS_OK;
@@ -349,20 +438,14 @@ public:
         flush_evalues();
         uint32_t k_eff = std::min(k, n_ch_);
 
-        /* Compute exact e-BH rejection threshold */
-        std::vector<std::pair<double, uint32_t>> ranked(n_ch_);
         for (uint32_t c = 0; c < n_ch_; ++c) {
-            ranked[c] = {combined_e_[c], c};
+            rank_scratch_[c] = {combined_e_[c], c};
         }
-        std::sort(ranked.begin(), ranked.end(),
-                  [](const auto& x, const auto& y) {
-                      if (x.first != y.first) return x.first > y.first;
-                      return x.second < y.second;
-                  });
+        std::sort(rank_scratch_.begin(), rank_scratch_.end(), rank_greater);
         uint32_t k_star = 0;
         const double inv_a = static_cast<double>(n_ch_) / alpha_;
         for (uint32_t i = 1; i <= n_ch_; ++i) {
-            if (ranked[i - 1].first >= inv_a / static_cast<double>(i)) {
+            if (rank_scratch_[i - 1].first >= inv_a / static_cast<double>(i)) {
                 k_star = i;
             }
         }
@@ -370,7 +453,7 @@ public:
                                    : std::numeric_limits<double>::infinity();
         ebh_cache_valid_ = true;
         for (uint32_t i = 0; i < k_eff; ++i) {
-            uint32_t c = ranked[i].second;
+            uint32_t c = rank_scratch_[i].second;
             out_status[i].channel = c;
             out_status[i].changepoint_tick = best_cp_tick_[c];
             out_status[i].e_value = combined_e_[c];
@@ -428,6 +511,7 @@ private:
     void allocate() {
         n_seen_.assign(n_ch_, 0);
         n_post_.assign(n_ch_, 0);
+        ch_tick_.assign(n_ch_, 0);
         loc_.assign(n_ch_, 0.0);
         scale_.assign(n_ch_, 1.0);
         inv_scale_.assign(n_ch_, 1.0);
@@ -440,7 +524,8 @@ private:
         cnt_burst_.assign(n_ch_, 0);
         cnt_ext_burst_.assign(n_ch_, 0);
         n_snaps_.assign(n_ch_, 0);
-        next_snap_n_.assign(n_ch_, warmup_);
+        const uint32_t first_snap = std::max<uint32_t>(warmup_, 24U);
+        next_snap_n_.assign(n_ch_, first_snap);
         snaps_.assign(static_cast<size_t>(n_ch_) * kMaxCheckpoints,
                       Snap{0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0});
         best_log_e_mean_.assign(n_ch_, 0.0);
@@ -449,8 +534,25 @@ private:
         best_cp_tick_.assign(n_ch_, 0);
         mode_.assign(n_ch_, 0);
         dirty_.assign(n_ch_, 0);
+        rank_scratch_.assign(n_ch_, {1.0, 0U});
+        w_sorted_.assign(eff_warmup_, 0.0);
+        w_tmp_.assign(eff_warmup_, 0.0);
+        w_abs_.assign(eff_warmup_, 0.0);
+        w_clip_.assign(eff_warmup_, 0.0);
 
-        warmup_buf_.assign(static_cast<size_t>(n_ch_) * warmup_, 0.0);
+        warmup_buf_.assign(static_cast<size_t>(n_ch_) * eff_warmup_, 0.0);
+        if (season_period_ >= 2) {
+            warmup_phase_.assign(static_cast<size_t>(n_ch_) * eff_warmup_, 0);
+            /* Phase-major layout [phase * n_ch_ + c] for contiguous SIMD loads */
+            season_template_.assign(static_cast<size_t>(season_period_) * n_ch_, 0.0);
+        }
+        if (detrend_alpha_ > 0.0) {
+            detrend_level_.assign(n_ch_, 0.0);
+            detrend_seen_.assign(n_ch_, 0);
+            if (detrend_alpha_ < 1.0) {
+                detrend_init_buf_.assign(static_cast<size_t>(n_ch_) * kDetrendInitN, 0.0);
+            }
+        }
         if (ring_cap_ > 0) {
             ring_vals_.assign(static_cast<size_t>(n_ch_) * ring_cap_, 0.0);
             ring_ticks_.assign(static_cast<size_t>(n_ch_) * ring_cap_, 0);
@@ -459,11 +561,18 @@ private:
         }
         burst_z_thresh_ = std::max(1.8, norm_ppf(1.0 - 0.5 * burst_p0_));
         ext_burst_z_thresh_ = std::max(burst_z_thresh_ + 0.75, 3.0);
+        thresh_log_ = std::log(1.0 / alpha_);
+        b0_tail_ = std::max(2.0, 0.5 * (1.0 - burst_p0_) / burst_p0_);
+        lbeta_sign_  = fast_lgamma(0.5)  + fast_lgamma(0.5)      - fast_lgamma(1.0);
+        lbeta_b0_    = fast_lgamma(0.5)  + fast_lgamma(b0_tail_) - fast_lgamma(0.5 + b0_tail_);
+        lbeta_b1_    = fast_lgamma(1.0)  + fast_lgamma(4.0)      - fast_lgamma(5.0);
+        lbeta_ext0_  = fast_lgamma(0.25) + fast_lgamma(45.0)     - fast_lgamma(45.25);
+        lbeta_ext1_  = fast_lgamma(0.75) + fast_lgamma(4.0)      - fast_lgamma(4.75);
+
         all_warmed_ = false;
-        any_checkpoint_due_ = false;
         sync_post_ = false;
         sync_post_n_ = 0;
-        sync_next_snap_ = std::max<uint32_t>(warmup_, 24);
+        sync_next_snap_ = first_snap;
         all_dirty_ = false;
         ebh_cache_valid_ = false;
         ebh_thresh_ = std::numeric_limits<double>::infinity();
@@ -479,50 +588,112 @@ private:
         if (ring_len_[c] < ring_cap_) ++ring_len_[c];
     }
 
-    /* Winsorized-MAD causal baseline estimator:
-     * ~95% Gaussian efficiency (2.6x lower scale variance than raw MAD)
-     * while remaining 100% immune to 1e10 DC offsets AND tick-0 1e17 warmup spikes. */
-    void finalize_warmup(uint32_t c) noexcept {
-        const double* buf = warmup_buf_.data() + static_cast<size_t>(c) * warmup_;
-        std::vector<double> sorted(buf, buf + warmup_);
-        std::sort(sorted.begin(), sorted.end());
-        double med = (warmup_ & 1U)
-                         ? sorted[warmup_ / 2]
-                         : sorted[warmup_ / 2 - 1] + 0.5 * (sorted[warmup_ / 2] - sorted[warmup_ / 2 - 1]);
-        std::vector<double> tmp(warmup_);
-        for (uint32_t i = 0; i < warmup_; ++i) tmp[i] = sorted[i] - med;
-        std::vector<double> abs_dev(warmup_);
-        for (uint32_t i = 0; i < warmup_; ++i) abs_dev[i] = std::fabs(tmp[i]);
-        std::sort(abs_dev.begin(), abs_dev.end());
-        double mad = (warmup_ & 1U)
-                         ? abs_dev[warmup_ / 2]
-                         : 0.5 * (abs_dev[warmup_ / 2 - 1] + abs_dev[warmup_ / 2]);
-        double q25 = tmp[warmup_ / 4];
-        double q75 = tmp[(3 * warmup_) / 4];
-        double robust_r = std::max({mad / 0.67448975, (q75 - q25) / 1.3489795, 1e-12});
+    static inline double median_sorted(const std::vector<double>& v) noexcept {
+        const size_t n = v.size();
+        if (n == 0) return 0.0;
+        return (n & 1U) ? v[n / 2] : (0.5 * v[n / 2 - 1] + 0.5 * v[n / 2]);
+    }
 
-        /* Winsorize at +-3.0 * robust_r and compute high-efficiency sample std */
+    static inline double median_unsorted(std::vector<double>& v) noexcept {
+        const size_t n = v.size();
+        if (n == 0) return 0.0;
+        const size_t mid = n / 2;
+        std::nth_element(v.begin(), v.begin() + static_cast<std::ptrdiff_t>(mid), v.end());
+        double hi = v[mid];
+        if (n & 1U) return hi;
+        double lo = *std::max_element(v.begin(), v.begin() + static_cast<std::ptrdiff_t>(mid));
+        return 0.5 * lo + 0.5 * hi;
+    }
+
+    static inline double median5(double a, double b, double c, double d, double e) noexcept {
+        double arr[5] = {a, b, c, d, e};
+        std::nth_element(arr, arr + 2, arr + 5);
+        return arr[2];
+    }
+
+    /* Winsorized-MAD causal baseline estimator (+ optional frozen per-phase seasonal median):
+     * Overflow-free up to +-1e308; immune to 1e10 DC offsets & 1e17 warmup spikes. */
+    void finalize_warmup(uint32_t c) noexcept {
+        const size_t wbase = static_cast<size_t>(c) * eff_warmup_;
+        const double* buf = warmup_buf_.data() + wbase;
+        std::memcpy(w_sorted_.data(), buf, static_cast<size_t>(eff_warmup_) * sizeof(double));
+
+        if (season_period_ >= 2) {
+            std::memcpy(w_tmp_.data(), buf, static_cast<size_t>(eff_warmup_) * sizeof(double));
+            const double med_all = median_unsorted(w_tmp_);
+
+            const uint16_t* ph_buf = warmup_phase_.data() + wbase;
+            std::vector<std::vector<double>> buckets(season_period_);
+            for (uint32_t i = 0; i < eff_warmup_; ++i) {
+                uint32_t p = static_cast<uint32_t>(ph_buf[i]) % season_period_;
+                buckets[p].push_back(buf[i]);
+            }
+            for (uint32_t p = 0; p < season_period_; ++p) {
+                double sp = med_all;
+                if (!buckets[p].empty()) {
+                    sp = median_unsorted(buckets[p]);
+                }
+                if (!std::isfinite(sp)) sp = 0.0;
+                season_template_[static_cast<size_t>(p) * n_ch_ + c] = sp;
+            }
+            for (uint32_t i = 0; i < eff_warmup_; ++i) {
+                uint32_t p = static_cast<uint32_t>(ph_buf[i]) % season_period_;
+                double diff = buf[i] - season_template_[static_cast<size_t>(p) * n_ch_ + c];
+                if (!std::isfinite(diff)) diff = (buf[i] >= 0.0) ? 1e300 : -1e300;
+                w_sorted_[i] = diff;
+            }
+        }
+
+        std::sort(w_sorted_.begin(), w_sorted_.end());
+        double med = median_sorted(w_sorted_);
+        if (!std::isfinite(med)) med = 0.0;
+        for (uint32_t i = 0; i < eff_warmup_; ++i) {
+            double d = w_sorted_[i] - med;
+            if (!std::isfinite(d)) d = (w_sorted_[i] >= med) ? 1e300 : -1e300;
+            w_tmp_[i] = d;
+            w_abs_[i] = std::fabs(d);
+        }
+        double mad = median_unsorted(w_abs_);
+        double q25 = w_tmp_[eff_warmup_ / 4];
+        double q75 = w_tmp_[(3 * eff_warmup_) / 4];
+        double mad_s = mad / 0.67448975;
+        double iqr_s = (q75 / 1.3489795) - (q25 / 1.3489795);
+        if (!std::isfinite(mad_s)) mad_s = 1e300;
+        if (!std::isfinite(iqr_s)) iqr_s = 1e300;
+        double robust_r = clamp_d(std::max({mad_s, iqr_s, 1e-12}), 1e-12, 1e300);
+
+        /* Normalize by robust_r before Winsorizing/squaring so nd^2 <= 36 (overflow-free) */
         double wsum = 0.0;
-        std::vector<double> wclipped(warmup_);
-        for (uint32_t i = 0; i < warmup_; ++i) {
-            double v = clamp_d(tmp[i], -3.0 * robust_r, 3.0 * robust_r);
-            wclipped[i] = v;
-            wsum += v;
+        const double inv_r = 1.0 / robust_r;
+        for (uint32_t i = 0; i < eff_warmup_; ++i) {
+            double nv = clamp_d(w_tmp_[i] * inv_r, -3.0, 3.0);
+            w_clip_[i] = nv;
+            wsum += nv;
         }
-        double wmean = wsum / static_cast<double>(warmup_);
+        double wmean = wsum / static_cast<double>(eff_warmup_);
         double wv = 0.0;
-        for (uint32_t i = 0; i < warmup_; ++i) {
-            double d = wclipped[i] - wmean;
-            wv += d * d;
+        for (uint32_t i = 0; i < eff_warmup_; ++i) {
+            double nd = w_clip_[i] - wmean;
+            wv += nd * nd;
         }
-        double wstd = std::sqrt(wv / static_cast<double>(std::max<uint32_t>(1, warmup_ - 1)));
+        double wstd = std::sqrt(wv / static_cast<double>(std::max<uint32_t>(1, eff_warmup_ - 1))) * robust_r;
+        if (!std::isfinite(wstd)) wstd = 1e300;
         double sc = std::max({wstd, 0.5 * robust_r, 1e-12});
+        if (season_period_ >= 2) {
+            /* Correct in-sample phase-median overfitting & add OOS median estimation variance */
+            double m_bar = static_cast<double>(eff_warmup_) / static_cast<double>(season_period_);
+            double oos_num = 1.0 + 1.5707963267948966 / std::max(m_bar, 1.0);
+            double ins_den = std::max(1.0 - 1.55 / std::max(m_bar, 2.0), 0.25);
+            sc *= std::sqrt(oos_num / ins_den);
+        }
+        if (!std::isfinite(sc)) sc = 1e300;
+        sc = clamp_d(sc, 1e-12, 1e300);
 
         loc_[c] = med;
         scale_[c] = sc;
         inv_scale_[c] = 1.0 / sc;
 
-        next_snap_n_[c] = std::max<uint32_t>(warmup_, 24);
+        next_snap_n_[c] = std::max<uint32_t>(warmup_, 24U);
     }
 
     inline void record_snapshot(uint32_t c, uint32_t tick) noexcept {
@@ -562,16 +733,68 @@ private:
 
     void update_one_impl(uint32_t c, double x, uint32_t tick) noexcept {
         if (!std::isfinite(x)) return;
+        /* Always archive lossless raw input tick before any causal pre-filtering */
         push_ring(c, x, tick);
 
+        /* Stage 1: Optional strictly causal detrender */
+        if (SS_UNLIKELY(detrend_alpha_ > 0.0)) {
+            uint32_t ds = detrend_seen_[c];
+            if (detrend_alpha_ >= 1.0) {
+                if (ds == 0) {
+                    detrend_level_[c] = x;
+                    detrend_seen_[c] = 1;
+                    return;
+                }
+                double r = x - detrend_level_[c];
+                detrend_level_[c] = x;
+                detrend_seen_[c] = ds + 1;
+                if (!std::isfinite(r)) return;
+                x = r;
+            } else {
+                if (ds < kDetrendInitN) {
+                    detrend_init_buf_[static_cast<size_t>(c) * kDetrendInitN + ds] = x;
+                    detrend_seen_[c] = ds + 1;
+                    if (ds + 1 == kDetrendInitN) {
+                        const size_t ib = static_cast<size_t>(c) * kDetrendInitN;
+                        detrend_level_[c] = median5(detrend_init_buf_[ib],
+                                                    detrend_init_buf_[ib + 1],
+                                                    detrend_init_buf_[ib + 2],
+                                                    detrend_init_buf_[ib + 3],
+                                                    detrend_init_buf_[ib + 4]);
+                    }
+                    return;
+                }
+                double r = x - detrend_level_[c];
+                if (!std::isfinite(r)) return;
+                double next_lvl = detrend_level_[c] + detrend_alpha_ * r;
+                if (!std::isfinite(next_lvl)) return;
+                detrend_level_[c] = next_lvl;
+                detrend_seen_[c] = ds + 1;
+                if (ds < kDetrendInitN + detrend_burnin_) return;
+                x = r;
+            }
+        }
+
+        const uint32_t phase = (season_period_ >= 2)
+                                   ? static_cast<uint32_t>((tick > 0 ? tick - 1U : 0U) % season_period_)
+                                   : 0U;
+
         uint32_t seen = n_seen_[c];
-        if (seen < warmup_) {
-            warmup_buf_[static_cast<size_t>(c) * warmup_ + seen] = x;
+        if (seen < eff_warmup_) {
+            const size_t widx = static_cast<size_t>(c) * eff_warmup_ + seen;
+            warmup_buf_[widx] = x;
+            if (season_period_ >= 2) warmup_phase_[widx] = static_cast<uint16_t>(phase);
             n_seen_[c] = seen + 1;
-            if (seen + 1 == warmup_) {
+            if (seen + 1 == eff_warmup_) {
                 finalize_warmup(c);
             }
             return;
+        }
+
+        /* Stage 2: Optional frozen causal per-phase seasonal subtraction */
+        if (season_period_ >= 2) {
+            x -= season_template_[static_cast<size_t>(phase) * n_ch_ + c];
+            if (!std::isfinite(x)) return;
         }
 
         n_seen_[c] = seen + 1;
@@ -595,15 +818,396 @@ private:
         }
     }
 
+    void update_batch_tile_warm(const double* base_mat, uint32_t tile_len, bool hit_snap) noexcept {
+        const double bth = burst_z_thresh_;
+        const double ebth = ext_burst_z_thresh_;
+        const bool check_ring = (ring_cap_ > 0);
+        const uint32_t base_tick = static_cast<uint32_t>(tick_count_);
+        const uint32_t old_post_n = sync_post_n_;
+        const size_t stride = n_ch_;
+        bool had_nonfinite = false;
+
+        auto break_sync_at = [&](uint32_t done_ch) noexcept {
+            for (uint32_t k = 0; k < done_ch; ++k) {
+                n_post_[k] = old_post_n + tile_len;
+                n_seen_[k] = eff_warmup_ + old_post_n + tile_len;
+                ch_tick_[k] = base_tick + tile_len;
+                dirty_[k] = 1;
+                if (hit_snap && n_post_[k] >= next_snap_n_[k] && n_snaps_[k] < kMaxCheckpoints) {
+                    record_snapshot(k, base_tick + tile_len);
+                }
+            }
+            for (uint32_t k = done_ch; k < n_ch_; ++k) {
+                n_post_[k] = old_post_n;
+                n_seen_[k] = eff_warmup_ + old_post_n;
+                ch_tick_[k] = base_tick;
+                dirty_[k] = 1;
+            }
+            sync_post_ = false;
+            all_dirty_ = false;
+            had_nonfinite = true;
+        };
+
+        auto finish_ring_ch = [&](uint32_t ch) noexcept {
+            const uint32_t k = std::min(tile_len, ring_cap_);
+            const uint32_t old_pos = ring_pos_[ch];
+            const uint32_t new_pos = (old_pos + tile_len) % ring_cap_;
+            uint32_t pos = (new_pos + ring_cap_ - k) % ring_cap_;
+            const size_t rbase = static_cast<size_t>(ch) * ring_cap_;
+            const uint32_t r_start = tile_len - k;
+            for (uint32_t r = r_start; r < tile_len; ++r) {
+                ring_vals_[rbase + pos] = base_mat[static_cast<size_t>(r) * stride + ch];
+                ring_ticks_[rbase + pos] = base_tick + r + 1;
+                pos = (pos + 1 == ring_cap_) ? 0 : (pos + 1);
+            }
+            ring_pos_[ch] = new_pos;
+            ring_len_[ch] = std::min(ring_cap_, ring_len_[ch] + tile_len);
+        };
+
+        const double* SS_RESTRICT loc_p = loc_.data();
+        const double* SS_RESTRICT inv_p = inv_scale_.data();
+        double* SS_RESTRICT lz_p = last_z_.data();
+        double* SS_RESTRICT su_p = sum_u_.data();
+        double* SS_RESTRICT su2_p = sum_u2_.data();
+        double* SS_RESTRICT st_p = sum_tail_.data();
+        double* SS_RESTRICT st2_p = sum_tail2_.data();
+        uint32_t* SS_RESTRICT csign_p = cnt_sign_.data();
+        uint32_t* SS_RESTRICT cburst_p = cnt_burst_.data();
+        uint32_t* SS_RESTRICT cext_p = cnt_ext_burst_.data();
+
+        uint32_t c = 0;
+
+#if defined(__AVX2__)
+        const __m256d v_scale_s = _mm256_set1_pd(0.4);
+        const __m256d v_one = _mm256_set1_pd(1.0);
+        const __m256d v_zero = _mm256_setzero_pd();
+        const __m256d v_hinge = _mm256_set1_pd(kTailHinge);
+        const __m256d v_zmax = _mm256_set1_pd(kMaxZ);
+        const __m256d v_zmin = _mm256_set1_pd(-kMaxZ);
+        const __m256d v_abs_mask = _mm256_castsi256_pd(_mm256_set1_epi64x(0x7fffffffffffffffLL));
+        const __m256d v_all_ones = _mm256_castsi256_pd(_mm256_set1_epi64x(-1LL));
+        const __m256d v_bth = _mm256_set1_pd(bth);
+        const __m256d v_ebth = _mm256_set1_pd(ebth);
+        const __m256d v_inf = _mm256_set1_pd(std::numeric_limits<double>::infinity());
+        const bool do_prefetch = (stride >= 64);
+
+        /* Primary 8-channel (full 64-byte cache line) branchless register-pinned AVX2 loop */
+        static constexpr uint32_t kMap8[8] = {0, 1, 4, 5, 2, 3, 6, 7};
+        for (; c + 8 <= n_ch_; c += 8) {
+            __m256d vlz0  = _mm256_loadu_pd(lz_p + c);
+            __m256d vlz1  = _mm256_loadu_pd(lz_p + c + 4);
+            __m256d vsu0  = _mm256_loadu_pd(su_p + c);
+            __m256d vsu1  = _mm256_loadu_pd(su_p + c + 4);
+            __m256d vsu20 = _mm256_loadu_pd(su2_p + c);
+            __m256d vsu21 = _mm256_loadu_pd(su2_p + c + 4);
+            __m256d vst0  = _mm256_loadu_pd(st_p + c);
+            __m256d vst1  = _mm256_loadu_pd(st_p + c + 4);
+            __m256d vst20 = _mm256_loadu_pd(st2_p + c);
+            __m256d vst21 = _mm256_loadu_pd(st2_p + c + 4);
+            __m256i vcsign  = _mm256_setzero_si256();
+            __m256i vcburst = _mm256_setzero_si256();
+            __m256i vcext   = _mm256_setzero_si256();
+            __m256d v_all_fin = v_all_ones;
+
+            const double* p = base_mat + c;
+            for (uint32_t r = 0; r < tile_len; ++r, p += stride) {
+                if (do_prefetch && r + 4 < tile_len) {
+                    _mm_prefetch(reinterpret_cast<const char*>(p + 4 * stride), _MM_HINT_T0);
+                }
+                __m256d vx0 = _mm256_loadu_pd(p);
+                __m256d vx1 = _mm256_loadu_pd(p + 4);
+                __m256d vfin0 = _mm256_cmp_pd(_mm256_and_pd(vx0, v_abs_mask), v_inf, _CMP_LT_OQ);
+                __m256d vfin1 = _mm256_cmp_pd(_mm256_and_pd(vx1, v_abs_mask), v_inf, _CMP_LT_OQ);
+                v_all_fin = _mm256_and_pd(v_all_fin, _mm256_and_pd(vfin0, vfin1));
+
+                __m256d vz0 = _mm256_mul_pd(_mm256_sub_pd(vx0, _mm256_loadu_pd(loc_p + c)),
+                                            _mm256_loadu_pd(inv_p + c));
+                __m256d vz1 = _mm256_mul_pd(_mm256_sub_pd(vx1, _mm256_loadu_pd(loc_p + c + 4)),
+                                            _mm256_loadu_pd(inv_p + c + 4));
+                vz0 = _mm256_max_pd(v_zmin, _mm256_min_pd(v_zmax, vz0));
+                vz1 = _mm256_max_pd(v_zmin, _mm256_min_pd(v_zmax, vz1));
+                vlz0 = vz0;
+                vlz1 = vz1;
+
+                __m256d vzs0 = _mm256_mul_pd(vz0, v_scale_s);
+                __m256d vzs1 = _mm256_mul_pd(vz1, v_scale_s);
+                __m256d vu0 = _mm256_div_pd(vzs0, _mm256_sqrt_pd(_mm256_add_pd(v_one, _mm256_mul_pd(vzs0, vzs0))));
+                __m256d vu1 = _mm256_div_pd(vzs1, _mm256_sqrt_pd(_mm256_add_pd(v_one, _mm256_mul_pd(vzs1, vzs1))));
+                __m256d vth0 = _mm256_max_pd(_mm256_sub_pd(_mm256_and_pd(vu0, v_abs_mask), v_hinge), v_zero);
+                __m256d vth1 = _mm256_max_pd(_mm256_sub_pd(_mm256_and_pd(vu1, v_abs_mask), v_hinge), v_zero);
+
+                vsu0  = _mm256_add_pd(vsu0, vu0);
+                vsu1  = _mm256_add_pd(vsu1, vu1);
+                vsu20 = _mm256_add_pd(vsu20, _mm256_mul_pd(vu0, vu0));
+                vsu21 = _mm256_add_pd(vsu21, _mm256_mul_pd(vu1, vu1));
+                vst0  = _mm256_add_pd(vst0, vth0);
+                vst1  = _mm256_add_pd(vst1, vth1);
+                vst20 = _mm256_add_pd(vst20, _mm256_mul_pd(vth0, vth0));
+                vst21 = _mm256_add_pd(vst21, _mm256_mul_pd(vth1, vth1));
+
+                __m256d vaz0 = _mm256_and_pd(vz0, v_abs_mask);
+                __m256d vaz1 = _mm256_and_pd(vz1, v_abs_mask);
+                __m256 s0 = _mm256_castpd_ps(_mm256_cmp_pd(vz0, v_zero, _CMP_GT_OQ));
+                __m256 s1 = _mm256_castpd_ps(_mm256_cmp_pd(vz1, v_zero, _CMP_GT_OQ));
+                __m256 b0 = _mm256_castpd_ps(_mm256_cmp_pd(vaz0, v_bth, _CMP_GT_OQ));
+                __m256 b1 = _mm256_castpd_ps(_mm256_cmp_pd(vaz1, v_bth, _CMP_GT_OQ));
+                __m256 e0 = _mm256_castpd_ps(_mm256_cmp_pd(vaz0, v_ebth, _CMP_GT_OQ));
+                __m256 e1 = _mm256_castpd_ps(_mm256_cmp_pd(vaz1, v_ebth, _CMP_GT_OQ));
+                vcsign  = _mm256_sub_epi32(vcsign,  _mm256_castps_si256(_mm256_shuffle_ps(s0, s1, 0x88)));
+                vcburst = _mm256_sub_epi32(vcburst, _mm256_castps_si256(_mm256_shuffle_ps(b0, b1, 0x88)));
+                vcext   = _mm256_sub_epi32(vcext,   _mm256_castps_si256(_mm256_shuffle_ps(e0, e1, 0x88)));
+            }
+
+            if (SS_UNLIKELY(_mm256_movemask_pd(v_all_fin) != 0xF)) {
+                if (!had_nonfinite) break_sync_at(c);
+                for (uint32_t r = 0; r < tile_len; ++r) {
+                    const uint32_t tick_r = base_tick + r + 1;
+                    const double* row_r = base_mat + static_cast<size_t>(r) * stride + c;
+                    for (uint32_t j = 0; j < 8; ++j) {
+                        ch_tick_[c + j] = tick_r;
+                        update_one_impl(c + j, row_r[j], tick_r);
+                    }
+                }
+                continue;
+            }
+
+            _mm256_storeu_pd(lz_p + c,      vlz0);  _mm256_storeu_pd(lz_p + c + 4,  vlz1);
+            _mm256_storeu_pd(su_p + c,      vsu0);  _mm256_storeu_pd(su_p + c + 4,  vsu1);
+            _mm256_storeu_pd(su2_p + c,     vsu20); _mm256_storeu_pd(su2_p + c + 4, vsu21);
+            _mm256_storeu_pd(st_p + c,      vst0);  _mm256_storeu_pd(st_p + c + 4,  vst1);
+            _mm256_storeu_pd(st2_p + c,     vst20); _mm256_storeu_pd(st2_p + c + 4, vst21);
+
+            alignas(32) uint32_t tmp_s[8], tmp_b[8], tmp_e[8];
+            _mm256_store_si256(reinterpret_cast<__m256i*>(tmp_s), vcsign);
+            _mm256_store_si256(reinterpret_cast<__m256i*>(tmp_b), vcburst);
+            _mm256_store_si256(reinterpret_cast<__m256i*>(tmp_e), vcext);
+            for (uint32_t j = 0; j < 8; ++j) {
+                const uint32_t ch = c + kMap8[j];
+                csign_p[ch]  += tmp_s[j];
+                cburst_p[ch] += tmp_b[j];
+                cext_p[ch]   += tmp_e[j];
+            }
+
+            if (SS_UNLIKELY(check_ring)) {
+                for (uint32_t j = 0; j < 8; ++j) finish_ring_ch(c + j);
+            }
+            if (SS_UNLIKELY(had_nonfinite)) {
+                for (uint32_t j = 0; j < 8; ++j) {
+                    uint32_t ch = c + j;
+                    n_post_[ch] += tile_len;
+                    n_seen_[ch] += tile_len;
+                    ch_tick_[ch] = base_tick + tile_len;
+                    dirty_[ch] = 1;
+                    if (hit_snap && n_post_[ch] >= next_snap_n_[ch] && n_snaps_[ch] < kMaxCheckpoints) {
+                        record_snapshot(ch, base_tick + tile_len);
+                    }
+                }
+            }
+        }
+
+        /* 4-channel AVX2 remainder strip (branchless finiteness check) */
+        for (; c + 4 <= n_ch_; c += 4) {
+            const __m256d vloc = _mm256_loadu_pd(loc_p + c);
+            const __m256d vinv = _mm256_loadu_pd(inv_p + c);
+            __m256d vlz  = _mm256_loadu_pd(lz_p + c);
+            __m256d vsu  = _mm256_loadu_pd(su_p + c);
+            __m256d vsu2 = _mm256_loadu_pd(su2_p + c);
+            __m256d vst  = _mm256_loadu_pd(st_p + c);
+            __m256d vst2 = _mm256_loadu_pd(st2_p + c);
+            __m256i vcsign  = _mm256_setzero_si256();
+            __m256i vcburst = _mm256_setzero_si256();
+            __m256i vcext   = _mm256_setzero_si256();
+            __m256d v_all_fin = v_all_ones;
+
+            const double* p = base_mat + c;
+            for (uint32_t r = 0; r < tile_len; ++r, p += stride) {
+                __m256d vx = _mm256_loadu_pd(p);
+                __m256d vabsx = _mm256_and_pd(vx, v_abs_mask);
+                v_all_fin = _mm256_and_pd(v_all_fin, _mm256_cmp_pd(vabsx, v_inf, _CMP_LT_OQ));
+
+                __m256d vz = _mm256_mul_pd(_mm256_sub_pd(vx, vloc), vinv);
+                vz = _mm256_max_pd(v_zmin, _mm256_min_pd(v_zmax, vz));
+                vlz = vz;
+
+                __m256d vzs = _mm256_mul_pd(vz, v_scale_s);
+                __m256d vden = _mm256_sqrt_pd(_mm256_add_pd(v_one, _mm256_mul_pd(vzs, vzs)));
+                __m256d vu = _mm256_div_pd(vzs, vden);
+                __m256d vabsu = _mm256_and_pd(vu, v_abs_mask);
+                __m256d vth = _mm256_max_pd(_mm256_sub_pd(vabsu, v_hinge), v_zero);
+
+                vsu  = _mm256_add_pd(vsu, vu);
+                vsu2 = _mm256_add_pd(vsu2, _mm256_mul_pd(vu, vu));
+                vst  = _mm256_add_pd(vst, vth);
+                vst2 = _mm256_add_pd(vst2, _mm256_mul_pd(vth, vth));
+
+                __m256d vabsz = _mm256_and_pd(vz, v_abs_mask);
+                vcsign  = _mm256_sub_epi64(vcsign,  _mm256_castpd_si256(_mm256_cmp_pd(vz,    v_zero, _CMP_GT_OQ)));
+                vcburst = _mm256_sub_epi64(vcburst, _mm256_castpd_si256(_mm256_cmp_pd(vabsz, v_bth,  _CMP_GT_OQ)));
+                vcext   = _mm256_sub_epi64(vcext,   _mm256_castpd_si256(_mm256_cmp_pd(vabsz, v_ebth, _CMP_GT_OQ)));
+            }
+
+            if (SS_UNLIKELY(_mm256_movemask_pd(v_all_fin) != 0xF)) {
+                if (!had_nonfinite) break_sync_at(c);
+                for (uint32_t r = 0; r < tile_len; ++r) {
+                    const uint32_t tick_r = base_tick + r + 1;
+                    const double* row_r = base_mat + static_cast<size_t>(r) * stride + c;
+                    for (uint32_t j = 0; j < 4; ++j) {
+                        ch_tick_[c + j] = tick_r;
+                        update_one_impl(c + j, row_r[j], tick_r);
+                    }
+                }
+                continue;
+            }
+
+            _mm256_storeu_pd(lz_p  + c, vlz);
+            _mm256_storeu_pd(su_p  + c, vsu);
+            _mm256_storeu_pd(su2_p + c, vsu2);
+            _mm256_storeu_pd(st_p  + c, vst);
+            _mm256_storeu_pd(st2_p + c, vst2);
+
+            alignas(32) uint64_t tmp_s[4], tmp_b[4], tmp_e[4];
+            _mm256_store_si256(reinterpret_cast<__m256i*>(tmp_s), vcsign);
+            _mm256_store_si256(reinterpret_cast<__m256i*>(tmp_b), vcburst);
+            _mm256_store_si256(reinterpret_cast<__m256i*>(tmp_e), vcext);
+            for (uint32_t j = 0; j < 4; ++j) {
+                csign_p[c + j]  += static_cast<uint32_t>(tmp_s[j]);
+                cburst_p[c + j] += static_cast<uint32_t>(tmp_b[j]);
+                cext_p[c + j]   += static_cast<uint32_t>(tmp_e[j]);
+            }
+
+            if (SS_UNLIKELY(check_ring)) {
+                finish_ring_ch(c + 0);
+                finish_ring_ch(c + 1);
+                finish_ring_ch(c + 2);
+                finish_ring_ch(c + 3);
+            }
+            if (SS_UNLIKELY(had_nonfinite)) {
+                for (uint32_t j = 0; j < 4; ++j) {
+                    uint32_t ch = c + j;
+                    n_post_[ch] += tile_len;
+                    n_seen_[ch] += tile_len;
+                    ch_tick_[ch] = base_tick + tile_len;
+                    dirty_[ch] = 1;
+                    if (hit_snap && n_post_[ch] >= next_snap_n_[ch] && n_snaps_[ch] < kMaxCheckpoints) {
+                        record_snapshot(ch, base_tick + tile_len);
+                    }
+                }
+            }
+        }
+#endif
+        for (; c < n_ch_; ++c) {
+            const double loc = loc_p[c];
+            const double inv = inv_p[c];
+            double lz  = lz_p[c];
+            double su  = su_p[c];
+            double su2 = su2_p[c];
+            double st  = st_p[c];
+            double st2 = st2_p[c];
+            uint32_t cs = 0, cb = 0, ce = 0;
+            const double* p = base_mat + c;
+            bool ch_ok = true;
+            for (uint32_t r = 0; r < tile_len; ++r, p += stride) {
+                double x = *p;
+                if (SS_UNLIKELY(!std::isfinite(x))) {
+                    ch_ok = false;
+                    break;
+                }
+                double z = clamp_z((x - loc) * inv);
+                lz = z;
+                double u = bounded_squash(z);
+                double th = std::max(0.0, std::fabs(u) - kTailHinge);
+                su  += u;
+                su2 += u * u;
+                st  += th;
+                st2 += th * th;
+                double az = std::fabs(z);
+                cs += (z > 0.0) ? 1U : 0U;
+                cb += (az > bth) ? 1U : 0U;
+                ce += (az > ebth) ? 1U : 0U;
+            }
+            if (SS_UNLIKELY(!ch_ok)) {
+                if (!had_nonfinite) break_sync_at(c);
+                for (uint32_t r = 0; r < tile_len; ++r) {
+                    const uint32_t tick_r = base_tick + r + 1;
+                    ch_tick_[c] = tick_r;
+                    update_one_impl(c, base_mat[static_cast<size_t>(r) * stride + c], tick_r);
+                }
+                continue;
+            }
+            lz_p[c] = lz;
+            su_p[c] = su;
+            su2_p[c] = su2;
+            st_p[c] = st;
+            st2_p[c] = st2;
+            csign_p[c]  += cs;
+            cburst_p[c] += cb;
+            cext_p[c]   += ce;
+            if (SS_UNLIKELY(check_ring)) finish_ring_ch(c);
+            if (SS_UNLIKELY(had_nonfinite)) {
+                n_post_[c] += tile_len;
+                n_seen_[c] += tile_len;
+                ch_tick_[c] = base_tick + tile_len;
+                dirty_[c] = 1;
+                if (hit_snap && n_post_[c] >= next_snap_n_[c] && n_snaps_[c] < kMaxCheckpoints) {
+                    record_snapshot(c, base_tick + tile_len);
+                }
+            }
+        }
+
+        tick_count_ += tile_len;
+        if (!had_nonfinite) {
+            sync_post_n_ += tile_len;
+            all_dirty_ = true;
+            if (SS_UNLIKELY(hit_snap)) {
+                const uint32_t cur_t = base_tick + tile_len;
+                for (uint32_t j = 0; j < n_ch_; ++j) {
+                    n_post_[j] = sync_post_n_;
+                    n_seen_[j] = eff_warmup_ + sync_post_n_;
+                    ch_tick_[j] = cur_t;
+                    if (n_post_[j] >= next_snap_n_[j] && n_snaps_[j] < kMaxCheckpoints) {
+                        record_snapshot(j, cur_t);
+                    }
+                }
+                sync_next_snap_ = (n_ch_ > 0) ? next_snap_n_[0] : std::numeric_limits<uint32_t>::max();
+            }
+        }
+    }
+
     void update_row_warm_simd(const double* values, uint32_t cur_tick) noexcept {
         const double bth = burst_z_thresh_;
         const double ebth = ext_burst_z_thresh_;
         const bool check_ring = (ring_cap_ > 0);
+        const bool has_season = (season_period_ >= 2);
+        const double* SS_RESTRICT seas_p =
+            has_season ? (season_template_.data() +
+                          static_cast<size_t>((cur_tick > 0 ? cur_tick - 1U : 0U) % season_period_) * n_ch_)
+                       : nullptr;
         uint32_t c = 0;
 
-        /* Fast-path check: can we skip per-channel snapshot branch this row?
-         * True whenever sync_post_ holds (no NaN desync) and next checkpoint is > 1 tick away. */
-        bool need_snap_check = !sync_post_ || (sync_post_n_ + 1 >= sync_next_snap_);
+        bool need_snap_check = !sync_post_ ||
+                               (n_ch_ > 0 && n_snaps_[0] < kMaxCheckpoints && sync_post_n_ + 1 >= sync_next_snap_);
+
+        auto desync_row_at = [&](uint32_t split_c) noexcept {
+            if (!sync_post_) return;
+            for (uint32_t k = 0; k < split_c; ++k) {
+                n_seen_[k] = eff_warmup_ + sync_post_n_ + 1;
+                n_post_[k] = sync_post_n_ + 1;
+                ch_tick_[k] = cur_tick;
+                dirty_[k] = 1;
+                if (n_post_[k] >= next_snap_n_[k] && n_snaps_[k] < kMaxCheckpoints) {
+                    record_snapshot(k, cur_tick);
+                }
+            }
+            for (uint32_t k = split_c; k < n_ch_; ++k) {
+                n_seen_[k] = eff_warmup_ + sync_post_n_;
+                n_post_[k] = sync_post_n_;
+                ch_tick_[k] = cur_tick - 1;
+                dirty_[k] = 1;
+            }
+            sync_post_ = false;
+            all_dirty_ = false;
+            need_snap_check = true;
+        };
 
 #if defined(__AVX2__)
         const __m256d v_scale_s = _mm256_set1_pd(0.4);
@@ -617,47 +1221,35 @@ private:
         const __m256d v_ebth = _mm256_set1_pd(ebth);
         const __m256d v_inf = _mm256_set1_pd(std::numeric_limits<double>::infinity());
 
-        const double* __restrict loc_p = loc_.data();
-        const double* __restrict inv_p = inv_scale_.data();
-        double* __restrict lz_p = last_z_.data();
-        double* __restrict su_p = sum_u_.data();
-        double* __restrict su2_p = sum_u2_.data();
-        double* __restrict st_p = sum_tail_.data();
-        double* __restrict st2_p = sum_tail2_.data();
-        uint32_t* __restrict csign_p = cnt_sign_.data();
-        uint32_t* __restrict cburst_p = cnt_burst_.data();
-        uint32_t* __restrict cext_p = cnt_ext_burst_.data();
+        const double* SS_RESTRICT loc_p = loc_.data();
+        const double* SS_RESTRICT inv_p = inv_scale_.data();
+        double* SS_RESTRICT lz_p = last_z_.data();
+        double* SS_RESTRICT su_p = sum_u_.data();
+        double* SS_RESTRICT su2_p = sum_u2_.data();
+        double* SS_RESTRICT st_p = sum_tail_.data();
+        double* SS_RESTRICT st2_p = sum_tail2_.data();
+        uint32_t* SS_RESTRICT csign_p = cnt_sign_.data();
+        uint32_t* SS_RESTRICT cburst_p = cnt_burst_.data();
+        uint32_t* SS_RESTRICT cext_p = cnt_ext_burst_.data();
 
         for (; c + 4 <= n_ch_; c += 4) {
             __m256d vx = _mm256_loadu_pd(values + c);
             __m256d vabsx = _mm256_and_pd(vx, v_abs_mask);
             int finite_mask = _mm256_movemask_pd(_mm256_cmp_pd(vabsx, v_inf, _CMP_LT_OQ));
-            if (__builtin_expect(finite_mask != 0xF, 0)) {
-                if (sync_post_) {
-                    for (uint32_t k = 0; k < c; ++k) {
-                        n_seen_[k] = warmup_ + sync_post_n_ + 1;
-                        n_post_[k] = sync_post_n_ + 1;
-                        dirty_[k] = 1;
-                        if (n_post_[k] >= next_snap_n_[k] && n_snaps_[k] < kMaxCheckpoints) {
-                            record_snapshot(k, cur_tick);
-                        }
-                    }
-                    for (uint32_t k = c; k < n_ch_; ++k) {
-                        n_seen_[k] = warmup_ + sync_post_n_;
-                        n_post_[k] = sync_post_n_;
-                        dirty_[k] = 1;
-                    }
-                    sync_post_ = false;
-                    all_dirty_ = false;
-                    need_snap_check = true;
-                }
+            __m256d vx_eff = has_season ? _mm256_sub_pd(vx, _mm256_loadu_pd(seas_p + c)) : vx;
+            int eff_mask = has_season
+                               ? _mm256_movemask_pd(_mm256_cmp_pd(_mm256_and_pd(vx_eff, v_abs_mask), v_inf, _CMP_LT_OQ))
+                               : 0xF;
+            if (SS_UNLIKELY(finite_mask != 0xF || eff_mask != 0xF)) {
+                desync_row_at(c);
                 for (uint32_t j = 0; j < 4; ++j) {
+                    ch_tick_[c + j] = cur_tick;
                     update_one_impl(c + j, values[c + j], cur_tick);
                 }
                 continue;
             }
 
-            __m256d vz = _mm256_mul_pd(_mm256_sub_pd(vx, _mm256_loadu_pd(loc_p + c)),
+            __m256d vz = _mm256_mul_pd(_mm256_sub_pd(vx_eff, _mm256_loadu_pd(loc_p + c)),
                                        _mm256_loadu_pd(inv_p + c));
             vz = _mm256_max_pd(v_zmin, _mm256_min_pd(v_zmax, vz));
             _mm256_storeu_pd(lz_p + c, vz);
@@ -684,30 +1276,31 @@ private:
                 csign_p[c + 2] += static_cast<uint32_t>((sign_mask >> 2) & 1);
                 csign_p[c + 3] += static_cast<uint32_t>((sign_mask >> 3) & 1);
             }
-            if (__builtin_expect(burst_mask != 0, 0)) {
+            if (SS_UNLIKELY(burst_mask != 0)) {
                 cburst_p[c + 0] += static_cast<uint32_t>((burst_mask >> 0) & 1);
                 cburst_p[c + 1] += static_cast<uint32_t>((burst_mask >> 1) & 1);
                 cburst_p[c + 2] += static_cast<uint32_t>((burst_mask >> 2) & 1);
                 cburst_p[c + 3] += static_cast<uint32_t>((burst_mask >> 3) & 1);
             }
-            if (__builtin_expect(ext_mask != 0, 0)) {
+            if (SS_UNLIKELY(ext_mask != 0)) {
                 cext_p[c + 0] += static_cast<uint32_t>((ext_mask >> 0) & 1);
                 cext_p[c + 1] += static_cast<uint32_t>((ext_mask >> 1) & 1);
                 cext_p[c + 2] += static_cast<uint32_t>((ext_mask >> 2) & 1);
                 cext_p[c + 3] += static_cast<uint32_t>((ext_mask >> 3) & 1);
             }
 
-            if (__builtin_expect(check_ring, 0)) {
+            if (SS_UNLIKELY(check_ring)) {
                 push_ring(c + 0, values[c + 0], cur_tick);
                 push_ring(c + 1, values[c + 1], cur_tick);
                 push_ring(c + 2, values[c + 2], cur_tick);
                 push_ring(c + 3, values[c + 3], cur_tick);
             }
-            if (__builtin_expect(!sync_post_, 0)) {
+            if (SS_UNLIKELY(!sync_post_)) {
                 for (uint32_t j = 0; j < 4; ++j) {
                     uint32_t ch = c + j;
                     n_seen_[ch] += 1;
                     n_post_[ch] += 1;
+                    ch_tick_[ch] = cur_tick;
                     dirty_[ch] = 1;
                     if (n_post_[ch] >= next_snap_n_[ch] && n_snaps_[ch] < kMaxCheckpoints) {
                         record_snapshot(ch, cur_tick);
@@ -719,28 +1312,19 @@ private:
         for (; c < n_ch_; ++c) {
             double x = values[c];
             if (!std::isfinite(x)) {
-                if (sync_post_) {
-                    for (uint32_t k = 0; k < c; ++k) {
-                        n_seen_[k] = warmup_ + sync_post_n_ + 1;
-                        n_post_[k] = sync_post_n_ + 1;
-                        dirty_[k] = 1;
-                        if (n_post_[k] >= next_snap_n_[k] && n_snaps_[k] < kMaxCheckpoints) {
-                            record_snapshot(k, cur_tick);
-                        }
-                    }
-                    for (uint32_t k = c; k < n_ch_; ++k) {
-                        n_seen_[k] = warmup_ + sync_post_n_;
-                        n_post_[k] = sync_post_n_;
-                        dirty_[k] = 1;
-                    }
-                    sync_post_ = false;
-                    all_dirty_ = false;
-                    need_snap_check = true;
-                }
+                desync_row_at(c);
+                ch_tick_[c] = cur_tick;
+                continue;
+            }
+            double x_eff = has_season ? (x - seas_p[c]) : x;
+            if (!std::isfinite(x_eff)) {
+                desync_row_at(c);
+                if (check_ring) push_ring(c, x, cur_tick);
+                ch_tick_[c] = cur_tick;
                 continue;
             }
             if (check_ring) push_ring(c, x, cur_tick);
-            double z = clamp_z((x - loc_[c]) * inv_scale_[c]);
+            double z = clamp_z((x_eff - loc_[c]) * inv_scale_[c]);
             last_z_[c] = z;
             double u = bounded_squash(z);
             double th = std::max(0.0, std::fabs(u) - kTailHinge);
@@ -755,6 +1339,7 @@ private:
             if (!sync_post_) {
                 n_seen_[c] += 1;
                 n_post_[c] += 1;
+                ch_tick_[c] = cur_tick;
                 dirty_[c] = 1;
                 if (n_post_[c] >= next_snap_n_[c] && n_snaps_[c] < kMaxCheckpoints) {
                     record_snapshot(c, cur_tick);
@@ -765,11 +1350,11 @@ private:
         if (sync_post_) {
             sync_post_n_ += 1;
             all_dirty_ = true;
-            if (__builtin_expect(need_snap_check, 0)) {
-                /* Materialize counts only on the <=24 checkpoint ticks out of 1,000,000! */
+            if (SS_UNLIKELY(need_snap_check)) {
                 for (uint32_t j = 0; j < n_ch_; ++j) {
                     n_post_[j] = sync_post_n_;
-                    n_seen_[j] = warmup_ + sync_post_n_;
+                    n_seen_[j] = eff_warmup_ + sync_post_n_;
+                    ch_tick_[j] = cur_tick;
                     if (n_post_[j] >= next_snap_n_[j] && n_snaps_[j] < kMaxCheckpoints) {
                         record_snapshot(j, cur_tick);
                     }
@@ -789,7 +1374,7 @@ private:
             return t;
         }();
         double q = x * 4.0;
-        if (q >= 1.0 && q <= 16384.0) {
+        if (SS_LIKELY(q >= 1.0 && q <= 16384.0)) {
             int qi = static_cast<int>(q);
             if (static_cast<double>(qi) == q) {
                 return kQTable[static_cast<size_t>(qi)];
@@ -804,38 +1389,61 @@ private:
         return std::lgamma(x);
     }
 
-    static inline double log_betabinom_marg(uint32_t k, uint32_t n, double a, double b) noexcept {
+    static inline double fast_xlogx(uint32_t n) noexcept {
+        static const std::array<double, 4097> kXLogX = []() {
+            std::array<double, 4097> t{};
+            t[0] = 0.0;
+            for (size_t i = 1; i < t.size(); ++i) {
+                double di = static_cast<double>(i);
+                t[i] = di * std::log(di);
+            }
+            return t;
+        }();
+        if (SS_LIKELY(n < kXLogX.size())) return kXLogX[n];
+        double dn = static_cast<double>(n);
+        return dn * std::log(dn);
+    }
+
+    static inline double fast_log1p_pos(double x) noexcept {
+        if (x < 1e-4) {
+            /* 4th-order Taylor on [0, 1e-4): max error < 2e-17 (< 0.1 ULP) */
+            return x * (1.0 - x * (0.5 - x * (1.0 / 3.0 - 0.25 * x)));
+        }
+        return std::log(1.0 + x);
+    }
+
+    static inline double log_betabinom_marg_pre(uint32_t k, uint32_t n, double a, double b, double lbeta_ab) noexcept {
         double dk = static_cast<double>(k);
         double dn = static_cast<double>(n);
-        return (fast_lgamma(a + dk) + fast_lgamma(b + dn - dk) - fast_lgamma(a + b + dn)) -
-               (fast_lgamma(a) + fast_lgamma(b) - fast_lgamma(a + b));
+        return (fast_lgamma(a + dk) + fast_lgamma(b + dn - dk) - fast_lgamma(a + b + dn)) - lbeta_ab;
     }
 
     static inline double log_e_two_sample_bernoulli(uint32_t k0, uint32_t n0,
                                                     uint32_t k1, uint32_t n1,
-                                                    double a0, double b0,
-                                                    double a1, double b1,
+                                                    double a0, double b0, double lb0,
+                                                    double a1, double b1, double lb1,
                                                     bool one_sided_increase) noexcept {
         if (n0 < 4 || n1 < 4) return 0.0;
-        double p0 = static_cast<double>(k0) / static_cast<double>(n0);
-        double p1 = static_cast<double>(k1) / static_cast<double>(n1);
-        if (one_sided_increase && p1 <= p0) return -50.0;
+        if (one_sided_increase && static_cast<uint64_t>(k1) * n0 <= static_cast<uint64_t>(k0) * n1) {
+            return -50.0;
+        }
 
         uint32_t kt = k0 + k1;
         uint32_t nt = n0 + n1;
-        double log_num = log_betabinom_marg(k0, n0, a0, b0) + log_betabinom_marg(k1, n1, a1, b1);
+        double log_num = log_betabinom_marg_pre(k0, n0, a0, b0, lb0) +
+                         log_betabinom_marg_pre(k1, n1, a1, b1, lb1);
         double log_den = 0.0;
         if (kt > 0 && kt < nt) {
-            double ph = static_cast<double>(kt) / static_cast<double>(nt);
-            log_den = static_cast<double>(kt) * std::log(ph) +
-                      static_cast<double>(nt - kt) * std::log(1.0 - ph);
+            log_den = fast_xlogx(kt) + fast_xlogx(nt - kt) - fast_xlogx(nt);
         }
         return log_num - log_den;
     }
 
-    static inline double log_e_two_sample_jzs(uint32_t n0, double sum0, double sum20,
-                                              uint32_t n1, double sum1, double sum21,
-                                              bool two_sided) noexcept {
+    static inline double log_e_two_sample_jzs_pre(uint32_t n0, double sum0, double sum20,
+                                                  uint32_t n1, double sum1, double sum21,
+                                                  double g0, double g1,
+                                                  double half_log_g0, double half_log_g1,
+                                                  bool two_sided) noexcept {
         if (n0 < 8 || n1 < 8) return 0.0;
         double dn0 = static_cast<double>(n0);
         double dn1 = static_cast<double>(n1);
@@ -850,20 +1458,37 @@ private:
         double sp2 = std::max((ss0 + ss1) / nu, 1e-6);
         double neff = (dn0 * dn1) / (dn0 + dn1);
         double t2_over_nu = (neff * diff * diff) / (sp2 * nu);
-        double one_sided_bonus = two_sided ? 0.0 : std::log(2.0);
+        double one_sided_bonus = two_sided ? 0.0 : kLog2;
+        double half_nup1 = 0.5 * (nu + 1.0);
+        double l1p_t2 = fast_log1p_pos(t2_over_nu);
 
-        static constexpr double kTau2[2] = {0.35 * 0.35, 0.85 * 0.85};
-        double log_e = -std::numeric_limits<double>::infinity();
-        for (int i = 0; i < 2; ++i) {
-            double g = 1.0 + neff * kTau2[i];
-            double le = one_sided_bonus - 0.5 * std::log(g) +
-                        0.5 * (nu + 1.0) * (std::log1p(t2_over_nu) - std::log1p(t2_over_nu / g));
-            log_e = log_sum_exp(log_e, le + std::log(0.5));
-        }
-        return log_e;
+        double le0 = one_sided_bonus - half_log_g0 +
+                     half_nup1 * (l1p_t2 - fast_log1p_pos(t2_over_nu / g0));
+        double le1 = one_sided_bonus - half_log_g1 +
+                     half_nup1 * (l1p_t2 - fast_log1p_pos(t2_over_nu / g1));
+        return log_sum_exp(le0, le1) + kLogHalf;
     }
 
-    void recompute_channel_evalue(uint32_t c) const noexcept {
+    void recompute_channel_evalue(uint32_t c,
+                                  uint32_t* cached_n0, uint32_t* cached_n1,
+                                  double* cached_g0, double* cached_g1,
+                                  double* cached_hlg0, double* cached_hlg1,
+                                  bool* cached_valid) const noexcept {
+        static const std::array<double, kMaxCheckpoints> kPi = []() {
+            std::array<double, kMaxCheckpoints> t{};
+            for (uint32_t k = 0; k < kMaxCheckpoints; ++k) {
+                t[k] = 1.0 / (static_cast<double>(k + 1) * static_cast<double>(k + 2));
+            }
+            return t;
+        }();
+        static const std::array<double, kMaxCheckpoints> kLogPi = []() {
+            std::array<double, kMaxCheckpoints> t{};
+            for (uint32_t k = 0; k < kMaxCheckpoints; ++k) {
+                t[k] = std::log(1.0 / (static_cast<double>(k + 1) * static_cast<double>(k + 2)));
+            }
+            return t;
+        }();
+
         uint32_t ns = n_snaps_[c];
         uint32_t ntot = n_post_[c];
         if (ns == 0 || ntot <= snaps_[static_cast<size_t>(c) * kMaxCheckpoints].n0) {
@@ -882,44 +1507,69 @@ private:
 
         double used_mass = 0.0;
         const size_t base = static_cast<size_t>(c) * kMaxCheckpoints;
-        const double b0_tail = std::max(2.0, 0.5 * (1.0 - burst_p0_) / burst_p0_);
+        const double su_c = sum_u_[c];
+        const double su2_c = sum_u2_[c];
+        const double st_c = sum_tail_[c];
+        const double st2_c = sum_tail2_[c];
+        const uint32_t sign_c = cnt_sign_[c];
+        const uint32_t burst_c = cnt_burst_[c];
+        const uint32_t ext_c = cnt_ext_burst_[c];
 
         for (uint32_t k = 0; k < ns; ++k) {
             const Snap& s = snaps_[base + k];
             if (ntot <= s.n0 + 4) continue;
             uint32_t n1 = ntot - s.n0;
-            double pi_k = 1.0 / (static_cast<double>(k + 1) * static_cast<double>(k + 2));
-            double log_pi = std::log(pi_k);
-            used_mass += pi_k;
+            double log_pi = kLogPi[k];
+            used_mass += kPi[k];
 
-            double sum_u1 = sum_u_[c] - s.sum_u0;
-            double sum_u21 = sum_u2_[c] - s.sum_u20;
+            double g0, g1, hlg0, hlg1;
+            if (SS_LIKELY(cached_valid[k] && cached_n0[k] == s.n0 && cached_n1[k] == n1)) {
+                g0 = cached_g0[k];
+                g1 = cached_g1[k];
+                hlg0 = cached_hlg0[k];
+                hlg1 = cached_hlg1[k];
+            } else {
+                double dn0 = static_cast<double>(s.n0);
+                double dn1 = static_cast<double>(n1);
+                double neff = (dn0 * dn1) / (dn0 + dn1);
+                g0 = 1.0 + neff * (0.35 * 0.35);
+                g1 = 1.0 + neff * (0.85 * 0.85);
+                hlg0 = 0.5 * std::log(g0);
+                hlg1 = 0.5 * std::log(g1);
+                cached_n0[k] = s.n0;
+                cached_n1[k] = n1;
+                cached_g0[k] = g0;
+                cached_g1[k] = g1;
+                cached_hlg0[k] = hlg0;
+                cached_hlg1[k] = hlg1;
+                cached_valid[k] = true;
+            }
 
-            uint32_t sign1 = cnt_sign_[c] - s.sign0;
+            uint32_t sign1 = sign_c - s.sign0;
             double le_sign = log_e_two_sample_bernoulli(
-                s.sign0, s.n0, sign1, n1, 0.5, 0.5, 0.5, 0.5, !two_sided_);
-            double le_jzs = log_e_two_sample_jzs(
+                s.sign0, s.n0, sign1, n1,
+                0.5, 0.5, lbeta_sign_, 0.5, 0.5, lbeta_sign_, !two_sided_);
+            double le_jzs = log_e_two_sample_jzs_pre(
                 s.n0, s.sum_u0, s.sum_u20,
-                n1, sum_u1, sum_u21,
-                two_sided_);
-            double le_m = log_sum_exp(le_sign + std::log(0.5), le_jzs + std::log(0.5));
+                n1, su_c - s.sum_u0, su2_c - s.sum_u20,
+                g0, g1, hlg0, hlg1, two_sided_);
+            double le_m = log_sum_exp(le_sign, le_jzs) + kLogHalf;
 
-            /* Burst e-value: convex mixture of:
-             *   1) Bounded tail-hinge max(0, |u|-0.55) one-sided JZS e-process (high continuous SNR!)
-             *   2) Exact distribution-free Beta-Binomial on |z|>2.24 & |z|>3.0 */
-            uint32_t burst1 = cnt_burst_[c] - s.burst0;
-            uint32_t ext1 = cnt_ext_burst_[c] - s.ext_burst0;
-            double le_tail = log_e_two_sample_jzs(
+            uint32_t burst1 = burst_c - s.burst0;
+            uint32_t ext1 = ext_c - s.ext_burst0;
+            double le_tail = log_e_two_sample_jzs_pre(
                 s.n0, s.sum_tail0, s.sum_tail20,
-                n1, sum_tail_[c] - s.sum_tail0, sum_tail2_[c] - s.sum_tail20,
-                false);
+                n1, st_c - s.sum_tail0, st2_c - s.sum_tail20,
+                g0, g1, hlg0, hlg1, false);
             double le_bb = log_e_two_sample_bernoulli(
-                s.burst0, s.n0, burst1, n1, 0.5, b0_tail, 1.0, 4.0, true);
+                s.burst0, s.n0, burst1, n1,
+                0.5, b0_tail_, lbeta_b0_, 1.0, 4.0, lbeta_b1_, true);
             double le_ext = log_e_two_sample_bernoulli(
-                s.ext_burst0, s.n0, ext1, n1, 0.25, 45.0, 0.75, 4.0, true);
+                s.ext_burst0, s.n0, ext1, n1,
+                0.25, 45.0, lbeta_ext0_, 0.75, 4.0, lbeta_ext1_, true);
             double le_b = log_sum_exp(
-                log_sum_exp(le_tail + std::log(0.50), le_ext + std::log(0.30)),
-                le_bb + std::log(0.20));
+                log_sum_exp(le_tail + kLog050, le_ext + kLog030),
+                le_bb + kLog020);
 
             log_mix_mean = log_sum_exp(log_mix_mean, log_pi + le_m);
             log_mix_burst = log_sum_exp(log_mix_burst, log_pi + le_b);
@@ -941,29 +1591,42 @@ private:
             if (!std::isfinite(log_mix_burst)) log_mix_burst = 0.0;
         }
 
-        double log_comb = log_sum_exp(log_mix_mean + std::log(0.5), log_mix_burst + std::log(0.5));
+        double log_comb = log_sum_exp(log_mix_mean, log_mix_burst) + kLogHalf;
+        if (!std::isfinite(log_mix_mean)) log_mix_mean = 0.0;
+        if (!std::isfinite(log_mix_burst)) log_mix_burst = 0.0;
+        if (!std::isfinite(log_comb)) log_comb = 0.0;
         best_log_e_mean_[c] = log_mix_mean;
         best_log_e_burst_[c] = log_mix_burst;
-        combined_e_[c] = std::exp(std::min(log_comb, 700.0));
+        double ce = std::exp(std::min(log_comb, 700.0));
+        combined_e_[c] = std::isfinite(ce) ? ce : 1.0;
         best_cp_tick_[c] = best_cp;
 
-        double thresh_log = std::log(1.0 / alpha_);
-        bool m_hit = log_mix_mean >= thresh_log;
-        bool b_hit = log_mix_burst >= thresh_log;
+        bool m_hit = log_mix_mean >= thresh_log_;
+        bool b_hit = log_mix_burst >= thresh_log_;
         mode_[c] = static_cast<uint8_t>((m_hit ? 1 : 0) | (b_hit ? 2 : 0));
     }
 
     uint32_t n_ch_;
     uint32_t warmup_;
+    uint32_t season_period_;
+    uint32_t eff_warmup_;
     uint32_t ring_cap_;
     double   alpha_;
     double   burst_p0_;
+    double   detrend_alpha_;
+    uint32_t detrend_burnin_;
     double   burst_z_thresh_;
     double   ext_burst_z_thresh_;
+    double   thresh_log_;
+    double   b0_tail_;
+    double   lbeta_sign_;
+    double   lbeta_b0_;
+    double   lbeta_b1_;
+    double   lbeta_ext0_;
+    double   lbeta_ext1_;
     bool     two_sided_;
     uint64_t tick_count_;
     bool     all_warmed_;
-    bool     any_checkpoint_due_;
     bool     sync_post_;
     uint32_t sync_post_n_;
     uint32_t sync_next_snap_;
@@ -974,6 +1637,7 @@ private:
     /* Structure-of-Arrays (SoA) per-channel hot state */
     mutable std::vector<uint32_t> n_seen_;
     mutable std::vector<uint32_t> n_post_;
+    mutable std::vector<uint32_t> ch_tick_;
     std::vector<double>   loc_;
     std::vector<double>   scale_;
     std::vector<double>   inv_scale_;
@@ -989,16 +1653,26 @@ private:
     std::vector<uint32_t> next_snap_n_;
     std::vector<Snap>     snaps_;
 
-    /* Cached lazy-evaluated outputs */
+    /* Cached lazy-evaluated outputs & zero-alloc ranking scratch */
     mutable std::vector<double>   best_log_e_mean_;
     mutable std::vector<double>   best_log_e_burst_;
     mutable std::vector<double>   combined_e_;
     mutable std::vector<uint32_t> best_cp_tick_;
     mutable std::vector<uint8_t>  mode_;
     mutable std::vector<uint8_t>  dirty_;
+    mutable std::vector<std::pair<double, uint32_t>> rank_scratch_;
 
-    /* Warmup buffer & lossless raw ring */
+    /* Warmup buffer, reusable scratch, seasonal template, detrend state & lossless raw ring */
     std::vector<double>   warmup_buf_;
+    std::vector<double>   w_sorted_;
+    std::vector<double>   w_tmp_;
+    std::vector<double>   w_abs_;
+    std::vector<double>   w_clip_;
+    std::vector<uint16_t> warmup_phase_;
+    std::vector<double>   season_template_;
+    std::vector<double>   detrend_level_;
+    std::vector<uint32_t> detrend_seen_;
+    std::vector<double>   detrend_init_buf_;
     std::vector<double>   ring_vals_;
     std::vector<uint32_t> ring_ticks_;
     std::vector<uint32_t> ring_pos_;

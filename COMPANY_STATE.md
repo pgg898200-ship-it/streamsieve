@@ -2,45 +2,40 @@
 
 > Operating discipline modeled on independent open-tool labs (zero paid promotion, zero astroturfing, zero spam outreach; traction earned strictly through drop-in utility, reproducible benchmarks, crisp documentation, and registry discoverability).
 
-## 1. Current State (`2026-11-22`, v0.1.0)
+## 1. Current State (`2026-11-22`, v0.2.0)
 
-- **Product:** `streamsieve` v0.1.0 — zero-dependency SIMD C++20/AVX2 runtime + `<5 ms` native CLI + Python SDK + 7-tool stdio MCP server + drop-in `river.drift` adapter (`EStreamDrift`).
+- **Product:** `streamsieve` v0.2.0 — zero-dependency 8-wide cache-tiled AVX2 C++20 runtime + `<4 ms` native CLI (`--jsonl` / CSV / `--season` / `--detrend`) + zero-dependency Python SDK (`pip install streamsieve`) + drop-in `river.drift` (`EStreamDrift`) & `scikit-learn` (`SklearnSieveDetector`) adapters + 7-tool stdio MCP server.
 - **Verification Gate:**
-  - Native C++20 `-O3 -march=native -Wall -Wextra -Wpedantic`: **0 warnings**, PASS.
-  - ASan + UBSan scalar build (`test-san`): **0 sanitizer errors**, bit-exact AVX2 vs scalar parity.
-  - Zero-dep Python unittest + Adversarial Breaker suite: **56/56 tests passing** (26 core + 3 adapter + 27 adversarial breaker tests).
-  - Affiliation hygiene audit: **0** personal/external lab references anywhere in source, docs, or git history.
+  - Native C++20 `-O3 -march=native -ffp-contract=off -Wall -Wextra -Wpedantic`: **0 warnings**, PASS.
+  - Strict `clang++ -std=c++20 -O3 -ffp-contract=off -Wall -Wextra -Wpedantic -Werror`: **0 warnings**, PASS.
+  - ASan + UBSan + `float-cast-overflow` scalar build (`test-san`): **0 sanitizer errors**, 0-ULP bit-exact AVX2 vs scalar parity.
+  - Windows MSVC C++20 CI + 15 cross-platform wheels (`Linux x86_64`, `macOS ARM64`, `Windows AMD64`, Python `3.9`–`3.13`).
+  - Zero-dep Python unittest + Adversarial Breaker + v0.2.0 parity/regression suite: **79/79 tests passing** (all 13 independent breaker witnesses `W1`–`W13` resolved & locked under regression tests).
+  - Affiliation hygiene audit: **0** external/personal references anywhere in source, docs, or git history.
 - **Verified Frontier Edge (`benchmarks/results.json`):**
-  - `160.75 M ch-ticks/s` native AVX2; `17.1×` faster than `river.ADWIN`, `54.4×` faster than `river.PageHinkley`, `5.65×` faster than NumPy/SciPy rolling z+BH.
-  - `4.03 ms` native CLI / `24.90 ms` Python cold import (`67.9×` faster than `numpy+scipy+river`).
-  - `0.004–0.010` continuous-peeking null FAR across Gaussian, Student-$t(3)$, LogNormal, and $10^{10}$ DC + 1000× loud channels.
-  - `0.65–0.70` recall on zero-mean symmetric `±3.5σ` bursts (`0.000–0.022` FDR) where `ADWIN` and Welch $t$-test score `0.00`.
-  - `99.99%` (`11,829×`) LLM prompt token compression (`3.84M -> 325` tokens) with `0.0` bit-exact raw-tick drill-down error.
+  - `255.67 M ch-ticks/s` native 8-wide AVX2 (`256×16k`), `191.20 M/s` (`1024×4k`), `146.69 M/s` (`4096×2k`); **26.9×** faster than `river.ADWIN`, **92.3×** faster than `river.PageHinkley`, **10.55×** faster than NumPy/SciPy rolling z+BH.
+  - `3.87 ms` native CLI / `25.30 ms` Python cold import (**70.8×** faster than `numpy+scipy+river`, **463×** for CLI).
+  - `0.004–0.010` stationary peeking null FAR across Gaussian, Student-$t(3)$, LogNormal, and $10^{10}$ DC + 1000× loud channels.
+  - `0.010–0.050` non-stationary peeking null FAR across 6σ diurnal waves (`P=24`), linear trends, random walks, and diurnal+trend streams (where Welch/ADWIN/PageHinkley emit `83.5–100%` false alarms); `0.799` F1 in `1.72 ms` on 64-ch diurnal firehose (vs `0.667` / `125.5 ms` Welch and `0.618` / `11.6 ms` ADWIN).
+  - `40.85 ms` even for 55× continuous peeking on 256-ch firehose (**faster than `river.ADWIN` `49.33 ms`**) with higher F1 (`0.909` vs `0.862`), lower FDR (`0.040` vs `0.054`), `0.65–0.70` zero-mean `±3.5σ` burst recall (`0.00` for ADWIN/Welch), and `0.0` loud FPs.
+  - `99.99%` (`11,829×`) LLM prompt token compression (`3.84M -> 325` tokens) in `53.4 ms` with `0.0` bit-exact raw-tick drill-down error.
   - `0.0%` CRDT overwrite churn (`1.00×` inflation vs `10.39×`), `10.7×` smaller `SSLT` v1 wire vs JSON debate, `100%` Byzantine quarantine, and `-30.39%` cost reduction with `90.01%` 90% AgACI coverage on real NOAA Seattle weather.
 
 ## 2. Organic Distribution Surfaces (Zero-Outreach / Pull-Based Only)
 
 | Surface | Artifact in Repo | Why It Drives Organic Third-Party Pull | Status |
 |---|---|---|---|
-| **PyPI (`pip install streamsieve`)** | `pyproject.toml`, `setup.py`, `MANIFEST.in`, `.github/workflows/release.yml` | Zero-dep prebuilt wheels (`cibuildwheel`) let developers & CI adopt in 1 command | Ready for PyPI Trusted Publisher tag `v0.1.0` |
-| **Drop-in `river.drift` substitution** | `python/streamsieve/adapters.py` (`EStreamDrift`) | 1-line swap (`from streamsieve import EStreamDrift as ADWIN`) with `0` deps & zero-mean burst detection | Implemented & tested |
-| **MCP Directories & Registries** | `server.json`, `python/streamsieve/mcp_server.py` | Agents and MCP clients discover 7 streaming tools (`sift_stream`, `lattice_*`, `voi_allocate`, `trust_step`) | Ready for MCP Registry listing on publish |
-| **Claude Code / Cursor Skills** | `SKILL.md`, `.claude-plugin/plugin.json`, `.cursor-plugin/plugin.json` | Native skill/plugin install in coding agents | Ready |
-| **AEO / AI-Agent Search Indexing** | `llms.txt`, `llms-full.txt`, `docs/benchmarks.md`, `docs/comparisons/*.md` | Dated, reproducible, honest X-vs-Y tables give AI coding assistants verifiable grounds to recommend `streamsieve` where it genuinely wins | Ready |
-| **Provenance & Checksums** | `LICENSE`, `NOTICE`, `SHA256SUMS` | Satisfies enterprise/OSS downstream maintainers auditing dependencies | Generated automatically per release |
+| **PyPI (`pip install streamsieve`)** | `pyproject.toml`, `setup.py`, `MANIFEST.in`, `.github/workflows/release.yml` | Zero-dep prebuilt wheels (15 wheels: Linux/macOS/Windows, Py 3.9–3.13) via OIDC Trusted Publishing | Live on `v0.2.0` tag |
+| **Standalone Native CLI Tarballs** | `.github/workflows/release.yml` (`cli-linux`, `cli-macos`) | `<4 ms` drop-in terminal pipe for OpenTelemetry/Prometheus JSONL & CSV logs | Live on `v0.2.0` GitHub Release |
+| **Drop-in `river` & `sklearn` Adapters** | `python/streamsieve/adapters.py` (`EStreamDrift`, `SklearnSieveDetector`) | 1-line swaps (`from streamsieve import EStreamDrift as ADWIN`, `SklearnSieveDetector().fit_predict(X)`) with 0 deps | Shipped & tested |
+| **MCP Directories & Registries** | `server.json`, `python/streamsieve/mcp_server.py` | Agents discover 7 streaming tools (`sift_stream` with `jsonl_text`/`season_period`/`detrend_alpha`, `lattice_*`, `voi_allocate`, `trust_step`) | Ready for MCP Registry listing |
+| **Claude Code / Cursor Skills** | `SKILL.md`, `.claude-plugin/plugin.json`, `.cursor-plugin/plugin.json` | Native skill/plugin install in coding agents | Shipped |
+| **AEO / AI-Agent Search Indexing** | `llms.txt`, `llms-full.txt`, `docs/benchmarks.md`, `docs/comparisons/*.md` | Dated, reproducible, honest X-vs-Y tables give AI coding assistants verifiable grounds to recommend `streamsieve` where it genuinely wins | Synced to v0.2.0 |
+| **Provenance & Checksums** | `LICENSE`, `NOTICE`, `SHA256SUMS` | Satisfies downstream maintainers auditing dependencies | Generated automatically per release |
 
 ## 3. Hard Operating Rules
 
 1. **No spam, no astroturfing, no fake accounts, no unsolicited comments on external repos.**
 2. **Every benchmark claim must be reproduced from `benchmarks/run_all.py` on the exact release commit.**
-3. **Always document honest failure boundaries** (non-stationary trends/seasonality require residuals; fixed-sample offline tests favor `scipy.stats`; online supervised ML favors `river`).
+3. **Always document honest failure boundaries** (`detrend_alpha=1.0` for steep linear trends vs `0 < detrend_alpha < 1` EWMA for slow drift; `3*P` seasonal warmup budget; fixed-sample offline tests favor `scipy.stats`; online supervised ML favors `river`).
 4. **Iterate strictly on real adoption demand signals** (PyPI downloads, GitHub dependents/issues, MCP installs, third-party benchmark comparisons).
-
-## 4. Next Highest-Leverage Iterations (Post-v0.1.0 Launch)
-
-1. **Human operator ticket:** Provision clean unaffiliated GitHub org/account + PyPI Trusted Publisher + push tag `v0.1.0` to trigger `cibuildwheel` cross-platform wheels and GitHub Release with `SHA256SUMS`.
-2. **v0.2.0 demand-driven candidates:**
-   - Streaming deseasonalization / online residual pre-filter (`EStreamResidual`) so users with raw diurnal/trending Prometheus or CloudWatch metrics get out-of-the-box stationary residuals.
-   - Standalone WebAssembly (`wasm32`) build of `streamsieve_core.hpp` for browser / edge-worker / Cloudflare Worker agents.
-   - `prometheus` / OpenTelemetry JSONL pipe mode directly in the `<5 ms` native CLI (`streamsieve sift --promql` / `--jsonl`).
-   - Independent third-party benchmark harness (`StreamSwarmBench` standalone wheel/dataset) for reproducible community evaluations.

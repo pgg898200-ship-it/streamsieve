@@ -10,6 +10,18 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#if defined(_WIN32) || defined(__CYGWIN__)
+  #if defined(STREAMSIEVE_BUILDING_DLL)
+    #define SS_API __declspec(dllexport)
+  #else
+    #define SS_API
+  #endif
+#elif defined(__GNUC__) && __GNUC__ >= 4
+  #define SS_API __attribute__((visibility("default")))
+#else
+  #define SS_API
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,8 +48,8 @@ typedef struct ss_trust_t   ss_trust_t;
 /* =========================================================================
  * Version & CPU Capabilities
  * ========================================================================= */
-const char* ss_version(void);
-int ss_has_avx2(void);
+SS_API const char* ss_version(void);
+SS_API int ss_has_avx2(void);
 
 /* =========================================================================
  * 1. EStreamEngine — AVX2 Anytime-Valid Dual-Resolution E-Process & e-BH
@@ -49,8 +61,10 @@ typedef struct {
     uint32_t ring_capacity;      /* Raw tick ring buffer per channel for lossless drill-down (default 256) */
     double   alpha;              /* Target FDR / Type-I error level (default 0.05) */
     double   burst_tail_p0;      /* Null tail rate for burst e-process (default 0.025) */
-    double   ewma_reset_decay;   /* Soft baseline decay for non-alerting calm ticks (0.0 = fixed post-warmup) */
+    double   ewma_reset_decay;   /* Reserved soft decay parameter (0.0 = fixed post-warmup) */
     uint8_t  two_sided;          /* 1 = two-sided shift, 0 = positive shift only */
+    uint32_t season_period;      /* 0 = off; P >= 2 subtracts frozen causal per-phase seasonal median */
+    double   detrend_alpha;      /* 0.0 = off; in (0, 1] causal EWMA innovation / 1.0 = first difference */
 } ss_estream_config_t;
 
 typedef struct {
@@ -66,41 +80,41 @@ typedef struct {
     uint8_t  rejected_ebh;       /* 1 if rejected by e-BH at configured alpha */
 } ss_channel_status_t;
 
-void ss_estream_default_config(ss_estream_config_t* cfg, uint32_t n_channels);
-ss_estream_t* ss_estream_create(const ss_estream_config_t* cfg);
-void ss_estream_destroy(ss_estream_t* st);
-int  ss_estream_reset(ss_estream_t* st);
+SS_API void ss_estream_default_config(ss_estream_config_t* cfg, uint32_t n_channels);
+SS_API ss_estream_t* ss_estream_create(const ss_estream_config_t* cfg);
+SS_API void ss_estream_destroy(ss_estream_t* st);
+SS_API int  ss_estream_reset(ss_estream_t* st);
 
 /* Ingest one tick across all n_channels (length = n_channels). */
-int ss_estream_update_row(ss_estream_t* st, const double* values, uint32_t n_values);
+SS_API int ss_estream_update_row(ss_estream_t* st, const double* values, uint32_t n_values);
 
-/* Bulk ingest n_ticks rows (row-major n_ticks * n_channels). Hot AVX2 path. */
-int ss_estream_update_batch(ss_estream_t* st, const double* matrix, uint32_t n_ticks, uint32_t n_channels);
+/* Bulk ingest n_ticks rows (row-major n_ticks * n_channels). Hot cache-tiled AVX2 path. */
+SS_API int ss_estream_update_batch(ss_estream_t* st, const double* matrix, uint32_t n_ticks, uint32_t n_channels);
 
 /* Ingest a single channel value (scalar / sparse tick update). */
-int ss_estream_update_one(ss_estream_t* st, uint32_t channel, double value);
+SS_API int ss_estream_update_one(ss_estream_t* st, uint32_t channel, double value);
 
 /* Run exact online e-BH across all channels at level alpha.
  * Writes rejected channel indices into out_indices (capacity max_out) and
  * returns count via *out_count. */
-int ss_estream_ebh_reject(const ss_estream_t* st, double alpha,
-                          uint32_t* out_indices, uint32_t max_out, uint32_t* out_count);
+SS_API int ss_estream_ebh_reject(const ss_estream_t* st, double alpha,
+                                 uint32_t* out_indices, uint32_t max_out, uint32_t* out_count);
 
 /* Get top-K channels ranked by combined e-value. */
-int ss_estream_topk(const ss_estream_t* st, uint32_t k,
-                    ss_channel_status_t* out_status, uint32_t* out_count);
+SS_API int ss_estream_topk(const ss_estream_t* st, uint32_t k,
+                           ss_channel_status_t* out_status, uint32_t* out_count);
 
 /* Get status of a single channel. */
-int ss_estream_get_channel(const ss_estream_t* st, uint32_t channel, ss_channel_status_t* out_status);
+SS_API int ss_estream_get_channel(const ss_estream_t* st, uint32_t channel, ss_channel_status_t* out_status);
 
 /* Lossless raw tick drill-down from per-channel ring buffer.
  * Copies up to max_out most-recent raw ticks in chronological order. */
-int ss_estream_fetch_raw(const ss_estream_t* st, uint32_t channel,
-                         double* out_values, uint32_t* out_ticks,
-                         uint32_t max_out, uint32_t* out_count);
+SS_API int ss_estream_fetch_raw(const ss_estream_t* st, uint32_t channel,
+                                double* out_values, uint32_t* out_ticks,
+                                uint32_t max_out, uint32_t* out_count);
 
-uint32_t ss_estream_n_channels(const ss_estream_t* st);
-uint64_t ss_estream_tick_count(const ss_estream_t* st);
+SS_API uint32_t ss_estream_n_channels(const ss_estream_t* st);
+SS_API uint64_t ss_estream_tick_count(const ss_estream_t* st);
 
 /* =========================================================================
  * 2. EvidenceLattice — Zero-Echo Provenance-Deduplicated CRDT Fusion
@@ -127,30 +141,30 @@ typedef struct {
     uint32_t distinct_agents;    /* Distinct contributing agents */
 } ss_hyp_summary_t;
 
-ss_lattice_t* ss_lattice_create(int merge_mode);
-void ss_lattice_destroy(ss_lattice_t* lat);
-int  ss_lattice_set_prior(ss_lattice_t* lat, uint64_t hyp_id, double prior_log_odds);
-int  ss_lattice_set_agent_weight(ss_lattice_t* lat, uint32_t agent_id, double weight);
+SS_API ss_lattice_t* ss_lattice_create(int merge_mode);
+SS_API void ss_lattice_destroy(ss_lattice_t* lat);
+SS_API int  ss_lattice_set_prior(ss_lattice_t* lat, uint64_t hyp_id, double prior_log_odds);
+SS_API int  ss_lattice_set_agent_weight(ss_lattice_t* lat, uint32_t agent_id, double weight);
 
 /* Observe one evidence item. Returns 1 in *was_echo if provenance_id was already seen. */
-int  ss_lattice_observe(ss_lattice_t* lat, const ss_evidence_item_t* item, int* was_echo);
+SS_API int  ss_lattice_observe(ss_lattice_t* lat, const ss_evidence_item_t* item, int* was_echo);
 
 /* CRDT Join: dst = merge(dst, src). Strictly commutative, associative, idempotent. */
-int  ss_lattice_merge(ss_lattice_t* dst, const ss_lattice_t* src);
+SS_API int  ss_lattice_merge(ss_lattice_t* dst, const ss_lattice_t* src);
 
 /* Query fused hypothesis summary. */
-int  ss_lattice_query(const ss_lattice_t* lat, uint64_t hyp_id, ss_hyp_summary_t* out_summary);
+SS_API int  ss_lattice_query(const ss_lattice_t* lat, uint64_t hyp_id, ss_hyp_summary_t* out_summary);
 
 /* List all hypothesis IDs currently tracked. */
-int  ss_lattice_list_hyps(const ss_lattice_t* lat, uint64_t* out_hyps, uint32_t max_out, uint32_t* out_count);
+SS_API int  ss_lattice_list_hyps(const ss_lattice_t* lat, uint64_t* out_hyps, uint32_t max_out, uint32_t* out_count);
 
 /* Compact binary wire serialization (for strict byte-budget inter-agent sync).
  * Pass out_buf = NULL to query exact required size in *out_len. */
-int  ss_lattice_serialize(const ss_lattice_t* lat, uint8_t* out_buf, size_t cap, size_t* out_len);
-ss_lattice_t* ss_lattice_deserialize(const uint8_t* buf, size_t len);
+SS_API int  ss_lattice_serialize(const ss_lattice_t* lat, uint8_t* out_buf, size_t cap, size_t* out_len);
+SS_API ss_lattice_t* ss_lattice_deserialize(const uint8_t* buf, size_t len);
 
 /* Deterministic 64-bit provenance hash helper (XXH-style SplitMix64). */
-uint64_t ss_hash_provenance(const uint8_t* data, size_t len);
+SS_API uint64_t ss_hash_provenance(const uint8_t* data, size_t len);
 
 /* =========================================================================
  * 3. VOISifter — Hierarchical Multi-Agent Value-of-Information Attention
@@ -177,31 +191,31 @@ typedef struct {
     double   current_prob;       /* Current posterior P(active) */
 } ss_voi_action_t;
 
-void ss_sifter_default_config(ss_sifter_config_t* cfg, uint32_t n_channels, uint32_t n_sites);
-ss_sifter_t* ss_sifter_create(const ss_sifter_config_t* cfg);
-void ss_sifter_destroy(ss_sifter_t* sf);
+SS_API void ss_sifter_default_config(ss_sifter_config_t* cfg, uint32_t n_channels, uint32_t n_sites);
+SS_API ss_sifter_t* ss_sifter_create(const ss_sifter_config_t* cfg);
+SS_API void ss_sifter_destroy(ss_sifter_t* sf);
 
 /* Set known or estimated noise std per channel (for loud-channel immunity). */
-int ss_sifter_set_noise_scales(ss_sifter_t* sf, const double* scales, uint32_t n_channels);
+SS_API int ss_sifter_set_noise_scales(ss_sifter_t* sf, const double* scales, uint32_t n_channels);
 
 /* Feed observations at any of the 3 granularities:
  *   observe_site_agg: average standardized reading across site's channels
  *   observe_mean:     epoch mean reading for a single channel
  *   observe_ticks:    raw tick array (length n_ticks) for a single channel */
-int ss_sifter_observe_site_agg(ss_sifter_t* sf, uint32_t site_id, double agg_value);
-int ss_sifter_observe_mean(ss_sifter_t* sf, uint32_t channel, double mean_value);
-int ss_sifter_observe_ticks(ss_sifter_t* sf, uint32_t channel, const double* ticks, uint32_t n_ticks);
+SS_API int ss_sifter_observe_site_agg(ss_sifter_t* sf, uint32_t site_id, double agg_value);
+SS_API int ss_sifter_observe_mean(ss_sifter_t* sf, uint32_t channel, double mean_value);
+SS_API int ss_sifter_observe_ticks(ss_sifter_t* sf, uint32_t channel, const double* ticks, uint32_t n_ticks);
 
 /* Greedy VOI attention allocation partitioned with ZERO overlap across n_agents. */
-int ss_sifter_allocate(const ss_sifter_t* sf, uint32_t budget_per_agent, uint32_t n_agents,
-                       uint32_t allow_site_agg, uint32_t allow_mean, uint32_t allow_ticks,
-                       ss_voi_action_t* out_actions, uint32_t max_out, uint32_t* out_count);
+SS_API int ss_sifter_allocate(const ss_sifter_t* sf, uint32_t budget_per_agent, uint32_t n_agents,
+                              uint32_t allow_site_agg, uint32_t allow_mean, uint32_t allow_ticks,
+                              ss_voi_action_t* out_actions, uint32_t max_out, uint32_t* out_count);
 
 /* Read current posterior P(channel active) for all n_channels. */
-int ss_sifter_posteriors(const ss_sifter_t* sf, double* out_probs, uint32_t n_channels);
+SS_API int ss_sifter_posteriors(const ss_sifter_t* sf, double* out_probs, uint32_t n_channels);
 
 /* Advance epoch (optional slight decay toward prior for non-stationary streams). */
-int ss_sifter_step_epoch(ss_sifter_t* sf, double stay_prob);
+SS_API int ss_sifter_step_epoch(ss_sifter_t* sf, double stay_prob);
 
 /* =========================================================================
  * 4. TrustCalibrator — Delayed-Label Agent Trust, Quarantine & Conformal Act
@@ -238,30 +252,30 @@ typedef struct {
     uint32_t active_agents;      /* Non-quarantined agents contributing */
 } ss_trust_decision_t;
 
-void ss_trust_default_config(ss_trust_config_t* cfg, uint32_t n_agents);
-ss_trust_t* ss_trust_create(const ss_trust_config_t* cfg);
-void ss_trust_destroy(ss_trust_t* tc);
+SS_API void ss_trust_default_config(ss_trust_config_t* cfg, uint32_t n_agents);
+SS_API ss_trust_t* ss_trust_create(const ss_trust_config_t* cfg);
+SS_API void ss_trust_destroy(ss_trust_t* tc);
 
 /* Binary/probability prediction fusion with delayed label tracking.
  * agent_probs: array of length n_agents (NaN for abstaining agents).
  * underage_cost / overage_cost control optimal_action threshold (default 1.0, 1.0). */
-int ss_trust_predict_prob(ss_trust_t* tc, uint64_t decision_id,
-                          const double* agent_probs, uint32_t n_agents,
-                          double underage_cost, double overage_cost,
-                          ss_trust_decision_t* out_dec);
+SS_API int ss_trust_predict_prob(ss_trust_t* tc, uint64_t decision_id,
+                                 const double* agent_probs, uint32_t n_agents,
+                                 double underage_cost, double overage_cost,
+                                 ss_trust_decision_t* out_dec);
 
 /* Continuous forecast fusion + crossing-free delayed AgACI + Bayes-optimal order.
  * agent_means, agent_stds: length n_agents (NaN for abstaining). */
-int ss_trust_predict_scalar(ss_trust_t* tc, uint64_t decision_id,
-                            const double* agent_means, const double* agent_stds, uint32_t n_agents,
-                            double underage_cost, double overage_cost,
-                            ss_trust_decision_t* out_dec);
+SS_API int ss_trust_predict_scalar(ss_trust_t* tc, uint64_t decision_id,
+                                   const double* agent_means, const double* agent_stds, uint32_t n_agents,
+                                   double underage_cost, double overage_cost,
+                                   ss_trust_decision_t* out_dec);
 
 /* Strictly causal delayed label resolution (out-of-order safe!). */
-int ss_trust_resolve(ss_trust_t* tc, uint64_t decision_id, double outcome);
+SS_API int ss_trust_resolve(ss_trust_t* tc, uint64_t decision_id, double outcome);
 
 /* Query trust & calibration diagnostics for all agents. */
-int ss_trust_get_agents(const ss_trust_t* tc, ss_agent_trust_t* out_agents, uint32_t n_agents);
+SS_API int ss_trust_get_agents(const ss_trust_t* tc, ss_agent_trust_t* out_agents, uint32_t n_agents);
 
 #ifdef __cplusplus
 }

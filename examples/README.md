@@ -1,22 +1,33 @@
-# `streamsieve` Examples
+# `streamsieve` Examples & Cookbooks
 
-## Included Dataset: `noaa_weather.csv`
+## Included Dataset & Runnable Scripts
 
-- **File:** [`examples/noaa_weather.csv`](noaa_weather.csv) (2,922 daily weather observations for Seattle and New York from 2012-01-01 to 2015-12-31 — 1,461 rows per city; columns: `location,date,precipitation,temp_max,temp_min,wind,weather`).
-- **License / Provenance:** Public domain (`other-pd`), sourced from NOAA via Vega Datasets (`weather.csv`).
+| File | What It Demonstrates | Run Command |
+|---|---|---|
+| [`examples/jsonl_diurnal_sre.py`](jsonl_diurnal_sre.py) | Streaming SRE JSONL/NDJSON telemetry with 6σ diurnal cycles (`season_period=24`), sustained latency shift + sparse DB lock bursts, 108× brief compression, and bit-exact lossless raw drill-down | `python3 examples/jsonl_diurnal_sre.py` |
+| [`examples/multi_agent_pipeline.py`](multi_agent_pipeline.py) | End-to-end 4-engine multi-agent loop: `EStream` e-BH sift → `VOISifter` zero-overlap read allocation → `EvidenceLattice` echo-free CRDT sync (`SSLT` wire) → `TrustCalibrator` Byzantine quarantine + 4:1 asymmetric action | `python3 examples/multi_agent_pipeline.py` |
+| [`examples/noaa_weather.csv`](noaa_weather.csv) | 2,922 daily NOAA weather observations (Seattle & New York, 2012–2015, public domain `other-pd` via Vega Datasets) | Used in CLI & NOAA delayed-AgACI examples below |
 
-## Quick Examples
+---
 
-### 1. Native CLI Sift on Real NOAA Telemetry (`<5 ms` cold start)
+## Quick CLI & Python Snippets
+
+### 1. Native CLI Sift on JSONL Logs & Real NOAA Telemetry (`<4 ms` cold start)
 
 ```bash
+# Auto-detect JSONL/NDJSON logs with diurnal deseasonalizing
+tail -n 2000 metrics.jsonl | streamsieve sift --season 24 --alpha 0.05 --json -
+
+# Detrend linear ramps or random walks (1.0 = causal first difference)
+cat cpu_trend.csv | streamsieve sift --detrend 1.0 --alpha 0.05 -
+
 # Extract Seattle numeric columns (precipitation, temp_max, temp_min, wind) and sift
 awk -F, 'NR==1 || $1=="Seattle" {print $3","$4","$5","$6}' examples/noaa_weather.csv \
-  | ./build/streamsieve sift --alpha 0.05 --top 4 -
+  | streamsieve sift --alpha 0.05 --top 4 -
 
 # Emit strict RFC-8259 JSON brief
 awk -F, 'NR==1 || $1=="Seattle" {print $3","$4","$5","$6}' examples/noaa_weather.csv \
-  | ./build/streamsieve sift --alpha 0.05 --top 4 --json -
+  | streamsieve sift --alpha 0.05 --top 4 --json -
 ```
 
 ### 2. Real-Data Delayed-Label AgACI & Cost-Asymmetric Action (`act` Probe)
@@ -24,7 +35,7 @@ awk -F, 'NR==1 || $1=="Seattle" {print $3","$4","$5","$6}' examples/noaa_weather
 Reproduce the real NOAA Seattle `temp_max` experiment with 4 forecasters (1-day delayed causal resolution, 4:1 underage:overage cost ratio):
 
 ```bash
-PYTHONPATH=python python3 -c '
+python3 -c '
 import csv
 from streamsieve import TrustCalibrator
 

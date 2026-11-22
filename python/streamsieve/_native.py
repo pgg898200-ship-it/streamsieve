@@ -92,6 +92,8 @@ class SSEStreamConfig(Structure):
         ("burst_tail_p0", c_double),
         ("ewma_reset_decay", c_double),
         ("two_sided", c_uint8),
+        ("season_period", c_uint32),
+        ("detrend_alpha", c_double),
     ]
 
 

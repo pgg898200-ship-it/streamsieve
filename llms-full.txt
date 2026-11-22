@@ -1,7 +1,7 @@
-# streamsieve v0.1.0 — Full Machine-Readable Reference (`llms-full.txt`)
+# streamsieve v0.2.0 — Full Machine-Readable Reference (`llms-full.txt`)
 
-> SIMD C++20/AVX2 runtime + `<5 ms` native CLI + zero-dependency Python SDK + 7-tool JSON-RPC 2.0 stdio MCP server for strictly causal, anytime-valid multi-agent streaming inference, zero-echo CRDT belief fusion, budgeted hierarchical VOI attention, and delayed-label Byzantine-safe agent trust calibration.
-> License: Apache-2.0 | Zero runtime dependencies | Verified on Linux x86_64 AVX2+FMA & scalar ASan/UBSan (53/53 tests + 48 subtests passing, 0 compiler warnings).
+> SIMD C++20/AVX2 runtime (8-wide cache-tiled batch kernel) + `<4 ms` native CLI (`--jsonl` / CSV / `--season` / `--detrend`) + zero-dependency Python SDK (`pip install streamsieve`, prebuilt Linux/macOS/Windows wheels) + drop-in `river` & `scikit-learn` adapters + 7-tool JSON-RPC 2.0 stdio MCP server for strictly causal, anytime-valid multi-agent streaming inference, zero-echo CRDT belief fusion, budgeted hierarchical VOI attention, and delayed-label Byzantine-safe agent trust calibration.
+> License: Apache-2.0 | Zero runtime dependencies | Verified on GCC `-O3`, `clang++ -Werror`, MSVC C++20, and ASan/UBSan/`float-cast-overflow` (79/79 tests passing, 0 compiler warnings).
 
 ---
 
@@ -11,61 +11,68 @@
 
 | Problem | `streamsieve` Engine | Mechanism | Verified Headline Result (`benchmarks/results.json`) |
 |---|---|---|---|
-| Context blowup + continuous-peeking p-hacking + loud-channel traps | `EStream` (`ss_estream_t`) | AVX2 4-wide SoA dual-resolution e-process (Winsorized-MAD + clamped z + bounded squash + JZS + Beta-Binomial + dyadic checkpoints + exact online e-BH + lossless ring) | **160.75 M ch-ticks/s** native AVX2 (`17.1×` faster than `river.ADWIN`, `54.4×` faster than `river.PageHinkley`, `5.65×` vs NumPy/SciPy); **99.99% (`11,829×`)** token compression (`3.84M -> 325` tokens) with `0.0` exact raw drill-down error; **0.004–0.010** peeking null FAR; **0.65–0.70** zero-mean `±3.5σ` burst recall (ADWIN/Welch = `0.00`) |
-| Echo-chamber double counting + LWW overwrite churn + JSON wire bloat | `EvidenceLattice` (`ss_lattice_t`) | State-based Join-Semilattice CRDT keyed by 64-bit `provenance_id` + Vovk–Wang admissible cross-agent e-merging + `SSLT` v1 binary/Base85 wire codec | **0.0% overwrite churn**, **1.00× inflation** at $W=8$ (vs `96.5%` LWW churn / `10.39×` naive log-odds); **10.7× smaller** wire (`10,428 B` vs `111,143 B` JSON debate); **315,753** 100-item CRDT merges/s |
+| Context blowup + continuous-peeking p-hacking + diurnal/trending false alarms + loud-channel traps | `EStream` (`ss_estream_t`) | 8-wide cache-tiled AVX2 SoA dual-resolution e-process (optional causal per-phase median deseasonalizer + first-diff/5-median-EWMA detrender + overflow-free Winsorized-MAD + clamped z + bounded squash + JZS + Beta-Binomial + dyadic checkpoints + exact online e-BH + lossless raw ring) | **255.67 M ch-ticks/s** native AVX2 (`26.9×` faster than `river.ADWIN`, `92.3×` faster than `river.PageHinkley`, `10.55×` vs NumPy/SciPy); **99.99% (`11,829×`)** token compression (`3.84M -> 325` tokens) with `0.0` exact raw drill-down error; **0.004–0.010** stationary peeking null FAR; **0.010–0.050** non-stationary null FAR (diurnal/trend/RW vs `83.5–100%` Welch/ADWIN/PH); **0.65–0.70** zero-mean `±3.5σ` burst recall (ADWIN/Welch = `0.00`); `40.8 ms` even at 55× peeking (faster than ADWIN `49.3 ms`) |
+| Echo-chamber double counting + LWW overwrite churn + JSON wire bloat | `EvidenceLattice` (`ss_lattice_t`) | State-based Join-Semilattice CRDT keyed by 64-bit `provenance_id` + Vovk–Wang admissible cross-agent e-merging + `SSLT` v1 binary/Base85 wire codec | **0.0% overwrite churn**, **1.00× inflation** at $W=8$ (vs `96.5%` LWW churn / `10.39×` naive log-odds); **10.7× smaller** wire (`10,428 B` vs `111,143 B` JSON debate); **290,141** 100-item CRDT merges/s |
 | Firehose attention under tight read/token budgets across $W$ agents | `VOISifter` (`ss_sifter_t`) | Hierarchical `site × channel × tick` mean-field Bayesian posterior + causal noise-scale normalization + sparse-burst mixture LLR + greedy Expected Brier-Risk Reduction with immediate discounting | **+0.702 Brier skill**, **78.3% Recall@Top**, **0.11%** inter-agent duplicate reads on 2,048-ch firehose ($W=4$) vs `-0.010` round-robin / `-32.42` naive top-raw-mean |
 | Delayed/out-of-order labels + bloviators + Byzantine agents + regime flips + asymmetric cost | `TrustCalibrator` (`ss_trust_t`) | Causal pending-prediction store + non-negative online Platt shrinkage + fixed-share BOA + leave-one-out Ville e-value quarantine & raw-loss shadow recovery + 4-rate delayed AgACI + Bayes-optimal quantile action | **100.0% Byzantine quarantine**, post-flip Brier **0.1840** (vs `0.2179` ExpWeights, `0.2539` mean); **30.39%** cost reduction (`3.889` vs `5.587`) & **90.01%** empirical coverage for 90% AgACI intervals on real NOAA Seattle `temp_max` |
 
 ### When to Choose Incumbents Instead
 - Need online supervised ML estimators (Hoeffding trees, online regression/classification): use `river`.
 - Need single fixed-horizon offline statistical tests on static tables (no continuous peeking): use `scipy.stats` / `statsmodels`.
-- Raw non-stationary time series with strong trends or diurnal seasonality: pre-difference or pass one-step prediction residuals into `EStream`.
+- Steep linear ramps: use `detrend_alpha=1.0` (causal first difference, 0 transient), NOT `0 < detrend_alpha < 1` (EWMA high-pass intended for slow drift). Non-integer or rapidly drifting seasonal periods should be residualized externally before feeding `EStream`.
 
 ---
 
 ## 2. Build, Install & CLI Reference
 
 ```bash
-# Build shared library (python/streamsieve/_libstreamsieve.so) + native CLI (build/streamsieve)
-make all
+# Prebuilt zero-dep wheels (Linux x86_64, macOS ARM64, Windows AMD64, Python 3.9-3.13)
+pip install streamsieve
 
-# Run native C++20 AVX2 + ASan/UBSan scalar tests
-make test-cpp test-san
-
-# Run zero-dependency Python test suite (26 unit + 27 adversarial breaker tests = 53 tests)
+# Or build from source: shared lib + native CLI + C++20/ASan/UBSan + 79 Python tests
+make all test-cpp test-san
 PYTHONPATH=python python3 -m unittest discover -s tests -p "test_*.py" -v
-
-# Editable install (zero runtime dependencies)
-pip install --no-build-isolation --no-deps -e .
 ```
 
-### Native CLI (`./build/streamsieve`, 4.03 ms cold start)
-- `streamsieve sift [--alpha 0.05] [--top 10] [--warmup 32] [--json] [FILE|-]`
-  - Sifts CSV, TSV, or whitespace numeric streams from file or stdin (`-`).
-  - Emits compact text brief or strict RFC-8259 JSON brief with channel handles (`ch:<idx>@t=<cp>..<tick>`).
-- `streamsieve bench [--channels 1024] [--ticks 4000]`
-  - Native AVX2 throughput self-benchmark with exact e-BH verification.
+### Native CLI (`./build/streamsieve`, `3.87 ms` cold start) & Python CLI (`streamsieve` / `sieve`)
+- `streamsieve sift [--alpha 0.05] [--top 10] [--warmup 32] [--season 0] [--detrend 0.0] [--jsonl] [--json] [FILE|-]`
+  - Sifts CSV, TSV, whitespace, or **auto-detected strict RFC-8259 JSONL/NDJSON** streams from file or stdin (`-`).
+  - Emits compact text brief or strict RFC-8259 JSON brief (`allow_nan=False`, UTF-8-validated string escaping) with effective sanitized parameters and channel handles (`ch:<idx>@t=<cp>..<tick>`).
+- `streamsieve bench [--channels 1024] [--ticks 4000] [--json]`
+  - Native 8-wide AVX2 throughput self-benchmark with exact e-BH verification.
+- `streamsieve verify [--json]`
+  - End-to-end self-verification of bit-exact zero-lookahead causality, CRDT axioms, VOI zero-overlap, and Ville quarantine.
+- `streamsieve mcp`
+  - Launches the zero-dependency JSON-RPC 2.0 stdio MCP server.
 - `streamsieve version`
-  - Prints version and compile-time SIMD capability (`AVX2+FMA` or `scalar`).
+  - Prints version (`0.2.0`) and compile-time SIMD capability (`AVX2+FMA` or `scalar`).
 
 ---
 
 ## 3. Zero-Dependency Python API Reference (`import streamsieve`)
 
-Cold import latency: `24.90 ms` subprocess median (`<1 ms` in-process, `67.9×` faster than `numpy+scipy+river`). Zero third-party runtime imports (`numpy`, `scipy`, `river`, `torch`, `pandas` are never imported). Accepts Python sequences, `array('d')`, `memoryview`, or zero-copy NumPy `float64` contiguous arrays via `__array_interface__`.
+Cold import latency: `25.30 ms` subprocess median (`<1 ms` in-process, `70.8×` faster than `numpy+scipy+river`). Zero third-party runtime imports (`numpy`, `scipy`, `river`, `sklearn`, `torch`, `pandas` are never imported). Accepts Python sequences, `array('d')`, `memoryview`, or zero-copy NumPy `float64` contiguous arrays via `__array_interface__`.
 
-### 3.1 `EStream` & `sift_matrix`
+### 3.1 `EStream`, `sift_matrix` & Drop-In Ecosystem Adapters
 ```python
-from streamsieve import EStream, sift_matrix, parse_channel_handle
+from streamsieve import (
+    EStream,
+    EStreamDrift,          # Drop-in river.drift.ADWIN/PageHinkley replacement
+    SklearnSieveDetector,  # Drop-in scikit-learn OutlierMixin/BaseEstimator detector
+    sift_matrix,
+    parse_channel_handle,
+)
 
 est = EStream(
     n_channels: int,
     *,
     warmup: int = 32,           # >= 12 finite warmup ticks per channel
     ring_capacity: int = 256,   # 0 disables lossless ring for max throughput
-    alpha: float = 0.05,        # nominal e-BH FDR level in (0, 0.5]
+    alpha: float = 0.05,        # nominal e-BH FDR level in [1e-9, 0.5]
     burst_tail_p0: float = 0.025,
     two_sided: bool = True,
+    season_period: int = 0,     # 0 or [2, 4096]; freezes 3-cycle per-phase medians
+    detrend_alpha: float = 0.0, # 1.0 = causal 1st diff; (0,1) = 5-median EWMA high-pass
     names: list[str] | None = None,
 )
 est.update_row(values)                     # 1D sequence/buffer of length n_channels
@@ -80,8 +87,21 @@ est.reset()
 est.close()  # also supports `with EStream(...) as est:`
 
 # One-liner helper:
-est, brief = sift_matrix(matrix, names=None, alpha=0.05, warmup=32, max_channels=10, ring_capacity=256)
-brief.to_compact_text()  # ~320-token summary with drill-down handles
+est, brief = sift_matrix(
+    matrix, names=None, alpha=0.05, warmup=32, season_period=0, detrend_alpha=0.0, max_channels=10, ring_capacity=256
+)
+
+# Drop-in river.drift detector (zero river dep):
+det = EStreamDrift(alpha=0.05, warmup=32, season_period=0, detrend_alpha=0.0, auto_reset=True)
+det.update(x)  # -> self; read det.drift_detected, det.warning_detected, det.e_value, det.mode, det.clone()
+
+# Drop-in scikit-learn OutlierMixin detector (zero sklearn/numpy dep):
+sk = SklearnSieveDetector(alpha=0.05, warmup=32, season_period=0, detrend_alpha=0.0, check_every=1)
+sk.fit(X_base)                # atomic fit on (T, D) or (T,)
+sk.partial_fit(X_more)        # incremental causal ingestion
+scores = sk.decision_function(X_live)  # batch-size-invariant signed e-BH log-margins (<=0 anomaly)
+labels = sk.predict(X_live)            # +1 calm, -1 anytime-valid e-BH anomaly
+labels = sk.fit_predict(X_all)         # reset + strictly causal +1/-1 labels
 ```
 
 ### 3.2 `EvidenceLattice`
@@ -182,17 +202,17 @@ agents: list[AgentTrust] = tc.agents()  # agent_id, weight, platt_slope, platt_b
 from streamsieve import assert_causal, verify_estream_causality, CausalityViolationError
 
 assert_causal(fn, stream, probe_ticks=None)  # poisons s > t with +1e12, -1e12, NaN, +Inf -> enforces 0.0 diff at <= t
-verify_estream_causality(matrix, probe_ticks=None, warmup=32, ring_capacity=256)
+verify_estream_causality(matrix, probe_ticks=None, warmup=32, ring_capacity=256, season_period=0, detrend_alpha=0.0)
 ```
 
 ---
 
-## 4. MCP Stdio Server (`python3 -m streamsieve.mcp_server`)
+## 4. MCP Stdio Server (`streamsieve mcp` / `python3 -m streamsieve.mcp_server`)
 
-Supports both newline-delimited JSON (NDJSON) and LSP-style `Content-Length` framing over stdio (JSON-RPC 2.0, MCP protocol `2024-11-05`). Hardened against malformed JSON, negative `Content-Length`, `Infinity`/`NaN`/`10**400` coercion overflows, and invalid tool arguments (always returns RFC-8259 compliant JSON with `allow_nan=False`).
+Supports both newline-delimited JSON (NDJSON) and LSP-style `Content-Length` framing over stdio (JSON-RPC 2.0, MCP protocol `2024-11-05`). Hardened against malformed JSON, deeply nested payloads (`RecursionError`), `Infinity`/`NaN`/`10**400` coercion overflows, negative `Content-Length`, atomic session replacement on failed `append`/`reset`, and JSONL key-order alignment across `append=True` calls (always emits strict RFC-8259 JSON with `allow_nan=False`).
 
 Exposed tools (7):
-1. `sift_stream` — Ingest `rows`, `csv_text`, or `json_data` into stateful `EStream` -> compact e-BH brief, drill-down handles, and token savings stats.
+1. `sift_stream` — Ingest `rows`, `csv_text`, `jsonl_text`, or `json_data` (with optional `season_period`, `detrend_alpha`, `append`) into stateful `EStream` -> compact e-BH brief, drill-down handles, and token savings stats.
 2. `fetch_raw_ticks` — Lossless raw `(tick, value)` drill-down by handle (`ch:3@t=180..600`) or channel index.
 3. `lattice_observe` — Submit provenance-tagged evidence -> `was_echo` + updated `HypSummary`.
 4. `lattice_merge` — CRDT-merge two session lattices or a Base85 `SSLT` payload -> converged summaries + wire size + Base85.
@@ -204,7 +224,7 @@ Exposed tools (7):
 
 ## 5. Exception-Free C ABI (`csrc/streamsieve_capi.h`)
 
-Status codes: `SS_OK (0)`, `SS_ERR_NULL (-1)`, `SS_ERR_INVALID_ARG (-2)`, `SS_ERR_OOM (-3)`, `SS_ERR_BOUNDS (-4)`, `SS_ERR_PARSE (-5)`, `SS_ERR_BUFFER_SMALL (-6)`.
+Cross-platform `SS_API` exports (`__declspec(dllexport)` on Windows MSVC, `visibility("default")` on GCC/Clang). Status codes: `SS_OK (0)`, `SS_ERR_NULL (-1)`, `SS_ERR_INVALID_ARG (-2)`, `SS_ERR_OOM (-3)`, `SS_ERR_BOUNDS (-4)`, `SS_ERR_PARSE (-5)`, `SS_ERR_BUFFER_SMALL (-6)`.
 Core entry points:
 - Utility: `ss_version`, `ss_has_avx2`, `ss_hash_provenance`.
 - `EStreamEngine`: `ss_estream_default_config`, `ss_estream_create`, `ss_estream_destroy`, `ss_estream_reset`, `ss_estream_update_row`, `ss_estream_update_batch`, `ss_estream_update_one`, `ss_estream_ebh_reject`, `ss_estream_get_channel`, `ss_estream_topk`, `ss_estream_fetch_raw`, `ss_estream_n_channels`, `ss_estream_tick_count`.
@@ -214,14 +234,16 @@ Core entry points:
 
 ---
 
-## 6. Complete Verified Benchmarks Snapshot (2026-11-22, Intel Xeon 2.30 GHz 2 vCPU)
+## 6. Complete Verified Benchmarks Snapshot (2026-11-22, v0.2.0, Intel Xeon 2.30 GHz 2 vCPU)
 
-- **Native AVX2 CLI Throughput:** `160.75 M ch-ticks/s` (`256×16k`, `25.48 ms`), `113.69 M/s` (`1024×4k`, `36.03 ms`), `93.15 M/s` (`4096×2k`, `87.94 ms`).
-- **Incumbent Speedups:** `17.05×` faster than `river.drift.ADWIN(0.002)` (`1.95 ms` vs `33.18 ms`), `54.42×` faster than `river.drift.PageHinkley()` (`105.92 ms`), `5.65×` faster than vectorized NumPy/SciPy causal rolling z+BH (`13.70 ms` vs `77.36 ms`), `67.94×` faster Python cold import (`24.90 ms` vs `1,691.69 ms`), `4.03 ms` native CLI cold start.
-- **Continuous Peeking Null FAR (500 trials × T=600, peek/10, α=0.05):** Gaussian `0.010`, Student-$t(3)$ `0.008`, LogNormal `0.004`, `1e10_DC+1000xLoud` `0.006` (vs `0.196–0.834` rolling `|z|>3`, `0.476–0.542` peeking Welch, `0.108–1.000` PageHinkley).
-- **256-Ch Mixed Firehose (one-sided bursts):** `streamsieve_ebh` `0.000` FDR / `1.000` Prec / `0.883` F1 / `3.8 ms`; `streamsieve_ebh_peeking` `0.040` FDR / `0.909` F1 / `52.4 ms` (vs ADWIN `0.054` FDR / `0.862` F1 / `47.4 ms`; peeking Welch+BH `0.321` FDR / `0.800` F1 / `183.9 ms`).
+- **Native 8-Wide AVX2 CLI Throughput:** `255.67 M ch-ticks/s` (`256×16k`, `16.02 ms`), `191.20 M/s` (`1024×4k`, `21.42 ms`), `146.69 M/s` (`4096×2k`, `55.85 ms`).
+- **Incumbent Speedups:** `26.95×` faster than `river.drift.ADWIN(0.002)` (`1.21 ms` vs `32.62 ms`), `92.26×` faster than `river.drift.PageHinkley()` (`111.67 ms`), `10.55×` faster than vectorized NumPy/SciPy causal rolling z+BH (`7.58 ms` vs `79.92 ms`), `70.78×` faster Python cold import (`25.30 ms` vs `1,791.01 ms`), `3.87 ms` native CLI cold start (`463×` faster).
+- **Stationary Continuous Peeking Null FAR (500 trials × T=600, peek/10, α=0.05):** Gaussian `0.010`, Student-$t(3)$ `0.008`, LogNormal `0.004`, `1e10_DC+1000xLoud` `0.006` (vs `0.196–0.834` rolling `|z|>3`, `0.476–0.542` peeking Welch, `0.108–1.000` PageHinkley).
+- **Non-Stationary Null FAR (200 trials × T=600, peek/10, α=0.05):** `Diurnal_P24_6sigma` `0.010`, `LinearTrend_0.25/tick` `0.035`, `RandomWalk_UnitStep` `0.025`, `Diurnal_P24+LinearTrend` `0.050` (vs `0.835–1.000` peeking Welch, `1.000` ADWIN/PH on trends & random walks).
+- **64-Ch Diurnal (`P=24`, `6σ`) Firehose:** `streamsieve_season24` `1.00` shift / `0.35` burst / `0.000` FDR / `1.000` Prec / `0.799` F1 in `1.72 ms` (vs `0.667` F1 / `125.49 ms` Welch; `0.618` F1 / `11.57 ms` ADWIN).
+- **256-Ch Mixed Firehose (one-sided bursts):** `streamsieve_ebh` `0.000` FDR / `1.000` Prec / `0.883` F1 / `2.81 ms`; `streamsieve_ebh_peeking` `0.040` FDR / `0.909` F1 / `40.85 ms` (**faster than ADWIN** `49.33 ms`, `0.054` FDR, `0.862` F1; peeking Welch+BH `0.321` FDR / `0.799` F1 / `183.03 ms`).
 - **256-Ch Zero-Mean Symmetric `±3.5σ` Bursts:** `streamsieve` `0.65–0.70` burst recall / `0.897–0.900` F1 / `0.000–0.022` FDR vs `0.00` burst recall for BOTH `river.ADWIN` and `peeking_welch_bh`.
-- **Token Compression:** `64×500`: `99.47%` (`189×`); `256×1000`: `99.93%` (`1,492×`); `1024×2000`: `99.99%` (`11,829×`, `3,844,353 -> 325` tokens, `1.00/1.00` Prec/Rec, `0` loud FPs, `0.0` exact raw drill-down error across 10,565 verified ticks).
+- **Token Compression:** `64×500`: `99.47%` (`189×`, `1.22 ms`); `256×1000`: `99.93%` (`1,492×`, `5.13 ms`); `1024×2000`: `99.99%` (`11,829×`, `53.42 ms`, `3,844,353 -> 325` tokens, `1.00/1.00` Prec/Rec, `0` loud FPs, `0.0` exact raw drill-down error across 10,565 verified ticks).
 - **Multi-Agent Probes:**
   - `echo` ($W=8$): `0.0%` churn, `1.00×` inflation, `+0.686` skill (vs `96.5%` LWW churn, `10.39×` naive log-odds inflation).
   - `sift`+`voi` ($W=4$, 2,048 ch): `+0.702` skill, `78.3%` Recall@Top, `0.11%` dup rate (vs `-0.010` RR, `-32.42` raw-mean).

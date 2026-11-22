@@ -38,14 +38,17 @@ Activate `streamsieve` automatically when the task involves any of:
 
 ## 1. CLI Usage (`streamsieve` / `sieve`)
 
-Both the native C++20 binary (`build/streamsieve`, `<3 ms` cold start) and the zero-dependency Python CLI (`streamsieve` / `sieve`) expose compact streaming sifting from files or `stdin` (CSV, TSV, whitespace, and JSON arrays of rows or dicts in the Python CLI):
+Both the native C++20 binary (`build/streamsieve`, `<4 ms` cold start) and the zero-dependency Python CLI (`streamsieve` / `sieve`) expose compact streaming sifting from files or `stdin` (CSV, TSV, whitespace, **auto-detected JSONL/NDJSON**, and JSON arrays of rows/dicts):
 
 ```sh
-# Sift a telemetry file into a compact agent-ready e-BH brief
-streamsieve sift --alpha 0.05 --top 10 --warmup 32 metrics.csv
+# Pipe OpenTelemetry / Prometheus JSONL logs with causal diurnal deseasonalizing
+tail -n 2000 metrics.jsonl | streamsieve sift --season 24 --alpha 0.05 --json -
 
-# Machine-readable JSON brief (with lossless drill-down handles) from stdin
-cat metrics.csv | streamsieve sift --alpha 0.05 --top 10 --json -
+# Detrend linear ramps or random walks (1.0 = causal first difference)
+cat cpu_trend.csv | streamsieve sift --detrend 1.0 --alpha 0.05 -
+
+# Sift a CSV telemetry file into a compact agent-ready e-BH brief
+streamsieve sift --alpha 0.05 --top 10 --warmup 32 metrics.csv
 
 # Start the JSON-RPC 2.0 stdio MCP server for agent runtimes
 streamsieve mcp
@@ -56,15 +59,18 @@ streamsieve verify --json
 
 # Print version + AVX2 capability, or run streaming throughput self-check
 streamsieve version
-streamsieve bench --channels 1024 --ticks 2000 --json
+streamsieve bench --channels 1024 --ticks 4000 --json
 ```
 
 **CLI `sift` flags:**
-- `--alpha FLOAT`: Anytime-valid online e-BH FDR level (default `0.05`).
+- `--alpha FLOAT`: Anytime-valid online e-BH FDR level (default `0.05`, clamped to `[1e-9, 0.5]`).
 - `--top INT`: Max top-ranked channels included in the brief (default `10`).
-- `--warmup INT`: Causal warmup ticks for shifted-anchor Winsorized-MAD baseline estimation (default `32`, engine floor `12`).
-- `--ring-capacity INT`: Per-channel raw-tick ring buffer size for lossless drill-down (Python CLI, default `256`).
-- `--json`: Emit compact JSON containing `n_channels`/`channels`, `ticks`, `raw_bytes`, `n_rejected`/`ebh_rejected`, `top[]` (with `channel`, `name`, `e_value`, `log_e_mean`, `log_e_burst`, `changepoint_tick`, `mode`, `rejected_ebh`, and `handle` `ch:<id>@t=<cp>..<tick>`).
+- `--warmup INT`: Causal warmup ticks for overflow-free Winsorized-MAD baseline estimation (default `32`, engine floor `12`).
+- `--season INT`: Optional causal per-phase median deseasonalization period $P \in [2, 4096]$ (`0` = disabled; extends warmup to `max(warmup, 3*P)`).
+- `--detrend FLOAT`: Optional causal detrender in `[0, 1]` (`1.0` = causal first difference eliminating linear trends & random walks in 1 tick; `0 < alpha < 1` = 5-sample-median EWMA high-pass for slow drift).
+- `--jsonl`: Explicitly force strict RFC-8259 JSONL/NDJSON parsing (auto-detected when first non-whitespace byte is `{`).
+- `--ring-capacity INT`: Per-channel lossless raw-tick ring buffer size (Python CLI, default `256`).
+- `--json`: Emit strict RFC-8259 JSON containing `n_channels`/`channels`, `ticks`, `raw_bytes`, `season_period`, `detrend_alpha`, `n_rejected`/`ebh_rejected`, `top[]` (with `channel`, `name`, `e_value`, `log_e_mean`, `log_e_burst`, `changepoint_tick`, `mode`, `rejected_ebh`, and `handle` `ch:<id>@t=<cp>..<tick>`).
 
 ---
 
@@ -74,8 +80,8 @@ When connected via `.claude-plugin/plugin.json` or `.cursor-plugin/plugin.json` 
 
 | MCP Tool | Engine | Key Arguments | Returns |
 |---|---|---|---|
-| `sift_stream` | `EStreamEngine` | `rows` \| `csv_text` \| `json_data`, optional `session_id`, `names`, `alpha` (`0.05`), `warmup` (`32`), `max_channels` (`10`), `ring_capacity` (`256`), `append` (`false`) | `compact_text`, `rejected_channels`, `top[]`, `handles[]` (`ch:<id>@t=<cp>..<tick>`), and `token_savings` (`compression_ratio`, `savings_pct`). |
-| `fetch_raw_ticks` | `EStreamEngine` | `handle` (e.g. `"ch:3@t=180..600"`) or `channel`, optional `session_id`, `limit`, `start_tick`, `end_tick` | Exact chronological `ticks: [[tick, value], ...]` from the channel's lossless ring buffer. |
+| `sift_stream` | `EStreamEngine` | `rows` \| `csv_text` \| `jsonl_text` \| `json_data`, optional `session_id`, `names`, `alpha` (`0.05`), `warmup` (`32`), `season_period` (`0`), `detrend_alpha` (`0.0`), `max_channels` (`10`), `ring_capacity` (`256`), `append` (`false`) | `compact_text`, `rejected_channels`, `top[]`, `handles[]` (`ch:<id>@t=<cp>..<tick>`), `season_period`, `detrend_alpha`, and `token_savings` (`compression_ratio`, `savings_pct`). |
+| `fetch_raw_ticks` | `EStreamEngine` | `handle` (e.g. `"ch:3@t=180..600"`) or `channel`, optional `session_id`, `limit`, `start_tick`, `end_tick` | Exact chronological `ticks: [[tick, value], ...]` from the channel's lossless raw ring buffer (pre-filter). |
 | `lattice_observe` | `EvidenceLattice` | Required `hyp_id`, `provenance_id`, `llr`; optional `lattice_id`, `merge_mode` (`"strict_origin"` \| `"max_reliability"`), `log_e`, `agent_id`, `reliability`, `timestamp_ns`, `prior_log_odds`, `agent_weight` | `was_echo` (`bool`) and deduplicated `summary` (`posterior_prob`, `total_log_odds`, `merged_e_value`, `unique_evidence`, `echoes_suppressed`). |
 | `lattice_merge` | `EvidenceLattice` | `target_id` plus `source_id` and/or `source_base85`; optional `merge_mode`, `return_base85` (`true`) | Bit-exact CRDT join: `hypotheses`, `summaries`, `wire_bytes`, and optional ASCII `base85` wire payload. |
 | `lattice_query` | `EvidenceLattice` | Optional `lattice_id`, `hyp_id` (omit to list all hypotheses), `include_base85` | Current deduplicated `summary` / `summaries` without mutating state. |
@@ -83,7 +89,7 @@ When connected via `.claude-plugin/plugin.json` or `.cursor-plugin/plugin.json` 
 | `trust_step` | `TrustCalibrator` | Required `action` (`"predict_prob"` \| `"predict_scalar"` \| `"resolve"` \| `"status"`); `calibrator_id`, `decision_id`, `agent_probs` or `agent_means`/`agent_stds` (`null` = abstain), `underage_cost`, `overage_cost`, `outcome`, `conformal_alpha`, `quarantine_e_thresh`, `fixed_share_alpha`, `eta` | Calibrated `decision` (`fused_prob`, `fused_point`, `ci_low`, `ci_high`, `optimal_action`, `active_agents`) and per-agent `agents[]` trust/Platt/quarantine diagnostics. |
 
 **Multi-agent MCP orchestration recipe:**
-1. Call `sift_stream` with `csv_text`/`rows`/`json_data` (use `append: true` for incremental batches) → inspect `compact_text` and `rejected_channels` (cutting context tokens by >95%).
+1. Call `sift_stream` with `jsonl_text`/`csv_text`/`rows`/`json_data` (set `season_period` for diurnal metrics, `detrend_alpha=1.0` for trending metrics, `append: true` for incremental batches) → inspect `compact_text` and `rejected_channels` (cutting context tokens by >95%).
 2. Call `voi_allocate` with `noise_scales` and `n_agents` to partition deeper inspections (`site_agg`, `mean`, `ticks`) with zero overlap across agents.
 3. Have workers call `fetch_raw_ticks` ONLY on flagged handles (`ch:<id>@t=<cp>..<tick>`) and record findings via `lattice_observe` using a deterministic content-derived `provenance_id`.
 4. Reconcile worker lattices in any order via `lattice_merge` (by `source_id` or compact `source_base85` wire string; safe over arbitrary cyclic gossip) and inspect with `lattice_query`.
@@ -91,14 +97,14 @@ When connected via `.claude-plugin/plugin.json` or `.cursor-plugin/plugin.json` 
 
 ---
 
-## 3. Zero-Dependency Python API
+## 3. Zero-Dependency Python API (`pip install streamsieve`)
 
 The `streamsieve` Python package uses only the Python standard library (`ctypes` + `array`, zero NumPy/SciPy imports) while accepting Python lists, `array('d')`, `memoryview`, and duck-typed NumPy `float64` arrays zero-copy.
 
-### 3.1 Firehose Sifting & Lossless Drill-Down (`sift_matrix`, `EStream`)
+### 3.1 Firehose Sifting, Lossless Drill-Down & Drop-In Adapters
 
 ```python
-from streamsieve import EStream, sift_matrix
+from streamsieve import EStream, EStreamDrift, SklearnSieveDetector, sift_matrix
 
 # One-line batch sifting (zero-copy for contiguous float64 matrices)
 est, brief = sift_matrix(
@@ -106,6 +112,8 @@ est, brief = sift_matrix(
     names=channel_names,    # optional list[str]
     alpha=0.05,             # anytime-valid e-BH FDR level
     warmup=32,              # causal Winsorized-MAD warmup ticks
+    season_period=0,        # set P >= 2 for diurnal streams
+    detrend_alpha=0.0,      # 1.0 = causal first diff; (0,1) = EWMA high-pass
     max_channels=10,
     ring_capacity=256,      # lossless raw-tick ring buffer per channel
 )
@@ -117,9 +125,15 @@ flagged_ids = brief.rejected_channels   # exact online e-BH rejections
 for status in brief.statuses:
     if status.rejected_ebh:
         raw_pairs = est.fetch_raw(status.handle, limit=64)  # [(tick, value), ...]
+
+# Drop-in river.drift replacement (zero river dependency)
+det = EStreamDrift(alpha=0.05, season_period=24)
+# Drop-in scikit-learn OutlierMixin multivariate detector (zero sklearn dependency)
+sk = SklearnSieveDetector(alpha=0.05, warmup=32, season_period=24)
+labels = sk.fit_predict(matrix)         # +1 calm, -1 anytime-valid e-BH anomaly
 ```
 
-For incremental tick-by-tick ingestion, use `EStream(n_channels, warmup=32, ring_capacity=256, alpha=0.05)` with `update_row(row)`, `update_batch(matrix)`, `update_one(channel, value)`, `ebh_reject(alpha)`, `topk(k)`, `channel_status(c)`, and `brief()`.
+For incremental tick-by-tick ingestion, use `EStream(n_channels, warmup=32, ring_capacity=256, alpha=0.05, season_period=0, detrend_alpha=0.0)` with `update_row(row)`, `update_batch(matrix)`, `update_one(channel, value)`, `ebh_reject(alpha)`, `topk(k)`, `channel_status(c)`, and `brief()`.
 
 ### 3.2 Echo-Free Multi-Agent Belief Fusion (`EvidenceLattice`)
 
@@ -238,8 +252,8 @@ assert verify_estream_causality(matrix, warmup=32, alpha=0.05)
 
 Keep these boundaries in mind when relying on `streamsieve` outputs:
 
-- **Warmup & earliest alert tick:** `EStream` requires `warmup` ticks (default `32`, floor `12`) to freeze its shifted-anchor Winsorized-MAD baseline, plus the first snapshot at post-warmup tick `max(warmup, 24)` and `> 4` post-split ticks (`>= 8` for JZS). Under default settings, non-trivial e-values begin at tick `69`. Shifts occurring *during* warmup contaminate the baseline rather than alerting.
-- **Stationary/exchangeable null requirement:** `EStream` guarantees $\mathbb{E}_{H_0}[E_\tau] \le 1$ for stationary exchangeable streams (even heavy-tailed Student-$t$, skewed LogNormal, $10^{10}$ DC offsets, or $1000\times$ loud channels). For strongly seasonal, trending, or autocorrelated raw telemetry, **pre-difference, deseasonalize, or feed one-step forecast residuals** first.
+- **Warmup & earliest alert tick:** `EStream` requires `eff_warmup = max(warmup, 12, 3 * season_period)` ticks (default `32` when `season_period == 0`) to freeze its overflow-free Winsorized-MAD baseline, plus the first snapshot at post-warmup tick `max(warmup, 24)` and `> 4` post-split ticks (`>= 8` for JZS). Under default settings, non-trivial e-values begin at tick `69`. Shifts occurring *during* warmup contaminate the baseline rather than alerting.
+- **Non-stationary streams (`season_period` & `detrend_alpha`):** `EStream` guarantees $\mathbb{E}_{H_0}[E_\tau] \le 1$ on stationary exchangeable streams (including heavy tails, skew, $10^{10}$ DC offsets, and $1000\times$ loud channels). For diurnal/periodic streams with known integer period $P \in [2, 4096]$, set `season_period=P`. For linear trends or unit-step random walks, set `detrend_alpha=1.0` (causal first difference, 0 transient); reserve `0 < detrend_alpha < 1` (5-sample-median EWMA high-pass) for slow baseline drift. For time-varying or non-integer periods, feed external one-step forecast residuals.
 - **Wide-panel sparse-burst power:** On very wide panels ($M \ge 1000$) with few active sparse-burst channels, online e-BH requires $E_{(k^*)} \ge M / (\alpha k^*)$; ensure enough baseline ticks $n_0$ accumulate before burst onset or pair with `VOISifter` site-level triage.
 - **Provenance discipline:** `EvidenceLattice` deduplicates only when duplicate observations share the same `provenance_id`. Hash canonical source event identifiers (`EvidenceLattice.hash_id(...)`). When cross-agent correlation is possible, gate decisions on `merged_e_value` (Vovk–Wang arithmetic mean) rather than assuming full independence in `posterior_prob`.
 - **Delayed-label hygiene & Byzantine limit:** Never pass future ground truth into `TrustCalibrator.resolve` before it is causally observed. Keep unresolved decisions below the bounded `65,536`-entry pending table cap (oldest IDs evict first). Median reference loss tolerates up to `< 50%` simultaneously poisoned agents; if $\ge 50\%$ collude, the benchmark degrades.

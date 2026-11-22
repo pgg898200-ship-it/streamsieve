@@ -14,6 +14,7 @@
  */
 #include "streamsieve_capi.h"
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <cstdio>
@@ -21,8 +22,10 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace {
@@ -32,14 +35,34 @@ void print_help() {
         << "streamsieve " << ss_version() << " (" << (ss_has_avx2() ? "AVX2+FMA" : "scalar") << ")\n"
         << "SIMD C++20 multi-agent streaming inference & anytime-valid firehose sifter.\n\n"
         << "Usage:\n"
-        << "  streamsieve sift [OPTIONS] [FILE|-]   Sift CSV/TSV stream into compact e-BH brief\n"
+        << "  streamsieve sift [OPTIONS] [FILE|-]   Sift CSV/TSV/JSONL stream into compact e-BH brief\n"
         << "  streamsieve bench [OPTIONS]           Run native AVX2 throughput self-benchmark\n"
         << "  streamsieve version                   Print version & SIMD capability\n\n"
         << "Options for sift:\n"
         << "  --alpha FLOAT    Anytime-valid e-BH FDR level (default: 0.05)\n"
         << "  --top INT        Max channels in compact brief (default: 10)\n"
         << "  --warmup INT     Causal warmup ticks (default: 32)\n"
+        << "  --season INT     Causal seasonal period P >= 2 (default: 0 = off)\n"
+        << "  --detrend FLOAT  Causal detrend alpha in (0, 1]; 1.0 = first diff (default: 0 = off)\n"
+        << "  --jsonl          Parse newline-delimited JSON objects (auto-detected if line starts with '{')\n"
         << "  --json           Emit machine-readable JSON brief\n";
+}
+
+uint32_t parse_u32_clamped(const char* s, uint32_t def_val, uint32_t max_val) {
+    if (!s || !*s) return def_val;
+    char* end = nullptr;
+    long long v = std::strtoll(s, &end, 10);
+    if (end == s || v < 0) return def_val;
+    if (v > static_cast<long long>(max_val)) return max_val;
+    return static_cast<uint32_t>(v);
+}
+
+double parse_f64_safe(const char* s, double def_val) {
+    if (!s || !*s) return def_val;
+    char* end = nullptr;
+    double v = std::strtod(s, &end);
+    if (end == s || !std::isfinite(v)) return def_val;
+    return v;
 }
 
 bool parse_numeric_row(const std::string& line, std::vector<double>& out) {
@@ -74,21 +97,224 @@ std::vector<std::string> split_header(const std::string& line) {
     return cols;
 }
 
+inline void skip_ws(const char*& p) {
+    while (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n') ++p;
+}
+
+bool parse_json_string(const char*& p, std::string& out) {
+    out.clear();
+    if (*p != '"') return false;
+    ++p;
+    while (*p) {
+        unsigned char uc = static_cast<unsigned char>(*p);
+        if (uc < 0x20) return false; /* Unescaped control chars are invalid in RFC-8259 */
+        char c = *p++;
+        if (c == '"') return true;
+        if (c == '\\') {
+            char e = *p++;
+            if (!e) return false;
+            switch (e) {
+                case '"':  out.push_back('"');  break;
+                case '\\': out.push_back('\\'); break;
+                case '/':  out.push_back('/');  break;
+                case 'b':  out.push_back('\b'); break;
+                case 'f':  out.push_back('\f'); break;
+                case 'n':  out.push_back('\n'); break;
+                case 'r':  out.push_back('\r'); break;
+                case 't':  out.push_back('\t'); break;
+                case 'u': {
+                    for (int k = 0; k < 4; ++k) {
+                        unsigned char hc = static_cast<unsigned char>(*p);
+                        bool is_hex = (hc >= '0' && hc <= '9') ||
+                                      (hc >= 'a' && hc <= 'f') ||
+                                      (hc >= 'A' && hc <= 'F');
+                        if (!is_hex) return false;
+                        ++p;
+                    }
+                    out.push_back('?');
+                    break;
+                }
+                default:
+                    return false;
+            }
+        } else {
+            out.push_back(c);
+        }
+    }
+    return false;
+}
+
+bool parse_json_number(const char*& p, double& out_val) {
+    const char* start = p;
+    if (*p == '-') ++p;
+    if (*p == '0') {
+        ++p;
+    } else if (*p >= '1' && *p <= '9') {
+        while (*p >= '0' && *p <= '9') ++p;
+    } else {
+        p = start;
+        return false;
+    }
+    if (*p == '.') {
+        ++p;
+        if (!(*p >= '0' && *p <= '9')) { p = start; return false; }
+        while (*p >= '0' && *p <= '9') ++p;
+    }
+    if (*p == 'e' || *p == 'E') {
+        ++p;
+        if (*p == '+' || *p == '-') ++p;
+        if (!(*p >= '0' && *p <= '9')) { p = start; return false; }
+        while (*p >= '0' && *p <= '9') ++p;
+    }
+    /* Reject non-delimiter trailing identifier chars (e.g. 0x10 or 123abc) */
+    if ((*p >= '0' && *p <= '9') || (*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z') || *p == '_' || *p == '.') {
+        p = start;
+        return false;
+    }
+    char* end = nullptr;
+    out_val = std::strtod(start, &end);
+    if (end != p) {
+        p = start;
+        return false;
+    }
+    return true;
+}
+
+bool skip_json_value(const char*& p, int depth) {
+    if (depth > 64) return false;
+    skip_ws(p);
+    if (!*p) return false;
+    if (*p == '"') {
+        std::string tmp;
+        return parse_json_string(p, tmp);
+    }
+    if (*p == '{' || *p == '[') {
+        char close_ch = (*p == '{') ? '}' : ']';
+        ++p;
+        skip_ws(p);
+        if (*p == close_ch) { ++p; return true; }
+        while (*p) {
+            if (close_ch == '}') {
+                std::string k;
+                if (!parse_json_string(p, k)) return false;
+                skip_ws(p);
+                if (*p != ':') return false;
+                ++p;
+            }
+            if (!skip_json_value(p, depth + 1)) return false;
+            skip_ws(p);
+            if (*p == ',') { ++p; skip_ws(p); continue; }
+            if (*p == close_ch) { ++p; return true; }
+            return false;
+        }
+        return false;
+    }
+    if (std::strncmp(p, "true", 4) == 0) { p += 4; return true; }
+    if (std::strncmp(p, "false", 5) == 0) { p += 5; return true; }
+    if (std::strncmp(p, "null", 4) == 0) { p += 4; return true; }
+    double tmp_num = 0.0;
+    return parse_json_number(p, tmp_num);
+}
+
+bool parse_jsonl_row(const std::string& line,
+                     std::vector<std::string>& headers,
+                     std::unordered_map<std::string, uint32_t>& key_to_col,
+                     std::vector<double>& row,
+                     bool schema_locked) {
+    const char* p = line.c_str();
+    skip_ws(p);
+    if (*p != '{') return false;
+    ++p;
+    skip_ws(p);
+
+    if (schema_locked) {
+        row.assign(headers.size(), std::numeric_limits<double>::quiet_NaN());
+    } else {
+        headers.clear();
+        key_to_col.clear();
+        row.clear();
+    }
+
+    if (*p == '}') {
+        ++p;
+        skip_ws(p);
+        return (*p == '\0') && schema_locked;
+    }
+
+    bool closed = false;
+    std::string key;
+    while (*p) {
+        skip_ws(p);
+        if (!parse_json_string(p, key)) return false;
+        skip_ws(p);
+        if (*p != ':') return false;
+        ++p;
+        skip_ws(p);
+
+        /* Strict RFC-8259 JSON number vs other JSON value */
+        if (*p == '-' || (*p >= '0' && *p <= '9')) {
+            double val = 0.0;
+            if (!parse_json_number(p, val)) return false;
+            if (std::isfinite(val)) {
+                if (!schema_locked) {
+                    auto it = key_to_col.find(key);
+                    if (it == key_to_col.end()) {
+                        uint32_t idx = static_cast<uint32_t>(headers.size());
+                        key_to_col.emplace(key, idx);
+                        headers.push_back(key);
+                        row.push_back(val);
+                    } else {
+                        row[it->second] = val;
+                    }
+                } else {
+                    auto it = key_to_col.find(key);
+                    if (it != key_to_col.end()) {
+                        row[it->second] = val;
+                    }
+                }
+            }
+        } else {
+            if (!skip_json_value(p, 0)) return false;
+        }
+
+        skip_ws(p);
+        if (*p == ',') { ++p; continue; }
+        if (*p == '}') { ++p; closed = true; break; }
+        return false;
+    }
+
+    if (!closed) return false;
+    skip_ws(p);
+    if (*p != '\0') return false;
+    return !row.empty();
+}
+
 int cmd_sift(int argc, char** argv) {
     double alpha = 0.05;
     uint32_t top_k = 10;
     uint32_t warmup = 32;
+    uint32_t season_period = 0;
+    double detrend_alpha = 0.0;
     bool as_json = false;
+    bool jsonl_mode = false;
+    bool mode_decided = false;
     std::string file_path = "-";
 
     for (int i = 2; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg == "--alpha" && i + 1 < argc) {
-            alpha = std::atof(argv[++i]);
+            alpha = parse_f64_safe(argv[++i], 0.05);
         } else if (arg == "--top" && i + 1 < argc) {
-            top_k = static_cast<uint32_t>(std::atoi(argv[++i]));
+            top_k = parse_u32_clamped(argv[++i], 10, 1000000);
         } else if (arg == "--warmup" && i + 1 < argc) {
-            warmup = static_cast<uint32_t>(std::atoi(argv[++i]));
+            warmup = parse_u32_clamped(argv[++i], 32, 1000000);
+        } else if (arg == "--season" && i + 1 < argc) {
+            season_period = parse_u32_clamped(argv[++i], 0, 4096);
+        } else if (arg == "--detrend" && i + 1 < argc) {
+            detrend_alpha = parse_f64_safe(argv[++i], 0.0);
+        } else if (arg == "--jsonl") {
+            jsonl_mode = true;
+            mode_decided = true;
         } else if (arg == "--json") {
             as_json = true;
         } else if (arg == "-h" || arg == "--help") {
@@ -98,6 +324,14 @@ int cmd_sift(int argc, char** argv) {
             file_path = arg;
         }
     }
+
+    /* Sanitize identically to EStreamEngine so reported JSON config matches effective behavior */
+    if (!std::isfinite(alpha)) alpha = 0.05;
+    alpha = std::max(1e-9, std::min(alpha, 0.5));
+    warmup = std::max<uint32_t>(warmup, 12U);
+    season_period = (season_period >= 2U) ? std::min<uint32_t>(season_period, 4096U) : 0U;
+    if (!std::isfinite(detrend_alpha)) detrend_alpha = 0.0;
+    detrend_alpha = std::max(0.0, std::min(detrend_alpha, 1.0));
 
     std::ifstream fin;
     std::istream* in = &std::cin;
@@ -113,6 +347,7 @@ int cmd_sift(int argc, char** argv) {
     auto t0 = std::chrono::steady_clock::now();
     std::string line;
     std::vector<std::string> headers;
+    std::unordered_map<std::string, uint32_t> key_to_col;
     std::vector<double> row;
     ss_estream_t* st = nullptr;
     uint32_t n_ch = 0;
@@ -121,19 +356,33 @@ int cmd_sift(int argc, char** argv) {
 
     while (std::getline(*in, line)) {
         raw_bytes += line.size() + 1;
-        if (line.empty()) continue;
-        if (!parse_numeric_row(line, row)) {
-            if (rows_ingested == 0 && headers.empty()) {
+        const char* p = line.c_str();
+        skip_ws(p);
+        if (!*p) continue;
+        if (!mode_decided) {
+            jsonl_mode = (*p == '{');
+            mode_decided = true;
+        }
+
+        bool ok = false;
+        if (jsonl_mode) {
+            ok = parse_jsonl_row(line, headers, key_to_col, row, st != nullptr);
+        } else {
+            ok = parse_numeric_row(line, row);
+            if (!ok && rows_ingested == 0 && headers.empty()) {
                 headers = split_header(line);
             }
-            continue;
         }
+        if (!ok) continue;
+
         if (!st) {
             n_ch = static_cast<uint32_t>(row.size());
             ss_estream_config_t cfg{};
             ss_estream_default_config(&cfg, n_ch);
             cfg.alpha = alpha;
             cfg.warmup = warmup;
+            cfg.season_period = season_period;
+            cfg.detrend_alpha = detrend_alpha;
             st = ss_estream_create(&cfg);
             if (!st) {
                 std::cerr << "streamsieve: failed to initialize engine\n";
@@ -178,23 +427,57 @@ int cmd_sift(int argc, char** argv) {
 
     auto print_json_str = [](const std::string& s) {
         std::cout << '"';
-        for (unsigned char ch : s) {
-            switch (ch) {
-                case '"':  std::cout << "\\\""; break;
-                case '\\': std::cout << "\\\\"; break;
-                case '\b': std::cout << "\\b";  break;
-                case '\f': std::cout << "\\f";  break;
-                case '\n': std::cout << "\\n";  break;
-                case '\r': std::cout << "\\r";  break;
-                case '\t': std::cout << "\\t";  break;
-                default:
-                    if (ch < 0x20) {
-                        char esc[8];
-                        std::snprintf(esc, sizeof(esc), "\\u%04x", static_cast<unsigned>(ch));
-                        std::cout << esc;
-                    } else {
-                        std::cout << static_cast<char>(ch);
+        const size_t n = s.size();
+        for (size_t i = 0; i < n; ) {
+            unsigned char ch = static_cast<unsigned char>(s[i]);
+            if (ch < 0x80) {
+                ++i;
+                switch (ch) {
+                    case '"':  std::cout << "\\\""; break;
+                    case '\\': std::cout << "\\\\"; break;
+                    case '\b': std::cout << "\\b";  break;
+                    case '\f': std::cout << "\\f";  break;
+                    case '\n': std::cout << "\\n";  break;
+                    case '\r': std::cout << "\\r";  break;
+                    case '\t': std::cout << "\\t";  break;
+                    default:
+                        if (ch < 0x20) {
+                            char esc[8];
+                            std::snprintf(esc, sizeof(esc), "\\u%04x", static_cast<unsigned>(ch));
+                            std::cout << esc;
+                        } else {
+                            std::cout << static_cast<char>(ch);
+                        }
+                }
+            } else {
+                /* Validate UTF-8 multibyte sequence; escape invalid raw bytes as \ufffd */
+                size_t seq_len = 0;
+                if ((ch & 0xE0) == 0xC0 && ch >= 0xC2 && i + 1 < n &&
+                    (static_cast<unsigned char>(s[i + 1]) & 0xC0) == 0x80) {
+                    seq_len = 2;
+                } else if ((ch & 0xF0) == 0xE0 && i + 2 < n) {
+                    unsigned char b1 = static_cast<unsigned char>(s[i + 1]);
+                    unsigned char b2 = static_cast<unsigned char>(s[i + 2]);
+                    if ((b1 & 0xC0) == 0x80 && (b2 & 0xC0) == 0x80 &&
+                        !(ch == 0xE0 && b1 < 0xA0) && !(ch == 0xED && b1 >= 0xA0)) {
+                        seq_len = 3;
                     }
+                } else if ((ch & 0xF8) == 0xF0 && ch <= 0xF4 && i + 3 < n) {
+                    unsigned char b1 = static_cast<unsigned char>(s[i + 1]);
+                    unsigned char b2 = static_cast<unsigned char>(s[i + 2]);
+                    unsigned char b3 = static_cast<unsigned char>(s[i + 3]);
+                    if ((b1 & 0xC0) == 0x80 && (b2 & 0xC0) == 0x80 && (b3 & 0xC0) == 0x80 &&
+                        !(ch == 0xF0 && b1 < 0x90) && !(ch == 0xF4 && b1 >= 0x90)) {
+                        seq_len = 4;
+                    }
+                }
+                if (seq_len > 0) {
+                    std::cout.write(s.data() + i, static_cast<std::streamsize>(seq_len));
+                    i += seq_len;
+                } else {
+                    std::cout << "\\ufffd";
+                    ++i;
+                }
             }
         }
         std::cout << '"';
@@ -207,10 +490,13 @@ int cmd_sift(int argc, char** argv) {
     if (as_json) {
         std::cout << "{\"engine\":\"streamsieve\",\"version\":\"" << ss_version() << "\""
                   << ",\"avx2\":" << (ss_has_avx2() ? "true" : "false")
+                  << ",\"format\":\"" << (jsonl_mode ? "jsonl" : "delimited") << "\""
                   << ",\"channels\":" << n_ch
                   << ",\"ticks\":" << rows_ingested
                   << ",\"raw_bytes\":" << raw_bytes
                   << ",\"alpha\":"; print_json_num(alpha);
+        std::cout << ",\"season_period\":" << season_period
+                  << ",\"detrend_alpha\":"; print_json_num(detrend_alpha);
         std::cout << ",\"ebh_rejected\":" << n_rej
                   << ",\"elapsed_ms\":"; print_json_num(elapsed_ms);
         std::cout << ",\"top\":[";
@@ -253,8 +539,8 @@ int cmd_bench(int argc, char** argv) {
     uint32_t n_ticks = 2000;
     for (int i = 2; i < argc; ++i) {
         std::string arg = argv[i];
-        if (arg == "--channels" && i + 1 < argc) n_ch = static_cast<uint32_t>(std::atoi(argv[++i]));
-        else if (arg == "--ticks" && i + 1 < argc) n_ticks = static_cast<uint32_t>(std::atoi(argv[++i]));
+        if (arg == "--channels" && i + 1 < argc) n_ch = std::max<uint32_t>(1, parse_u32_clamped(argv[++i], 1024, 1000000));
+        else if (arg == "--ticks" && i + 1 < argc) n_ticks = std::max<uint32_t>(1, parse_u32_clamped(argv[++i], 2000, 10000000));
     }
 
     std::vector<double> data(static_cast<size_t>(n_ticks) * n_ch);

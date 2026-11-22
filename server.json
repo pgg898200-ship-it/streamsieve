@@ -6,12 +6,12 @@
     "url": "https://github.com/pgg898200-ship-it/streamsieve",
     "source": "github"
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "packages": [
     {
       "registry_type": "pypi",
       "identifier": "streamsieve",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "transport": {
         "type": "stdio"
       },

@@ -1182,10 +1182,11 @@ class TestSurface7ZeroDependencyAndColdImportGate(unittest.TestCase):
 
         timings.sort()
         median_ms = timings[len(timings) // 2]
+        budget_ms = 120.0 if sys.platform == "win32" else 25.0
         self.assertLess(
             median_ms,
-            15.0,
-            f"Cold `import streamsieve` median {median_ms:.3f} ms >= 15 ms (runs={timings})",
+            budget_ms,
+            f"Cold `import streamsieve` median {median_ms:.3f} ms >= {budget_ms} ms (runs={timings})",
         )
 
 

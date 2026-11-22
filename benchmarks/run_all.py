@@ -186,6 +186,26 @@ def _print_markdown_summary(data: dict[str, Any]) -> None:
             f"| {r['empirical_fdr']:.3f} | {r['f1']:.3f} |"
         )
 
+    exp_c = pf.get("experiment_c_nonstationary")
+    if exp_c:
+        print("\n### Experiment C — Non-Stationary Diurnal (P=24) & Trending Null FAR (200 trials x T=600, peek/10)")
+        print("| Scenario | `streamsieve` (pre-filter) | Naive `|z|>3` | Peeking `ttest` | `ADWIN(0.002)` | `PageHinkley` |")
+        print("|---|---:|---:|---:|---:|---:|")
+        for scen, row in exp_c["null_far_by_scenario"].items():
+            print(
+                f"| {scen} | **{row['streamsieve_prefilter']:.3f}** | {row['naive_rolling_z3']:.3f} "
+                f"| {row['peeking_ttest_ind']:.3f} | {row['river_adwin_0.002']:.3f} | {row['river_page_hinkley']:.3f} |"
+            )
+        df = exp_c["diurnal_64ch_firehose"]
+        print("\n### Experiment C2 — 64-Ch Diurnal (P=24, 6σ wave) Firehose Detection (5 seeds)")
+        print("| Method | Recall (Shift) | Recall (Burst) | Emp. FDR | Precision | F1 | Wall (ms) |")
+        print("|---|---:|---:|---:|---:|---:|---:|")
+        for m, r in df["methods"].items():
+            print(
+                f"| `{m}` | {r['recall_shift']:.2f} | {r['recall_burst']:.2f} | {r['empirical_fdr']:.3f} "
+                f"| {r['precision']:.3f} | {r['f1']:.3f} | {r['wall_ms']:.1f} |"
+            )
+
     # 3. Multi-Agent Probes
     mp = data["multiagent_probes"]
     print("\n## 3. Multi-Agent Streaming Probes (All 8 Mechanisms + Real NOAA Weather)\n")

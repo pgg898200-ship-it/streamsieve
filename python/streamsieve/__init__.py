@@ -6,7 +6,7 @@ imports zero third-party dependencies.
 
 from __future__ import annotations
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 _LAZY_EXPORTS: dict[str, tuple[str, str]] = {
     # Native helpers & error type
@@ -38,6 +38,7 @@ _LAZY_EXPORTS: dict[str, tuple[str, str]] = {
     "MCPServer": ("streamsieve.mcp_server", "MCPServer"),
     # 7. Drop-in ecosystem adapters (zero third-party imports)
     "EStreamDrift": ("streamsieve.adapters", "EStreamDrift"),
+    "SklearnSieveDetector": ("streamsieve.adapters", "SklearnSieveDetector"),
 }
 
 __all__ = ["__version__", *_LAZY_EXPORTS.keys()]

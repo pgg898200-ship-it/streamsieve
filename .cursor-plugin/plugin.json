@@ -1,6 +1,6 @@
 {
   "name": "streamsieve",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "SIMD C++20 multi-agent streaming inference: anytime-valid dual-resolution e-processes + online e-BH FDR control, echo-free CRDT belief fusion, zero-overlap VOI firehose attention, and delayed-label trust calibration with Ville quarantine.",
   "author": {
     "name": "StreamSieve Contributors"

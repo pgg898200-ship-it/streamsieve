@@ -297,8 +297,182 @@ def _run_mixed_firehose_suite(
     }
 
 
+def run_experiment_c_nonstationary(
+    n_null_trials: int = 200,
+    n_ticks: int = 600,
+    peek_every: int = 10,
+    alpha: float = 0.05,
+    seed: int = 202630,
+) -> dict[str, Any]:
+    """Experiment C: Non-stationary diurnal (P=24), linear trend, and random-walk streams.
+
+    Compares streamsieve causal pre-filtering (season_period=24, detrend_alpha=1.0)
+    against raw river.ADWIN(delta=0.002), river.PageHinkley(), peeking Welch t-test,
+    and naive rolling |z|>3.
+    """
+    rng = np.random.default_rng(seed)
+    e_thresh = 1.0 / alpha
+    t_idx = np.arange(n_ticks, dtype=np.float64)[:, None]
+    diurnal_wave = 50.0 + 6.0 * np.sin(2.0 * np.pi * t_idx / 24.0) + 2.0 * np.cos(4.0 * np.pi * t_idx / 24.0)
+
+    null_scenarios: dict[str, tuple[np.ndarray, int, float]] = {
+        "Diurnal_P24_6sigma": (
+            np.ascontiguousarray(diurnal_wave + rng.standard_normal((n_ticks, n_null_trials))),
+            24,
+            0.0,
+        ),
+        "LinearTrend_0.25/tick": (
+            np.ascontiguousarray(100.0 + 0.25 * t_idx + rng.standard_normal((n_ticks, n_null_trials))),
+            0,
+            1.0,
+        ),
+        "RandomWalk_UnitStep": (
+            np.ascontiguousarray(np.cumsum(rng.standard_normal((n_ticks, n_null_trials)), axis=0)),
+            0,
+            1.0,
+        ),
+        "Diurnal_P24+LinearTrend": (
+            np.ascontiguousarray(diurnal_wave + 0.25 * t_idx + rng.standard_normal((n_ticks, n_null_trials))),
+            24,
+            1.0,
+        ),
+    }
+
+    null_far: dict[str, dict[str, float]] = {}
+    for scen_name, (x_mat, sp, da) in null_scenarios.items():
+        # 1. streamsieve with causal pre-filter
+        hit_ss = np.zeros(n_null_trials, dtype=bool)
+        with EStream(
+            n_null_trials,
+            warmup=32,
+            ring_capacity=0,
+            alpha=alpha,
+            season_period=sp,
+            detrend_alpha=da,
+        ) as est:
+            for start in range(0, n_ticks, peek_every):
+                end = min(n_ticks, start + peek_every)
+                est.update_batch(x_mat[start:end])
+                if end >= 40:
+                    for st in est.topk(n_null_trials):
+                        if st.e_value < e_thresh:
+                            break
+                        hit_ss[st.channel] = True
+
+        # 2. Naive rolling |z|>3
+        hit_z = np.zeros(n_null_trials, dtype=bool)
+        for t in range(40, n_ticks + 1, peek_every):
+            win = x_mat[max(0, t - 65) : t - 1]
+            mu = win.mean(axis=0)
+            sd = win.std(axis=0, ddof=1)
+            z = np.abs((x_mat[t - 1] - mu) / np.maximum(sd, 1e-12))
+            hit_z |= z > 3.0
+
+        # 3. Peeking Welch t-test (p < 0.05)
+        hit_tt = np.zeros(n_null_trials, dtype=bool)
+        for t in range(40, n_ticks + 1, peek_every):
+            mid = t // 2
+            _, pvals = sp_stats.ttest_ind(x_mat[:mid], x_mat[mid:t], axis=0, equal_var=False)
+            hit_tt |= np.nan_to_num(pvals, nan=1.0) < alpha
+
+        # 4 & 5. river ADWIN(0.002) and PageHinkley
+        hit_adw = 0
+        hit_ph = 0
+        for j in range(n_null_trials):
+            col = x_mat[:, j].tolist()
+            adw = river_drift.ADWIN(delta=0.002)
+            for v in col:
+                adw.update(v)
+                if adw.drift_detected:
+                    hit_adw += 1
+                    break
+            ph = river_drift.PageHinkley()
+            for v in col:
+                ph.update(v)
+                if ph.drift_detected:
+                    hit_ph += 1
+                    break
+
+        null_far[scen_name] = {
+            "streamsieve_prefilter": round(float(hit_ss.mean()), 4),
+            "naive_rolling_z3": round(float(hit_z.mean()), 4),
+            "peeking_ttest_ind": round(float(hit_tt.mean()), 4),
+            "river_adwin_0.002": round(hit_adw / float(n_null_trials), 4),
+            "river_page_hinkley": round(hit_ph / float(n_null_trials), 4),
+        }
+
+    # Diurnal 64-ch firehose detection (5 seeds, T=600, cp=240: 4 shifts +2.0s, 4 bursts 18% +3.5s, 56 diurnal nulls)
+    n_ch_d, cp_d = 64, 240
+    shift_set = set(range(0, 4))
+    burst_set = set(range(4, 8))
+    loud_set: set[int] = set()
+    diurnal_scores: dict[str, list[dict[str, float]]] = {
+        "streamsieve_season24": [],
+        "peeking_welch_bh": [],
+        "river_adwin_0.002": [],
+    }
+    for s_idx in range(5):
+        rng_d = np.random.default_rng(seed + 100 + s_idx)
+        mat_d = diurnal_wave + rng_d.standard_normal((n_ticks, n_ch_d))
+        mat_d[cp_d:, 0:4] += 2.0
+        bmask = rng_d.random((n_ticks - cp_d, 4)) < 0.18
+        mat_d[cp_d:, 4:8] += bmask * 3.5
+        mat_d = np.ascontiguousarray(mat_d, dtype=np.float64)
+
+        t0 = time.perf_counter()
+        with EStream(n_ch_d, warmup=32, ring_capacity=64, alpha=alpha, season_period=24) as est:
+            est.update_batch(mat_d)
+            fl = set(est.ebh_reject(alpha))
+        diurnal_scores["streamsieve_season24"].append(
+            _score_firehose(fl, shift_set, burst_set, loud_set, (time.perf_counter() - t0) * 1000.0)
+        )
+
+        t0 = time.perf_counter()
+        hit_bh = np.zeros(n_ch_d, dtype=bool)
+        for t in range(120, n_ticks + 1, 10):
+            mid = t // 2
+            _, pvals = sp_stats.ttest_ind(mat_d[:mid], mat_d[mid:t], axis=0, equal_var=False)
+            adj = sp_stats.false_discovery_control(np.clip(np.nan_to_num(pvals, nan=1.0), 0.0, 1.0), method="bh")
+            hit_bh |= adj < alpha
+        diurnal_scores["peeking_welch_bh"].append(
+            _score_firehose(set(np.flatnonzero(hit_bh).tolist()), shift_set, burst_set, loud_set, (time.perf_counter() - t0) * 1000.0)
+        )
+
+        t0 = time.perf_counter()
+        fl_adw: set[int] = set()
+        for c in range(n_ch_d):
+            adw = river_drift.ADWIN(delta=0.002)
+            for v in mat_d[:, c].tolist():
+                adw.update(v)
+                if adw.drift_detected:
+                    fl_adw.add(c)
+                    break
+        diurnal_scores["river_adwin_0.002"].append(
+            _score_firehose(fl_adw, shift_set, burst_set, loud_set, (time.perf_counter() - t0) * 1000.0)
+        )
+
+    diurnal_summary = {
+        m: {k: round(float(np.mean([r[k] for r in rows])), 4) for k in rows[0].keys()}
+        for m, rows in diurnal_scores.items()
+    }
+
+    return {
+        "n_null_trials": n_null_trials,
+        "n_ticks": n_ticks,
+        "peek_every": peek_every,
+        "nominal_alpha": alpha,
+        "null_far_by_scenario": null_far,
+        "diurnal_64ch_firehose": {
+            "n_channels": n_ch_d,
+            "changepoint_tick": cp_d,
+            "n_seeds": 5,
+            "methods": diurnal_summary,
+        },
+    }
+
+
 def run_benchmark() -> dict[str, Any]:
-    """Run Experiments A, B, and diagnostic B2 and return structured dict."""
+    """Run Experiments A, B, diagnostic B2, and C (non-stationary) and return structured dict."""
     return {
         "experiment_a_peeking_null_far": run_experiment_a(),
         "experiment_b_mixed_firehose": _run_mixed_firehose_suite(
@@ -307,6 +481,7 @@ def run_benchmark() -> dict[str, Any]:
         "experiment_b2_diagnostic_symmetric_bursts": _run_mixed_firehose_suite(
             n_seeds=5, base_seed=202620, symmetric_bursts=True
         ),
+        "experiment_c_nonstationary": run_experiment_c_nonstationary(),
     }
 
 

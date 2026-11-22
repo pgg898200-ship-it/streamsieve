@@ -21,7 +21,7 @@ import io
 import json
 import math
 import sys
-from typing import Any, BinaryIO
+from typing import Any, BinaryIO, Sequence
 
 from ._native import StreamSieveError, has_avx2, version
 from .lattice import EvidenceLattice
@@ -116,7 +116,10 @@ def _as_float(val: Any, name: str, *, allow_nonfinite: bool = False) -> float:
 def _parse_json_stream(data: Any) -> tuple[list[list[float]], list[str] | None]:
     """Parse JSON array of numeric rows OR JSON array of dicts."""
     if isinstance(data, str):
-        data = json.loads(data)
+        try:
+            data = json.loads(data)
+        except (json.JSONDecodeError, RecursionError, ValueError) as exc:
+            raise ValueError(f"Invalid json_data: {exc}") from exc
     if not isinstance(data, list):
         raise ValueError("json_data must be a JSON array of rows or objects")
     if not data:
@@ -137,13 +140,67 @@ def _parse_json_stream(data: Any) -> tuple[list[list[float]], list[str] | None]:
     return (rows, None)
 
 
+def _safe_jsonl_float(v: Any) -> float | None:
+    """Convert JSONL numeric field to finite float or None (on bool/non-numeric/overflow/non-finite)."""
+    if not isinstance(v, (int, float)) or isinstance(v, bool):
+        return None
+    try:
+        fv = float(v)
+    except OverflowError:
+        return None
+    return fv if math.isfinite(fv) else None
+
+
+def _parse_jsonl_rows(
+    jsonl_text: str,
+    *,
+    expected_keys: Sequence[str] | None = None,
+) -> tuple[list[list[float]], list[str] | None]:
+    """Parse newline-delimited JSON objects (JSONL/NDJSON), extracting numeric top-level fields.
+
+    When ``expected_keys`` is provided (e.g., on stateful ``append=True`` calls), columns are
+    extracted strictly in ``expected_keys`` order even if incoming JSON objects reorder keys.
+    """
+    rows: list[list[float]] = []
+    keys: list[str] | None = [str(k) for k in expected_keys] if expected_keys else None
+    for raw_line in jsonl_text.splitlines():
+        line = raw_line.strip()
+        if not line or not line.startswith("{"):
+            continue
+        try:
+            obj = json.loads(line)
+        except (json.JSONDecodeError, RecursionError, ValueError):
+            continue
+        if not isinstance(obj, dict):
+            continue
+        if keys is None:
+            cand_keys: list[str] = []
+            first_row: list[float] = []
+            for k, v in obj.items():
+                fv = _safe_jsonl_float(v)
+                if fv is not None:
+                    cand_keys.append(str(k))
+                    first_row.append(fv)
+            if cand_keys:
+                keys = cand_keys
+                rows.append(first_row)
+        else:
+            row_vals: list[float] = []
+            for k in keys:
+                fv = _safe_jsonl_float(obj.get(k))
+                row_vals.append(fv if fv is not None else math.nan)
+            rows.append(row_vals)
+    return (rows, keys)
+
+
 TOOL_DEFINITIONS: list[dict[str, Any]] = [
     {
         "name": "sift_stream",
         "description": (
-            "Ingest multivariate streaming telemetry (rows, CSV/TSV text, or JSON arrays) into a "
-            "stateful AVX2 anytime-valid e-process monitor and return an ultra-compact e-BH brief "
-            "with lossless channel drill-down handles (ch:<id>@t=<cp>..<tick>) and token savings stats."
+            "Ingest multivariate streaming telemetry (rows, CSV/TSV, JSONL/NDJSON, or JSON arrays) into a "
+            "stateful AVX2 anytime-valid e-process monitor (with optional causal deseasonalizing & detrending) "
+            "and return an ultra-compact e-BH brief with lossless channel drill-down handles "
+            "(ch:<id>@t=<cp>..<tick>) and token savings stats."
         ),
         "inputSchema": {
             "type": "object",
@@ -158,6 +215,10 @@ TOOL_DEFINITIONS: list[dict[str, Any]] = [
                     "type": "string",
                     "description": "CSV/TSV/whitespace numeric stream with optional header row.",
                 },
+                "jsonl_text": {
+                    "type": "string",
+                    "description": "Newline-delimited JSON objects (NDJSON/JSONL); extracts numeric top-level fields.",
+                },
                 "json_data": {
                     "description": "JSON string or parsed array of numeric rows or dicts.",
                 },
@@ -168,6 +229,16 @@ TOOL_DEFINITIONS: list[dict[str, Any]] = [
                 },
                 "alpha": {"type": "number", "default": 0.05},
                 "warmup": {"type": "integer", "default": 32},
+                "season_period": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "Optional causal seasonal period P >= 2 (0 = disabled).",
+                },
+                "detrend_alpha": {
+                    "type": "number",
+                    "default": 0.0,
+                    "description": "Optional causal detrend alpha in (0, 1]; 1.0 = first diff (0 = disabled).",
+                },
                 "max_channels": {"type": "integer", "default": 10},
                 "ring_capacity": {"type": "integer", "default": 256},
                 "append": {
@@ -383,10 +454,19 @@ class MCPServer:
         session_id = str(args.get("session_id", "default"))
         alpha = _as_float(args.get("alpha", 0.05), "alpha")
         warmup = _as_int(args.get("warmup", 32), "warmup")
+        season_period = _as_int(args.get("season_period", 0), "season_period")
+        detrend_alpha = _as_float(args.get("detrend_alpha", 0.0), "detrend_alpha")
         max_channels = _as_int(args.get("max_channels", 10), "max_channels")
         ring_capacity = _as_int(args.get("ring_capacity", 256), "ring_capacity")
         append = bool(args.get("append", False))
         explicit_names = args.get("names")
+
+        existing = self._streams.get(session_id)
+        expected_jsonl_keys = (
+            existing.names
+            if (append and existing is not None and existing.names)
+            else None
+        )
 
         rows: list[list[float]] = []
         parsed_names: list[str] | None = None
@@ -402,16 +482,23 @@ class MCPServer:
                     raise ValueError(f"rows[{r_idx}] must be an array of numbers")
                 rows.append([_as_float(v, f"rows[{r_idx}]", allow_nonfinite=True) for v in r])
             raw_chars = len(json.dumps(_sanitize_json(raw_rows), separators=(",", ":")))
+        elif "jsonl_text" in args and args["jsonl_text"] is not None:
+            jsonl_text = str(args["jsonl_text"])
+            raw_chars = len(jsonl_text)
+            rows, parsed_names = _parse_jsonl_rows(jsonl_text, expected_keys=expected_jsonl_keys)
         elif "csv_text" in args and args["csv_text"] is not None:
             csv_text = str(args["csv_text"])
             raw_chars = len(csv_text)
-            rows, parsed_names = _parse_csv_rows(csv_text)
+            if csv_text.lstrip().startswith("{"):
+                rows, parsed_names = _parse_jsonl_rows(csv_text, expected_keys=expected_jsonl_keys)
+            else:
+                rows, parsed_names = _parse_csv_rows(csv_text)
         elif "json_data" in args and args["json_data"] is not None:
             jd = args["json_data"]
             raw_chars = len(jd) if isinstance(jd, str) else len(json.dumps(_sanitize_json(jd), separators=(",", ":")))
             rows, parsed_names = _parse_json_stream(jd)
         else:
-            raise ValueError("Provide one of 'rows', 'csv_text', or 'json_data'")
+            raise ValueError("Provide one of 'rows', 'csv_text', 'jsonl_text', or 'json_data'")
 
         if not rows or not rows[0]:
             raise ValueError("No numeric rows found in input stream")
@@ -423,20 +510,38 @@ class MCPServer:
             else (parsed_names if parsed_names and len(parsed_names) == n_ch else None)
         )
 
-        est = self._streams.get(session_id)
-        if not append or est is None or est.n_channels != n_ch:
-            if est is not None:
-                est.close()
-            est = EStream(
+        eff_season = min(season_period, 4096) if season_period >= 2 else 0
+        eff_detrend = min(1.0, max(0.0, detrend_alpha))
+        est = existing
+        need_new = (
+            not append
+            or est is None
+            or est.n_channels != n_ch
+            or est.season_period != eff_season
+            or est.detrend_alpha != eff_detrend
+        )
+        if need_new:
+            new_est = EStream(
                 n_ch,
                 warmup=warmup,
                 ring_capacity=ring_capacity,
                 alpha=alpha,
+                season_period=season_period,
+                detrend_alpha=detrend_alpha,
                 names=names,
             )
-            self._streams[session_id] = est
+            try:
+                new_est.update_batch(rows)
+            except Exception:
+                new_est.close()
+                raise
+            if est is not None:
+                est.close()
+            self._streams[session_id] = new_est
+            est = new_est
+        else:
+            est.update_batch(rows)
 
-        est.update_batch(rows)
         brief = est.brief(max_channels=max_channels, names=names, alpha=alpha)
         compact_text = brief.to_compact_text()
         brief_chars = len(compact_text)
@@ -448,6 +553,8 @@ class MCPServer:
         payload = dict(brief)
         payload["session_id"] = session_id
         payload["rows_ingested_now"] = len(rows)
+        payload["season_period"] = est.season_period
+        payload["detrend_alpha"] = est.detrend_alpha
         payload["compact_text"] = compact_text
         payload["token_savings"] = {
             "raw_chars": raw_chars,
@@ -608,14 +715,15 @@ class MCPServer:
         if sf is None or reset:
             if "n_channels" not in args or args["n_channels"] is None:
                 raise ValueError("voi_allocate requires 'n_channels' when creating or resetting a sifter")
-            if sf is not None:
-                sf.close()
-            sf = VOISifter(
+            new_sf = VOISifter(
                 _as_int(args["n_channels"], "n_channels"),
                 n_sites=_as_int(args.get("n_sites", 1), "n_sites"),
                 ticks_per_epoch=_as_int(args.get("ticks_per_epoch", 8), "ticks_per_epoch"),
             )
-            self._sifters[sifter_id] = sf
+            if sf is not None:
+                sf.close()
+            self._sifters[sifter_id] = new_sf
+            sf = new_sf
 
         if args.get("noise_scales") is not None:
             ns = args["noise_scales"]
@@ -810,7 +918,15 @@ class MCPServer:
                 "structuredContent": payload,
                 "isError": False,
             }
-        except (ValueError, TypeError, OverflowError, AttributeError, KeyError, StreamSieveError) as exc:
+        except (
+            ValueError,
+            TypeError,
+            OverflowError,
+            RecursionError,
+            AttributeError,
+            KeyError,
+            StreamSieveError,
+        ) as exc:
             err_payload = {"error": str(exc), "tool": name}
             return {
                 "content": [

@@ -1,18 +1,18 @@
 # `StreamSwarmBench` — Verified Empirical Benchmark Report
 
-- **Date (UTC):** `2026-11-22T16:36:43Z`
-- **Engine:** `streamsieve 0.1.0` (C++20, `-O3 -march=native -ffp-contract=off`, AVX2+FMA enabled)
+- **Date (UTC):** `2026-11-22T20:27:17Z`
+- **Engine:** `streamsieve 0.2.0` (C++20, `-O3 -march=native -ffp-contract=off`, 8-wide cache-tiled AVX2+FMA enabled)
 - **Hardware:** `Intel(R) Xeon(R) CPU @ 2.30GHz` (2 logical vCPUs), Linux `6.18.57-x86_64`, glibc `2.39`
 - **Incumbent Versions:** `river 0.27.0`, `scipy 1.18.1`, `numpy 2.5.5`, Python `3.12.16`
-- **Raw Machine-Readable Data:** [`benchmarks/results.json`](../benchmarks/results.json) (total wall runtime: `34.49 s`)
+- **Raw Machine-Readable Data:** [`benchmarks/results.json`](../benchmarks/results.json) (total wall runtime: `37.17 s`)
 
 ## Reproduce Every Number
 
 ```bash
-# 1. Build native AVX2 core + CLI and run C++ / ASan+UBSan checks
+# 1. Build native AVX2 core + CLI and run C++ / ASan+UBSan+float-cast-overflow checks
 make all test-cpp test-san
 
-# 2. Run zero-dependency Python unit + adversarial breaker tests (53 tests)
+# 2. Run zero-dependency Python unit, v0.2.0 parity, & adversarial breaker tests (79 tests)
 PYTHONPATH=python python3 -m unittest discover -s tests -p "test_*.py" -v
 
 # 3. Run full StreamSwarmBench against river, scipy, and numpy
@@ -25,50 +25,50 @@ PYTHONPATH=python .bench-venv/bin/python benchmarks/run_all.py
 
 Source script: [`benchmarks/bench_throughput.py`](../benchmarks/bench_throughput.py).
 
-### 1.1 Native AVX2 CLI & Zero-Copy Python `update_batch`
+### 1.1 Native 8-Wide AVX2 CLI & Zero-Copy Python `update_batch`
 
 | Mode | Shape (`ch × ticks`) | Channel-Ticks | Median Latency (ms) | Throughput (M ch-ticks/s) |
 |---|---:|---:|---:|---:|
-| Native CLI (`./build/streamsieve bench`, internal) | `256 × 16,000` | 4,096,000 | **25.481** | **160.75** |
-| Native CLI (`./build/streamsieve bench`, internal) | `1,024 × 4,000` | 4,096,000 | **36.027** | **113.69** |
-| Native CLI (`./build/streamsieve bench`, internal) | `4,096 × 2,000` | 8,192,000 | **87.942** | **93.15** |
-| Python zero-copy `EStream.update_batch` | `256 × 4,000` | 1,024,000 | **11.772** | **86.99** |
-| Python zero-copy `EStream.update_batch` + `ebh_reject` | `256 × 4,000` | 1,024,000 | **13.792** | **74.24** |
-| Python zero-copy `EStream.update_batch` | `1,024 × 2,000` | 2,048,000 | **43.972** | **46.58** |
-| Python zero-copy `EStream.update_batch` + `ebh_reject` | `1,024 × 2,000` | 2,048,000 | **51.751** | **39.57** |
+| Native CLI (`./build/streamsieve bench`, internal) | `256 × 16,000` | 4,096,000 | **16.021** | **255.67** |
+| Native CLI (`./build/streamsieve bench`, internal) | `1,024 × 4,000` | 4,096,000 | **21.423** | **191.20** |
+| Native CLI (`./build/streamsieve bench`, internal) | `4,096 × 2,000` | 8,192,000 | **55.847** | **146.69** |
+| Python zero-copy `EStream.update_batch` | `256 × 4,000` | 1,024,000 | **8.289** | **123.53** |
+| Python zero-copy `EStream.update_batch` + `ebh_reject` | `256 × 4,000` | 1,024,000 | **8.873** | **115.41** |
+| Python zero-copy `EStream.update_batch` | `1,024 × 2,000` | 2,048,000 | **29.092** | **70.40** |
+| Python zero-copy `EStream.update_batch` + `ebh_reject` | `1,024 × 2,000` | 2,048,000 | **34.121** | **60.02** |
 
 ### 1.2 Matched Head-to-Head Throughput vs Incumbents
 
 | Benchmark | Matrix | Median (ms) | Throughput (M ch-ticks/s) | Speedup vs Incumbent |
 |---|---|---:|---:|---:|
-| `streamsieve.EStream.update_batch` (zero-copy NumPy) | `64 × 2,000` | **1.946** | **65.77** | Reference (`17.05×` vs ADWIN, `54.42×` vs PH) |
-| `streamsieve.EStream.update_row` (Python loop) | `64 × 2,000` | 22.579 | 5.67 | `1.47×` vs ADWIN, `4.69×` vs PH |
-| `river.drift.ADWIN(delta=0.002)` | `64 × 2,000` | 33.180 | 3.858 | 1.00× |
-| `river.drift.PageHinkley()` | `64 × 2,000` | 105.915 | 1.209 | 1.00× |
-| `streamsieve` (`update_batch` + exact online e-BH) | `256 × 4,000` | **13.696** | **74.77** | **5.65×** vs NumPy/SciPy |
-| NumPy/SciPy causal rolling z-score + BH | `256 × 4,000` | 77.355 | 13.24 | 1.00× |
+| `streamsieve.EStream.update_batch` (zero-copy NumPy) | `64 × 2,000` | **1.210** | **105.75** | Reference (`26.95×` vs ADWIN, `92.26×` vs PH) |
+| `streamsieve.EStream.update_row` (Python loop) | `64 × 2,000` | 25.761 | 4.97 | `1.27×` vs ADWIN, `4.33×` vs PH |
+| `river.drift.ADWIN(delta=0.002)` | `64 × 2,000` | 32.621 | 3.924 | 1.00× |
+| `river.drift.PageHinkley()` | `64 × 2,000` | 111.672 | 1.146 | 1.00× |
+| `streamsieve` (`update_batch` + exact online e-BH) | `256 × 4,000` | **7.575** | **135.18** | **10.55×** vs NumPy/SciPy |
+| NumPy/SciPy causal rolling z-score + BH | `256 × 4,000` | 79.922 | 12.81 | 1.00× |
 
 ### 1.3 Coordination Primitives & Cold-Start Latency
 
 | Operation | Measured Performance |
 |---|---:|
-| `EvidenceLattice.observe` (uint64 IDs) | **121,292 ops/s** (`8.25 µs/op`) |
-| `EvidenceLattice.observe` (string IDs, FNV-1a/SplitMix64 hashed) | **72,276 ops/s** (`13.84 µs/op`) |
-| `EvidenceLattice.merge` (100-item CRDT in-place) | **315,753 merges/s** (`3.17 µs/merge`) |
-| `EvidenceLattice` wire deserialize + merge (100 items, `4,188 B` SSLT / `5,235` B85 chars) | **30,342 merges/s** (`41.88 B/item`) |
-| `TrustCalibrator` (4 agents, `predict_prob` + `resolve`) | **24,434 ops/s** (`40.93 µs/op`) |
-| `TrustCalibrator` (4 agents, `predict_scalar` + `resolve`) | **20,657 ops/s** (`48.41 µs/op`) |
-| Cold-start CLI `./build/streamsieve version` (median / p95 of 10) | **4.03 ms** / `4.32 ms` |
-| Cold-start `python3 -c "import streamsieve"` (median / p95 of 10) | **24.90 ms** / `26.33 ms` (**67.9× faster**) |
-| Cold-start `python3 -c "import numpy, scipy.stats, river.drift"` (median of 10) | `1,691.69 ms` |
+| `EvidenceLattice.observe` (uint64 IDs) | **119,194 ops/s** (`8.39 µs/op`) |
+| `EvidenceLattice.observe` (string IDs, FNV-1a/SplitMix64 hashed) | **70,624 ops/s** (`14.16 µs/op`) |
+| `EvidenceLattice.merge` (100-item CRDT in-place) | **290,141 merges/s** (`3.45 µs/merge`) |
+| `EvidenceLattice` wire deserialize + merge (100 items, `4,188 B` SSLT / `5,235` B85 chars) | **26,193 merges/s** (`41.88 B/item`) |
+| `TrustCalibrator` (4 agents, `predict_prob` + `resolve`) | **21,739 ops/s** (`46.00 µs/op`) |
+| `TrustCalibrator` (4 agents, `predict_scalar` + `resolve`) | **18,439 ops/s** (`54.23 µs/op`) |
+| Cold-start CLI `./build/streamsieve version` (median / p95 of 10) | **3.87 ms** / `7.46 ms` (**463× faster** than incumbent imports) |
+| Cold-start `python3 -c "import streamsieve"` (median / p95 of 10) | **25.30 ms** / `28.95 ms` (**70.78× faster**) |
+| Cold-start `python3 -c "import numpy, scipy.stats, river.drift"` (median of 10) | `1,791.01 ms` |
 
 ---
 
-## 2. Continuous-Peeking Calibration & 256-Channel Mixed Firehose FDR
+## 2. Continuous-Peeking Calibration, Mixed Firehoses & Non-Stationary Streams
 
 Source script: [`benchmarks/bench_peeking_fdr.py`](../benchmarks/bench_peeking_fdr.py).
 
-### 2.1 Experiment A — Continuous-Peeking Null Type-I Error
+### 2.1 Experiment A — Continuous-Peeking Stationary Null Type-I Error
 
 **Protocol:** 500 independent stationary null streams × $T = 600$ ticks, peeked every 10 ticks, nominal $\alpha = 0.05$.
 
@@ -85,11 +85,13 @@ Source script: [`benchmarks/bench_peeking_fdr.py`](../benchmarks/bench_peeking_f
 
 | Method | Recall (Shift) | Recall (Burst) | Loud FPs (/32) | Emp. FDR | Precision | F1 | Wall (ms) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| `streamsieve_ebh` (single-pass) | **1.00** | 0.60 | **0.0** | **0.000** | **1.000** | **0.883** | **3.80** |
-| `streamsieve_ebh_peeking` (every 10 ticks) | **1.00** | **0.75** | **0.0** | **0.040** | **0.960** | **0.909** | 52.45 |
-| `river_adwin_0.002` | 1.00 | 0.60 | 0.4 | 0.054 | 0.946 | 0.862 | 47.44 |
-| `peeking_welch_bh` | 1.00 | 1.00 | 1.2 | 0.321 | 0.680 | 0.800 | 183.92 |
-| `naive_z3` | 0.20 | 0.30 | 7.6 | 0.966 | 0.034 | 0.060 | 7.85 |
+| `streamsieve_ebh` (single-pass) | **1.00** | 0.60 | **0.0** | **0.000** | **1.000** | **0.883** | **2.81** |
+| `streamsieve_ebh_peeking` (every 10 ticks) | **1.00** | **0.75** | **0.0** | **0.040** | **0.960** | **0.909** | **40.85** |
+| `river_adwin_0.002` | 1.00 | 0.60 | 0.4 | 0.054 | 0.946 | 0.862 | 49.33 |
+| `peeking_welch_bh` | 1.00 | 1.00 | 1.2 | 0.321 | 0.680 | 0.800 | 183.03 |
+| `naive_z3` | 0.20 | 0.30 | 7.6 | 0.966 | 0.034 | 0.060 | 5.59 |
+
+*v0.2.0 speedup note:* Thanks to transcendental-free `fast_xlogx` and per-checkpoint `(n0, n1)` JZS geometry caching, even 55× continuous peeking (`40.85 ms`) is now **faster than `river.ADWIN` (`49.33 ms`)** while winning F1 (`0.909` vs `0.862`), FDR (`0.040` vs `0.054`), burst recall (`0.75` vs `0.60`), and loud FPs (`0.0` vs `0.4`).
 
 ### 2.3 Experiment B2 (Diagnostic) — Zero-Mean Symmetric `±3.5σ` Bursts
 
@@ -97,13 +99,32 @@ Source script: [`benchmarks/bench_peeking_fdr.py`](../benchmarks/bench_peeking_f
 
 | Method | Recall (Shift) | Recall (Burst) | Loud FPs (/32) | Emp. FDR | F1 | Wall (ms) |
 |---|---:|---:|---:|---:|---:|---:|
-| `streamsieve_ebh` (single-pass) | **1.00** | **0.65** | **0.0** | **0.000** | **0.897** | **3.60** |
-| `streamsieve_ebh_peeking` (every 10 ticks) | **1.00** | **0.70** | **0.0** | **0.022** | **0.900** | 52.25 |
-| `river_adwin_0.002` | 1.00 | **0.00** | 0.0 | 0.000 | 0.667 | 48.43 |
-| `peeking_welch_bh` | 1.00 | **0.00** | 0.0 | 0.298 | 0.578 | 170.22 |
-| `naive_z3` | 0.50 | 0.30 | 6.6 | 0.941 | 0.102 | 5.32 |
+| `streamsieve_ebh` (single-pass) | **1.00** | **0.65** | **0.0** | **0.000** | **0.897** | **2.70** |
+| `streamsieve_ebh_peeking` (every 10 ticks) | **1.00** | **0.70** | **0.0** | **0.022** | **0.900** | **38.77** |
+| `river_adwin_0.002` | 1.00 | **0.00** | 0.0 | 0.000 | 0.667 | 49.46 |
+| `peeking_welch_bh` | 1.00 | **0.00** | 0.0 | 0.298 | 0.578 | 187.99 |
+| `naive_z3` | 0.50 | 0.30 | 6.6 | 0.941 | 0.102 | 5.27 |
 
-*Takeaway:* Mean-only detectors (`ADWIN`, Welch $t$-test) are mathematically blind (`0.00` recall) to zero-mean variance/tail bursts; `streamsieve`'s dual-resolution tail-hinge JZS + Beta-Binomial e-process catches them at `0.65–0.70` recall with `0.000–0.022` FDR and `0.0` loud-channel false positives.
+### 2.4 Experiment C — Non-Stationary Diurnal (`P=24`) & Trending Null FAR
+
+**Protocol:** 200 independent non-stationary null streams × $T = 600$ ticks, peeked every 10 ticks, nominal $\alpha = 0.05$. `streamsieve` uses its built-in causal pre-filter (`season_period=24` and/or `detrend_alpha=1.0`).
+
+| Non-Stationary Null Scenario | `streamsieve` (pre-filter) | Naive `\|z\| > 3` | Peeking Welch `ttest` | `ADWIN(0.002)` | `PageHinkley` |
+|---|---:|---:|---:|---:|---:|
+| `Diurnal_P24_6sigma` (6σ 24-tick wave) | **0.010** | 0.000 | 0.835 | 0.000 | 1.000 |
+| `LinearTrend_0.25/tick` | **0.035** | 0.000 | 1.000 | 1.000 | 1.000 |
+| `RandomWalk_UnitStep` | **0.025** | 0.645 | 1.000 | 1.000 | 1.000 |
+| `Diurnal_P24+LinearTrend` | **0.050** | 0.000 | 1.000 | 1.000 | 1.000 |
+
+### 2.5 Experiment C2 — 64-Ch Diurnal (`P=24`, `6σ` wave) Firehose Detection
+
+**Protocol:** 64 channels × 600 ticks riding a 6σ diurnal sinusoid (`P=24`), changepoint $t^* = 240$, 5 seeds (4 sustained shifts + 4 sparse bursts + 56 diurnal nulls).
+
+| Method | Recall (Shift) | Recall (Burst) | Emp. FDR | Precision | F1 | Wall (ms) |
+|---|---:|---:|---:|---:|---:|---:|
+| `streamsieve_season24` | **1.00** | **0.35** | **0.000** | **1.000** | **0.799** | **1.72** |
+| `peeking_welch_bh` | 1.00 | 0.00 | 0.000 | 1.000 | 0.667 | 125.49 |
+| `river_adwin_0.002` | 0.90 | 0.00 | 0.000 | 1.000 | 0.618 | 11.57 |
 
 ---
 
@@ -172,15 +193,15 @@ Source script: [`benchmarks/bench_token_compression.py`](../benchmarks/bench_tok
 
 | Scale | Raw CSV Bytes | Raw Tokens (`char/4`) | Brief Tokens (`char/4`) | Token Reduction | Wall (ms) | e-BH Prec / Rec | Loud FPs | `fetch_raw` Max Abs Err |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| `64 ch × 500 ticks` | 239,984 | 59,996 | **318** | **99.47%** (`188.7×`) | 1.54 | `1.00 / 0.75` | **0** | **`0.0`** (1,842 ticks verified) |
-| `256 ch × 1,000 ticks` | 1,921,952 | 480,488 | **322** | **99.93%** (`1,492.2×`) | 6.72 | `1.00 / 1.00` | **0** | **`0.0`** (5,203 ticks verified) |
-| `1,024 ch × 2,000 ticks` | 15,377,411 | 3,844,353 | **325** | **99.99%** (`11,828.8×`) | 72.26 | `1.00 / 1.00` | **0** | **`0.0`** (10,565 ticks verified) |
+| `64 ch × 500 ticks` | 239,984 | 59,996 | **318** | **99.47%** (`188.7×`) | **1.22** | `1.00 / 0.75` | **0** | **`0.0`** (1,842 ticks verified) |
+| `256 ch × 1,000 ticks` | 1,921,952 | 480,488 | **322** | **99.93%** (`1,492.2×`) | **5.13** | `1.00 / 1.00` | **0** | **`0.0`** (5,203 ticks verified) |
+| `1,024 ch × 2,000 ticks` | 15,377,411 | 3,844,353 | **325** | **99.99%** (`11,828.8×`) | **53.42** | `1.00 / 1.00` | **0** | **`0.0`** (10,565 ticks verified) |
 
 ---
 
 ## 5. Honest Caveats & Methodology Notes
 
-1. **Batch vs per-row Python calls:** `update_batch()` passes a single contiguous `double*` buffer into AVX2 C++20 (`65.8–87.0 M ch-ticks/s`). Python loops calling `update_row()` one tick at a time incur `ctypes` marshaling overhead (`5.67 M ch-ticks/s`, still `1.47×` faster than `river.ADWIN`).
-2. **Frequent peeking wall time:** Single-pass `update_batch + ebh_reject` on 256×600 takes **3.80 ms** (`12.5×` faster than `river.ADWIN`). Calling `ebh_reject()` 55 times per 600 ticks takes `52.45 ms` (comparable to `ADWIN`'s `47.44 ms`, while delivering higher F1 `0.909` vs `0.862`, lower FDR `0.040` vs `0.054`, and `0.0` loud FPs).
-3. **Short-horizon rare bursts:** On `64 ch × 500 ticks`, `ebh_recall` is `0.75` (`1.00` shift recall, `0.50` rare-burst recall) and rises to `1.00 / 1.00` at `1,000` and `2,000` ticks as pre/post burst counts accumulate.
+1. **Batch vs per-row Python calls:** `update_batch()` dispatches to the 8-wide cache-tiled AVX2 kernel (`70.4–135.2 M ch-ticks/s` from Python; `146.7–255.7 M/s` native CLI). Python loops calling `update_row()` one tick at a time incur `ctypes` per-call overhead (`4.97 M ch-ticks/s`, still `1.27×` faster than `river.ADWIN`).
+2. **Detrender mode:** `detrend_alpha=1.0` (causal first difference) eliminates arbitrarily steep linear trends and random walks in 1 tick (`0` transient), while `0 < detrend_alpha < 1` is an EWMA high-pass filter for slow drift (converging in `~3/alpha` ticks).
+3. **Short-horizon rare bursts:** On `64 ch × 500 ticks`, `ebh_recall` is `0.75` (`1.00` shift recall, `0.50` rare-burst recall) and rises to `1.00 / 1.00` at `1,000` and `2,000` ticks as pre/post burst counts accumulate. Similarly, on the 64-ch diurnal firehose (`t* = 240`, `P = 24`), shift recall is `1.00` and burst recall is `0.35` (vs `0.00` for Welch/ADWIN) because 3 cycles (`72` ticks) are consumed by causal phase-median warmup.
 4. **Hardware variance:** Numbers reflect a 2-vCPU virtualized Intel Xeon @ 2.30 GHz with AVX2+FMA. Bare-metal AVX2/AVX-512 workstations typically achieve higher native throughput.

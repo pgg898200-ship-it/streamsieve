@@ -1,6 +1,6 @@
 CXX      ?= g++
 CXXFLAGS ?= -std=c++20 -O3 -march=native -ffp-contract=off -Wall -Wextra -Wpedantic -fPIC
-SANFLAGS := -std=c++20 -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined -Wall -Wextra -Wpedantic -fPIC
+SANFLAGS := -std=c++20 -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined,float-cast-overflow -Wall -Wextra -Wpedantic -fPIC
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)

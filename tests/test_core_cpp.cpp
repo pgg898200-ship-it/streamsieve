@@ -261,11 +261,141 @@ static void test_sifter_and_trust() {
     ss_trust_destroy(tc);
 }
 
+static void test_adversarial_edge_cases() {
+    /* W1: tiny detrend_alpha = 1e-12 must not trigger float-cast-overflow UB */
+    {
+        ss_estream_config_t cfg;
+        ss_estream_default_config(&cfg, 4);
+        cfg.warmup = 16;
+        cfg.detrend_alpha = 1e-12;
+        ss_estream_t* est = ss_estream_create(&cfg);
+        assert(est != nullptr);
+        double row[4] = {1.0, 2.0, 3.0, 4.0};
+        for (int t = 0; t < 64; ++t) {
+            assert(ss_estream_update_row(est, row, 4) == SS_OK);
+        }
+        ss_channel_status_t st{};
+        assert(ss_estream_get_channel(est, 0, &st) == SS_OK);
+        assert(std::isfinite(st.e_value));
+        ss_estream_destroy(est);
+    }
+
+    /* W2: alternating +-1e308 and +-1e155 warmup must stay finite and preserve e-BH sort order */
+    {
+        ss_estream_config_t cfg;
+        ss_estream_default_config(&cfg, 8);
+        cfg.warmup = 16;
+        cfg.alpha = 0.05;
+        ss_estream_t* est = ss_estream_create(&cfg);
+        assert(est != nullptr);
+        std::vector<double> mat(120 * 8, 0.0);
+        for (int t = 0; t < 120; ++t) {
+            double s = (t % 2 == 0) ? 1.0 : -1.0;
+            mat[t * 8 + 0] = s * 1e308;
+            mat[t * 8 + 1] = s * 1e155;
+            for (int c = 2; c < 8; ++c) {
+                mat[t * 8 + c] = 0.1 * s + ((c == 2 && t >= 60) ? 4.0 : 0.0);
+            }
+        }
+        assert(ss_estream_update_batch(est, mat.data(), 120, 8) == SS_OK);
+        ss_channel_status_t top[8]{};
+        uint32_t got = 0;
+        assert(ss_estream_topk(est, 8, top, &got) == SS_OK);
+        assert(got == 8);
+        for (uint32_t i = 0; i < got; ++i) {
+            assert(std::isfinite(top[i].e_value));
+            assert(std::isfinite(top[i].baseline_loc));
+            assert(std::isfinite(top[i].baseline_scale));
+            assert(top[i].baseline_scale > 0.0);
+            if (i > 0) assert(top[i - 1].e_value >= top[i].e_value);
+        }
+        assert(top[0].channel == 2);
+        ss_estream_destroy(est);
+    }
+
+    /* W3: seasonal subtraction overflow (1e308 - (-1e308)) must be 0-ULP identical across row vs one */
+    {
+        ss_estream_config_t cfg;
+        ss_estream_default_config(&cfg, 5);
+        cfg.warmup = 12;
+        cfg.season_period = 4;
+        cfg.ring_capacity = 32;
+        ss_estream_t* erow = ss_estream_create(&cfg);
+        ss_estream_t* eone = ss_estream_create(&cfg);
+        assert(erow && eone);
+        for (int t = 0; t < 40; ++t) {
+            double row[5];
+            for (int c = 0; c < 5; ++c) {
+                row[c] = (t < 12) ? -1e308 : ((t == 20 && (c == 1 || c == 4)) ? 1e308 : -1e308 + 1.0);
+            }
+            assert(ss_estream_update_row(erow, row, 5) == SS_OK);
+            for (int c = 0; c < 5; ++c) {
+                assert(ss_estream_update_one(eone, static_cast<uint32_t>(c), row[c]) == SS_OK);
+            }
+        }
+        for (uint32_t c = 0; c < 5; ++c) {
+            ss_channel_status_t s1{}, s2{};
+            assert(ss_estream_get_channel(erow, c, &s1) == SS_OK);
+            assert(ss_estream_get_channel(eone, c, &s2) == SS_OK);
+            assert(s1.e_value == s2.e_value);
+            assert(s1.z_score == s2.z_score);
+            assert(std::isfinite(s1.e_value));
+            double v1[32]{}, v2[32]{};
+            uint32_t t1[32]{}, t2[32]{}, n1 = 0, n2 = 0;
+            assert(ss_estream_fetch_raw(erow, c, v1, t1, 32, &n1) == SS_OK);
+            assert(ss_estream_fetch_raw(eone, c, v2, t2, 32, &n2) == SS_OK);
+            assert(n1 == n2);
+            for (uint32_t i = 0; i < n1; ++i) {
+                assert(v1[i] == v2[i] && t1[i] == t2[i]);
+            }
+        }
+        ss_estream_destroy(erow);
+        ss_estream_destroy(eone);
+    }
+
+    /* W4: two simultaneous 1e15 warmup spikes must not poison 5-sample median EWMA detrend init */
+    {
+        ss_estream_config_t cfg;
+        ss_estream_default_config(&cfg, 2);
+        cfg.warmup = 24;
+        cfg.alpha = 0.05;
+        cfg.detrend_alpha = 0.15;
+        ss_estream_t* est = ss_estream_create(&cfg);
+        assert(est != nullptr);
+        for (int t = 0; t < 240; ++t) {
+            double v0 = (t == 0 || t == 1) ? 1e15 : ((t % 2 == 0) ? 0.5 : -0.5);
+            double v1 = (t % 2 == 0) ? 0.5 : -0.5;
+            double row[2] = {v0, v1};
+            assert(ss_estream_update_row(est, row, 2) == SS_OK);
+        }
+        ss_channel_status_t st{};
+        assert(ss_estream_get_channel(est, 0, &st) == SS_OK);
+        assert(std::isfinite(st.e_value) && st.e_value < 20.0);
+        ss_estream_destroy(est);
+    }
+
+    /* W10: ebh_reject alpha clamping must match constructor [1e-9, 0.5] */
+    {
+        ss_estream_config_t cfg;
+        ss_estream_default_config(&cfg, 2);
+        cfg.alpha = 0.99; /* clamped to 0.5 */
+        ss_estream_t* est = ss_estream_create(&cfg);
+        assert(est != nullptr);
+        uint32_t out[2]{};
+        uint32_t n_a = 0, n_b = 0;
+        assert(ss_estream_ebh_reject(est, 0.99, out, 2, &n_a) == SS_OK);
+        assert(ss_estream_ebh_reject(est, 0.50, out, 2, &n_b) == SS_OK);
+        assert(n_a == n_b);
+        ss_estream_destroy(est);
+    }
+}
+
 int main() {
     std::printf("Running streamsieve %s C++20 core tests (AVX2=%d)...\n", ss_version(), ss_has_avx2());
     test_estream_null_calibration_and_power();
     test_lattice_crdt_axioms();
     test_sifter_and_trust();
+    test_adversarial_edge_cases();
     std::printf("ALL NATIVE C++20 CORE TESTS PASSED!\n");
     return 0;
 }

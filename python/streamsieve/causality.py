@@ -188,6 +188,8 @@ def verify_estream_causality(
     burst_tail_p0: float = 0.025,
     ewma_reset_decay: float = 0.0,
     two_sided: bool = True,
+    season_period: int = 0,
+    detrend_alpha: float = 0.0,
 ) -> bool:
     """Verify bit-exact zero-lookahead causality of :class:`EStream` on ``matrix``."""
     n_ticks = len(matrix)
@@ -205,6 +207,8 @@ def verify_estream_causality(
             burst_tail_p0=burst_tail_p0,
             ewma_reset_decay=ewma_reset_decay,
             two_sided=two_sided,
+            season_period=season_period,
+            detrend_alpha=detrend_alpha,
         ) as est:
             for t in range(len(stream)):
                 est.update_row(stream[t])
