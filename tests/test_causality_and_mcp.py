@@ -25,9 +25,9 @@ from streamsieve.cli import main as cli_main
 
 def _repo_python_env() -> dict[str, str]:
     env = dict(os.environ)
-    py_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "python"))
+    pkg_parent = os.path.dirname(os.path.dirname(os.path.abspath(streamsieve.__file__)))
     existing = env.get("PYTHONPATH", "")
-    env["PYTHONPATH"] = f"{py_dir}:{existing}" if existing else py_dir
+    env["PYTHONPATH"] = f"{pkg_parent}{os.pathsep}{existing}" if existing else pkg_parent
     return env
 
 

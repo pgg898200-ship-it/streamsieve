@@ -27,6 +27,7 @@ import time
 import unittest
 from typing import Any
 
+import streamsieve
 from streamsieve import (
     CausalityViolationError,
     EStream,
@@ -39,14 +40,14 @@ from streamsieve import (
 )
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
-PYTHON_DIR = os.path.join(REPO_ROOT, "python")
 NATIVE_CLI = os.path.join(REPO_ROOT, "build", "streamsieve")
 
 
 def _repo_python_env() -> dict[str, str]:
     env = dict(os.environ)
+    pkg_parent = os.path.dirname(os.path.dirname(os.path.abspath(streamsieve.__file__)))
     existing = env.get("PYTHONPATH", "")
-    env["PYTHONPATH"] = f"{PYTHON_DIR}:{existing}" if existing else PYTHON_DIR
+    env["PYTHONPATH"] = f"{pkg_parent}{os.pathsep}{existing}" if existing else pkg_parent
     return env
 
 
@@ -1066,6 +1067,7 @@ class TestSurface6MCPServerAndCLISecurityTorture(unittest.TestCase):
             f"adversarial inputs: {crashes}",
         )
 
+    @unittest.skipUnless(os.path.isfile(NATIVE_CLI), "native CLI binary not built in wheel-only test environment")
     def test_native_cli_edge_cases_and_cold_start_latency(self) -> None:
         """Native ./build/streamsieve handles empty stdin, header-only CSV, ragged rows, and <15 ms cold start."""
         self.assertTrue(os.path.isfile(NATIVE_CLI), f"Native CLI binary not found at {NATIVE_CLI}")
@@ -1103,6 +1105,7 @@ class TestSurface6MCPServerAndCLISecurityTorture(unittest.TestCase):
             f"Native CLI 10-run cold-start median {median_ms:.2f} ms >= 15 ms (all={latencies_ms})",
         )
 
+    @unittest.skipUnless(os.path.isfile(NATIVE_CLI), "native CLI binary not built in wheel-only test environment")
     def test_witness_native_cli_json_validity_on_quoted_header_and_extreme_values(self) -> None:
         """WITNESS #9 (Native CLI): `./build/streamsieve sift --json` must always emit strict RFC-8259 JSON.
 
