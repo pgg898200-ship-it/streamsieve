@@ -1,0 +1,97 @@
+{
+  "formatVersion": 1,
+  "timestamp": "2026-11-22T20:23:08.567Z",
+  "node": "v24.22.3",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "platform": "linux",
+  "arch": "x64",
+  "config": {
+    "boxes": 8192,
+    "steps": 8192,
+    "repeats": 5,
+    "scenario": "wide-local",
+    "seed": 514229
+  },
+  "blockSize": 64,
+  "flatbushVersion": "4.7.0",
+  "scenarios": [
+    {
+      "name": "wide-local",
+      "updates": 8192,
+      "agents": 16,
+      "events": 27781,
+      "meanStartMembers": 966.625,
+      "bounds": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "boxDimensionsAsFractionOfBounds": [
+        0.15,
+        0.55
+      ],
+      "timings": {
+        "edgechime": {
+          "buildMs": 47.953619,
+          "runnerSetupMs": [
+            0.0030740000001969747,
+            0.0019829999998819403,
+            0.0015220000000226719,
+            0.0023530000000846485,
+            0.003014999999777501
+          ],
+          "meanUsPerUpdateSamples": [
+            0.4037332763672241,
+            0.4080582275391986,
+            0.40895214843739147,
+            0.42785437011716443,
+            0.6017976074221276
+          ],
+          "medianMeanUsPerUpdate": 0.40895214843739147,
+          "p95BlockMeanUsPerUpdate": 0.7421874999984368
+        },
+        "flatbush": {
+          "buildMs": 27.731150999999983,
+          "runnerSetupMs": [
+            1.1902760000000399,
+            1.2061899999998786,
+            1.975259000000051,
+            0.6950899999999365,
+            0.854363999999805
+          ],
+          "meanUsPerUpdateSamples": [
+            24.8172939453124,
+            29.97078808593756,
+            27.775792602539205,
+            25.785746093749868,
+            31.7079802246093
+          ],
+          "medianMeanUsPerUpdate": 27.775792602539205,
+          "p95BlockMeanUsPerUpdate": 41.93732812499462
+        },
+        "perimeterGrid": {
+          "buildMs": 37.166304999999994,
+          "runnerSetupMs": [
+            0.0026229999998577114,
+            0.002312999999958265,
+            0.0030249999999796273,
+            0.002664000000095257,
+            0.0027340000001458975
+          ],
+          "meanUsPerUpdateSamples": [
+            1.6054858398439065,
+            1.6075748291017045,
+            1.6105333251954512,
+            2.0799222412108964,
+            2.050267944336104
+          ],
+          "medianMeanUsPerUpdate": 1.6105333251954512,
+          "p95BlockMeanUsPerUpdate": 2.609140624997508,
+          "gridSide": 128,
+          "gridPostings": 949620
+        }
+      }
+    }
+  ]
+}
