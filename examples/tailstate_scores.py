@@ -1,93 +1,99 @@
-"""Reconnect to a StreamSieve score board after a worker misses updates.
+"""Resume paged reads of a native Afterkey/StreamSieve score feed.
 
-From a StreamSieve checkout, build the native detector and install Tailstate:
+From the repository root (C++20 and a C compiler required):
 
-    make lib
+    c++ -O2 -std=c++20 -Icsrc -Iafterkey/include afterkey/examples/streamsieve.cpp csrc/streamsieve_capi.cpp -o /tmp/streamsieve-afterkey
     python3 -m pip install https://pgg-tailstate.tancurl3.chatgpt.site/tailstate.tar.gz
-    PYTHONPATH=python python3 examples/tailstate_scores.py
+    /tmp/streamsieve-afterkey --score-feed | python3 examples/tailstate_scores.py
 
-A C compiler is needed for the Tailstate source install. The included NOAA
-Seattle file supplies one-step differences of four weather measurements.
-Tailstate maintains the current e-value of each channel as an exact binary64
-payload. A disconnected worker can skip superseded scores. Consumers needing
-every alarm transition should use an event stream. PGG maintains both tools.
+Afterkey emits complete change batches for the native producer. The Python
+bridge holds absolute scores, and serves pages of two changes to a worker
+backed by SQLite. The worker closes after its first page, then reopens after
+several producer checkpoints. Its scores and cursor commit in one transaction.
+Both libraries are maintained by PGG. Use an event log if each transient score
+or alert must be observed.
 """
-import csv
 import json
 from pathlib import Path
-import struct
+import sqlite3
+import sys
+from tempfile import TemporaryDirectory
 
-from streamsieve import EStream
-from tailstate import Store
-
-
-FIELDS = ("precipitation", "temp_max", "temp_min", "wind")
-SOURCE = Path(__file__).with_name("noaa_weather.csv")
+from tailstate import Cursor, Store
 
 
-def word(value):
-    return struct.unpack(">Q", struct.pack(">d", value))[0]
-
-
-def score(bits):
-    return struct.unpack(">d", struct.pack(">Q", bits))[0]
-
-
-def weather_differences():
-    previous = None
-    with SOURCE.open(newline="") as stream:
-        for record in csv.DictReader(stream):
-            if record["location"] != "Seattle":
-                continue
-            current = [float(record[field]) for field in FIELDS]
-            if previous is not None:
-                yield [a - b for a, b in zip(current, previous)]
-            previous = current
-
-
-def catch_up(store, replica, cursor):
-    """Apply each two-row page before acknowledging its cursor."""
-    consumed = 0
-    while True:
-        page = store.page(cursor, limit=2)
-        if not page.changes:
-            return page.cursor, consumed
-        for change in page.changes:
-            if change.deleted:
-                replica.pop(change.key, None)
+def apply_page(db, publisher):
+    """Commit the page's effects and its acknowledgement together."""
+    saved = db.execute("SELECT epoch, seq, key FROM ack").fetchone()
+    with db:
+        cursor = None
+        if saved and saved[0] == publisher.epoch:
+            cursor = Cursor(saved[0], int(saved[1]), saved[2])
+        elif saved:
+            db.execute("DELETE FROM scores")
+        page = publisher.page(cursor, limit=2)
+        for row in page.changes:
+            if row.deleted:
+                db.execute("DELETE FROM scores WHERE key = ?", (row.key,))
             else:
-                replica[change.key] = change.value
-        consumed += len(page.changes)
-        cursor = page.cursor
+                db.execute("INSERT OR REPLACE INTO scores VALUES (?, ?)",
+                           (row.key, row.value.to_bytes(8, "big")))
+        db.execute("DELETE FROM ack")
+        db.execute("INSERT INTO ack VALUES (?, ?, ?)",
+                   (page.cursor.epoch, str(page.cursor.seq), page.cursor.key))
+    return len(page.changes)
 
 
-def run():
-    replica = {}
-    cursor = None
-    ticks = 0
-    with EStream(len(FIELDS), names=FIELDS) as detector, Store(len(FIELDS)) as store:
-        for ticks, row in enumerate(weather_differences(), start=1):
-            detector.update_row(row)
-            for key in range(detector.n_channels):
-                store.put(key, word(detector.channel_status(key).e_value))
-            if ticks == 64:
-                cursor, _ = catch_up(store, replica, cursor)
+def replay(lines, path):
+    label, count = next(lines).split()
+    if label != "channels":
+        raise ValueError("expected channel count at start of score feed")
+    with Store(int(count), indexed=True) as store:
+        checkpoints = 0
+        expected = {}
+        for line in lines:
+            op, *fields = line.split()
+            if op == "put":
+                key, value = map(int, fields)
+                store.put(key, value)
+            elif op == "checkpoint":
+                checkpoints += 1
+                if checkpoints == 1:
+                    db = sqlite3.connect(path)
+                    try:
+                        db.execute("CREATE TABLE scores(key INTEGER PRIMARY KEY, bits BLOB)")
+                        db.execute("CREATE TABLE ack(epoch TEXT, seq TEXT, key INTEGER)")
+                        acknowledged = apply_page(db, store)
+                    finally:
+                        db.close()
+            elif op == "expect":
+                key, value = map(int, fields)
+                expected[key] = value
+            else:
+                raise ValueError(f"unrecognized score feed record {op!r}")
 
-        if cursor is None or ticks <= 64:
-            raise RuntimeError("reconnect example needs more than 64 observations")
-        missed_writes = store.head - cursor.seq
-        cursor, received = catch_up(store, replica, cursor)
-        expected = {key: word(detector.channel_status(key).e_value)
-                    for key in range(detector.n_channels)}
-        if replica != expected or cursor.seq != store.head or received != len(FIELDS):
-            raise RuntimeError("worker's reconstructed state differs from live detector")
-        return {
-            "observations": ticks,
-            "score_writes_while_disconnected": missed_writes,
-            "rows_received_on_reconnect": received,
-            "e_values": {name: score(replica[key]) for key, name in enumerate(FIELDS)},
-        }
+        if checkpoints < 2 or len(expected) != int(count):
+            raise ValueError("incomplete StreamSieve score feed")
+        db = sqlite3.connect(path)
+        try:
+            received = 0
+            while True:
+                size = apply_page(db, store)
+                if size == 0:
+                    break
+                received += size
+            actual = {key: int.from_bytes(bits, "big") for key, bits in
+                      db.execute("SELECT key, bits FROM scores")}
+            cursor = db.execute("SELECT seq FROM ack").fetchone()[0]
+            if actual != expected or int(cursor) != store.head:
+                raise RuntimeError("resumed replica differs from native detector")
+        finally:
+            db.close()
+        return {"afterkey_checkpoints": checkpoints, "bridge_updates": store.head,
+                "initial_page_rows": acknowledged, "reconnect_rows": received,
+                "verified_channels": len(actual)}
 
 
 if __name__ == "__main__":
-    print(json.dumps(run(), sort_keys=True))
+    with TemporaryDirectory() as directory:
+        print(json.dumps(replay(iter(sys.stdin), Path(directory) / "worker.sqlite")))

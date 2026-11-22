@@ -34,8 +34,15 @@ cli: $(CLI_OUT)
 $(CLI_OUT): csrc/streamsieve_cli.cpp csrc/streamsieve_core.hpp csrc/streamsieve_capi.h | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) csrc/streamsieve_cli.cpp csrc/streamsieve_capi.cpp -o $(CLI_OUT) -lm
 
-test-cpp: $(CPP_TEST)
+test-cpp: $(CPP_TEST) test-afterkey
 	./$(CPP_TEST)
+
+.PHONY: test-afterkey
+test-afterkey: $(BUILD_DIR)/test_afterkey
+	./$(BUILD_DIR)/test_afterkey
+
+$(BUILD_DIR)/test_afterkey: afterkey/tests/test_afterkey.cpp afterkey/include/afterkey.hpp afterkey/include/afterkey_journal.hpp | $(BUILD_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -std=c++17 $< -o $@
 
 $(CPP_TEST): tests/test_core_cpp.cpp csrc/streamsieve_core.hpp csrc/streamsieve_capi.h csrc/streamsieve_capi.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) tests/test_core_cpp.cpp csrc/streamsieve_capi.cpp -o $(CPP_TEST) -lm

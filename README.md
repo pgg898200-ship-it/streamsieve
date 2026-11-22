@@ -18,6 +18,10 @@ AI agent fleets break in four predictable ways on live data streams:
 
 ---
 
+## Catch up a slow reader
+
+[Afterkey](afterkey/) is the standalone C++17 change feed for dashboards and agents that poll at different rates. It returns the latest value or deletion for each changed key since a reader’s cursor. Try the [interactive demo](https://afterkey.tancurl3.chatgpt.site/) or compile the [StreamSieve channel-score example](afterkey/examples/streamsieve.cpp).
+
 ## Verified Benchmarks (`StreamSwarmBench`)
 
 Measured live on an Intel Xeon 2.30 GHz Linux VM (2 vCPUs, AVX2+FMA, Python 3.12.16) against `river 0.27.0`, `scipy 1.18.1`, and `numpy 2.5.5`. Full structured output: [`benchmarks/results.json`](benchmarks/results.json) | Detailed report: [`docs/benchmarks.md`](docs/benchmarks.md).
