@@ -40,7 +40,7 @@ For an existing service, copy [include/afterkey.hpp](include/afterkey.hpp) into 
 
 ## Read a bounded page
 
-Use the headers in this checkout for the page API and the optional sparse journal. The 0.1.0 download above contains the original full-feed API.
+Download the [bounded-page source kit](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-057fe313.tar.gz) for the C++17 headers, tests, runnable example, comparison harness and raw results. Its SHA-256 is `6ecccac7f4c35a4132db3d128ec2a599ca4c9b89a99dab1f39f0582111771470`. The 0.1.0 kit above contains the original full-feed API.
 
 Both `Index` and `Journal` expose `since_page(revision, last_key, limit, callback)`. It returns the number of rows delivered and stops at the requested limit. A deletion consumes one row. Use `std::nullopt` when only the revision is available.
 
@@ -65,7 +65,7 @@ Use `afterkey::Journal<T, true>` when readers frequently cross a large contiguou
 
 At 65,536 keys the two bitmaps occupy 16,640 bytes (about 0.254 bytes/key), plus implementation-specific bookkeeping. Writes update the maps and compaction rebuilds them. Dense sequential reads can be faster with the default journal. Both configurations emit identical rows and preserve the same cursor and callback contracts. Recompile consumers when updating these header-only templates.
 
-A seeded 65,536-key replay on one shared AMD EPYC 9V74 VM retired a contiguous quarter of the original registration order. Median time to deliver a 16-row page starting inside that gap was **90 ns** with sparse reads and **6,690 ns** with the default journal. On the 64-row sparse catch-up, whole-feed times were 261 ns and 4,727 ns. For 4,096 densely surviving rows they were 6,780 ns and 6,710 ns. After compaction the writes measured 6.95 ns and 5.74 ns respectively, and the sparse configuration added 16,688 allocated bytes. These synthetic in-process measurements include a consuming callback. The runnable comparison and raw results are under `bench/afterkey/` in the [Tailstate source kit](https://pgg-tailstate.tancurl3.chatgpt.site).
+A seeded 65,536-key replay on one shared AMD EPYC 9V74 VM retired a contiguous quarter of the original registration order. Median time to deliver a 16-row page starting inside that gap was **90 ns** with sparse reads and **6,690 ns** with the default journal. On the 64-row sparse catch-up, whole-feed times were 261 ns and 4,727 ns. For 4,096 densely surviving rows they were 6,780 ns and 6,710 ns. After compaction the writes measured 6.95 ns and 5.74 ns respectively, and the sparse configuration added 16,688 allocated bytes. These synthetic in-process measurements include a consuming callback. The kit includes these measurements under `comparison/bench/afterkey/`. [Benchmark methods, losing cases and Google Borg trace replay](https://pgg-tailstate.tancurl3.chatgpt.site/comparison.html).
 
 ## Which workload benefits?
 
