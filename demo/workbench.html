@@ -1,1 +1,32 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Test your shard map · RankFence</title><link rel="stylesheet" href="docs.css"></head><body><header><a class="brand" href="index.html">RankFence</a><nav><a href="guide.html">Guide</a></nav></header><article><h1>Test your shard map</h1><p>Paste a complete query as JSON. Supply one ranked ID list and one shard name per source. The replay compares pages read with and without the shard map, then checks both answers against exhaustive fusion. Your input stays in this browser.</p><label for="input">Ranked streams</label><textarea id="input" spellcheck="false"></textarea><div class="controls"><label>Top k <input id="k" type="number" min="1" max="100" value="5"></label><label>Page size <input id="page" type="number" min="1" max="256" value="8"></label><button class="button" id="run">Run replay</button><button class="button" id="example">Load example</button></div><pre id="output" aria-live="polite"></pre><p>This independent exact-integer replay checks at the end of each round of pages. The Python adapter also supports asynchronous arrivals and early closure of individual losing shards. Input limits are 64 streams and 20,000 entries.</p></article><script src="workbench.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Replay a search query · RankFence</title>
+  <meta name="description" content="Compare exact reciprocal rank fusion with and without a shard map. Paste ranked ID lists and see how many IDs settle the winners.">
+  <link rel="stylesheet" href="docs.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="index.html">RankFence</a>
+    <nav><a href="guide.html">Integration guide</a></nav>
+  </header>
+  <article>
+    <h1>Replay a search query</h1>
+    <p>Four retrievers each return three document IDs. Both western retrievers put the same document first. Can the eastern shard still change the winner? Change a list or try your own query below. The replay runs in your browser.</p>
+    <label for="input">Ranked lists and shard names</label>
+    <textarea id="input" rows="14" spellcheck="false" aria-describedby="input-help"></textarea>
+    <p id="input-help">Use one ordered list per retriever. Give two retrievers the same group if they can return the same document. Omit the groups to allow overlap across all lists.</p>
+    <div class="controls">
+      <label>Top k <input id="k" type="number" min="1" max="100" value="1"></label>
+      <label>Page size <input id="page" type="number" min="1" max="256" value="1"></label>
+      <button class="button" id="run">Run replay</button>
+      <button class="button" id="example">Reset example</button>
+    </div>
+    <pre id="output" aria-live="polite"></pre>
+    <p>The replay checks the winners against exhaustive fusion after simulating equal-sized page rounds. It accepts up to 64 streams and 20,000 IDs. The Python adapter also supports asynchronous pages and early closure of losing shards.</p>
+  </article>
+  <script src="workbench.js"></script>
+</body>
+</html>

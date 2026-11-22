@@ -2,11 +2,11 @@
 
 RankFence is an MIT-licensed Python coordinator for exact reciprocal rank fusion of ranked result streams. Its distinctive integration is a trusted map of disjoint search namespaces. It can cancel all pending reads on a losing shard before the global answer is ready. Requires Python 3.10+. No runtime dependencies or API key.
 
-- Guide and contract: https://rankfence-pgg.tancurl3.chatgpt.site/guide.html
-- Try privately in a browser: https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html
-- Baselines, counterexamples and reproducibility: https://rankfence-pgg.tancurl3.chatgpt.site/benchmarks.html
-- Install: python -m pip install https://rankfence-pgg.tancurl3.chatgpt.site/rankfence-0.1.0-py3-none-any.whl
-- All Python source, tests, replay scripts and original result files: https://rankfence-pgg.tancurl3.chatgpt.site/rankfence-0.1.0.zip
+- Guide and contract: https://pgg-engineering-rankfence.hf.space/guide.html
+- Try privately in a browser: https://pgg-engineering-rankfence.hf.space/workbench.html
+- Baselines, counterexamples and reproducibility: https://pgg-engineering-rankfence.hf.space/benchmarks.html
+- Install: python -m pip install https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/9107326cf0993e842c281d412cb276e83eb1c6a4/releases/rankfence-0.1.0-py3-none-any.whl
+- All Python source, tests, replay scripts and original result files: https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/9107326cf0993e842c281d412cb276e83eb1c6a4/releases/rankfence-0.1.0.zip
 
 ## When does it fit?
 
@@ -16,10 +16,12 @@ Stable, pull-based ranked cursors. Each source contributes 1/(c+rank), starting 
 
 On 100 Robust03 topics hash-split into eight simulated shards, retirement consumed 78,956 of 400,000 input IDs. A wrapper that independently resolved every shard with RankSeal and merged scores consumed 206,934 IDs. All ordered top fives agreed. A support-aware integer baseline matched the 82,637 reads of RankFence with retirement disabled. No production latency or market-share claims.
 
-- Raw shard comparison: https://rankfence-pgg.tancurl3.chatgpt.site/results/rankseal.json
-- Real SQLite FTS5 example results: https://rankfence-pgg.tancurl3.chatgpt.site/results/sqlite-fts.json
-- Unpartitioned replay: https://rankfence-pgg.tancurl3.chatgpt.site/results/robust03.json
+- Raw shard comparison: https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/9107326cf0993e842c281d412cb276e83eb1c6a4/results/rankseal.json
+- Real SQLite FTS5 example results: https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/9107326cf0993e842c281d412cb276e83eb1c6a4/results/sqlite-fts.json
+- Unpartitioned replay: https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/9107326cf0993e842c281d412cb276e83eb1c6a4/results/robust03.json
 
 ## Local MCP tools
 
 After installing the wheel, a stdio MCP client can launch `python -m rankfence.mcp`. rankfence_analyze replays a bounded materialized query with the supplied shard map. rankfence_verify checks a receipt. Input payloads stay in the local process.
+
+- Product source and tested MCP request: https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0#let-an-agent-measure-its-own-workload

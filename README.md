@@ -1,8 +1,35 @@
 # RankFence
 
-**Stop fetching from search shards once the exact winners are settled.** RankFence coordinates paged lexical, vector or agent retrievers. Tell it which sources can return the same document. It uses that information to rule out candidates, return the global top k and close unfinished streams. Python 3.10+, MIT, no runtime dependencies.
+**Stop fetching search results when the next page can’t change the winners.** RankFence merges paged rankings with reciprocal rank fusion (RRF). Put it between your keyword and vector retrievers and the component that consumes their top results, such as a reranker or a RAG context builder. It returns the exact ordered document IDs and closes cursors it no longer needs.
 
-[GitHub source](https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0) · [Explore the replay](https://rankfence-pgg.tancurl3.chatgpt.site) · [Test your own shard map locally in a browser](https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html) · [Download the wheel](https://rankfence-pgg.tancurl3.chatgpt.site/rankfence-0.1.0-py3-none-any.whl) · [Benchmark methodology and raw results](results/README.md)
+[Try a query in your browser](https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html) · [Connect live cursors](#use-live-retrieval-cursors) · [Call from an MCP client](#let-an-agent-measure-its-own-workload)
+
+## Try one query
+
+Install the Python 3.10+ wheel. It has no runtime dependencies.
+
+```sh
+python -m pip install https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/9107326cf0993e842c281d412cb276e83eb1c6a4/releases/rankfence-0.1.0-py3-none-any.whl
+```
+
+Two search shards each run a keyword and a vector retriever. Both western retrievers rank the same document first. Each eastern retriever ranks a different document first.
+
+```python
+from rankfence import PartitionFence
+
+fence = PartitionFence(["west", "west", "east", "east"], k=1)
+for source, first_id in enumerate(["west/alpha", "west/alpha", "east/delta", "east/epsilon"]):
+    fence.push(source, [first_id])
+
+print(fence.ordered())  # ('west/alpha',)
+print(fence.done)       # (False, False, False, False)
+```
+
+All four cursors are still open. No eastern document can take first place because each one already missed at least one rank-one contribution. The source map guarantees that eastern documents can’t also collect points in the west. If any two sources can return the same document, keep those sources in the same group. When ownership is unknown, use `Fence(sources=4, k=1)`.
+
+Use `ordered()` for a ranked result or `members()` for the winning set. Each returns `None` until it can prove the answer. A certified ID can still gain score as more pages arrive.
+
+[![Ranked IDs read on 100 TREC Robust03 topics split into eight simulated shards. Full-window fusion read 400,000 IDs, independent shard fusion read 206,934 and RankFence with shard retirement read 78,956. All three returned the same ordered top five.](docs/shard-replay.png)](results/README.md)
 
 ## Why give the coordinator a shard map?
 
@@ -22,26 +49,6 @@ On 100 TREC Robust03 topics, we hash-partitioned each original ranking into eigh
 With shard retirement enabled, the coordinator read **61.84% fewer IDs** than the local RankSeal merge. All 100 answers matched exhaustive fusion. The lower bound comes from known document ownership. A sufficiently capable competing implementation can use the same information.
 
 The RankFence implementation also supports unpartitioned streams, membership-only proofs and an independent receipt verifier. RankSeal supports weighted inputs and a two-source hindsight benchmark. For mutable rankings with replacements and withdrawals, see the PGG RankPatch project. Stable ranked pages are required here.
-
-## Install and try
-
-```sh
-python -m pip install https://rankfence-pgg.tancurl3.chatgpt.site/rankfence-0.1.0-py3-none-any.whl
-```
-
-```python
-from rankfence.partition import PartitionFence
-
-fence = PartitionFence(["west", "west", "east", "east"], k=1)
-fence.push(0, ["west/alpha", "west/beta"])
-fence.push(1, ["west/alpha", "west/gamma"])
-fence.push(2, ["east/delta", "east/epsilon"])
-fence.push(3, ["east/epsilon", "east/delta"])
-assert fence.ordered() == ("west/alpha",)
-assert fence.done == (False, False, False, False)
-```
-
-For flat fusion use `Fence(sources=4, k=1)`. Both classes accept IDs in one-based rank order. Use `members()` if a downstream reranker just needs the winning set. Either call returns `None` while its requested property is uncertain. A certified ID can still gain score.
 
 ## Use live retrieval cursors
 
@@ -75,7 +82,23 @@ After installing the wheel, configure a local MCP server using the Python interp
 {"mcpServers":{"rankfence":{"command":"python","args":["-m","rankfence.mcp"]}}}
 ```
 
-The server exposes two local tools. `rankfence_analyze` replays a small complete query and checks the answer against exhaustive fusion. `rankfence_verify` checks a receipt against the supplied trusted topology. A retrieval agent can use them to decide whether early stopping pays on its own ranked lists. [Browser workbench](https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html)
+Call `rankfence_analyze` with the complete ranked lists for one query. This replays equal-sized pages and checks the winners against exhaustive RRF. The public and local tools accept this input.
+
+```json
+{
+  "rankings": [
+    ["west/alpha", "west/beta", "west/gamma"],
+    ["west/alpha", "west/gamma", "west/beta"],
+    ["east/delta", "east/epsilon", "east/zeta"],
+    ["east/epsilon", "east/zeta", "east/delta"]
+  ],
+  "source_groups": ["west", "west", "east", "east"],
+  "k": 1,
+  "page_size": 1
+}
+```
+
+The result includes `ids: ["west/alpha"]`, `ids_read_in_replay: 4`, `ids_in_full_query: 12`, and `matches_exhaustive: true`. The tool receives all 12 IDs up front. The count of four tells you where live cursors could have stopped on this query. The local server also returns a receipt. Use `rankfence_verify` with the trusted shard map to check it independently.
 
 ## Verify a receipt or explain a wait
 
