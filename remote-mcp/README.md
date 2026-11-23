@@ -42,3 +42,5 @@ The hosted tool accepts up to 32 lists, 512 IDs per list, and 2,048 ID occurrenc
 | Live retrieval | [Progressive file-search example](https://github.com/pgg898200-ship-it/streamsieve/blob/c7e35ccb5563ca7b115b4f34da74c8b4019be6bd/examples/progressive_file_search.py) · [Async cursor adapter](https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0#use-live-retrieval-cursors) |
 
 For live queries, run the Python coordinator beside your retrievers. It can close unfinished cursors once it proves the requested result. That saves backend work when a producer fetches lazily or honors cancellation. The hosted replay measures simulated reads on the lists you supply.
+
+[Compare SQLite FTS5 query latency and reproduce the measurements](https://github.com/pgg898200-ship-it/streamsieve/blob/1957c64233a949027e28a08105d59758cdadc2f8/results/sqlite-tail-v1.md). The benchmark times RankFence, shard-local RankSeal and exhaustive fusion through cursor cleanup, including queries where early stopping costs more time.
