@@ -57,7 +57,7 @@ Can a retriever replace its list? RankPatch updates the current winners after ea
 
 | Product | What it does | Where it fits | Try it |
 | --- | --- | --- | --- |
-| [Patchfleet](https://github.com/pgg898200-ship-it/backfold/tree/main/labs/patchfleet) | Replay a verified edit across pinned Git trees. | In migration tooling that distributes the same change to multiple release trees. | [Explore the NumPy migration replay](https://pgg898200-ship-it.github.io/backfold/patchfleet/) |
+| [Patchfleet](https://github.com/pgg898200-ship-it/backfold/tree/main/labs/patchfleet) | Archive an agent fleet’s exact patches or replay a verified migration across Git trees. | In evaluation pipelines and migration tooling with pinned source repositories. | [Download the patch archiver](https://pgg898200-ship-it.github.io/backfold/patchfleet/#archive) · [Explore the NumPy migration replay](https://pgg898200-ship-it.github.io/backfold/patchfleet/) |
 
 ## Evaluation and sequential decisions
 

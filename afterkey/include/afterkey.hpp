@@ -111,7 +111,9 @@ private:
             slots_[*last_key].revision == cursor) {
             return slots_[*last_key].newer;
         }
-        if (slots_[oldest_].revision > cursor) return oldest_;
+        const Slot& oldest = slots_[oldest_];
+        if (cursor <= oldest.revision)
+            return cursor == oldest.revision ? oldest.newer : oldest_;
 
         Key first = newest_;
         Key older = slots_[first].older;

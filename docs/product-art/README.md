@@ -2,7 +2,7 @@
 
 Choose a tool by the operation you need. Each product has editable vector artwork, source and a working example.
 
-[View or print all 25 product marks](sheets/all-products.svg)
+[View or print all 26 product marks](sheets/all-products.svg)
 
 ## Search and retrieval
 
@@ -63,6 +63,14 @@ Choose a tool by the operation you need. Each product has editable vector artwor
 | --- | --- | --- |
 | [Cloture](https://github.com/pgg898200-ship-it/cloture) | Stop a fixed-budget vote when the remaining judges cannot change the winner. | [Example](https://pgg898200-ship-it.github.io/cloture/playground.html) · [Artwork](motifs/cloture.svg) |
 | [eproc](https://github.com/pgg898200-ship-it/eproc) | Track evidence as individual or paired evaluation scores arrive. | [Example](https://pgg898200-ship-it.github.io/eproc/) · [Artwork](motifs/eproc.svg) |
+
+## Code maintenance
+
+![Product marks for Patchfleet.](sheets/code-maintenance.svg)
+
+| Product | What it does | Links |
+| --- | --- | --- |
+| [Patchfleet](https://github.com/pgg898200-ship-it/backfold/tree/main/labs/patchfleet) | Archive exact agent patches using their Git base. | [Example](https://pgg898200-ship-it.github.io/backfold/patchfleet/#archive) · [Artwork](motifs/patchfleet.svg) |
 
 ## Visual rules
 

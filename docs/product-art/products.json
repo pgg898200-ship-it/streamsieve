@@ -294,5 +294,17 @@
         "arrive."
       ]
     }
+  ],
+  "Code maintenance": [
+    {
+      "slug": "patchfleet",
+      "name": "Patchfleet",
+      "source": "https://github.com/pgg898200-ship-it/backfold/tree/main/labs/patchfleet",
+      "demo": "https://pgg898200-ship-it.github.io/backfold/patchfleet/#archive",
+      "lines": [
+        "Archive exact agent patches",
+        "using their Git base."
+      ]
+    }
   ]
 }

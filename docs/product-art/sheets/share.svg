@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">PGG Engineering tool index</title>
-  <desc id="desc">PGG Engineering tool index: 25 products grouped by operation. A grid on the right shows each product’s diagram.</desc>
+  <desc id="desc">PGG Engineering tool index: 26 products grouped by operation. A grid on the right shows each product’s diagram.</desc>
   <rect width="1200" height="630" fill="#FAFAFA" />
   <text x="64" y="76" font-size="31" font-family="'Instrument Sans', Arial, sans-serif" fill="#141619" font-weight="600" letter-spacing="-1">PGG Engineering</text>
-  <text x="1136" y="73" font-size="20" font-family="'IBM Plex Mono', 'DejaVu Sans Mono', monospace" fill="#555C65" text-anchor="end">25 tools</text>
+  <text x="1136" y="73" font-size="20" font-family="'IBM Plex Mono', 'DejaVu Sans Mono', monospace" fill="#555C65" text-anchor="end">26 tools</text>
   <path d="M64 105H1136 M64 528H1136" stroke="#DADDE1" stroke-width="1.5" />
   <text x="59" y="238" font-size="94" font-family="'Instrument Sans', Arial, sans-serif" fill="#141619" font-weight="600" letter-spacing="-4.5">Tool index</text>
   <text x="64" y="297" font-size="27" font-family="'Instrument Sans', Arial, sans-serif" fill="#555C65">Search and retrieval</text>
@@ -11,7 +11,8 @@
   <text x="64" y="375" font-size="27" font-family="'Instrument Sans', Arial, sans-serif" fill="#555C65">State replication and event routing</text>
   <text x="64" y="414" font-size="27" font-family="'Instrument Sans', Arial, sans-serif" fill="#555C65">Telemetry, time series and forecasts</text>
   <text x="64" y="453" font-size="27" font-family="'Instrument Sans', Arial, sans-serif" fill="#555C65">Evaluation and sequential decisions</text>
-  <svg viewBox="0 0 96 96" role="img" x="776" y="126" width="72" height="72" aria-hidden="true">
+  <text x="64" y="492" font-size="27" font-family="'Instrument Sans', Arial, sans-serif" fill="#555C65">Code maintenance</text>
+  <svg viewBox="0 0 96 96" role="img" x="824.3333333333333" y="126.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Three writes across two keys reduce to two latest rows. The blue terminal row carries a deletion.</title>
     <path d="M14 27H75 M14 59H75" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
     <circle cx="24" cy="27" r="4" fill="none" stroke="#555C65" stroke-width="2.5" />
@@ -20,7 +21,7 @@
     <path d="M66 54l8 9m0-9-8 9" fill="none" stroke="#315BFF" stroke-width="3.8" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M80 19H84V69H80" fill="none" stroke="#141619" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="848" y="126" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="886.6666666666666" y="126.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>A correction at the second event branches from the original timeline to a revised summary below.</title>
     <path d="M12 27H80" fill="none" stroke="#141619" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" />
     <circle cx="12" cy="27" r="3.7" fill="#141619" />
@@ -31,7 +32,7 @@
     <rect x="27" y="22" width="10" height="10" fill="#FAFAFA" stroke="#315BFF" stroke-width="3" />
     <rect x="75" y="60" width="12" height="12" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="920" y="126" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="948.9999999999999" y="126.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Three requests share a prompt prefix. A blue breakpoint sits where their suffixes diverge.</title>
     <rect x="12" y="25" width="32" height="7" fill="#141619" />
     <rect x="50" y="25" width="31" height="7" fill="none" stroke="#555C65" stroke-width="2.5" />
@@ -42,7 +43,7 @@
     <path d="M47 14V83" fill="none" stroke="#315BFF" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M42 13h10l-5 7Z" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="992" y="126" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="1011.3333333333333" y="126.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Three aligned telemetry channels shift at different times. The earlier upstream candidate is highlighted for investigation.</title>
     <path d="M12 30H26l4 -10h50" fill="none" stroke="#141619" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" />
     <circle cx="30" cy="20" r="3.5" fill="#315BFF" />
@@ -52,14 +53,14 @@
     <circle cx="68" cy="67" r="3.5" fill="#555C65" />
     <path d="M30 31V77" fill="none" stroke="#315BFF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 5" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="1064" y="126" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="1073.6666666666665" y="126.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>A series shifts from one level to another. A blue bracket marks the changed interval for a digest.</title>
     <path d="M11 63l6 -4 5 5 5 -7 5 4 6 -2 6 3 6 -5 4 -20 6 -4 5 3 6 -7 5 6 7 -3" fill="none" stroke="#141619" stroke-width="3.1" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M53 22v-5h29v5" fill="none" stroke="#315BFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M53 70h29" fill="none" stroke="#315BFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
     <rect x="53" y="68" width="5" height="5" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="776" y="198" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="824.3333333333333" y="188.33333333333334" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Five ballots have been read. The fifth locks the leading count, leaving the last two ballots unopened.</title>
     <rect x="12" y="20" width="6" height="46" fill="#141619" />
     <rect x="22" y="20" width="6" height="46" fill="#141619" />
@@ -71,7 +72,7 @@
     <path d="M12 75H57" fill="none" stroke="#141619" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M60 17v53" fill="none" stroke="#315BFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="848" y="198" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="886.6666666666666" y="188.33333333333334" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>The final bytes of one chunk and the first bytes of the next form a stop string. The output ends at its start.</title>
     <rect x="11" y="27" width="8" height="12" fill="#555C65" />
     <rect x="22" y="27" width="8" height="12" fill="#555C65" />
@@ -86,7 +87,7 @@
     <path d="M33 53V80" fill="none" stroke="#315BFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M39 67H82" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="2 5" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="920" y="198" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="948.9999999999999" y="188.33333333333334" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>A point moves through two overlapping rectangular zones. Blue crossings mark changes in membership.</title>
     <rect x="15" y="24" width="42" height="39" fill="none" stroke="#141619" stroke-width="3" />
     <rect x="41" y="38" width="38" height="37" fill="none" stroke="#555C65" stroke-width="3" />
@@ -96,14 +97,14 @@
     <circle cx="57" cy="41.5" r="3.1" fill="#315BFF" />
     <circle cx="64" cy="38" r="3.1" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="992" y="198" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="1011.3333333333333" y="188.33333333333334" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>A sequential evidence trace crosses a preset stopping boundary. The crossing is marked in blue.</title>
     <path d="M12 30H83" fill="none" stroke="#555C65" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 5" />
     <path d="M12 70l12 -6 10 4 9 -15 8 4 9 -17" fill="none" stroke="#141619" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M60 40l9 -15 12 -7" fill="none" stroke="#315BFF" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" />
     <circle cx="66" cy="30" r="3.6" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="1064" y="198" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="1073.6666666666665" y="188.33333333333334" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Two event frames have the same prefix and suffix. The blue segment is the edit carried between them.</title>
     <rect x="12" y="21" width="25" height="13" fill="none" stroke="#141619" stroke-width="3" />
     <rect x="64" y="21" width="17" height="13" fill="none" stroke="#141619" stroke-width="3" />
@@ -113,13 +114,13 @@
     <rect x="42" y="62" width="16" height="13" fill="#315BFF" />
     <path d="M50 39v13m-4-4 4 5 4-5" fill="none" stroke="#315BFF" stroke-width="2.7" stroke-linejoin="round" stroke-linecap="round" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="776" y="270" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="824.3333333333333" y="250.66666666666669" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Two repeated subsequences align across an observed series. Blue brackets identify their locations.</title>
     <path d="M11 52l7 3 5 -20 7 15 5 -7 5 4 6 3 7 7 4 -4 6 -20 7 15 5 -7 7 4" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M16 67v5h22v-5 M58 67v5h22v-5" fill="none" stroke="#315BFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M16 24h22 M58 24h22" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="848" y="270" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="886.6666666666666" y="250.66666666666669" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Two conditions change state in opposite directions after the same update batch.</title>
     <path d="M48 15V80" fill="none" stroke="#555C65" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 5" />
     <path d="M12 39H48V23H84 M12 56H48V72H84" fill="none" stroke="#141619" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
@@ -127,7 +128,7 @@
     <circle cx="48" cy="23" r="3.6" fill="#315BFF" />
     <circle cx="48" cy="72" r="3.6" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="920" y="270" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="948.9999999999999" y="250.66666666666669" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>A moving window contains three event ticks. The blue boundary marks the next expiration while no new events arrive.</title>
     <path d="M10 56H85" fill="none" stroke="#555C65" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M15 56v-10" fill="none" stroke="#DADDE1" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
@@ -138,7 +139,13 @@
     <path d="M24 66v9h44v-9" fill="none" stroke="#DADDE1" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M74 28V61" fill="none" stroke="#315BFF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 4" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="992" y="270" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="1011.3333333333333" y="250.66666666666669" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
+    <title>Three patch lines are separated into a narrow marker column and their original code.</title>
+    <path d="M14 30h9m-4.5-4.5v9M14 48h9M14 66h9m-4.5-4.5v9" fill="none" stroke="#315BFF" stroke-width="3" />
+    <path d="M35 30h41M35 48h32M35 66h46" fill="none" stroke="#141619" stroke-width="4" />
+    <path d="M29 19v58" fill="none" stroke="#DADDE1" stroke-width="2" />
+  </svg>
+  <svg viewBox="0 0 96 96" role="img" x="1073.6666666666665" y="250.66666666666669" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Two dependency paths converge on one task. The blue segment marks the duration being changed.</title>
     <path d="M15 48H26L40 25H60L76 48 M26 48L40 71H60L76 48H84" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M40 25H60" fill="none" stroke="#315BFF" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" />
@@ -149,14 +156,14 @@
     <circle cx="60" cy="71" r="4" fill="#141619" />
     <circle cx="79" cy="48" r="4" fill="#141619" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="1064" y="270" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="824.3333333333333" y="313.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>A step curve reaches the target cache hit rate. Blue guides locate the associated capacity.</title>
     <path d="M14 16V78H84" fill="none" stroke="#555C65" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M16 69H27V61H40V50H52V36H67V28H83" fill="none" stroke="#141619" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M15 36H52V77" fill="none" stroke="#315BFF" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 5" />
     <circle cx="52" cy="36" r="4.5" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="776" y="342" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="886.6666666666666" y="313.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>One heartbeat starts three deadline intervals. Blue endpoints show when each reader marks it stale.</title>
     <path d="M16 16V79" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M16 28H48" fill="none" stroke="#141619" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" />
@@ -166,7 +173,7 @@
     <path d="M16 68H80" fill="none" stroke="#141619" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" />
     <circle cx="80" cy="68" r="4" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="848" y="342" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="948.9999999999999" y="313.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Two requests start at different times. The blue backup finishes before the first request.</title>
     <path d="M13 33H78" fill="none" stroke="#141619" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M36 62H64" fill="none" stroke="#315BFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
@@ -176,7 +183,7 @@
     <path d="M36 17V48" fill="none" stroke="#555C65" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 5" />
     <circle cx="64" cy="62" r="4" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="920" y="342" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="1011.3333333333333" y="313.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Three shard streams meet a vertical cutoff. Pages beyond it remain unread.</title>
     <rect x="12" y="24" width="9" height="8" fill="#141619" />
     <rect x="26" y="24" width="9" height="8" fill="#141619" />
@@ -196,7 +203,7 @@
     <path d="M51 14V85" fill="none" stroke="#315BFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M48 14h6" fill="none" stroke="#315BFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="992" y="342" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="1073.6666666666665" y="313.0" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Two document rows exchange positions after a source revises its ranking. The blue row moves upward.</title>
     <path d="M12 20H32 M64 20H84" fill="none" stroke="#141619" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M12 72H32 M64 72H84" fill="none" stroke="#141619" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
@@ -205,7 +212,7 @@
     <circle cx="12" cy="56" r="4" fill="#315BFF" />
     <circle cx="84" cy="36" r="4" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="1064" y="342" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="824.3333333333333" y="375.33333333333337" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Ranked-score intervals have separated. The blue cutoff lies between the lowest certified top score and the strongest remaining challenger.</title>
     <path d="M14 76H82" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M61 24H81 M61 19v10 M81 19v10" fill="none" stroke="#141619" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" />
@@ -214,7 +221,7 @@
     <path d="M36 53v20" fill="none" stroke="#315BFF" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
     <circle cx="36" cy="53" r="3" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="776" y="414" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="886.6666666666666" y="375.33333333333337" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>An ensemble member shifts relative to the observation. The remaining forecast members keep their positions.</title>
     <path d="M12 59H84" fill="none" stroke="#555C65" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M19 53v13" fill="none" stroke="#141619" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
@@ -227,7 +234,7 @@
     <path d="M38 20l5 8H33Z" fill="#141619" />
     <path d="M38 32v35" fill="none" stroke="#555C65" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 5" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="848" y="414" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="948.9999999999999" y="375.33333333333337" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>A single array of changed keys serves three readers. Each reader takes a different prefix.</title>
     <rect x="12" y="19" width="8" height="9" fill="#141619" />
     <rect x="24" y="19" width="8" height="9" fill="#141619" />
@@ -243,7 +250,7 @@
     <path d="M78 62v8" fill="none" stroke="#315BFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M12 79H81" fill="none" stroke="#DADDE1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="920" y="414" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="1011.3333333333333" y="375.33333333333337" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>Three telemetry channels enter a brief. A selected channel retains a handle back to its samples.</title>
     <path d="M12 24h7l4 -4 5 8 4 -6 8 2" fill="none" stroke="#141619" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M12 46h7l4 -4 5 8 4 -6 8 2" fill="none" stroke="#141619" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
@@ -254,7 +261,7 @@
     <rect x="57" y="62" width="18" height="4" fill="#555C65" />
     <circle cx="80" cy="34" r="4" fill="#315BFF" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="992" y="414" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="1073.6666666666665" y="375.33333333333337" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>A reader cursor separates acknowledged rows from an ordered blue page. Further rows remain available.</title>
     <path d="M14 30H82" fill="none" stroke="#141619" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
     <rect x="16" y="24" width="5" height="12" fill="#555C65" />
@@ -266,7 +273,7 @@
     <path d="M43 48v8h21v-8" fill="none" stroke="#315BFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M13 70H34 M44 70H64 M73 70H82" fill="none" stroke="#DADDE1" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
   </svg>
-  <svg viewBox="0 0 96 96" role="img" x="1064" y="414" width="72" height="72" aria-hidden="true">
+  <svg viewBox="0 0 96 96" role="img" x="824.3333333333333" y="437.6666666666667" width="62.333333333333336" height="62.333333333333336" aria-hidden="true">
     <title>A fixed context window feeds a forecast with a fixed horizon. The blue continuation is the prediction.</title>
     <path d="M11 60l8 -11 8 5 9 -17 8 9 8 -4" fill="none" stroke="#141619" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" />
     <path d="M52 42l9 4 9 -13 11 -1" fill="none" stroke="#315BFF" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" />

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="196" viewBox="0 0 240 196" role="img" aria-labelledby="title desc">
+  <title id="title">Code maintenance</title>
+  <desc id="desc">Patchfleet. Three patch lines are separated into a narrow marker column and their original code.</desc>
+  <rect width="240" height="196" fill="#FAFAFA" />
+  <svg viewBox="0 0 96 96" role="img" x="57" y="12" width="126" height="126" aria-hidden="true">
+    <title>Three patch lines are separated into a narrow marker column and their original code.</title>
+    <path d="M14 30h9m-4.5-4.5v9M14 48h9M14 66h9m-4.5-4.5v9" fill="none" stroke="#315BFF" stroke-width="3" />
+    <path d="M35 30h41M35 48h32M35 66h46" fill="none" stroke="#141619" stroke-width="4" />
+    <path d="M29 19v58" fill="none" stroke="#DADDE1" stroke-width="2" />
+  </svg>
+  <text x="120" y="164" font-size="22" font-family="'Instrument Sans', Arial, sans-serif" fill="#141619" font-weight="600" text-anchor="middle">Patchfleet</text>
+</svg>

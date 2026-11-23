@@ -19,15 +19,15 @@ If a worker publishes its available slot count ten times between polls, the dash
 
 ![After revision 1, key 3 is set to 20, key 7 is set to 11, and key 3 is deleted. The poll returns key 7 with value 11 at revision 3, then the deletion of key 3 at revision 4.](art/afterkey-register.svg)
 
-[Try two readers in your browser](https://huggingface.co/spaces/pgg-engineering/afterkey) · [Download the C++17 kit](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-057fe313.tar.gz) · [Reproduce the benchmarks](bench/environment.md)
+[Try two readers in your browser](https://huggingface.co/spaces/pgg-engineering/afterkey) · [Download the C++17 kit](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-9f74b70c.tar.gz) · [Reproduce the benchmarks](bench/environment.md)
 
 ## Run a catch-up in two-row pages
 
 The example tracks available slots per worker. The reader last saw worker 0 with eight slots. While it is away, that count falls to seven, then six. Worker 1 reports twelve slots, and the producer records a deletion for worker 2. Build the example with a C++17 compiler.
 
 ```sh
-curl -fsSLO https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-057fe313.tar.gz
-tar -xzf afterkey-pages-057fe313.tar.gz
+curl -fsSLO https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-pages-9f74b70c.tar.gz
+tar -xzf afterkey-pages-9f74b70c.tar.gz
 cd afterkey-pages
 c++ -std=c++17 -O2 -Iinclude example.cpp -o afterkey-demo
 ./afterkey-demo
@@ -43,7 +43,9 @@ The first two rows make up page one. Worker 1 comes first because it reported be
 
 Copy [afterkey.hpp](include/afterkey.hpp) or [afterkey_journal.hpp](include/afterkey_journal.hpp) into your include path. Each header works on its own. Each callback receives a revision, a dense key and a borrowed pointer to the current value. A null pointer means deletion. The [full-feed example](examples/quickstart.cpp) uses `since` to read all changes in one call. [Edit the worker updates in Compiler Explorer](https://godbolt.org/z/Tz3sP7KMj) to run the C++17 header and inspect the rows that reach the reader.
 
-The kit includes the tests, comparison harness and raw measurements. Its SHA-256 is `6ecccac7f4c35a4132db3d128ec2a599ca4c9b89a99dab1f39f0582111771470`. The [0.1.0 ZIP](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-0.1.0.zip) contains the original full-feed API.
+A reader whose cursor equals the oldest retained revision can start directly at its successor, even when it has lost its key hint.
+
+The kit includes the tests, comparison harness and raw measurements. Its SHA-256 is `59dc754499c4e1ce1f8aeb67936b28de1d409120faabe6939c3dd86bea981b63`. The [0.1.0 ZIP](https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/main/afterkey/releases/afterkey-0.1.0.zip) contains the original full-feed API.
 
 ## Read a bounded page
 
