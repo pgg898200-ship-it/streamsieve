@@ -53,6 +53,12 @@ Can a retriever replace its list? RankPatch updates the current winners after ea
 | [tsjit](https://github.com/pgg898200-ship-it/tsjit) | Compile a forecasting model for a specified context and horizon. | Around the model prediction call, or in a streaming runtime that maintains inputs as observations arrive. | [Model and runtime guide](https://github.com/pgg898200-ship-it/tsjit/blob/main/llms.txt) |
 | [RecastCRPS](https://github.com/pgg898200-ship-it/streamsieve/tree/main/integrations/recastcrps) | Update an ensemble’s continuous ranked probability score when a forecast changes. | In forecast verification, between member revisions and scoring against an observation. | [Hurricane Lee replay](https://huggingface.co/spaces/pgg-engineering/recastcrps) |
 
+## Code maintenance
+
+| Product | What it does | Where it fits | Try it |
+| --- | --- | --- | --- |
+| [Patchfleet](https://github.com/pgg898200-ship-it/backfold/tree/main/labs/patchfleet) | Replay a verified edit across pinned Git trees. | In migration tooling that distributes the same change to multiple release trees. | [Explore the NumPy migration replay](https://pgg898200-ship-it.github.io/backfold/patchfleet/) |
+
 ## Evaluation and sequential decisions
 
 | Product | What it does | Where it fits | Try it |

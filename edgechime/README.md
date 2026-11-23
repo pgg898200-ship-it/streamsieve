@@ -79,6 +79,10 @@ The CLI consumes newline-delimited JSON in arrival order. It stores a pair of co
 
 Stream vehicle positions from Eclipse SUMO floating-car data and route them to matching zones. The runnable example includes a versioned upstream regression fixture and expected events. Game developers can import rectangular triggers from a named Tiled object layer. Both examples run from the source checkout. [SUMO adapter](examples/sumo/README.md) · [Tiled adapter](examples/tiled/README.md).
 
+## Check a SQLite spatial index
+
+On 4,469 labeled taxi updates, SQLite’s default floating-point R-tree produced incorrect changes on 10 updates when its stored bounds were used directly. Integer bounds matched every update. [Run the comparison and inspect the first mismatch](bench/sqlite/README.md).
+
 ## Reproduce
 
 From the source checkout, run `npm test`, `npm run bench` and `node bench/fleet.mjs`. The comparison harness includes pinned Flatbush 4.7.0 and its dependency, a specialized perimeter-grid baseline and a historical taxi replay. The benchmark can run offline. Source, selection and license for the Porto positions are in [the trace note](bench/trace.md). Zone subscriptions are generated.
