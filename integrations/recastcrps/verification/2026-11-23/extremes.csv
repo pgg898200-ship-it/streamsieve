@@ -1,0 +1,17 @@
+case,slots,support,queries,repeat,engine,elapsed_ns,ns_per_query
+small_dynamic,64,128,6000,1,static_prefix,5337626.00,889.60
+small_dynamic,64,128,6000,1,recastcrps,760624.00,126.77
+small_dynamic,64,128,6000,1,ordered_fenwick,944150.00,157.36
+small_dynamic,64,128,6000,1,all_loo,4272985.00,712.16
+large_dynamic,4096,4096,2000,1,static_prefix,272338171.00,136169.09
+large_dynamic,4096,4096,2000,1,recastcrps,544368.00,272.18
+large_dynamic,4096,4096,2000,1,ordered_fenwick,492831.00,246.42
+large_dynamic,4096,4096,2000,1,all_loo,60793149.00,30396.57
+many_ties_dynamic,8192,32,1200,1,static_prefix,214695354.00,178912.80
+many_ties_dynamic,8192,32,1200,1,recastcrps,122054.00,101.71
+many_ties_dynamic,8192,32,1200,1,ordered_fenwick,75834.00,63.20
+many_ties_dynamic,8192,32,1200,1,all_loo,68837815.00,57364.85
+large_static,4096,4096,2000,1,static_prefix,126360.00,63.18
+large_static,4096,4096,2000,1,recastcrps,315544.00,157.77
+large_static,4096,4096,2000,1,ordered_fenwick,197788.00,98.89
+large_static,4096,4096,2000,1,all_loo,69648040.00,34824.02

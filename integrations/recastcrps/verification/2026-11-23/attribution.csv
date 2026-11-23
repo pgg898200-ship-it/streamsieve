@@ -1,0 +1,17 @@
+case,slots,support,revisions,repeat,engine,elapsed_ns,ns_per_all_member_query
+small,16,64,2000,1,erase_restore,1132953.00,566.48
+small,16,64,2000,1,rank_scan,453662.00,226.83
+small,16,64,2000,1,sort_once,466602.00,233.30
+small,16,64,2000,1,recastcrps,464238.00,232.12
+many_ties,4096,32,200,1,erase_restore,23508106.00,117540.53
+many_ties,4096,32,200,1,rank_scan,1684372.00,8421.86
+many_ties,4096,32,200,1,sort_once,26418732.00,132093.66
+many_ties,4096,32,200,1,recastcrps,4032383.00,20161.92
+large,4096,4096,160,1,erase_restore,35180991.00,219881.19
+large,4096,4096,160,1,rank_scan,2854051.00,17837.82
+large,4096,4096,160,1,sort_once,34423797.00,215148.73
+large,4096,4096,160,1,recastcrps,4199384.00,26246.15
+sparse_active,64,65536,160,1,erase_restore,1615849.00,10099.06
+sparse_active,64,65536,160,1,rank_scan,29069377.00,181683.61
+sparse_active,64,65536,160,1,sort_once,197678.00,1235.49
+sparse_active,64,65536,160,1,recastcrps,195965.00,1224.78
