@@ -1,10 +1,22 @@
 CXX ?= c++
 CXXFLAGS ?= -O3 -std=c++17 -DNDEBUG -Wall -Wextra -Wpedantic
 OUT ?= build
+PREFIX ?= /usr/local
+INSTALL ?= install
 HEADER = include/pulsefold.hpp
 
-.PHONY: all check live-check benchmark scale clean
+.PHONY: all install install-live check live-check benchmark scale clean
 all: $(OUT)/pulsefold
+
+install: $(OUT)/pulsefold
+	$(INSTALL) -d "$(DESTDIR)$(PREFIX)/include" "$(DESTDIR)$(PREFIX)/bin" "$(DESTDIR)$(PREFIX)/share/licenses/pulsefold"
+	$(INSTALL) -m 644 $(HEADER) "$(DESTDIR)$(PREFIX)/include/pulsefold.hpp"
+	$(INSTALL) -m 755 $(OUT)/pulsefold "$(DESTDIR)$(PREFIX)/bin/pulsefold"
+	$(INSTALL) -m 644 LICENSE "$(DESTDIR)$(PREFIX)/share/licenses/pulsefold/LICENSE"
+
+install-live: $(OUT)/pulsefold-live
+	$(INSTALL) -d "$(DESTDIR)$(PREFIX)/bin"
+	$(INSTALL) -m 755 $(OUT)/pulsefold-live "$(DESTDIR)$(PREFIX)/bin/pulsefold-live"
 
 $(OUT):
 	mkdir -p $(OUT)

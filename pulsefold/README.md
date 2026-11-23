@@ -41,6 +41,15 @@ The last heartbeat at time 4 sets deadlines at 9 and 16. The heartbeat at 10 rec
 
 The columns are event time, feed ID, subscriber ID, and new state. The input accepts `TIME FEED` and `TIME tick`, in nondecreasing time order. Ticks let a replay report silence even when every sender has stopped. The `--summary` switch counts transitions. Integer times and positive deadlines must use the same unit.
 
+## Install from the release branch
+
+The [release branch](https://github.com/pgg898200-ship-it/streamsieve/tree/pulsefold-v0.1.0/pulsefold) adds install targets after the 0.1.0 source archive. From a checkout of that branch:
+
+    make -C pulsefold install PREFIX="$HOME/.local"
+    "$HOME/.local/bin/pulsefold" 1 5,12 < pulsefold/examples/heartbeat.txt
+
+A C++17 consumer can now use `#include <pulsefold.hpp>` with `-I"$HOME/.local/include"`. On POSIX, add the live adapter with `make -C pulsefold install-live PREFIX="$HOME/.local"`. Packagers can stage either target with `DESTDIR`, for example `make -C pulsefold install PREFIX=/usr DESTDIR="$PWD/stage"`.
+
 ## Connect live agents
 
 On a POSIX host, feed numeric sender IDs to a long-lived process, one per line.
