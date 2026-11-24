@@ -77,3 +77,33 @@ taskset -c 4 build/grouped --seed 73492051 --repeats 8
 for run in 1 2 3 4 5; do taskset -c 4 build/scale; done
 for run in 1 2 3 4 5; do taskset -c 4 build/scale 16384 256 256; done
 ```
+
+## November 24, 2026 • grouped challenger and recorded replay
+
+A block scan caches the earliest deadline for each consecutive 32 feeds. When the global minimum is due, it checks block minima and scans only the blocks that could have expired. Both scan variants use the same expiration ordering and callback code. On rotating outages this was the fastest of four challengers. Pulsefold processed the workload in 9.68–9.79 ns/op versus 16.02–16.14 ns/op for the block scan. On the small healthy workload there were no callbacks.
+
+Each cell reports the median of ten run means, in ns per input operation. The factor is the fastest challenger's median divided by Pulsefold's median. Every engine occupied each starting position twice per scenario and seed.
+
+| Grouped workload | Pulsefold (73492051) | Fastest challenger | Factor | Pulsefold (20261124) | Fastest challenger | Factor |
+|---|---:|---|---:|---:|---|---:|
+| small-healthy | 1.77 | 2.21 (group-scan) | 1.25× | 1.77 | 2.21 (group-scan) | 1.25× |
+| large-mixed | 7.83 | 13.27 (group-wide-radix) | 1.70× | 7.99 | 13.50 (group-wide-radix) | 1.69× |
+| rotating-outages | 9.68 | 16.14 (group-tiled-scan) | 1.67× | 9.79 | 16.02 (group-tiled-scan) | 1.64× |
+| synchronous-storm | 2.43 | 3.14 (group-scan) | 1.29× | 2.43 | 3.34 (group-scan) | 1.37× |
+| all-unique | 29.35 | 41.85 (group-wide-radix) | 1.43× | 29.60 | 42.28 (group-wide-radix) | 1.43× |
+
+On the recorded Intel Berkeley sensor replay, the scalar cached scan took 27.44 ns/op versus Pulsefold’s 29.19 ns/op. Both emitted 4,731 stale and 4,725 fresh transitions over the 9,482 measured observations. All five engines matched on both output digests. The simpler scan merits consideration for a small fleet with scalar callbacks.
+
+PGG ran both benchmarks on a shared AMD EPYC 9V45 host, pinned to logical CPU 4, using GCC 14.2.0 and the release Makefile defaults. The November 22 comparison used an EPYC 9V74 and four grouped engines. Host and challenger changes prevent attributing the entire change in margin to one cause. Timings exclude setup, warm-up and external delivery. The grouped harness checked ordered streams and subscriber membership before timing. These are first-party measurements.
+
+[Grouped measurements, 500 runs](grouped-20261124.csv) · [Sensor replay, 50 runs](sensor-20261124.csv) · [Challenger implementation](../bench/grouped.cpp)
+
+From the release branch’s `pulsefold` directory:
+
+```sh
+make build/grouped build/benchmark
+for seed in 73492051 20261124; do
+    taskset -c 4 build/grouped --seed "$seed" --repeats 10
+done
+taskset -c 4 build/benchmark --trace bench/data/intel-lab-4h.tsv --repeats 10
+```

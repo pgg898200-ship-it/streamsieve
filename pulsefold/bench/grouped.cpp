@@ -91,33 +91,39 @@ struct Work {
     }
 };
 
+template<bool Tiled>
 class GroupScan {
     const Work& work_;
     struct Feed { Time last = 0; std::size_t cursor = 0; bool armed = false; };
     std::vector<Feed> feeds_;
+    static constexpr std::size_t block_size = 32;
+    std::vector<Time> block_min_;
     using Expiry = std::tuple<Time, Id, std::size_t>;
     std::vector<Expiry> expired_;
     Time earliest_ = std::numeric_limits<Time>::max();
 public:
-    explicit GroupScan(const Work& work) : work_(work), feeds_(work.feed_policy.size()) {}
+    explicit GroupScan(const Work& work) : work_(work), feeds_(work.feed_policy.size()) {
+        if constexpr (Tiled)
+            block_min_.assign((feeds_.size() + block_size - 1) / block_size, earliest_);
+    }
 
     template<class Emit>
     void advance_groups(Time now, Emit&& emit) {
         if (now < earliest_) return;
         earliest_ = std::numeric_limits<Time>::max();
         expired_.clear();
-        for (Id f = 0; f < feeds_.size(); ++f) {
-            auto& feed = feeds_[f];
-            if (!feed.armed) continue;
-            const auto& p = work_.compiled[work_.feed_policy[f]];
-            while (feed.cursor < p.thresholds.size()) {
-                const Time due = feed.last + p.thresholds[feed.cursor];
-                if (due > now) {
-                    earliest_ = std::min(earliest_, due);
-                    break;
+        if constexpr (Tiled) {
+            for (std::size_t block = 0; block < block_min_.size(); ++block) {
+                auto& next = block_min_[block];
+                if (next <= now) {
+                    next = std::numeric_limits<Time>::max();
+                    const auto first = block * block_size;
+                    scan(first, std::min(first + block_size, feeds_.size()), now, next);
                 }
-                expired_.emplace_back(due, f, feed.cursor++);
+                earliest_ = std::min(earliest_, next);
             }
+        } else {
+            scan(0, feeds_.size(), now, earliest_);
         }
         if (!std::is_sorted(expired_.begin(), expired_.end()))
             std::sort(expired_.begin(), expired_.end());
@@ -131,7 +137,29 @@ public:
         const auto& p = work_.compiled[work_.feed_policy[f]];
         if (feed.cursor) emit(now, f, p.range(0, feed.cursor), true);
         feed = {now, 0, true};
-        earliest_ = std::min(earliest_, now + p.thresholds.front());
+        const Time due = now + p.thresholds.front();
+        earliest_ = std::min(earliest_, due);
+        if constexpr (Tiled) {
+            auto& next = block_min_[f / block_size];
+            next = std::min(next, due);
+        }
+    }
+private:
+    void scan(std::size_t first, std::size_t past, Time now, Time& next) {
+        for (std::size_t index = first; index < past; ++index) {
+            const auto f = static_cast<Id>(index);
+            auto& feed = feeds_[f];
+            if (!feed.armed) continue;
+            const auto& p = work_.compiled[work_.feed_policy[f]];
+            while (feed.cursor < p.thresholds.size()) {
+                const Time due = feed.last + p.thresholds[feed.cursor];
+                if (due > now) {
+                    next = std::min(next, due);
+                    break;
+                }
+                expired_.emplace_back(due, f, feed.cursor++);
+            }
+        }
     }
 };
 
@@ -268,9 +296,9 @@ int benchmark(int argc, char** argv) {
         else if (flag == "--scenario") selected = val;
         else throw std::invalid_argument("unknown option " + flag);
     }
-    constexpr std::array<const char*, 4> names = {"pulsefold", "group-scan", "group-radix", "group-wide-radix"};
+    constexpr std::array<const char*, 5> names = {"pulsefold", "group-scan", "group-radix", "group-wide-radix", "group-tiled-scan"};
     using Fn = Result(*)(const Work&);
-    const std::array<Fn, names.size()> runners = {run<Product>, run<GroupScan>, run<BinaryGroupRadix>, run<WideGroupRadix>};
+    const std::array<Fn, names.size()> runners = {run<Product>, run<GroupScan<false>>, run<BinaryGroupRadix>, run<WideGroupRadix>, run<GroupScan<true>>};
     std::cout << "scenario,seed,repeat,run_order,engine,feeds,subscribers_per_feed,distinct_ttls,"
                  "warmup_ops,measured_ops,group_callbacks,represented_transitions,checksum,batch_size,"
                  "mean_ns_per_op,p99_batch_mean_ns_per_op\n";
@@ -281,7 +309,8 @@ int benchmark(int argc, char** argv) {
         const Work work(c, seed);
         std::vector<Record> expected;
         verify<Product>(work, expected, true);
-        verify<GroupScan>(work, expected, false);
+        verify<GroupScan<false>>(work, expected, false);
+        verify<GroupScan<true>>(work, expected, false);
         verify<BinaryGroupRadix>(work, expected, false);
         verify<WideGroupRadix>(work, expected, false);
         for (unsigned rep = 0; rep < reps; ++rep) {
