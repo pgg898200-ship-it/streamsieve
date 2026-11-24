@@ -1,5 +1,18 @@
 # RecastCRPS adoption evidence
 
+## November 24, 2026
+
+| Public signal | Verified |
+| --- | --- |
+| Unique independent integrating repositories | 0 found cumulatively |
+| Independent reproductions, citations and integration requests | 0 found in each category |
+| Owned verification | [Milton replay](replay/README.md#repeat-the-check-on-hurricane-milton), 1,891 member updates. Live Lee demo checked in Chrome. |
+| Parent repository stars / forks | 0 / 0 |
+| Space likes | 0 |
+| Downloads and bot traffic | No verified counts available |
+
+GitHub repository and README searches returned only StreamSieve. The two external code matches contained longer forecastCRPS identifiers. Requirements and pyproject searches found no external dependency. Both matching PRs were owner-authored. Public web and OpenAlex searches yielded no independent references. The Space had no discussion threads. Project verification runs are recorded separately from downstream use.
+
 ## November 23, 2026
 
 | Public signal | Verified |

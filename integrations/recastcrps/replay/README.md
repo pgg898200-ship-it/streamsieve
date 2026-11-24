@@ -2,7 +2,7 @@
 
 This fixture follows 31 NOAA Global Ensemble Forecast System members as they revise Hurricane Lee's forecast maximum sustained wind for the same valid time. Each member occupies a stable slot. The reference outcome is the National Hurricane Center's post-storm best-track intensity, in knots. For background see the [NHC storm report](https://www.nhc.noaa.gov/data/tcr/AL132023_Lee.pdf).
 
-From the repository root, run the offline replay:
+From the RecastCRPS directory, run the offline replay with
 
 ```sh
 c++ -std=c++17 -O2 -Iinclude replay/replay.cpp -o /tmp/recast-replay
@@ -42,3 +42,20 @@ To reproduce the CSV from the upstream archives, run `python3 replay/extract_lee
 | Uncompressed NOAA a-deck | `0ed6ffa50154f6055f8a3cba4db475e3b4a42e99e61080c9b811809204556cbe` |
 | Uncompressed NOAA b-deck | `ca9ae215e737d32cd13300fbeab900d75ab84c6d915f51f87e236c3cc46ee958` |
 | `lee_gefs.csv` | `3314ea7d0e64f5b38ee5d92be288c886ea9bcc4aec99ff0d88712979c5b8ce2a` |
+
+## Repeat the check on Hurricane Milton
+
+The [Milton fixture](milton_gefs.csv) covers seven 12 UTC verification times from October 5 through 11, 2024. It uses the same GEFS member IDs, 6–72 hour leads, positive-wind filter and NHC best-track verification as the Lee replay. Of 84 possible target/initialization pairs, 61 had a complete panel of 31 members. Each cycle contributes equally to the reported mean. The different storm and lead-time mix limits comparisons of forecast skill across the two fixtures.
+
+Run the compiled replay from the RecastCRPS directory. The CSV is bundled for offline use.
+
+```sh
+/tmp/recast-replay replay/milton_gefs.csv
+```
+
+```text
+targets=7 cycles=61 members=31 verified_updates=1891 revised_values=1601 unchanged_resubmissions=73
+mean_complete_cycle_crps_kt=42.52561369
+```
+
+To rebuild the CSV, run `python3 replay/extract_lee.py --storm milton`. The extractor verifies both source hashes before writing. The resulting CSV has SHA-256 `01c76a4f63a7650e3fcb82fd0e8c55ffb4efb15db0c64d03a9fe1db611984ba2`. [NOAA forecast archive](https://ftp.nhc.noaa.gov/atcf/archive/2024/aal142024.dat.gz) · [NOAA best-track archive](https://ftp.nhc.noaa.gov/atcf/archive/2024/bal142024.dat.gz)
