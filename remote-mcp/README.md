@@ -44,3 +44,5 @@ The hosted tool accepts up to 32 lists, 512 IDs per list, and 2,048 ID occurrenc
 For live queries, run the Python coordinator beside your retrievers. It can close unfinished cursors once it proves the requested result. That saves backend work when a producer fetches lazily or honors cancellation. The hosted replay measures simulated reads on the lists you supply.
 
 [Compare SQLite FTS5 query latency and reproduce the measurements](https://github.com/pgg898200-ship-it/streamsieve/blob/1957c64233a949027e28a08105d59758cdadc2f8/results/sqlite-tail-v1.md). The benchmark times RankFence, shard-local RankSeal and exhaustive fusion through cursor cleanup, including queries where early stopping costs more time.
+
+[Connect cancellable SQLite shard cursors](https://github.com/pgg898200-ship-it/streamsieve/blob/5d0d61157c7047aac41598f8337ed1ad3da5da51/results/sqlite-interrupt-v1.md) with the Python adapter. The paired benchmark includes interruption of a running FTS5 query, a required archive read and an empty result.
