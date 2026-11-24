@@ -11,20 +11,35 @@ WHERE xmin <= :x AND :x < xmax AND ymin <= :y AND :y < ymax
 """
 
 
-def score(zones, moves, module):
+REFINED_POINT_QUERY = """
+SELECT z.id
+FROM zones AS idx
+JOIN zone_bounds AS z ON z.id = idx.id
+WHERE idx.xmin <= :x AND :x < idx.xmax
+  AND idx.ymin <= :y AND :y < idx.ymax
+  AND z.xmin <= :x AND :x < z.xmax
+  AND z.ymin <= :y AND :y < z.ymax
+"""
+
+
+def score(zones, moves, module, *, refine=False):
     db = sqlite3.connect(":memory:")
     try:
         # module is selected from the two SQLite built-ins below.
         db.execute(f"CREATE VIRTUAL TABLE zones USING {module}(id,xmin,xmax,ymin,ymax)")
-        db.executemany("INSERT INTO zones VALUES (?,?,?,?,?)", (
-            (i, xmin, xmax, ymin, ymax)
-            for i, (xmin, ymin, xmax, ymax) in enumerate(zones)
-        ))
+        rows = [(i, xmin, xmax, ymin, ymax) for i, (xmin, ymin, xmax, ymax) in enumerate(zones)]
+        db.executemany("INSERT INTO zones VALUES (?,?,?,?,?)", rows)
+        query = POINT_QUERY
+        if refine:
+            db.execute("CREATE TABLE zone_bounds(id INTEGER PRIMARY KEY, xmin INTEGER, "
+                       "xmax INTEGER, ymin INTEGER, ymax INTEGER)")
+            db.executemany("INSERT INTO zone_bounds VALUES (?,?,?,?,?)", rows)
+            query = REFINED_POINT_QUERY
         failures = 0
         first_failure = None
         for move in moves:
             old, new = (
-                {row[0] for row in db.execute(POINT_QUERY, {"x": move["x" + k], "y": move["y" + k]})}
+                {row[0] for row in db.execute(query, {"x": move["x" + k], "y": move["y" + k]})}
                 for k in ("0", "1")
             )
             entered, exited = sorted(new - old), sorted(old - new)
@@ -51,8 +66,9 @@ def main():
         if any(type(v) is not int or not -(2**31) <= v < 2**31 for v in box):
             parser.error("rtree_i32 requires signed 32-bit integer bounds")
     results = {module: score(zones, moves, module) for module in ("rtree", "rtree_i32")}
+    results["rtree_refined"] = score(zones, moves, "rtree", refine=True)
     print(json.dumps({"sqlite": sqlite3.sqlite_version, **results}, indent=2))
-    return int(results["rtree_i32"]["matched"] != len(moves))
+    return int(any(results[key]["matched"] != len(moves) for key in ("rtree_i32", "rtree_refined")))
 
 
 if __name__ == "__main__":

@@ -5,9 +5,26 @@ Does an R-tree point query return the exact zones a taxi entered and left? On th
 | SQLite 3.53.1 index | Updates with exact entry and exit IDs | First mismatch |
 | --- | ---: | --- |
 | `rtree` | 4,459 / 4,469 | Trip 32, step 8 reported an extra entry into zone 1 |
+| `rtree` with original bounds checked by ID | 4,469 / 4,469 | None |
 | `rtree_i32` | 4,469 / 4,469 | None |
 
 Zone 1 starts at latitude **41,153,630** in integer microdegrees. The new fix was **41,153,625**, five microdegrees south of that edge. SQLite rounds floating-point R-tree bounds outward. A query can therefore admit a point outside the original box. For this fixture, all bounds fit in signed 32-bit integers. For data requiring a different representation, use the spatial index to select candidates and test the original bounds before emitting an event. [SQLite coordinate rounding and integer R-trees](https://sqlite.org/rtree.html)
+
+## Keep an existing floating-point index
+
+Suppose a gateway already has a floating-point R-tree named `zones` and a table named `zone_bounds` holding the original rectangles, keyed by the same integer ID. Use the index to find candidates, then check each candidate against its stored source bounds. This retains the original index. Both tables must describe the same revision of each rectangle. If the only surviving coordinates are the rounded index values, recover the exact bounds from the source first.
+
+```sql
+SELECT z.id
+FROM zones AS idx
+JOIN zone_bounds AS z ON z.id = idx.id
+WHERE idx.xmin <= :x AND :x < idx.xmax
+  AND idx.ymin <= :y AND :y < idx.ymax
+  AND z.xmin <= :x AND :x < z.xmax
+  AND z.ymin <= :y AND :y < z.ymax;
+```
+
+Bind `:x` and `:y` to one observed position in the same coordinate system as the two tables. Run the query for each endpoint and compare the returned IDs. The replay stores original integer microdegrees in `zone_bounds`. This follows the SQLite maintainers’ advice for applications that need the original GPS precision. [SQLite user report and maintainer response](https://sqlite.org/forum/info/0163fd9af6240bee5bc6c7e9456fda60125882b9ce879751b5b5748ffa61505c)
 
 ## Run it
 
@@ -21,4 +38,4 @@ curl -fL "$base/moves.jsonl.gz" -o porto-data/moves.jsonl.gz
 python3 score_sqlite.py porto-data
 ```
 
-For each endpoint the query includes the west and south edges and excludes the east and north edges. The scorer subtracts the two membership sets in both directions and compares all IDs to the published labels, including updates with no changes. It prints the first mismatch and returns a failing exit status if the integer index disagrees with any label. This measures correctness on 256 synthetic rectangles and observed taxi positions. For latency, the separate JavaScript benchmark compares EdgeChime, Flatbush and a perimeter grid over several workloads. [Benchmark and losing cases](../../README.md#measured-performance) · [Dataset and attribution](https://huggingface.co/datasets/pgg-engineering/edgechime-bench) · [Map a move](../gis/README.md)
+For each endpoint the query includes the west and south edges and excludes the east and north edges. The scorer subtracts the two membership sets in both directions and compares all IDs to the published labels, including updates with no changes. It prints the first mismatch and returns a failing exit status if either the integer index or the refined floating-point query disagrees with any label. This measures correctness on 256 synthetic rectangles and observed taxi positions. For latency, the separate JavaScript benchmark compares EdgeChime, Flatbush and a perimeter grid over several workloads. [Benchmark and losing cases](../../README.md#measured-performance) · [Dataset and attribution](https://huggingface.co/datasets/pgg-engineering/edgechime-bench) · [Map a move](../gis/README.md)
