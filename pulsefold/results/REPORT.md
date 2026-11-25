@@ -107,3 +107,25 @@ for seed in 73492051 20261124; do
 done
 taskset -c 4 build/benchmark --trace bench/data/intel-lab-4h.tsv --repeats 10
 ```
+
+## November 25, 2026 • replaying silence in an external trace
+
+The scalar benchmark on the release branch accepts both `TIME FEED` and `TIME tick` from an external trace. A tick advances event time without reporting a heartbeat. This lets every engine measure expiry during silence or at the end of a capture. Timestamps must be nondecreasing and use microseconds for the built-in 54-feed sensor policy.
+
+PGG replayed the published Intel Berkeley fixture with one experimental tick appended 600 seconds after its final observation. This models ten minutes of silence after capture; the fixture itself records no observations for that additional period. All five engines matched on both output digests. Their measured transition counts matched the replay CLI after subtracting the 1,053-operation warm-up.
+
+| Measured segment | Observations | Ticks | Stale | Fresh |
+|---|---:|---:|---:|---:|
+| Original fixture | 9,482 | 0 | 4,731 | 4,725 |
+| Same fixture with final tick | 9,482 | 1 | 4,912 | 4,725 |
+
+Run from the branch’s `pulsefold` directory. The derived trace SHA-256 is `c56088adc6667f2348c52b26a6fff61a0316eb78cd486a4d969ef453f84adb04`.
+
+```sh
+make build/benchmark
+trace=$(mktemp)
+cat bench/data/intel-lab-4h.tsv > "$trace"
+awk 'END {printf "%.0f tick\n", $1 + 600000000}' bench/data/intel-lab-4h.tsv >> "$trace"
+build/benchmark --trace "$trace" --repeats 1
+rm "$trace"
+```

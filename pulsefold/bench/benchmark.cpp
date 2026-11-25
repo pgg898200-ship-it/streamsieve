@@ -86,13 +86,18 @@ Trace read_trace(const std::string& path) {
         if (!(fields >> stamp)) continue;
         try {
             if (!(fields >> feed) || fields >> extra)
-                throw std::invalid_argument("expected timestamp_us and feed_id");
+                throw std::invalid_argument("expected timestamp_us followed by a feed ID or tick");
             const Time t = parse_unsigned(stamp);
-            const auto f = parse_unsigned(feed);
-            if (f >= trace.config.size()) throw std::invalid_argument("feed ID must be in [0,53]");
+            Id id = poll;
+            if (feed != "tick") {
+                const auto value = parse_unsigned(feed);
+                if (value >= trace.config.size())
+                    throw std::invalid_argument("feed ID must be in [0,53]");
+                id = static_cast<Id>(value);
+            }
             if (!trace.operations.empty() && t < trace.operations.back().time)
                 throw std::invalid_argument("timestamps must be nondecreasing");
-            trace.operations.push_back({t, static_cast<Id>(f)});
+            trace.operations.push_back({t, id});
         } catch (const std::exception& error) {
             throw std::runtime_error(path + ":" + std::to_string(line_no) + ": " + error.what());
         }
