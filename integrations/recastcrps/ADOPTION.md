@@ -1,5 +1,18 @@
 # RecastCRPS adoption evidence
 
+## November 25, 2026
+
+| Public signal | Verified |
+| --- | --- |
+| Unique independent integrating repositories | 0 found cumulatively |
+| Third-party reproductions, citations and integration requests | 0 found in public searches |
+| PGG-owned verification | [Two-storm withdrawal reference](replay/README.md#check-an-adapter-against-exact-withdrawal-scores), 185 cycles |
+| Hugging Face Space likes | 0 |
+| Parent stars / forks | Last observed November 24: 0 / 0 |
+| Downloads and bot traffic | No verified counts available |
+
+The repository and README search found only StreamSieve. External code matches contained the substring in unrelated forecastCRPS identifiers. External requirements files, pyproject manifests, commits, issues and PRs yielded no verified use. No independent citation or reproduction surfaced in public web search. Direct OpenAlex lookup was unavailable for this check.
+
 ## November 24, 2026
 
 | Public signal | Verified |
