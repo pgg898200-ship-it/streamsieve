@@ -46,3 +46,5 @@ For live queries, run the Python coordinator beside your retrievers. It can clos
 [Compare SQLite FTS5 query latency and reproduce the measurements](https://github.com/pgg898200-ship-it/streamsieve/blob/1957c64233a949027e28a08105d59758cdadc2f8/results/sqlite-tail-v1.md). The benchmark times RankFence, shard-local RankSeal and exhaustive fusion through cursor cleanup, including queries where early stopping costs more time.
 
 [Connect cancellable SQLite shard cursors](https://github.com/pgg898200-ship-it/streamsieve/blob/5d0d61157c7047aac41598f8337ed1ad3da5da51/results/sqlite-interrupt-v1.md) with the Python adapter. The paired benchmark includes interruption of a running FTS5 query, a required archive read and an empty result.
+
+[Try deferred shard startup in the Python 0.2.0a1 preview](https://github.com/pgg898200-ship-it/streamsieve/tree/dcf5a22e9c00870a5edd255757df7d3571061f58). The SciFact reproduction includes 300 queries, a shard-local RankSeal comparison, and cited-paper hit counts for both ranking layouts.
