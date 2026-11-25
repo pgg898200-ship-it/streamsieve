@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rankfence"
-version = "0.1.0"
+version = "0.2.0a1"
 description = "Certified early stopping for reciprocal rank fusion over asynchronous ranked streams"
 readme = "README.md"
 license = {text = "MIT"}
@@ -13,7 +13,7 @@ keywords = ["reciprocal-rank-fusion", "retrieval", "asyncio", "top-k"]
 
 [project.urls]
 Homepage = "https://rankfence-pgg.tancurl3.chatgpt.site"
-Source = "https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0"
+Source = "https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-deferred-0.2.0a1"
 
 [project.scripts]
 rankfence = "rankfence.__main__:main"

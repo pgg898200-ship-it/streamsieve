@@ -1,5 +1,19 @@
 # RankFence
 
+## Preview delayed shard startup in Python 0.2.0a1
+
+[Download the prerelease wheel and its checksum](releases/deferred-0.2.0a1). With this wheel, a query can wait for the first catalog pages before opening the archive:
+
+```python
+result = await fuse_partitioned(
+    [catalog_title, catalog_body, archive_body],
+    ["catalog", "catalog", "archive"], k=1, defer_groups=("archive",),
+)
+```
+
+On SciFact this avoided all 300 archive opens with two catalog rankers and one archive ranker. Giving both shards two rankers improved cited-paper hits and eliminated the startup savings. [Read the paired measurements and reproduce both layouts](results/scifact-defer-v1.md).
+
+
 **Stop fetching search results when the next page can’t change the winners.** RankFence merges paged rankings with reciprocal rank fusion (RRF). Put it between your keyword and vector retrievers and the component that consumes their top results, such as a reranker or a RAG context builder. It returns the exact ordered document IDs and closes cursors it no longer needs.
 
 [Try a query in your browser](https://rankfence-pgg.tancurl3.chatgpt.site/workbench.html) · [Connect live cursors](#use-live-retrieval-cursors) · [Call from an MCP client](#let-an-agent-measure-its-own-workload)

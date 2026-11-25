@@ -35,13 +35,19 @@ async def fuse(sources: Sequence[AsyncIterable[Page]], k: int, *, c: int = 60,
 
 async def fuse_partitioned(sources: Sequence[AsyncIterable[Page]], source_groups: Sequence[str],
                            k: int, *, c: int = 60, mode: str = "ordered",
-                           receipt: bool = False, prune: bool = True) -> Result:
+                           receipt: bool = False, prune: bool = True,
+                           defer_groups: Sequence[str] = ()) -> Result:
     """Fuse rankings with pairwise-disjoint group ID spaces.
 
     source_groups[i] names the partition of sources[i]. The caller guarantees
     that each ID belongs to one partition, including all unread pages. With
     prune=True the coordinator can cancel a losing partition before the global
     result is ready. Cancellation leaves its EOF flags false.
+
+    defer_groups delays the first pull from the named groups until every other
+    source has delivered a page or retired. Lazy backends can then avoid startup
+    entirely. All groups count toward the proof from the start. Choose initial
+    sources that can make progress without waiting on a deferred source.
     """
     if isinstance(source_groups, (str, bytes)):
         raise TypeError("provide one group name per source")
@@ -51,10 +57,15 @@ async def fuse_partitioned(sources: Sequence[AsyncIterable[Page]], source_groups
     if type(prune) is not bool:
         raise TypeError("prune must be a bool")
     fence = PartitionFence(groups, k, c)
-    return await _consume(sources, fence, k, c, mode, receipt, groups, prune)
+    if isinstance(defer_groups, (str, bytes)):
+        raise TypeError("provide a sequence of group names to defer")
+    delayed = set(defer_groups)
+    if delayed - set(groups) or delayed == set(groups):
+        raise ValueError("defer_groups must select a proper subset of the source groups")
+    return await _consume(sources, fence, k, c, mode, receipt, groups, prune, delayed)
 
 
-async def _consume(sources, fence, k, c, mode, receipt, groups=None, prune=False):
+async def _consume(sources, fence, k, c, mode, receipt, groups=None, prune=False, delayed=()):
     if mode not in ("ordered", "members"):
         raise ValueError("mode must be ordered or members")
     check = fence.ordered if mode == "ordered" else fence.members
@@ -93,13 +104,22 @@ async def _consume(sources, fence, k, c, mode, receipt, groups=None, prune=False
             if any(reader is other for other in readers):
                 raise ValueError("each source requires a distinct iterator")
             readers.append(reader)
+        deferred = []
+        initial = set()
         for i, reader in enumerate(readers):
+            if delayed:
+                if groups[i] in delayed:
+                    deferred.append(i)
+                    continue
+                initial.add(i)
             pending[asyncio.create_task(pull(reader))] = i
         while pending:
             ready, _ = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
             resume = []
             for task in sorted(ready, key=pending.__getitem__):
                 i = pending.pop(task)
+                if deferred:
+                    initial.discard(i)
                 page = task.result()
                 if not isinstance(page, Page):
                     raise TypeError("sources must yield Page objects")
@@ -130,6 +150,9 @@ async def _consume(sources, fence, k, c, mode, receipt, groups=None, prune=False
                     for error in errors:
                         if isinstance(error, BaseException):
                             raise error
+            if deferred and initial <= retired:
+                resume.extend(deferred)
+                deferred.clear()
             for i in resume:
                 if i in retired:
                     continue

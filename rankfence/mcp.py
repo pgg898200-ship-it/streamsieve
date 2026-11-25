@@ -8,7 +8,7 @@ from . import Fence, PartitionFence, retirable_sources, verify
 
 MODERN, LEGACY = "2026-07-28", "2025-11-25"
 NS = "io.modelcontextprotocol/"
-INFO = {"name": "rankfence", "version": "0.1.0"}
+INFO = {"name": "rankfence", "version": "0.2.0a1"}
 CAPABILITIES = {"tools": {}}
 FRAME = 256 * 1024
 MAX_SOURCES, MAX_IDS, MAX_DEPTH = 32, 2048, 512
