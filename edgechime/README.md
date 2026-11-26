@@ -71,6 +71,19 @@ The CLI consumes newline-delimited JSON in arrival order. It stores a pair of co
 
 Stream vehicle positions from Eclipse SUMO floating-car data and route them to matching zones. The runnable example includes a versioned upstream regression fixture and expected events. Game developers can import rectangular triggers from a named Tiled object layer. Both examples run from the source checkout. [SUMO adapter](examples/sumo/README.md) · [Tiled adapter](examples/tiled/README.md).
 
+## Check a SQLite geofence query against the labeled replay
+
+From the `edgechime/` directory in this checkout or the Space’s source ZIP, rebuild the 256 zones and 4,469 labeled taxi updates from the bundled trace. The exporter checks EdgeChime’s callbacks against every label. Download the pinned Python scorer once, then run it offline with Python 3 and SQLite’s R-tree module.
+
+```sh
+run_dir=$(mktemp -d)
+node bench/export-dataset.mjs "$run_dir"
+curl -fsSL https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/c0a9d6e25d25dbab5f926979fbb8fed2856824cd/edgechime/bench/sqlite/score_sqlite.py -o "$run_dir/score_sqlite.py"
+python3 "$run_dir/score_sqlite.py" "$run_dir"
+```
+
+On SQLite 3.53.1, direct floating-point index bounds matched **4,459 of 4,469** updates. Integer bounds and a floating-point index checked against the original bounds each matched **4,469 of 4,469**. At trip 32, step 8, the direct floating-point query reported an extra entry into zone 1. [Inspect the SQL and the first mismatch](https://github.com/pgg898200-ship-it/streamsieve/blob/c0a9d6e25d25dbab5f926979fbb8fed2856824cd/edgechime/bench/sqlite/README.md).
+
 ## Reproduce
 
 From the source checkout, run `npm test`, `npm run bench` and `node bench/fleet.mjs`. The comparison harness includes pinned Flatbush 4.7.0 and its dependency, a specialized perimeter-grid baseline and a historical taxi replay. The benchmark can run offline. Source, selection and license for the Porto positions are in [the trace note](bench/trace.md). Zone subscriptions are generated.
