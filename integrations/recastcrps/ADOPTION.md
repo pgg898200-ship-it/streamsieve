@@ -1,5 +1,19 @@
 # RecastCRPS adoption evidence
 
+## November 26, 2026
+
+| Signal | Verified |
+| --- | --- |
+| Unique independent repositories integrating RecastCRPS | 0 found cumulatively |
+| Independent reproductions, citations, integration requests | 0 found in each category |
+| PGG-owned integration | [xskillscore comparison](examples/README.md#compare-member-withdrawals-with-xskillscore), 5,920 scores checked |
+| Project benchmark runs | Native revision, attribution and extremes drivers, scoringrules comparison and Python call latency |
+| Parent repository stars / forks | 0 / 0 |
+| Space likes | 0 |
+| Downloads and bot traffic | No verified counts available |
+
+GitHub repository, README, commit and issue searches surfaced only owner activity for this project. External code matches were unrelated names containing forecastCRPS. Searches of requirements files and pyproject manifests yielded no matches. Crossref returned no records for RecastCRPS, and the Space had no discussion threads. OpenAlex rate-limited the lookup. The xskillscore example was built and run by PGG.
+
 ## November 25, 2026
 
 | Public signal | Verified |
