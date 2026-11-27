@@ -41,6 +41,7 @@ The hosted tool accepts up to 32 lists, 512 IDs per list, and 2,048 ID occurrenc
 | Local stdio replay and receipt verification | [Python package and MCP client configuration](https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0#let-an-agent-measure-its-own-workload) |
 | Live retrieval | [Progressive file-search example](https://github.com/pgg898200-ship-it/streamsieve/blob/c7e35ccb5563ca7b115b4f34da74c8b4019be6bd/examples/progressive_file_search.py) · [Async cursor adapter](https://github.com/pgg898200-ship-it/streamsieve/tree/rankfence-v0.1.0#use-live-retrieval-cursors) |
 | SQLite worker configuration | [Tested adapter and concurrent retrieval timings](https://github.com/pgg898200-ship-it/streamsieve/blob/69341dea6a11066facf5823da43608bdc7c283d6/results/scifact-workers-v1.md) for one or four simultaneous queries |
+| Decide whether to open an ID-range shard | [Test the top-one shortcut and reproduce the RankSeal comparison](https://github.com/pgg898200-ship-it/streamsieve/blob/2b7af7ce917a995b976ebf49e13e02235c88e8b0/results/scifact-range-v1.md) |
 
 For live queries, run the Python coordinator beside your retrievers. It can close unfinished cursors once it proves the requested result. That saves backend work when a producer fetches lazily or honors cancellation. The hosted replay measures simulated reads on the lists you supply.
 
