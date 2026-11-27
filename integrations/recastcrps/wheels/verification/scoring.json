@@ -1,0 +1,1139 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "affinity": [
+    0
+  ],
+  "packages": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "scoringrules": "0.12.0",
+    "numba": "0.68.1",
+    "llvmlite": "0.50.0",
+    "array-api-compat": "1.16.0"
+  },
+  "options": {
+    "sizes": [
+      8,
+      32,
+      512,
+      8192
+    ],
+    "steps": 128,
+    "small_batch_steps": 2048,
+    "repeats": 5,
+    "seed": 95722
+  },
+  "thread_settings": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "NUMBA_NUM_THREADS": "1"
+  },
+  "support": [
+    -2048,
+    2048
+  ],
+  "rows": [
+    {
+      "members": 8,
+      "edits": 2048,
+      "integer_weighted": false,
+      "methods": {
+        "recast": {
+          "setup_or_snapshot_ns": [
+            94000,
+            90144,
+            102542,
+            92507,
+            93018
+          ],
+          "score_loop_ns": [
+            466282,
+            414806,
+            412833,
+            426473,
+            559471
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 208.23876953125
+        },
+        "numpy_online": {
+          "setup_or_snapshot_ns": [
+            2784,
+            1753,
+            2413,
+            1963,
+            1692
+          ],
+          "score_loop_ns": [
+            45994173,
+            46897223,
+            47470635,
+            48454445,
+            46975970
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 22937.4853515625
+        },
+        "numba_online": {
+          "setup_or_snapshot_ns": [
+            1492,
+            2784,
+            1652,
+            1953,
+            1582
+          ],
+          "score_loop_ns": [
+            30053251,
+            27097213,
+            26998586,
+            25394816,
+            25427865
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 13182.9033203125
+        },
+        "numpy_batch": {
+          "setup_or_snapshot_ns": [
+            557437,
+            604537,
+            644937,
+            600882,
+            598008
+          ],
+          "score_loop_ns": [
+            425772,
+            325033,
+            487885,
+            281528,
+            288017
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 158.70751953125
+        },
+        "numba_batch": {
+          "setup_or_snapshot_ns": [
+            559331,
+            653911,
+            633330,
+            572650,
+            585058
+          ],
+          "score_loop_ns": [
+            146217,
+            223782,
+            119718,
+            114860,
+            113018
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 58.4560546875
+        }
+      }
+    },
+    {
+      "members": 32,
+      "edits": 128,
+      "integer_weighted": false,
+      "methods": {
+        "recast": {
+          "setup_or_snapshot_ns": [
+            109062,
+            123202,
+            90233,
+            103053,
+            87380
+          ],
+          "score_loop_ns": [
+            27901,
+            27812,
+            28503,
+            27190,
+            27681
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 217.28125
+        },
+        "numpy_online": {
+          "setup_or_snapshot_ns": [
+            1883,
+            1923,
+            1923,
+            1933,
+            1983
+          ],
+          "score_loop_ns": [
+            3249554,
+            2846355,
+            2895217,
+            3116827,
+            2911822
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 22748.609375
+        },
+        "numba_online": {
+          "setup_or_snapshot_ns": [
+            1973,
+            1993,
+            1903,
+            1943,
+            2053
+          ],
+          "score_loop_ns": [
+            1637040,
+            2047149,
+            1646664,
+            1824378,
+            1597040
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 12864.5625
+        },
+        "numpy_batch": {
+          "setup_or_snapshot_ns": [
+            38267,
+            40961,
+            39389,
+            40209,
+            39789
+          ],
+          "score_loop_ns": [
+            65016,
+            74731,
+            69603,
+            73309,
+            80920
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 572.7265625
+        },
+        "numba_batch": {
+          "setup_or_snapshot_ns": [
+            38828,
+            39088,
+            38167,
+            41662,
+            38267
+          ],
+          "score_loop_ns": [
+            33209,
+            42153,
+            35813,
+            45307,
+            37896
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 296.0625
+        }
+      }
+    },
+    {
+      "members": 512,
+      "edits": 128,
+      "integer_weighted": false,
+      "methods": {
+        "recast": {
+          "setup_or_snapshot_ns": [
+            147589,
+            148861,
+            153588,
+            159197,
+            178235
+          ],
+          "score_loop_ns": [
+            32137,
+            30736,
+            30765,
+            31556,
+            29604
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 240.3515625
+        },
+        "numpy_online": {
+          "setup_or_snapshot_ns": [
+            18267,
+            17887,
+            18027,
+            18027,
+            17867
+          ],
+          "score_loop_ns": [
+            3862453,
+            3972747,
+            3916273,
+            4259483,
+            4548121
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 31037.0859375
+        },
+        "numba_online": {
+          "setup_or_snapshot_ns": [
+            17987,
+            19579,
+            19008,
+            18207,
+            18648
+          ],
+          "score_loop_ns": [
+            2303069,
+            2289028,
+            2344531,
+            2281146,
+            2278902
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 17883.03125
+        },
+        "numpy_batch": {
+          "setup_or_snapshot_ns": [
+            160869,
+            187789,
+            164144,
+            218044,
+            195501
+          ],
+          "score_loop_ns": [
+            1289935,
+            1268803,
+            1331386,
+            1244667,
+            1276755
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 9974.6484375
+        },
+        "numba_batch": {
+          "setup_or_snapshot_ns": [
+            189842,
+            428075,
+            163313,
+            154830,
+            153408
+          ],
+          "score_loop_ns": [
+            723974,
+            774961,
+            743874,
+            745917,
+            741911
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 5811.515625
+        }
+      }
+    },
+    {
+      "members": 8192,
+      "edits": 128,
+      "integer_weighted": false,
+      "methods": {
+        "recast": {
+          "setup_or_snapshot_ns": [
+            1113853,
+            1281392,
+            1137258,
+            1187213,
+            1143938
+          ],
+          "score_loop_ns": [
+            47962,
+            50806,
+            47641,
+            42763,
+            48011
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 374.703125
+        },
+        "numpy_online": {
+          "setup_or_snapshot_ns": [
+            272124,
+            287236,
+            283080,
+            275659,
+            284572
+          ],
+          "score_loop_ns": [
+            37128263,
+            36216699,
+            36858813,
+            36205593,
+            34206436
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 282942.9609375
+        },
+        "numba_online": {
+          "setup_or_snapshot_ns": [
+            276981,
+            366404,
+            264412,
+            287647,
+            301708
+          ],
+          "score_loop_ns": [
+            30247819,
+            30790084,
+            34493192,
+            31617252,
+            31321523
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 244699.3984375
+        },
+        "numpy_batch": {
+          "setup_or_snapshot_ns": [
+            1101235,
+            1739492,
+            1750659,
+            1312368,
+            1437174
+          ],
+          "score_loop_ns": [
+            35204486,
+            35944215,
+            38726164,
+            36744353,
+            35723327
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 280814.1796875
+        },
+        "numba_batch": {
+          "setup_or_snapshot_ns": [
+            1421139,
+            1627105,
+            1611222,
+            1805680,
+            1604832
+          ],
+          "score_loop_ns": [
+            29842027,
+            30116114,
+            30290593,
+            29072184,
+            36013939
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 235282.140625
+        }
+      }
+    },
+    {
+      "members": 8,
+      "edits": 2048,
+      "integer_weighted": true,
+      "methods": {
+        "recast": {
+          "setup_or_snapshot_ns": [
+            95392,
+            84105,
+            120018,
+            94320,
+            97875
+          ],
+          "score_loop_ns": [
+            442897,
+            442066,
+            425051,
+            466883,
+            424561
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 1.3642420526593924e-12,
+            "log10_max_abs": -11.865108567503567,
+            "min_signed_delta": -9.094947017729282e-13,
+            "max_signed_delta": 1.3642420526593924e-12,
+            "min_signed_rel_nonzero": -8.496188244647583e-16,
+            "max_signed_rel_nonzero": 9.624534750838276e-16,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 215.8525390625
+        },
+        "numpy_online": {
+          "setup_or_snapshot_ns": [
+            3866,
+            2974,
+            3365,
+            4066,
+            3896
+          ],
+          "score_loop_ns": [
+            97906470,
+            93862768,
+            97415913,
+            97615258,
+            96355398
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 47566.36376953125
+        },
+        "numba_online": {
+          "setup_or_snapshot_ns": [
+            2544,
+            3565,
+            2884,
+            3575,
+            2594
+          ],
+          "score_loop_ns": [
+            84205503,
+            86831170,
+            87131446,
+            90206521,
+            85980468
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 4.547473508864641e-13,
+            "log10_max_abs": -12.34222982222323,
+            "min_signed_delta": -4.547473508864641e-13,
+            "max_signed_delta": 4.547473508864641e-13,
+            "min_signed_rel_nonzero": -3.6353032239189086e-16,
+            "max_signed_rel_nonzero": 3.94419563861906e-16,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 42398.0322265625
+        },
+        "numpy_batch": {
+          "setup_or_snapshot_ns": [
+            973745,
+            1145951,
+            978312,
+            1109918,
+            972243
+          ],
+          "score_loop_ns": [
+            703795,
+            696283,
+            603095,
+            636715,
+            608344
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 310.89599609375
+        },
+        "numba_batch": {
+          "setup_or_snapshot_ns": [
+            1106403,
+            1014456,
+            1005653,
+            978152,
+            1068396
+          ],
+          "score_loop_ns": [
+            575865,
+            497459,
+            513903,
+            518259,
+            503928
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 4.547473508864641e-13,
+            "log10_max_abs": -12.34222982222323,
+            "min_signed_delta": -4.547473508864641e-13,
+            "max_signed_delta": 4.547473508864641e-13,
+            "min_signed_rel_nonzero": -3.6353032239189086e-16,
+            "max_signed_rel_nonzero": 3.94419563861906e-16,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 250.92919921875
+        }
+      }
+    },
+    {
+      "members": 32,
+      "edits": 128,
+      "integer_weighted": true,
+      "methods": {
+        "recast": {
+          "setup_or_snapshot_ns": [
+            178334,
+            95081,
+            94340,
+            84415,
+            147779
+          ],
+          "score_loop_ns": [
+            30195,
+            30045,
+            29884,
+            27611,
+            29294
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 9.094947017729282e-13,
+            "log10_max_abs": -12.041199826559248,
+            "min_signed_delta": -9.094947017729282e-13,
+            "max_signed_delta": 5.115907697472721e-13,
+            "min_signed_rel_nonzero": -8.96893851048652e-16,
+            "max_signed_rel_nonzero": 1.0630860819077128e-15,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 233.46875
+        },
+        "numpy_online": {
+          "setup_or_snapshot_ns": [
+            3525,
+            4146,
+            4416,
+            3526,
+            4437
+          ],
+          "score_loop_ns": [
+            6128857,
+            6487230,
+            6917869,
+            6840954,
+            6085413
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 50681.484375
+        },
+        "numba_online": {
+          "setup_or_snapshot_ns": [
+            3606,
+            3936,
+            3906,
+            4847,
+            3946
+          ],
+          "score_loop_ns": [
+            5806158,
+            6339079,
+            5992865,
+            6601289,
+            6295015
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 6.821210263296962e-13,
+            "log10_max_abs": -12.166138563167548,
+            "min_signed_delta": -4.547473508864641e-13,
+            "max_signed_delta": 6.821210263296962e-13,
+            "min_signed_rel_nonzero": -4.390941155651444e-16,
+            "max_signed_rel_nonzero": 6.693056752032617e-16,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 49179.8046875
+        },
+        "numpy_batch": {
+          "setup_or_snapshot_ns": [
+            69193,
+            70044,
+            72047,
+            69783,
+            71176
+          ],
+          "score_loop_ns": [
+            168110,
+            179377,
+            226276,
+            223983,
+            234137
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 1749.8671875
+        },
+        "numba_batch": {
+          "setup_or_snapshot_ns": [
+            68361,
+            104615,
+            69673,
+            69153,
+            69893
+          ],
+          "score_loop_ns": [
+            140699,
+            160579,
+            151405,
+            294387,
+            156403
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 6.821210263296962e-13,
+            "log10_max_abs": -12.166138563167548,
+            "min_signed_delta": -4.547473508864641e-13,
+            "max_signed_delta": 6.821210263296962e-13,
+            "min_signed_rel_nonzero": -4.390941155651444e-16,
+            "max_signed_rel_nonzero": 6.693056752032617e-16,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 1221.8984375
+        }
+      }
+    },
+    {
+      "members": 512,
+      "edits": 128,
+      "integer_weighted": true,
+      "methods": {
+        "recast": {
+          "setup_or_snapshot_ns": [
+            212716,
+            184344,
+            162101,
+            184504,
+            161099
+          ],
+          "score_loop_ns": [
+            32388,
+            31747,
+            33449,
+            34441,
+            34201
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 1.0913936421275139e-11,
+            "log10_max_abs": -10.962018580511623,
+            "min_signed_delta": -1.0913936421275139e-11,
+            "max_signed_delta": 7.503331289626658e-12,
+            "min_signed_rel_nonzero": -1.120008983497559e-14,
+            "max_signed_rel_nonzero": 1.0264532676922038e-14,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 261.3203125
+        },
+        "numpy_online": {
+          "setup_or_snapshot_ns": [
+            35983,
+            39519,
+            36114,
+            40220,
+            35953
+          ],
+          "score_loop_ns": [
+            8192391,
+            7536166,
+            9011516,
+            8376854,
+            7913647
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 64003.0546875
+        },
+        "numba_online": {
+          "setup_or_snapshot_ns": [
+            35612,
+            36454,
+            35402,
+            35533,
+            36854
+          ],
+          "score_loop_ns": [
+            6844560,
+            6977798,
+            7398122,
+            8704871,
+            8031562
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 1.8189894035458565e-12,
+            "log10_max_abs": -11.740169830895267,
+            "min_signed_delta": -1.8189894035458565e-12,
+            "max_signed_delta": 9.094947017729282e-13,
+            "min_signed_rel_nonzero": -1.6594657579091288e-15,
+            "max_signed_rel_nonzero": 1.327344576779921e-15,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 57797.828125
+        },
+        "numpy_batch": {
+          "setup_or_snapshot_ns": [
+            146367,
+            215240,
+            203522,
+            166878,
+            251333
+          ],
+          "score_loop_ns": [
+            1870246,
+            2081690,
+            2233586,
+            2165164,
+            2196050
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 16915.34375
+        },
+        "numba_batch": {
+          "setup_or_snapshot_ns": [
+            137013,
+            143633,
+            167498,
+            150273,
+            172907
+          ],
+          "score_loop_ns": [
+            1798680,
+            1531524,
+            1550261,
+            3071940,
+            1582619
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 1.8189894035458565e-12,
+            "log10_max_abs": -11.740169830895267,
+            "min_signed_delta": -1.8189894035458565e-12,
+            "max_signed_delta": 9.094947017729282e-13,
+            "min_signed_rel_nonzero": -1.6594657579091288e-15,
+            "max_signed_rel_nonzero": 1.327344576779921e-15,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 12364.2109375
+        }
+      }
+    },
+    {
+      "members": 8192,
+      "edits": 128,
+      "integer_weighted": true,
+      "methods": {
+        "recast": {
+          "setup_or_snapshot_ns": [
+            1139671,
+            1240332,
+            1174824,
+            1260761,
+            1144039
+          ],
+          "score_loop_ns": [
+            49794,
+            62793,
+            50785,
+            37456,
+            49683
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 1.837179297581315e-10,
+            "log10_max_abs": -9.735848457112624,
+            "min_signed_delta": -1.837179297581315e-10,
+            "max_signed_delta": 1.1186784831807017e-10,
+            "min_signed_rel_nonzero": -2.191470951830467e-13,
+            "max_signed_rel_nonzero": 1.5222594820536255e-13,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 389.015625
+        },
+        "numpy_online": {
+          "setup_or_snapshot_ns": [
+            746338,
+            657146,
+            570097,
+            577577,
+            533873
+          ],
+          "score_loop_ns": [
+            57080379,
+            59564055,
+            56862946,
+            56680545,
+            56760844
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 444241.765625
+        },
+        "numba_online": {
+          "setup_or_snapshot_ns": [
+            564378,
+            631617,
+            626309,
+            811234,
+            567603
+          ],
+          "score_loop_ns": [
+            62690246,
+            53544441,
+            54582782,
+            51681104,
+            51235453
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 8.640199666842818e-12,
+            "log10_max_abs": -11.0634762212704,
+            "min_signed_delta": -7.048583938740194e-12,
+            "max_signed_delta": 8.640199666842818e-12,
+            "min_signed_rel_nonzero": -6.0523964852536615e-15,
+            "max_signed_rel_nonzero": 9.069493792167838e-15,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 418315.9453125
+        },
+        "numpy_batch": {
+          "setup_or_snapshot_ns": [
+            3300119,
+            3627855,
+            3576869,
+            3277495,
+            3274231
+          ],
+          "score_loop_ns": [
+            74802906,
+            74725341,
+            69403141,
+            67503962,
+            71212506
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 0.0,
+            "log10_max_abs": null,
+            "min_signed_delta": 0.0,
+            "max_signed_delta": 0.0,
+            "min_signed_rel_nonzero": 0.0,
+            "max_signed_rel_nonzero": 0.0,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 556347.703125
+        },
+        "numba_batch": {
+          "setup_or_snapshot_ns": [
+            3482930,
+            3085339,
+            3261531,
+            3158528,
+            3273689
+          ],
+          "score_loop_ns": [
+            57898424,
+            60081735,
+            58107935,
+            57550437,
+            61937609
+          ],
+          "delta_vs_numpy_batch_qd": {
+            "max_abs": 8.640199666842818e-12,
+            "log10_max_abs": -11.0634762212704,
+            "min_signed_delta": -7.048583938740194e-12,
+            "max_signed_delta": 8.640199666842818e-12,
+            "min_signed_rel_nonzero": -6.0523964852536615e-15,
+            "max_signed_rel_nonzero": 9.069493792167838e-15,
+            "zero_reference_count": 0
+          },
+          "median_ns_per_edit_score": 453968.2421875
+        }
+      }
+    }
+  ],
+  "source_sha256": {
+    "include/recastcrps.hpp": "5e5945696e21ab9eda8fa0d99a59520566f169ef70d0a069dafec52117f56c34",
+    "python/recastcrps/module.cpp": "484cf52b6f205604851e8e50ef42137a4d3a73cae4e5cc1addb66d5c9c3c4968"
+  }
+}
