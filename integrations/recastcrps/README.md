@@ -14,6 +14,14 @@ On one AMD EPYC 9V74 core, a revision followed immediately by a best-and-worst w
 
 ## Try it
 
+For CPython 3.12 on x86-64 Linux compatible with `manylinux_2_24`, install the prebuilt wheel without a compiler. The URL pins both the artifact commit and the SHA-256 digest.
+
+```sh
+python -m pip install --only-binary=:all: 'https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/d1ded86e362068ee9f83766c032bc848b0e14e3c/integrations/recastcrps/wheels/recastcrps-0.1.0-cp312-cp312-manylinux_2_24_x86_64.whl#sha256=3870ee020fe788d9218e25f5e7823770c21b66551b93610b0d3a91a9149a064e'
+```
+
+[Wheel build and verification](https://github.com/pgg898200-ship-it/streamsieve/tree/d1ded86e362068ee9f83766c032bc848b0e14e3c/integrations/recastcrps/wheels)
+
 Install the [source distribution from Hugging Face](https://huggingface.co/spaces/pgg-engineering/recastcrps/resolve/main/recastcrps-0.1.0.tar.gz), install the GitHub release branch below, or build from source.
 
 ```sh
