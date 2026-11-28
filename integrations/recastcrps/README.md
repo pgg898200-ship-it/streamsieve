@@ -14,11 +14,27 @@ On one AMD EPYC 9V74 core, a revision followed immediately by a best-and-worst w
 
 ## Try it
 
+For CPython 3.12 on x86-64 Linux compatible with `manylinux_2_24`, install the prebuilt wheel without a compiler. The URL pins both the artifact commit and the SHA-256 digest.
+
+```sh
+python -m pip install --only-binary=:all: 'https://raw.githubusercontent.com/pgg898200-ship-it/streamsieve/d1ded86e362068ee9f83766c032bc848b0e14e3c/integrations/recastcrps/wheels/recastcrps-0.1.0-cp312-cp312-manylinux_2_24_x86_64.whl#sha256=3870ee020fe788d9218e25f5e7823770c21b66551b93610b0d3a91a9149a064e'
+```
+
+[Wheel build and verification](https://github.com/pgg898200-ship-it/streamsieve/tree/d1ded86e362068ee9f83766c032bc848b0e14e3c/integrations/recastcrps/wheels)
+
 Install the [source distribution from Hugging Face](https://huggingface.co/spaces/pgg-engineering/recastcrps/resolve/main/recastcrps-0.1.0.tar.gz), install the GitHub release branch below, or build from source.
 
 ```sh
 python -m pip install "recastcrps @ git+https://github.com/pgg898200-ship-it/streamsieve.git@release/recastcrps-0.1.0#subdirectory=integrations/recastcrps"
 ```
+
+For a reproducible install without Git, use this line in a pip requirements file. The URL pins the Space revision and the hash pins the source archive bytes.
+
+```text
+recastcrps @ https://huggingface.co/spaces/pgg-engineering/recastcrps/resolve/8b5a3d11d5fc3671c1d471a014b386570d320eee/recastcrps-0.1.0.tar.gz#sha256=a0f29d0159932c85d52613770db944708eedd513a63395e5169a78e15130d746
+```
+
+Run `python -m pip install -r requirements.txt` in a virtual environment. If Linux reports that it cannot find `clang++` and GCC is installed, run `CC=gcc CXX=g++ python -m pip install -r requirements.txt`. Either build requires a C++17 compiler and CPython headers.
 
 From this directory run `python -m pip install .` with a GCC or Clang C++17 toolchain and CPython development headers. The extension has no runtime package dependencies. A C++ caller can copy [recastcrps.hpp](include/recastcrps.hpp) directly.
 

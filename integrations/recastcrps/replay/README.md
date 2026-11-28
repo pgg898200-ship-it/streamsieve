@@ -2,7 +2,7 @@
 
 This fixture follows 31 NOAA Global Ensemble Forecast System members as they revise Hurricane Lee's forecast maximum sustained wind for the same valid time. Each member occupies a stable slot. The reference outcome is the National Hurricane Center's post-storm best-track intensity, in knots. For background see the [NHC storm report](https://www.nhc.noaa.gov/data/tcr/AL132023_Lee.pdf).
 
-From the repository root, run the offline replay:
+From the RecastCRPS directory, run the offline replay with
 
 ```sh
 c++ -std=c++17 -O2 -Iinclude replay/replay.cpp -o /tmp/recast-replay
@@ -42,3 +42,37 @@ To reproduce the CSV from the upstream archives, run `python3 replay/extract_lee
 | Uncompressed NOAA a-deck | `0ed6ffa50154f6055f8a3cba4db475e3b4a42e99e61080c9b811809204556cbe` |
 | Uncompressed NOAA b-deck | `ca9ae215e737d32cd13300fbeab900d75ab84c6d915f51f87e236c3cc46ee958` |
 | `lee_gefs.csv` | `3314ea7d0e64f5b38ee5d92be288c886ea9bcc4aec99ff0d88712979c5b8ce2a` |
+
+## Repeat the check on Hurricane Milton
+
+The [Milton fixture](milton_gefs.csv) covers seven 12 UTC verification times from October 5 through 11, 2024. It uses the same GEFS member IDs, 6–72 hour leads, positive-wind filter and NHC best-track verification as the Lee replay. Of 84 possible target/initialization pairs, 61 had a complete panel of 31 members. Each cycle contributes equally to the reported mean. The different storm and lead-time mix limits comparisons of forecast skill across the two fixtures.
+
+Run the compiled replay from the RecastCRPS directory. The CSV is bundled for offline use.
+
+```sh
+/tmp/recast-replay replay/milton_gefs.csv
+```
+
+```text
+targets=7 cycles=61 members=31 verified_updates=1891 revised_values=1601 unchanged_resubmissions=73
+mean_complete_cycle_crps_kt=42.52561369
+```
+
+To rebuild the CSV, run `python3 replay/extract_lee.py --storm milton`. The extractor verifies both source hashes before writing. The resulting CSV has SHA-256 `01c76a4f63a7650e3fcb82fd0e8c55ffb4efb15db0c64d03a9fe1db611984ba2`. [NOAA forecast archive](https://ftp.nhc.noaa.gov/atcf/archive/2024/aal142024.dat.gz) · [NOAA best-track archive](https://ftp.nhc.noaa.gov/atcf/archive/2024/bal142024.dat.gz)
+
+## Check an adapter against exact withdrawal scores
+
+Use [withdrawal_reference.csv](withdrawal_reference.csv) to check how a forecast-verification adapter handles control-member withdrawal, probability renormalization and ties. Join to the corresponding Lee or Milton forecast CSV on `target_utc` and `init_utc`. Each of the 185 complete cycles has 31 equal-weight members and one integer observation in knots.
+
+| Adapter result | Expected value |
+| --- | --- |
+| `score(observed_kt)` | `full_num / 961` knots |
+| `leave_one_out(observed_kt)[0]`, omitting AC00 | `drop_ac00_num / 900` knots |
+| Lowest-scoring withdrawal | Forecast value `min_drop_value_kt`, score `min_drop_num / 900` knots |
+| Highest-scoring withdrawal | Forecast value `max_drop_value_kt`, score `max_drop_num / 900` knots |
+
+The denominators are the squared member counts before and after removal. For tied scores, the expected forecast value is the smaller value. Several member IDs can share it. For Lee at the September 8, 2023, 06 UTC initialization and 12 UTC valid time, the expected full score is 66752/961. With AC00 withdrawn it is 62466/900. The minimum and maximum withdrawal scores are 62392/900 and 62787/900, obtained by removing a 55-knot and a 70-knot forecast, respectively.
+
+To reproduce the integer numerators, compute `n * sum(abs(x_i - y)) - sum_{i<j} abs(x_i - x_j)` for the full ensemble and each omission. A separate check integrated the squared empirical CDF error over adjacent sorted distinct forecasts and the observation. On each interval it multiplied the interval width by the square of the difference between the count at or below the left endpoint and the observed CDF at that endpoint scaled by n. Both calculations agreed exactly on all 5,920 scores. The fixture stores the full score, the control withdrawal and the two extrema for each cycle.
+
+Withdrawing AC00 lowered empirical CRPS in 66 of 124 Lee cycles and 38 of 61 Milton cycles. Those are retrospective, equally counted cycles from two storms with repeated verifying times. They do not establish that dropping the control improves future forecasts.
