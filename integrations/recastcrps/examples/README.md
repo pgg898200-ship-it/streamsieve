@@ -8,10 +8,10 @@ The `member` dimension follows [xskillscore's ensemble interface](https://xskill
 
 ## Compare member withdrawals with xskillscore
 
-Run this example from the RecastCRPS source directory in a CPython 3.12 virtual environment with a C++17 compiler and Python headers.
+Run from the RecastCRPS source directory in a CPython 3.12 virtual environment. On compatible x86-64 Linux systems, [install the prebuilt wheel](../README.md#try-it), then run the commands below. For a source build, first install RecastCRPS with `python -m pip install .` using a C++17 compiler and Python headers.
 
 ```sh
-python -m pip install . 'xskillscore==0.0.29'
+python -m pip install 'xskillscore==0.0.29'
 python examples/xskillscore_withdrawals.py
 ```
 

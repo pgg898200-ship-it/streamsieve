@@ -1,5 +1,18 @@
 # RecastCRPS adoption evidence
 
+## November 28, 2026
+
+| Signal | Verified |
+| --- | --- |
+| Unique independent repositories integrating RecastCRPS | 0 found cumulatively |
+| Independent reproductions, citations and integration requests | 0 found in each category |
+| PGG-owned examples and verification | Tested the pinned wheel and both storm replays against the current default-branch merge candidate |
+| Parent repository stars / forks | 0 / 0 |
+| Hugging Face Space likes | 0 |
+| Downloads and bot traffic | No verified counts available |
+
+Repository, README, commit and issue searches returned owner activity. External GitHub code matches used longer, unrelated identifiers. Requirements and pyproject searches returned no external matches, Crossref returned no bibliographic record, and the Space had no discussion threads. The anonymous install and local test traffic are project verification.
+
 ## November 27, 2026
 
 | Signal | Verified |
