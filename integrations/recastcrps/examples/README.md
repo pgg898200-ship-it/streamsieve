@@ -6,6 +6,24 @@ From the RecastCRPS source directory, run `python -m pip install . pandas xarray
 
 The `member` dimension follows [xskillscore's ensemble interface](https://xskillscore.readthedocs.io/en/latest/api/xskillscore.crps_ensemble.html). Houtekamer et al. measured the contribution of each member by leaving it out of the Canadian ensemble Kalman filter and aggregating CRPS over many observations. The example here reports a single-target sensitivity per forecast cycle. Finding the best withdrawal after aggregating across targets requires computing contributions for each stable member across those targets. [Houtekamer et al., Monthly Weather Review (2021)](https://doi.org/10.1175/MWR-D-20-0238.1)
 
+## Compare member withdrawals with xskillscore
+
+Run this example from the RecastCRPS source directory in a CPython 3.12 virtual environment with a C++17 compiler and Python headers.
+
+```sh
+python -m pip install . 'xskillscore==0.0.29'
+python examples/xskillscore_withdrawals.py
+```
+
+The [example](xskillscore_withdrawals.py) reads the bundled Lee and Milton forecast cycles. RecastCRPS keeps one ensemble per verifying time and replaces its 31 member forecasts in initialization order. xskillscore scores the completed panels in a batch, then drops each named member in turn and scores the remaining 30. Passing `dim=[]` preserves each cycle. Both paths use equally weighted empirical CRPS and compare scores in knots.
+
+| Storm | Complete cycles | Full and withdrawal scores checked | Largest absolute difference |
+| --- | ---: | ---: | ---: |
+| Lee | 124 | 3,968 | 2.84 × 10⁻¹⁴ kn |
+| Milton | 61 | 1,952 | 2.84 × 10⁻¹⁴ kn |
+
+The November 26 check used xskillscore 0.0.29, xarray 2026.9.0, properscoring 0.1, pandas 3.1.1 and NumPy 2.3.5. The script raises an assertion if any absolute difference exceeds 10⁻¹⁰ knots. These complete-panel checks cover integer wind speeds, equal weights and a common observation for each target. [xskillscore ensemble CRPS](https://xskillscore.readthedocs.io/en/stable/api/xskillscore.crps_ensemble.html) · [NOAA inputs and exact withdrawal reference](../replay/README.md)
+
 ## StreamSieve
 
 Run the following from the RecastCRPS source directory with StreamSieve and its native library installed. The same 31 NOAA forecasts feed a scalar fusion decision and an empirical forecast distribution. Once the historical outcome becomes available, the decision is resolved and the empirical distribution can be verified.
